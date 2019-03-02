@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <Components>
+    <Component id="SysUserService"
+               service="Remember.Service.SysUserService"
+               type="Remember.Component.SysUserComponent"
+               isTransactional="true" />
+  </Components>
+</configuration>
