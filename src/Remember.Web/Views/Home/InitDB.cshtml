@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "InitDB";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据库初始化</title>
+    <link href="~/css/mdui.min.css" rel="stylesheet" />
+    <script>
+        function onStart() {
+            window.location.href = "/Home/StartInitDB";
+        }
+    </script>
+</head>
+<body class="mdui-theme-primary-blue"> 
+    <div class="mdui-container">
+        <h2>初始化数据库</h2>
+        <input class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-800" type="button" value="开始" onclick="onStart()" />
+    </div>
+</body>
+</html>

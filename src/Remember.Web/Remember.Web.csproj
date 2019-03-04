@@ -166,6 +166,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -176,7 +177,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Config\Service.xml" />
+    <Content Include="css\mdui.css" />
+    <Content Include="css\mdui.min.css" />
+    <Content Include="fonts\roboto\LICENSE.txt" />
     <Content Include="Global.asax" />
+    <Content Include="icons\material-icons\LICENSE.txt" />
+    <Content Include="js\mdui.js" />
+    <Content Include="js\mdui.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -188,7 +195,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -211,6 +217,40 @@
       <Project>{137b05d4-cc34-4cc5-a6c2-37a90d8bee1f}</Project>
       <Name>Remember.Service</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\InitDB.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="css\mdui.min.css.map" />
+    <Content Include="fonts\roboto\Roboto-Black.woff" />
+    <Content Include="fonts\roboto\Roboto-Black.woff2" />
+    <Content Include="fonts\roboto\Roboto-BlackItalic.woff" />
+    <Content Include="fonts\roboto\Roboto-BlackItalic.woff2" />
+    <Content Include="fonts\roboto\Roboto-Bold.woff" />
+    <Content Include="fonts\roboto\Roboto-Bold.woff2" />
+    <Content Include="fonts\roboto\Roboto-BoldItalic.woff" />
+    <Content Include="fonts\roboto\Roboto-BoldItalic.woff2" />
+    <Content Include="fonts\roboto\Roboto-Light.woff" />
+    <Content Include="fonts\roboto\Roboto-Light.woff2" />
+    <Content Include="fonts\roboto\Roboto-LightItalic.woff" />
+    <Content Include="fonts\roboto\Roboto-LightItalic.woff2" />
+    <Content Include="fonts\roboto\Roboto-Medium.woff" />
+    <Content Include="fonts\roboto\Roboto-Medium.woff2" />
+    <Content Include="fonts\roboto\Roboto-MediumItalic.woff" />
+    <Content Include="fonts\roboto\Roboto-MediumItalic.woff2" />
+    <Content Include="fonts\roboto\Roboto-Regular.woff" />
+    <Content Include="fonts\roboto\Roboto-Regular.woff2" />
+    <Content Include="fonts\roboto\Roboto-RegularItalic.woff" />
+    <Content Include="fonts\roboto\Roboto-RegularItalic.woff2" />
+    <Content Include="fonts\roboto\Roboto-Thin.woff" />
+    <Content Include="fonts\roboto\Roboto-Thin.woff2" />
+    <Content Include="fonts\roboto\Roboto-ThinItalic.woff" />
+    <Content Include="fonts\roboto\Roboto-ThinItalic.woff2" />
+    <Content Include="icons\material-icons\MaterialIcons-Regular.ijmap" />
+    <Content Include="icons\material-icons\MaterialIcons-Regular.woff" />
+    <Content Include="icons\material-icons\MaterialIcons-Regular.woff2" />
+    <Content Include="js\mdui.min.js.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
