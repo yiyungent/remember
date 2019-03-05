@@ -1,4 +1,5 @@
 ﻿using Castle.ActiveRecord;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Remember.Domain
@@ -10,7 +11,7 @@ namespace Remember.Domain
     public class SysRole : BaseEntity<SysRole>
     {
         [Display(Name = "角色名")]
-        [Property]
+        [Property(Length = 30, NotNull = true)]
         public string Name { get; set; }
 
         /// <summary>
@@ -21,5 +22,13 @@ namespace Remember.Domain
         [Display(Name = "状态")]
         [Property]
         public int Status { get; set; }
+
+        /// <summary>
+        /// 用户列表
+        ///     多对多
+        /// </summary>
+        [Display(Name = "用户列表")]
+        [HasAndBelongsToMany(Table = "Role_User", ColumnKey = "RoleId", ColumnRef = "UserId")]
+        public IList<SysUser> SysUserList { get; set; }
     }
 }
