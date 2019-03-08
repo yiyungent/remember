@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "安装 Remember";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>@ViewBag.Title</title>
+    <link href="~/css/mdui.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script>
+        var getProgressTimer = null;
+        function startInstall() {
+            $("#install-btn").remove();
+            getProgressTimer = setInterval(getProgress, 100);
+        }
+
+        function getProgress() {
+            $.ajax({
+                url: "@Url.Action("GetProgress")",
+                method: "POST",
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == 1) {
+                        // 成功获取安装进度---继续
+                        // 展示当前进度
+                        showProgress(data.currentInfo, data.currentPos);
+                    } else if (data.code == -2) {
+                        // 安装过程终止---暂停计时器
+                        window.clearInterval(getProgressTimer);
+                    }
+                }
+            });
+        }
+
+        function showProgress(currentInfo, currentPos) {
+            var index = $("#install-list").html().indexOf(currentInfo, 0);
+            if (index > 0) {
+                // 若已经存在，则不添加
+                return;
+            }
+            // 添加当前进度信息
+            var htmlTag = '<li class="mdui-list-item mdui-ripple">\
+                                <i class="mdui-list-item-icon mdui-icon material-icons"></i>\
+                                <div class="mdui-list-item-content">{0}</div>\
+                           </li>';
+            htmlTag = htmlTag.format(currentInfo);
+            $("#install-list").append(htmlTag);
+
+            // 更新进度条
+            $("#js-progress .mdui-progress-determinate").width(currentPos + '%');
+        }
+
+        function stopGetProgress() {
+            window.clearInterval(getProgressTimer);
+            $("#js-progress .mdui-progress-determinate").width('100%');
+        }
+
+        String.prototype.format = function () {
+            var args = arguments;
+            return this.replace(/\{(\d+)\}/g, function (s, i) {
+                return args[i];
+            });
+        };
+    </script>
+</head>
+<body class="mdui-theme-primary-blue">
+    <div class="mdui-container-fluid">
+        <div class="mdui-row .mdui-typo">
+            <h1 class="mdui-text-center">Remember 3分钟安装</h1>
+        </div>
+        <div class="mdui-row">
+            <div id="js-progress" class="mdui-progress">
+                <div class="mdui-progress-determinate" style="width: 0%;"></div>
+            </div>
+        </div>
+        <div class="mdui-row">
+            <div id="js-install-info" class="mdui-col-xs-6 mdui-col-offset-xs-3">
+                <!-- start install-list 安装进度列表 -->
+                <div class="mdui-row">
+                    <div class="mdui-col-xs-8 mdui-col-offset-xs-2">
+                        <ul id="install-list" class="mdui-list"></ul>
+                    </div>
+                </div>
+                <!-- end install-list 安装进度列表 -->
+                <div id="install-btn" class="mdui-row">
+                    <div class="mdui-col-xs-12">
+                        @Ajax.ActionLink("开始安装", "Index", null, new AjaxOptions
+                        {
+                            HttpMethod = "Post",
+                            //InsertionMode = InsertionMode.Replace,
+                            InsertionMode = InsertionMode.InsertAfter,
+                            UpdateTargetId = "js-install-info",
+                            LoadingElementDuration = 3000,
+                            //LoadingElementId = "js-progress",
+                            OnBegin = "startInstall",
+                            OnSuccess = "stopGetProgress"
+                        }, new { @class = "mdui-btn mdui-btn-block mdui-btn-raised mdui-ripple mdui-color-theme-800" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -45,7 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SysFunctionService.cs" />
+    <Compile Include="SysMenuService.cs" />
+    <Compile Include="SysRoleService.cs" />
     <Compile Include="SysUserService.cs" />
   </ItemGroup>
   <ItemGroup>

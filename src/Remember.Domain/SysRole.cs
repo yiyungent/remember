@@ -30,5 +30,21 @@ namespace Remember.Domain
         [Display(Name = "用户列表")]
         [HasAndBelongsToMany(Table = "Role_User", ColumnKey = "RoleId", ColumnRef = "UserId")]
         public IList<SysUser> SysUserList { get; set; }
+
+        /// <summary>
+        /// 角色菜单权限
+        ///     多对多关系
+        /// </summary>
+        [Display(Name = "角色菜单权限")]
+        [HasAndBelongsToMany(Table = "Role_Menu", ColumnKey = "RoleId", ColumnRef = "MenuId")]
+        public IList<SysMenu> SysMenuList { get; set; }
+
+        /// <summary>
+        /// 角色操作权限
+        ///     多对多关系
+        /// </summary>
+        [Display(Name = "角色操作权限")]
+        [HasAndBelongsToMany(Table = "Role_Function", ColumnKey = "RoleId", ColumnRef = "FunctionId")]
+        public IList<SysFunction> SysFunctionList { get; set; }
     }
 }

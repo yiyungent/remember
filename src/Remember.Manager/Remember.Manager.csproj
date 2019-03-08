@@ -45,7 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SysFunctionManager.cs" />
+    <Compile Include="SysMenuManager.cs" />
+    <Compile Include="SysRoleManager.cs" />
     <Compile Include="SysUserManager.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,7 @@
 
 namespace Remember.Manager
 {
-    public class SysUserManager : BaseManager<SysUser>
+    public class SysFunctionManager : BaseManager<SysFunction>
     {
     }
 }

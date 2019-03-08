@@ -11,13 +11,21 @@
     <script>
         function onStart() {
             window.location.href = "/Home/StartInitDB";
+            document.querySelector(".mdui-progress").removeAttribute("hidden");
         }
     </script>
 </head>
 <body class="mdui-theme-primary-blue"> 
-    <div class="mdui-container">
-        <h2>初始化数据库</h2>
-        <input class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-800" type="button" value="开始" onclick="onStart()" />
+    <div class="mdui-container-fluid">
+        <div class="mdui-row">
+            <div class="mdui-col-xs-6 mdui-col-offset-xs-3">
+                <h2>初始化数据库</h2>
+                <input class="mdui-btn mdui-btn-block mdui-btn-raised mdui-ripple mdui-color-theme-800" type="button" value="开始" onclick="onStart()" />
+                <div class="mdui-progress" hidden>
+                    <div class="mdui-progress-indeterminate"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

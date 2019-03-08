@@ -1,9 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
   <components>
-    <!--<component id="SysUserService"
-               service="Remember.Service.SysUserService"
-               type="Remember.Component.SysUserComponent"
-               isTransactional="true" />-->
+    <component id="SysUserService"
+               service="Remember.Service.SysUserService,Remember.Service"
+               type="Remember.Component.SysUserComponent,Remember.Component"
+               isTransactional="true" />
+    <component id="SysRoleService"
+               service="Remember.Service.SysRoleService,Remember.Service"
+               type="Remember.Component.SysRoleComponent,Remember.Component"
+               isTransactional="true" />
+    <component id="SysMenuService"
+               service="Remember.Service.SysMenuService,Remember.Service"
+               type="Remember.Component.SysMenuComponent,Remember.Component"
+               isTransactional="true" />
+    <component id="SysFunctionService"
+               service="Remember.Service.SysFunctionService,Remember.Service"
+               type="Remember.Component.SysFunctionComponent,Remember.Component"
+               isTransactional="true" />
   </components>
 </configuration>

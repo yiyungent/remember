@@ -45,5 +45,13 @@ namespace Remember.Domain
         // 注意是  ColumnKey    其设置为 当前类对应表需增加的字段，就算不是一个表自关联，而是两个表的一对多，这正是 Key的含义
         [HasMany(ColumnKey = "ParentId")]
         public IList<SysMenu> Children { get; set; }
+
+        /// <summary>
+        /// 操作列表
+        ///     一对多关系
+        /// </summary>
+        [Display(Name = "操作列表")]
+        [HasMany(ColumnKey = "MenuId")]
+        public IList<SysFunction> SysFunctionList { get; set; }
     }
 }

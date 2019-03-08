@@ -4,7 +4,7 @@ using Remember.Service;
 
 namespace Remember.Component
 {
-    public class SysUserComponent : BaseComponent<SysUser, SysUserManager>, SysUserService
+    public class SysFunctionComponent : BaseComponent<SysFunction, SysFunctionManager>, SysFunctionService
     {
     }
 }

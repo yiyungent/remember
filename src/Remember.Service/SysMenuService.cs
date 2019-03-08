@@ -7,7 +7,7 @@ using Remember.Domain;
 
 namespace Remember.Service
 {
-    public interface SysUserService : BaseService<SysUser>
+    public interface SysMenuService : BaseService<SysMenu>
     {
     }
 }

@@ -45,7 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SysFunctionComponent.cs" />
+    <Compile Include="SysMenuComponent.cs" />
+    <Compile Include="SysRoleComponent.cs" />
     <Compile Include="SysUserComponent.cs" />
   </ItemGroup>
   <ItemGroup>
