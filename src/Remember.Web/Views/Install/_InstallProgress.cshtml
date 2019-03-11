@@ -1,47 +1,9 @@
-﻿@using Remember.Web.Models
-@model InstallInfoViewModel
+﻿@model InstallProgressList
+@using Remember.Web.Models
 
 
-<div class="mdui-row">
-    <div class="mdui-col-xs-12">
-    @if (Model.Errors.Count > 0)
-    { 
-    <div class="mdui-table-fluid">
-        <table class="mdui-table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Message</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < Model.Errors.Count; i++)
-                {
-                <tr>
-                    <td>@i</td>
-                    <td>@Model.Errors[i].Message</td>
-                </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-    }
-</div>
-</div>
 <div class="mdui-row">
     <div class="mdui-col-xs-12 mdui-text-center">
-        <h3>安装时间</h3>
-        <div>@Model.InstallTime</div>
+        安装完成
     </div>
 </div>
-<div class="mdui-row">
-    <div class="mdui-col-xs-12 mdui-text-center">@Model.Result</div>
-</div>
-
-
-@*不需要容器<div id="js-install-info" class="mdui-col-xs-6 mdui-col-offset-xs-3"></div>*@
-@*
-    注意：ASP.NET MVC 提供的 Ajax 来实现类似 Pjax 与 jquery.pjax的插件有些许不同，
-    在 jquery.pjax中 会取响应内容的 UpdateTargetId 内的内容然后替换 原 UpdateTargetId 处的内容,所以需要在响应的内容中有UpdateTargetId容器
-    而在 ASP.NET Ajax中，直接将响应的所有内容都替换到UpdateTargetId中
-*@
