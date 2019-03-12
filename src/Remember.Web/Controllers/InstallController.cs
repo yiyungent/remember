@@ -11,14 +11,12 @@ using System.Threading;
 
 namespace Remember.Web.Controllers
 {
-    public delegate void Del_Install(ref InstallProgressList list);
+    public delegate void Del_OnInstall(ref InstallProgressList list);
     public class InstallController : Controller
     {
-        private event Del_Install _onInstall;
+        private event Del_OnInstall _onInstall;
 
         private static InstallProgressList _installProgressList = new InstallProgressList();
-
-        private bool _isInstallPause = false;
 
         public InstallController()
         {
@@ -26,7 +24,7 @@ namespace Remember.Web.Controllers
             _onInstall += InitTableData;
         }
 
-        #region 安装视图
+        #region Index视图
         [HttpGet]
         public ActionResult Index()
         {
@@ -36,18 +34,21 @@ namespace Remember.Web.Controllers
 
         #region 开始安装
         [HttpPost]
-        public ActionResult Index(string flag)
+        public void Index(InstallConfig installConfig)
         {
-            if (Request.IsAjaxRequest())
-            {
-                ExecInstall();
+            if(!ModelState.IsValid)
+            { 
+                
+                return;
+            }
+            Response.RedirectToRoute(new { action = "InstallProgress" });
+        }
+        #endregion
 
-                return PartialView("_InstallProgress");
-            }
-            else
-            {
-                return Content("非法请求");
-            }
+        #region 安装进度视图
+        public ActionResult InstallProgress()
+        {
+            return View("InstallProgress");
         }
         #endregion
 
@@ -62,9 +63,11 @@ namespace Remember.Web.Controllers
         private void InitTableData(ref InstallProgressList list)
         {
             InstallProgress pro = new InstallProgress { info = "表初始化数据" };
+            _installProgressList.AddItem(pro);
             try
             {
 
+                ShowProgressMsg(pro.info);
                 pro.isSuccess = true;
             }
             catch (Exception ex)
@@ -84,6 +87,7 @@ namespace Remember.Web.Controllers
             {
                 ActiveRecordStarter.CreateSchema();
                 pro.isSuccess = true;
+                ShowProgressMsg(pro);
             }
             catch (Exception ex)
             {
@@ -93,19 +97,21 @@ namespace Remember.Web.Controllers
         }
         #endregion
 
-        #region 获取安装进度
-        [HttpPost]
-        public JsonResult GetProgress()
+        #region 输出当前进度消息
+        private void ShowProgressMsg(InstallProgress progres)
         {
-            var progressInfo = new { progress = _installProgressList.List, code = _isInstallPause ? -1 : 1 };
-            return Json(progressInfo);
+            string js = "<script type=\"text/javascript\">window.scrollTo(0, document.body.scrollHeight);<" + "/script>";
+            string message = string.Format("<div>{0}...{1}</div>", progres.info, progres.isSuccess ? "成功" : "失败");
+            Response.Write(message);
+            Response.Write(js);
+            Response.Flush();
         }
-        #endregion
-
-        #region 获取安装步骤数
-        public int GetProgressCount()
+        private void ShowProgressMsg(string message)
         {
-            return _onInstall.GetInvocationList().Count();
+            string js = "<script type=\"text/javascript\">window.scrollTo(0, document.body.scrollHeight);<" + "/script>";
+            Response.Write(message);
+            Response.Write(js);
+            Response.Flush();
         }
         #endregion
     }

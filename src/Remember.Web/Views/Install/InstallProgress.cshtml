@@ -1,0 +1,21 @@
+﻿@using Remember.Web.Models
+@model List<InstallProgress>
+@{
+    Layout = "~/Views/Install/_InstallLayout.cshtml";
+    ViewBag.Title = "Remember 安装向导";
+}
+
+<div class="mdui-col-md-8 mdui-col-offset-md-2">
+    <div id="js-progress-bar" class="mdui-progress">
+        <div class="mdui-progress-indeterminate"></div>
+    </div>
+</div>
+<div class="mdui-col-md-8 mdui-col-offset-md-2">
+    <iframe id="js-progress-notice" src="@Url.Action("ExecInstall")" style="overflow: scroll; overflow-x: hidden; height: 300px; width: 100%; border: 1px solid #B5CFD9;"></iframe>
+</div>
+<div class="mdui-col-md-8 mdui-col-offset-md-2">
+    <div class="mdui-p-y-5">
+        <input id="js-install-btn" class="mdui-btn mdui-btn-block mdui-btn-raised mdui-ripple mdui-color-theme-800" type="submit" value="正在安装..." disabled />
+    </div>
+</div>>
+
