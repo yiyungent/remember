@@ -9,7 +9,7 @@ using System.ComponentModel;
 
 namespace Remember.Web.Extensions
 {
-    public static class EnumExtensions
+    public static class EnumExt
     {
         #region 获取枚举备注 Remark
         public static string GetRemark(this Enum value)

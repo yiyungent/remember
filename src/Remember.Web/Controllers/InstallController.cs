@@ -8,6 +8,13 @@ using Castle.ActiveRecord;
 using Newtonsoft.Json;
 using Remember.Web.Models;
 using System.Threading;
+using System.Text;
+using Newtonsoft.Json;
+using Remember.Core;
+using Remember.Service;
+using Remember.Domain;
+using System.Configuration;
+using Remember.Common;
 
 namespace Remember.Web.Controllers
 {
@@ -16,15 +23,29 @@ namespace Remember.Web.Controllers
     {
         private event Del_OnInstall _onInstall;
 
+        private event Action _onInstallComplete;
+
         private static InstallProgressList _installProgressList = new InstallProgressList();
+
+        private static readonly string _connStrKey = "connection.connection_string";
+
+        private static InstallConfig _installConfig;
+
+        /// <summary>
+        /// <code>true</code>: 安装已经锁定(已经安装过)
+        /// </summary>
+        private bool _installLock;
 
         public InstallController()
         {
             _onInstall += CreateSchema;
             _onInstall += InitTableData;
+            _onInstall += InitTableSysRole;
+            _onInstall += InitTableSysUser;
+            _onInstallComplete += RedirectToInstallCompletePage;
         }
 
-        #region Index视图
+        #region Index表单视图
         [HttpGet]
         public ActionResult Index()
         {
@@ -32,23 +53,71 @@ namespace Remember.Web.Controllers
         }
         #endregion
 
-        #region 开始安装
+        #region 开始安装-提交表单
         [HttpPost]
-        public void Index(InstallConfig installConfig)
+        public string Index(InstallConfig installConfig)
         {
-            if(!ModelState.IsValid)
-            { 
-                
-                return;
+            if (!ModelState.IsValid)
+            {
+                IDictionary<string, string> errorInfos = ModelStateFindErrors(ModelState);
+
+                var jsonObj = new { code = -1, errorInfos };
+                string jsonStr = JsonConvert.SerializeObject(jsonObj);
+                return jsonStr;
             }
-            Response.RedirectToRoute(new { action = "InstallProgress" });
+            else
+            {
+                // 将 installConfig 写入配置文件(管理员账号密码不写入)
+
+                // 以下三种方法都失败，ConnectionStrings 提示只读
+                //ConfigurationManager.ConnectionStrings[_connStrKey].ConnectionString = string.Format("Database={0};Data Source={1};User Id={2};Password={3};Charset=utf8;Allow Zero DateTime=True", installConfig.dbname, installConfig.dbhost, installConfig.dbuser, installConfig.dbpw);
+                //ConfigurationManager.ConnectionStrings[_connStrKey] = new ConnectionStringSettings(_connStrKey, string.Format("Database={0};Data Source={1};User Id={2};Password={3};Charset=utf8;Allow Zero DateTime=True", installConfig.dbname, installConfig.dbhost, installConfig.dbuser, installConfig.dbpw));
+
+                //ConfigurationManager.ConnectionStrings.Add(new ConnectionStringSettings(_connStrKey, string.Format("Database={0};Data Source={1};User Id={2};Password={3};Charset=utf8;Allow Zero DateTime=True", installConfig.dbname, installConfig.dbhost, installConfig.dbuser, installConfig.dbpw)));
+                // 跳转到 安装进度(使用 installConfig，执行安装)
+
+                _installConfig = installConfig;
+                return "{\"code\":1}";
+            }
+        }
+        #endregion
+
+        #region 将模型验证的错误转换成 PropertyName -> ErrorMessagesStr
+        private IDictionary<string, string> ModelStateFindErrors(ModelStateDictionary modelStateDic)
+        {
+            var keyAndErrors = from m in modelStateDic
+                               where m.Value.Errors.Any()
+                               select new { m.Key, m.Value.Errors };
+            // 注意： 每一个 key 都对应着一个错误集合
+            var errorsColl = from m in keyAndErrors select m.Errors;
+            string[] keyColl = (from m in keyAndErrors select m.Key).ToArray();
+
+            IDictionary<string, string> errorInfos = new Dictionary<string, string>();
+            int index = 0;
+            foreach (var item in errorsColl)
+            {
+                // item: 每一个 Key 对应的 错误集合
+                // 只要错误集合中的错误消息
+                var errorMsgs = from m in item
+                                select m.ErrorMessage;
+                errorInfos.Add(keyColl[index], string.Join(" 且 ", errorMsgs));
+                index++;
+            }
+            return errorInfos;
         }
         #endregion
 
         #region 安装进度视图
         public ActionResult InstallProgress()
         {
-            return View("InstallProgress");
+            return View();
+        }
+        #endregion
+
+        #region 安装完成视图
+        public ActionResult InstallComplete()
+        {
+            return View();
         }
         #endregion
 
@@ -56,44 +125,14 @@ namespace Remember.Web.Controllers
         public void ExecInstall()
         {
             _onInstall(ref _installProgressList);
+            _onInstallComplete();
         }
         #endregion
 
-        #region 初始化表数据
-        private void InitTableData(ref InstallProgressList list)
+        #region 安装完成后跳转到安装完成页
+        private void RedirectToInstallCompletePage()
         {
-            InstallProgress pro = new InstallProgress { info = "表初始化数据" };
-            _installProgressList.AddItem(pro);
-            try
-            {
-
-                ShowProgressMsg(pro.info);
-                pro.isSuccess = true;
-            }
-            catch (Exception ex)
-            {
-                pro.exception = ex;
-            }
-            Thread.Sleep(3000);
-        }
-        #endregion
-
-        #region 创建数据库表结构
-        private void CreateSchema(ref InstallProgressList list)
-        {
-            InstallProgress pro = new InstallProgress { info = "创建数据库 表结构" };
-            list.AddItem(pro);
-            try
-            {
-                ActiveRecordStarter.CreateSchema();
-                pro.isSuccess = true;
-                ShowProgressMsg(pro);
-            }
-            catch (Exception ex)
-            {
-                pro.exception = ex;
-            }
-            Thread.Sleep(3000);
+            Response.Write(string.Format("<script>parent.location.href=\"{0}\"</script>", Url.Action("InstallComplete")));
         }
         #endregion
 
@@ -114,5 +153,97 @@ namespace Remember.Web.Controllers
             Response.Flush();
         }
         #endregion
+
+        // start 自定义安装步骤
+
+        #region 创建数据库表结构
+        private void CreateSchema(ref InstallProgressList list)
+        {
+            InstallProgress pro = new InstallProgress { info = "创建数据库 表结构" };
+            list.AddItem(pro);
+            try
+            {
+                ActiveRecordStarter.CreateSchema();
+                pro.isSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                pro.exception = ex;
+                ShowProgressMsg(ex.Message);
+            }
+            Thread.Sleep(3000);
+            ShowProgressMsg(pro);
+        }
+        #endregion
+
+        #region 开始初始化表数据
+        private void InitTableData(ref InstallProgressList list)
+        {
+            InstallProgress pro = new InstallProgress { info = "开始 初始化表数据" };
+            list.AddItem(pro);
+            pro.isSuccess = true;
+            ShowProgressMsg(pro.info);
+        }
+        #endregion
+
+        #region 初始化角色表数据
+        private void InitTableSysRole(ref InstallProgressList list)
+        {
+            InstallProgress pro = new InstallProgress { info = "SysRole 表初始化数据" };
+            list.AddItem(pro);
+            try
+            {
+                Container.Instance.Resolve<SysRoleService>().Create(new SysRole()
+                {
+                    Name = "系统管理员",
+                    Status = 0
+                });
+
+                pro.isSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                pro.exception = ex;
+                ShowProgressMsg(ex.Message);
+            }
+            Thread.Sleep(3000);
+            ShowProgressMsg(pro);
+        }
+        #endregion
+
+        #region 初始化用户表数据
+        private void InitTableSysUser(ref InstallProgressList list)
+        {
+            InstallProgress pro = new InstallProgress { info = "SysUser 表初始化数据" };
+            list.AddItem(pro);
+            try
+            {
+                SysRole adminRole = Container.Instance.Resolve<SysRoleService>().GetEntity(1);
+                List<SysRole> roleList = new List<SysRole>();
+                roleList.Add(adminRole);
+                Container.Instance.Resolve<SysUserService>().Create(new SysUser
+                {
+                    Name = "系统管理员",
+                    LoginAccount = _installConfig.username,
+                    Password = StringHelper.EncodeMD5(_installConfig.password),
+                    SysRoleList = roleList,
+                    Status = 0
+                });
+
+                pro.isSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                pro.exception = ex;
+                ShowProgressMsg(ex.Message);
+            }
+            Thread.Sleep(3000);
+            ShowProgressMsg(pro);
+        }
+        #endregion
+
+
+
+        // end 自定义安装步骤
     }
 }

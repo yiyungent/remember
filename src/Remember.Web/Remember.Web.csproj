@@ -169,7 +169,7 @@
     <Compile Include="Attributes\RemarkAttribute.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
-    <Compile Include="Extensions\EnumExtension.cs" />
+    <Compile Include="Extensions\EnumExt.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -189,6 +189,7 @@
     <Content Include="icons\material-icons\LICENSE.txt" />
     <Content Include="js\mdui.js" />
     <Content Include="js\mdui.min.js" />
+    <Content Include="App_Data\install.lock" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -201,7 +202,9 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -213,14 +216,17 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
     <Content Include="Views\Install\_InstallLayout.cshtml" />
     <Content Include="Views\Install\InstallProgress.cshtml" />
+    <Content Include="Views\Install\InstallComplete.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Remember.Common\Remember.Common.csproj">
+      <Project>{32adadc3-36bb-42bc-b037-e3dd7c86177c}</Project>
+      <Name>Remember.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Remember.Component\Remember.Component.csproj">
       <Project>{b8d9a8a3-3e3b-4d2c-997c-30992eb24d76}</Project>
       <Name>Remember.Component</Name>
