@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseService.cs" />
+    <Compile Include="CardBoxService.cs" />
+    <Compile Include="CardInfoService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SysFunctionService.cs" />
     <Compile Include="SysMenuService.cs" />

@@ -13,7 +13,7 @@ namespace Remember.Domain
     [ActiveRecord]
     public class CardBox : BaseEntity<CardBox>
     {
-        [Display(Name = "标题")]
+        [Display(Name = "盒名")]
         [Property(Length = 30, NotNull = true)]
         public string Name { get; set; }
 

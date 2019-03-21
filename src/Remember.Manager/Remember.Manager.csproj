@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseManager.cs" />
+    <Compile Include="CardBoxManager.cs" />
+    <Compile Include="CardInfoManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SysFunctionManager.cs" />
     <Compile Include="SysMenuManager.cs" />

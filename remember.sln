@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Remember.Service", "src\Rem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Remember.Common", "src\Remember.Common\Remember.Common.csproj", "{32ADADC3-36BB-42BC-B037-E3DD7C86177C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Remember.WebAPI", "src\Remember.WebAPI\Remember.WebAPI.csproj", "{B8F1292F-0BB6-4D6A-9B8D-6409F586E28C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{32ADADC3-36BB-42BC-B037-E3DD7C86177C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32ADADC3-36BB-42BC-B037-E3DD7C86177C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32ADADC3-36BB-42BC-B037-E3DD7C86177C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8F1292F-0BB6-4D6A-9B8D-6409F586E28C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8F1292F-0BB6-4D6A-9B8D-6409F586E28C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8F1292F-0BB6-4D6A-9B8D-6409F586E28C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8F1292F-0BB6-4D6A-9B8D-6409F586E28C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,5 +71,6 @@ Global
 		{95F58579-283D-4DAE-8744-BD56F6EA570E} = {98FA7C60-5D77-4E38-BF07-879B3BB692A2}
 		{137B05D4-CC34-4CC5-A6C2-37A90D8BEE1F} = {98FA7C60-5D77-4E38-BF07-879B3BB692A2}
 		{32ADADC3-36BB-42BC-B037-E3DD7C86177C} = {98FA7C60-5D77-4E38-BF07-879B3BB692A2}
+		{B8F1292F-0BB6-4D6A-9B8D-6409F586E28C} = {98FA7C60-5D77-4E38-BF07-879B3BB692A2}
 	EndGlobalSection
 EndGlobal

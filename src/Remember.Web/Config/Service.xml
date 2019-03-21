@@ -17,5 +17,13 @@
                service="Remember.Service.SysFunctionService,Remember.Service"
                type="Remember.Component.SysFunctionComponent,Remember.Component"
                isTransactional="true" />
+    <component id="CardBoxService"
+               service="Remember.Service.CardBoxService,Remember.Service"
+               type="Remember.Component.CardBoxComponent,Remember.Component"
+               isTransactional="true" />
+    <component id="CardInfoService"
+               service="Remember.Service.CardInfoService,Remember.Service"
+               type="Remember.Component.CardInfoComponent,Remember.Component"
+               isTransactional="true" />
   </components>
 </configuration>
