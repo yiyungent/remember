@@ -8,13 +8,13 @@ namespace Remember.Web.Controllers
 {
     public class SysMenuController : Controller
     {
-        //
-        // GET: /SysMenu/
-
-        public ActionResult Index()
+        #region 菜单列表首页
+        public ViewResult Index()
         {
-            return View();
-        }
 
+
+            return View();
+        } 
+        #endregion
     }
 }

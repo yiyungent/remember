@@ -168,6 +168,7 @@
   <ItemGroup>
     <Compile Include="Attributes\AuthenLoginAttribute.cs" />
     <Compile Include="Attributes\RemarkAttribute.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\CardBoxController.cs" />
     <Compile Include="Controllers\CardInfoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -177,6 +178,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="HtmlHelpExt\CollapseMenu.cs" />
+    <Compile Include="HtmlHelpExt\SideMenu.cs" />
     <Compile Include="Models\InstallConfig.cs" />
     <Compile Include="Models\InstallProgressList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -342,6 +345,8 @@
     <Content Include="Views\CardInfo\Create.cshtml" />
     <Content Include="Views\CardInfo\Edit.cshtml" />
     <Content Include="Views\CardInfo\Details.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\SysMenu\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Binders\" />

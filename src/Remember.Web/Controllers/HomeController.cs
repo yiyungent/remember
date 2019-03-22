@@ -13,6 +13,12 @@ namespace Remember.Web.Controllers
 {
     public class HomeController : Controller
     {
+        #region 首页
+        public ViewResult Index()
+        {
 
+            return View();
+        } 
+        #endregion
     }
 }

@@ -41,6 +41,7 @@ namespace Remember.Web.Controllers
             _onInstall += InitTableData;
             _onInstall += InitTableSysRole;
             _onInstall += InitTableSysUser;
+            _onInstall += InitTableSysMenu;
             _onInstallComplete += RedirectToInstallCompletePage;
         }
 
@@ -241,6 +242,109 @@ namespace Remember.Web.Controllers
         }
         #endregion
 
+        #region 初始化菜单表数据
+        private void InitTableSysMenu(ref InstallProgressList list)
+        {
+            InstallProgress pro = new InstallProgress { info = "SysMenu 表初始化数据" };
+            list.AddItem(pro);
+            try
+            {
+                #region 一级菜单
+                Container.Instance.Resolve<SysMenuService>().Create(new SysMenu()
+                {
+                    Name = "系统管理",
+                    SortCode = 10,
+                });
+                Container.Instance.Resolve<SysMenuService>().Create(new SysMenu()
+                {
+                    Name = "业务管理",
+                    SortCode = 20,
+                });
+                #endregion
+
+                SysMenu parentMenu = null;
+                #region 系统管理的二级菜单
+                parentMenu = Container.Instance.Resolve<SysMenuService>().GetEntity(1);
+                Container.Instance.Resolve<SysMenuService>().Create(new SysMenu()
+                {
+                    Name = "菜单管理",
+                    ClassName = "Remember.Web.Controllers.SysMenuController",
+                    ControllerName = "SysMenu",
+                    ActionName = "Index",
+                    ParentMenu = parentMenu,
+                    SortCode = 10,
+                });
+                Container.Instance.Resolve<SysMenuService>().Create(new SysMenu()
+                {
+                    Name = "用户管理",
+                    ClassName = "Remember.Web.Controllers.SysUserController",
+                    ControllerName = "SysUser",
+                    ActionName = "Index",
+                    ParentMenu = parentMenu,
+                    SortCode = 20,
+                });
+                Container.Instance.Resolve<SysMenuService>().Create(new SysMenu()
+                {
+                    Name = "角色管理",
+                    ClassName = "Remember.Web.Controllers.SysRoleController",
+                    ControllerName = "SysRole",
+                    ActionName = "Index",
+                    ParentMenu = parentMenu,
+                    SortCode = 30,
+                });
+                #endregion
+
+                #region 业务的二级菜单
+                parentMenu = Container.Instance.Resolve<SysMenuService>().GetEntity(2);
+                Container.Instance.Resolve<SysMenuService>().Create(new SysMenu()
+                {
+                    Name = "卡片盒管理",
+                    ClassName = "Remember.Web.Controllers.CardBoxController",
+                    ControllerName = "CardBox",
+                    ActionName = "Index",
+                    ParentMenu = parentMenu,
+                    SortCode = 10,
+                });
+                Container.Instance.Resolve<SysMenuService>().Create(new SysMenu()
+                {
+                    Name = "调度管理",
+                    ClassName = "Remember.Web.Controllers.DeliveryFormController",
+                    ControllerName = "DeliveryForm",
+                    ActionName = "Index",
+                    ParentMenu = parentMenu,
+                    SortCode = 20,
+                });
+                Container.Instance.Resolve<SysMenuService>().Create(new SysMenu()
+                {
+                    Name = "回车报销管理",
+                    ClassName = "Remember.Web.Controllers.BillingController",
+                    ControllerName = "Billing",
+                    ActionName = "Index",
+                    ParentMenu = parentMenu,
+                    SortCode = 30,
+                });
+                Container.Instance.Resolve<SysMenuService>().Create(new SysMenu()
+                {
+                    Name = "产值分析",
+                    ClassName = "Remember.Web.Controllers.AchievementController",
+                    ControllerName = "Achievement",
+                    ActionName = "Index",
+                    ParentMenu = parentMenu,
+                    SortCode = 40,
+                });
+                #endregion
+
+                pro.isSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                pro.exception = ex;
+                ShowProgressMsg(ex.Message);
+            }
+            Thread.Sleep(3000);
+            ShowProgressMsg(pro);
+        }
+        #endregion
 
 
         // end 自定义安装步骤

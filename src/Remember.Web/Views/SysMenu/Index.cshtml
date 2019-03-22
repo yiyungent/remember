@@ -1,0 +1,31 @@
+﻿@using Remember.Web.HtmlHelpExt
+@model IList<Remember.Domain.SysMenu>
+
+@{
+    Layout = null;
+    ViewBag.Title = "菜单列表";
+}
+
+<link href="~/dist/layui/css/layui.css" rel="stylesheet" />
+
+<h2 style="text-align: center;">@ViewBag.Title</h2>
+<p>
+    <button class="layui-btn layui-btn-sm" onclick="onAdd()">新增</button>
+</p>
+
+@Html.GenerateCollapseMenu()
+
+
+<script src="~/dist/layui/layui.js"></script>
+<script>
+    layui.use(['element', 'layer'], function(){
+      var element = layui.element;
+      var layer = layui.layer;
+  
+      //监听折叠
+      element.on('collapse(test)', function(data){
+        layer.msg('展开状态：'+ data.show);
+      });
+    });
+</script>
+
