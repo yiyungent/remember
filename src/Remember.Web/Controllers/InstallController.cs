@@ -14,6 +14,7 @@ using Remember.Service;
 using Remember.Domain;
 using System.Configuration;
 using Remember.Common;
+using NHibernate.Criterion;
 
 namespace Remember.Web.Controllers
 {
@@ -42,6 +43,7 @@ namespace Remember.Web.Controllers
             _onInstall += InitTableSysRole;
             _onInstall += InitTableSysUser;
             _onInstall += InitTableSysMenu;
+            _onInstall += InitTableSysFunction;
             _onInstallComplete += RedirectToInstallCompletePage;
         }
 
@@ -333,6 +335,51 @@ namespace Remember.Web.Controllers
                 ShowProgressMsg(ex.Message);
             }
             Thread.Sleep(3000);
+            ShowProgressMsg(pro);
+        }
+        #endregion
+
+        #region 初始化系统菜单
+        private void InitTableSysFunction(ref InstallProgressList list)
+        {
+            InstallProgress pro = new InstallProgress { info = "SysFunction 表初始化数据" };
+            list.AddItem(pro);
+            try
+            {
+                IList<ICriterion> conditionList = new List<ICriterion>();
+                // ID: 3-7   有 "新增", "修改", "删除", "查看" 的菜单
+                conditionList.Add(Expression.Ge("ID", 3));
+                conditionList.Add(Expression.Le("ID", 7));
+                // 查找菜单
+                IList<SysMenu> findMenuList = Container.Instance.Resolve<SysMenuService>().Query(conditionList);
+                string[] funcNames = { "新增", "修改", "删除", "查看" };
+                foreach (SysMenu menu in findMenuList)
+                {
+                    foreach (string funcName in funcNames)
+                    {
+                        // 为此菜单创建/关联拥有的操作
+                        Container.Instance.Resolve<SysFunctionService>().Create(new SysFunction
+                        {
+                            Name = funcName,
+                            SysMenu = menu
+                        });
+                    }
+                }
+                // ID: 8 只有 "查看" 的菜单
+                Container.Instance.Resolve<SysFunctionService>().Create(new SysFunction
+                {
+                    Name = "查看",
+                    SysMenu = Container.Instance.Resolve<SysMenuService>().GetEntity(8)
+                });
+
+                pro.isSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                pro.exception = ex;
+                ShowProgressMsg(ex.Message);
+            }
+            Thread.Sleep(1000);
             ShowProgressMsg(pro);
         }
         #endregion
