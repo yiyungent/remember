@@ -11,8 +11,6 @@ namespace Remember.Web.Controllers
         #region 菜单列表首页
         public ViewResult Index()
         {
-
-
             return View();
         } 
         #endregion

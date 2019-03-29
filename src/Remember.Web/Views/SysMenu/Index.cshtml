@@ -8,12 +8,24 @@
 
 <link href="~/dist/layui/css/layui.css" rel="stylesheet" />
 
-<h2 style="text-align: center;">@ViewBag.Title</h2>
-<p>
-    <button class="layui-btn layui-btn-sm" onclick="onAdd()">新增</button>
-</p>
 
-@Html.GenerateCollapseMenu()
+<div class="layui-fluid">
+    <div class="layui-row">
+        <div class="layui-col-xs-12">
+            <h2 style="text-align: center;">@ViewBag.Title</h2>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-xs-12">
+            <button class="layui-btn layui-btn-sm" onclick="onAdd()">新增</button>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-xs-12">
+            @Html.GenerateCollapseMenu()
+        </div>
+    </div>
+</div>      
 
 
 <script src="~/dist/layui/layui.js"></script>

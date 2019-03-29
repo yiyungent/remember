@@ -7,18 +7,23 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Remember.Web.Attributes;
+using NHibernate.Criterion;
 
 namespace Remember.Web.Controllers
 {
     public class CardInfoController : Controller
     {
         #region 列表
-        public ViewResult Index(int cardBoxId, int pageIndex = 1, int pageSize = 10)
+        public ViewResult Index(int pageIndex = 1, string keyword = "")
         {
-            ViewBag.CardBox = Container.Instance.Resolve<CardBoxService>().GetEntity(cardBoxId);
+            int pageSize = 2;
+            IList<ICriterion> conditionList = new List<ICriterion>();
+            // 注意:如果首次(未传keyword)加载，那么keyword为"", like "" 为 所有
+            conditionList.Add(Expression.Like("Content", keyword.Trim(), MatchMode.Anywhere));
+            // 所有满足条件的(若无关键词条件则为所有)
+            IList<CardInfo> allList = Container.Instance.Resolve<CardInfoService>().Query(conditionList);
 
-            IList<CardInfo> allList = Container.Instance.Resolve<CardInfoService>().GetAll().Where(m => m.CardBox.ID == cardBoxId).ToList();
-
+            #region 分页处理
             ViewBag.TotalCount = allList.Count;
             // 最后一页的页码
             int lastPageIndex = (int)Math.Ceiling((double)allList.Count / pageSize);
@@ -32,6 +37,7 @@ namespace Remember.Web.Controllers
             var currentPageList = (from m in allList
                                    orderby m.ID descending
                                    select m).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+            #endregion
 
             return View(currentPageList.ToList());
         }
@@ -41,13 +47,13 @@ namespace Remember.Web.Controllers
         /// <summary>
         /// 新增
         /// </summary>
-        /// <param name="id">?cardBoxId=id</param>
         [HttpGet]
-        public ViewResult Create(int id)
+        public ViewResult Create()
         {
-
-            CardBox cardBox = Container.Instance.Resolve<CardBoxService>().GetEntity(id);
-            ViewBag.CardBox = cardBox;
+            // 1.准备实体
+            CardBox mo = new CardBox();
+            // 2.返回前预处理
+            ViewBag.DDLCardBox = InitDDLForCardBox(0);
 
             return View();
         }
@@ -60,6 +66,7 @@ namespace Remember.Web.Controllers
                 model.CardBox = Container.Instance.Resolve<CardBoxService>().GetEntity(model.CardBox.ID);
 
                 Container.Instance.Resolve<CardInfoService>().Create(model);
+
                 string message = string.Format("{0} 新增一张卡片", model.CardBox.Name);
                 TempData["message"] = message;
 
@@ -129,6 +136,34 @@ namespace Remember.Web.Controllers
             {
                 return Json(new { code = -1, message = ex.Message });
             }
+        }
+        #endregion
+
+        #region 辅助方法
+        /// <summary>
+        /// 初始化下拉备选项-卡片盒
+        /// </summary>
+        private IList<SelectListItem> InitDDLForCardBox(int selectedValue)
+        {
+            IList<SelectListItem> ret = new List<SelectListItem>();
+            ret.Add(new SelectListItem()
+            {
+                Text = "请选择卡片盒",
+                Value = "0",
+                Selected = (selectedValue == 0)
+            });
+            IList<CardBox> all = Container.Instance.Resolve<CardBoxService>().GetAll();
+            foreach (var item in all)
+            {
+                ret.Add(new SelectListItem()
+                {
+                    Text = item.Name,
+                    Value = item.ID.ToString(),
+                    Selected = (selectedValue == item.ID)
+                });
+            }
+
+            return ret;
         }
         #endregion
     }

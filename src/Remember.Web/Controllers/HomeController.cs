@@ -16,7 +16,6 @@ namespace Remember.Web.Controllers
         #region 首页
         public ViewResult Index()
         {
-
             return View();
         } 
         #endregion

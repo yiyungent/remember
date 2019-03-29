@@ -307,30 +307,21 @@ namespace Remember.Web.Controllers
                 });
                 Container.Instance.Resolve<SysMenuService>().Create(new SysMenu()
                 {
-                    Name = "调度管理",
-                    ClassName = "Remember.Web.Controllers.DeliveryFormController",
-                    ControllerName = "DeliveryForm",
+                    Name = "卡片管理",
+                    ClassName = "Remember.Web.Controllers.CardInfoController",
+                    ControllerName = "CardInfo",
                     ActionName = "Index",
                     ParentMenu = parentMenu,
                     SortCode = 20,
                 });
                 Container.Instance.Resolve<SysMenuService>().Create(new SysMenu()
                 {
-                    Name = "回车报销管理",
-                    ClassName = "Remember.Web.Controllers.BillingController",
-                    ControllerName = "Billing",
+                    Name = "统计分析",
+                    ClassName = "Remember.Web.Controllers.StatisticsController",
+                    ControllerName = "Statistics",
                     ActionName = "Index",
                     ParentMenu = parentMenu,
                     SortCode = 30,
-                });
-                Container.Instance.Resolve<SysMenuService>().Create(new SysMenu()
-                {
-                    Name = "产值分析",
-                    ClassName = "Remember.Web.Controllers.AchievementController",
-                    ControllerName = "Achievement",
-                    ActionName = "Index",
-                    ParentMenu = parentMenu,
-                    SortCode = 40,
                 });
                 #endregion
 

@@ -1,6 +1,6 @@
 ﻿@model Remember.Domain.CardInfo
 @{
-    ViewBag.Title = ViewBag.CardBox.Name + "添加 - 卡片";
+    ViewBag.Title = "添加 - 卡片";
 }
 
 <link href="~/dist/layui/css/layui.css" rel="stylesheet" />
@@ -10,7 +10,12 @@
     <button class="layui-btn layui-btn-sm" onclick="onCancel()">取消</button>
 </div>
 <form class="layui-form">
-    @Html.Hidden("CardBox.ID", (int)ViewBag.CardBox.ID)
+    <div class="layui-form-item">
+        @Html.LabelFor(model => model.CardBox, new { @class = "layui-form-label" })
+        <div class="layui-input-block">
+            @Html.DropDownListFor(model => model.CardBox.ID, (IList<SelectListItem>)ViewBag.DDLCardBox)
+        </div>
+    </div>
     <div class="layui-form-item">
         @Html.LabelFor(model => model.Content, new { @class = "layui-form-label" })
         <div class="layui-input-block layui-form-text">
@@ -29,7 +34,12 @@
 
     function onSubmit() {
         // 1.验证输入
-        // 1.1 盒名
+        // 1.1 卡片盒
+        if ($("#CardBox_ID").val() == '0') {
+            layer.msg("请选择所在卡片盒");
+            return;
+        }
+        // 1.2 卡片内容
         if ($.trim($("#Content").val()) == "") {
             layer.msg("请输入内容")
             $("#Content").focus();
