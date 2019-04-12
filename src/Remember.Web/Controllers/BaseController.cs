@@ -35,7 +35,8 @@ namespace Remember.Web.Controllers
                         filterContext.Result = new RedirectToRouteResult(new System.Web.Routing.RouteValueDictionary
                         {
                             { "Controller", "Admin" },
-                            { "Action", "Login" }
+                            { "Action", "Login" },
+                            { "area", "Admin" }
                         });
                     }
                     else
@@ -43,7 +44,7 @@ namespace Remember.Web.Controllers
                         // 前台登录
                         filterContext.Result = new RedirectToRouteResult(new System.Web.Routing.RouteValueDictionary
                         {
-                            { "Controller", "SysUser" },
+                            { "Controller", "Home" },
                             { "Action", "Login" }
                         });
                     }
@@ -62,7 +63,7 @@ namespace Remember.Web.Controllers
                     // 无权限, 跳转到登录界面
                     filterContext.Result = new RedirectToRouteResult(new System.Web.Routing.RouteValueDictionary
                     {
-                        { "Controller", "SysUser" },
+                        { "Controller", "Home" },
                         { "Action", "Login" }
                     });
                 }
@@ -75,20 +76,21 @@ namespace Remember.Web.Controllers
         /// </summary>
         private bool HasAuth(SysUser loginUser, string controllerName, string actionName)
         {
-            bool isHas = false;
-            foreach (SysRole role in loginUser.SysRoleList)
-            {
-                foreach (SysMenu menu in role.SysMenuList)
-                {
-                    if (menu.ClassName != null && menu.ClassName.ToUpper() == controllerName.ToUpper())
-                    {
-                        isHas = true;
-                        return isHas;
-                    }
-                }
-            }
+            //bool isHas = false;
+            //foreach (SysRole role in loginUser.SysRoleList)
+            //{
+            //    foreach (SysMenu menu in role.SysMenuList)
+            //    {
+            //        if (menu.ClassName != null && menu.ClassName.ToUpper() == controllerName.ToUpper())
+            //        {
+            //            isHas = true;
+            //            return isHas;
+            //        }
+            //    }
+            //}
 
-            return isHas;
+            //return isHas;
+            return true;
         }
         #endregion
     }

@@ -114,8 +114,9 @@
                 title: "新增",
                 shade: 0.4,
                 shadeClose: false,
-                area: ['500px', '440px'],
-                content: ['/CardInfo/Create', 'yes'],
+                area: ['500px', '300px'],
+                maxmin: true,
+                content: ['/Admin/CardInfo/Create', 'yes'],
                 end: function () {
                     location.href = location.href; // 刷新页面
                 }
@@ -129,8 +130,9 @@
                 title: "修改",
                 shade: 0.4,
                 shadeClose: false,
-                area: ['500px', '440px'],
-                content: ['/CardInfo/Edit?id=' + id, 'yes'],
+                area: ['500px', '300px'],
+                maxmin: true,
+                content: ['/Admin/CardInfo/Edit?id=' + id, 'yes'],
                 end: function () {
                     location.href = location.href; // 刷新页面
                 }
@@ -144,8 +146,9 @@
                 title: "查看",
                 shade: 0.4,
                 shadeClose: false,
-                area: ['500px', '440px'],
-                content: ['/CardInfo/Details?id=' + id, 'yes'],
+                area: ['500px', '300px'],
+                maxmin: true,
+                content: ['/Admin/CardInfo/Details?id=' + id, 'yes'],
             });
         }
         function onDelete(id) {
@@ -153,7 +156,7 @@
                 // 删除
                 $.ajax({
                     type: "post",
-                    url: "/CardInfo/Delete",
+                    url: "/Admin/CardInfo/Delete",
                     data: { id: id },
                     dataType: "json",
                     success: function (data) {

@@ -1,6 +1,7 @@
 ﻿using Remember.Core;
 using Remember.Domain;
 using Remember.Service;
+using Remember.Web.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Web.Mvc;
 
 namespace Remember.Web.Areas.Admin.Controllers
 {
-    public class CardBoxController : Controller
+    public class CardBoxController : BaseController
     {
         #region 列表
         public ActionResult Index(int pageIndex = 1, int pageSize = 10)

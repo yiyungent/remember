@@ -14,18 +14,31 @@
     <div class="layui-form-item">
         @Html.LabelFor(model => model.Content, new { @class = "layui-form-label" })
         <div class="layui-input-block">
-            @Html.TextAreaFor(model => model.Content, new { @class = "layui-input", placeholder = "请输入" + Html.DisplayNameFor(m => m.Content), autocomplete = "off", Value = Model.Content })
+            <div id="js-editArea" class="layui-textarea"></div>
+            @Html.TextAreaFor(model => model.Content, new { style = "display: none;" })
         </div>
     </div>
 </form>
 
 <script src="~/dist/layui/layui.js"></script>
 <script src="~/dist/jquery/jquery-3.3.1.min.js"></script>
+<script src="~/dist/wangEditor/wangEditor.min.js"></script>
 <script>
     layui.use(['form', 'layer'], function () {
         form = layui.form
         , layer = layui.layer;
     });
+
+    var E = window.wangEditor;
+    var editor = new E('#js-editArea');
+    var $hiddenEditArea = $("#Content");
+    editor.customConfig.onchange = function (html) {
+        // 监控变化，同步更新到 textarea
+        $hiddenEditArea.val(html)
+    }
+    editor.create();
+    // 初始化 编辑区 的值
+    editor.txt.html($hiddenEditArea.val());
 
     function onSubmit() {
         // 1.验证输入

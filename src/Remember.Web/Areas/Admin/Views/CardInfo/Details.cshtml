@@ -4,6 +4,7 @@
 }
 
 <link href="~/dist/layui/css/layui.css" rel="stylesheet" />
+<link href="~/css/editor.css" rel="stylesheet" />
 
 <div style="text-align: center;">
     <button class="layui-btn layui-btn-sm" onclick="onClose()">返回</button>
@@ -12,7 +13,7 @@
     <div class="layui-form-item layui-form-text">
         @Html.LabelFor(model => model.Content, new { @class = "layui-form-label" })
         <div class="layui-input-block">
-            @Html.TextAreaFor(model => model.Content, new { @class = "layui-textarea", placeholder = "请输入" + Html.DisplayNameFor(m => m.Content), autocomplete = "off", Value = Model.Content, disabled = "disabled" })
+            @Html.Raw(Model.Content)
         </div>
     </div>
 </form>

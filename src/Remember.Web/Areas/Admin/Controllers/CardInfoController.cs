@@ -8,10 +8,11 @@ using System.Web;
 using System.Web.Mvc;
 using Remember.Web.Attributes;
 using NHibernate.Criterion;
+using Remember.Web.Controllers;
 
 namespace Remember.Web.Areas.Admin.Controllers
 {
-    public class CardInfoController : Controller
+    public class CardInfoController : BaseController
     {
         #region 列表
         public ViewResult Index(int pageIndex = 1, string keyword = "")
@@ -59,6 +60,7 @@ namespace Remember.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public JsonResult Create(CardInfo model)
         {
             try
@@ -89,6 +91,7 @@ namespace Remember.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public JsonResult Edit(CardInfo model)
         {
             try

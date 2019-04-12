@@ -40,10 +40,10 @@ namespace Remember.Web.Controllers
         {
             _onInstall += CreateSchema;
             _onInstall += InitTableData;
-            _onInstall += InitTableSysRole;
-            _onInstall += InitTableSysUser;
             _onInstall += InitTableSysMenu;
             _onInstall += InitTableSysFunction;
+            _onInstall += InitTableSysRole;
+            _onInstall += InitTableSysUser;
             _onInstallComplete += RedirectToInstallCompletePage;
         }
 
@@ -195,10 +195,15 @@ namespace Remember.Web.Controllers
             list.AddItem(pro);
             try
             {
+                IList<SysMenu> allMenu = Container.Instance.Resolve<SysMenuService>().GetAll();
+                IList<SysFunction> allFunc = Container.Instance.Resolve<SysFunctionService>().GetAll();
+
                 Container.Instance.Resolve<SysRoleService>().Create(new SysRole()
                 {
                     Name = "系统管理员",
-                    Status = 0
+                    Status = 0,
+                    SysMenuList = allMenu,
+                    SysFunctionList = allFunc
                 });
 
                 pro.isSuccess = true;

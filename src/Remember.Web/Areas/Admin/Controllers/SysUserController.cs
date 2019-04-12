@@ -10,10 +10,5 @@ namespace Remember.Web.Areas.Admin.Controllers
     public class SysUserController : Controller
     {
 
-        [NeedlessAuth]
-        public ActionResult Login()
-        {
-            return View();
-        }
     }
 }
