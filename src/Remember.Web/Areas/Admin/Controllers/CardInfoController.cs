@@ -9,7 +9,7 @@ using System.Web.Mvc;
 using Remember.Web.Attributes;
 using NHibernate.Criterion;
 
-namespace Remember.Web.Controllers
+namespace Remember.Web.Areas.Admin.Controllers
 {
     public class CardInfoController : Controller
     {

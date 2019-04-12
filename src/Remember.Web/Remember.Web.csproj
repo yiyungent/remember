@@ -166,14 +166,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\TestController.cs" />
     <Compile Include="Attributes\AuthenLoginAttribute.cs" />
+    <Compile Include="Attributes\NeedlessAuthAttribute.cs" />
     <Compile Include="Attributes\RemarkAttribute.cs" />
-    <Compile Include="Controllers\AdminController.cs" />
-    <Compile Include="Controllers\CardBoxController.cs" />
-    <Compile Include="Controllers\CardInfoController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CardBoxController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CardInfoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
-    <Compile Include="Controllers\SysMenuController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SysMenuController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SysUserController.cs" />
     <Compile Include="Extensions\EnumExt.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -310,6 +315,9 @@
     <Content Include="dist\layui\font\iconfont.eot" />
     <Content Include="dist\layui\font\iconfont.ttf" />
     <Content Include="dist\layui\font\iconfont.woff" />
+    <Content Include="Areas\Admin\Views\Web.config" />
+    <Content Include="Areas\Admin\Views\Admin\Login.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\Index.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -337,19 +345,19 @@
     <Content Include="Views\Install\_InstallLayout.cshtml" />
     <Content Include="Views\Install\InstallProgress.cshtml" />
     <Content Include="Views\Install\InstallComplete.cshtml" />
-    <Content Include="Views\CardBox\Index.cshtml" />
-    <Content Include="Views\CardBox\Create.cshtml" />
-    <Content Include="Views\CardBox\Edit.cshtml" />
-    <Content Include="Views\CardBox\Details.cshtml" />
-    <Content Include="Views\CardInfo\Index.cshtml" />
-    <Content Include="Views\CardInfo\Create.cshtml" />
-    <Content Include="Views\CardInfo\Edit.cshtml" />
-    <Content Include="Views\CardInfo\Details.cshtml" />
-    <Content Include="Views\Admin\Index.cshtml" />
-    <Content Include="Views\SysMenu\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\CardBox\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\CardBox\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\CardBox\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\CardBox\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\CardInfo\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\CardInfo\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\CardInfo\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\CardInfo\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\SysMenu\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Binders\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="js\" />
   </ItemGroup>
   <ItemGroup>

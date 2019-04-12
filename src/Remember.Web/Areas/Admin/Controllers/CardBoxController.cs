@@ -7,7 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Remember.Web.Controllers
+namespace Remember.Web.Areas.Admin.Controllers
 {
     public class CardBoxController : Controller
     {
