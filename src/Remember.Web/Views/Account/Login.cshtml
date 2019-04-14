@@ -1,0 +1,44 @@
+﻿@model Remember.Web.Models.LoginModel
+@{
+	Layout = null;
+	ViewBag.Title = "登录";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>@ViewBag.Title</title>
+	<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="container">
+		@using (Html.BeginForm("Login", "Account", new { returnUrl = ViewBag.ReturnUrl }))
+		{
+			@Html.AntiForgeryToken()
+			<div>
+				@Html.ValidationSummary(false)
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.LoginAccount)
+				@Html.TextBoxFor(m => m.LoginAccount, new { @class = "form-control" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.Password)
+				@Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.IsRememberMe, new { @class = "form-check-label" })
+				<input id="IsRememberMe" type="checkbox" name="IsRememberMe" value="true" />
+			</div>
+			<input type="submit" value="登录" />
+		}
+	</div>
+	<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+	<script src="~/Scripts/bootstrap.min.js"></script>
+	<script src="~/Scripts/jquery.validate.min.js"></script>
+	<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+	<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+</body>
+</html>

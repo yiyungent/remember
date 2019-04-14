@@ -20,6 +20,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -172,6 +174,7 @@
     <Compile Include="Attributes\AuthenLoginAttribute.cs" />
     <Compile Include="Attributes\NeedlessAuthAttribute.cs" />
     <Compile Include="Attributes\RemarkAttribute.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Areas\Admin\Controllers\CardBoxController.cs" />
     <Compile Include="Areas\Admin\Controllers\CardInfoController.cs" />
@@ -184,6 +187,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HtmlHelpExt\CollapseMenu.cs" />
+    <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\InstallConfig.cs" />
     <Compile Include="Models\InstallProgressList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -407,6 +411,7 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Scripts\popper.min.js.map" />
     <Content Include="Scripts\popper.js.map" />
+    <Content Include="Views\Account\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />

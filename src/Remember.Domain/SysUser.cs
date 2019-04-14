@@ -1,4 +1,5 @@
 ﻿using Castle.ActiveRecord;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -21,6 +22,20 @@ namespace Remember.Domain
         [Display(Name = "密码")]
         [Property(Length = 64, NotNull = true)]
         public string Password { get; set; }
+
+        /// <summary>
+        /// 口令
+        ///     仅用作 “记住我” 记住 登录状态时 使用
+        /// </summary>
+        [Display(Name = "口令")]
+        [Property(Length = 40, NotNull = false)]
+        public string Token { get; set; }
+
+        /// <summary>
+        /// 最后登录时间
+        /// </summary>
+        [Property(NotNull = true)]
+        public DateTime LastLoginTime { get; set; }
 
         /// <summary>
         /// 状态
