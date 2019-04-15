@@ -178,7 +178,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="HtmlHelps\CollapseMenu.cs" />
     <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\InstallConfig.cs" />
     <Compile Include="Models\InstallProgressList.cs" />
@@ -403,6 +402,7 @@
     <Content Include="Views\CardInfo\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="HtmlHelps\" />
     <Folder Include="js\" />
   </ItemGroup>
   <ItemGroup>
