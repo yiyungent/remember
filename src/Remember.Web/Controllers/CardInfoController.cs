@@ -10,9 +10,9 @@ using Remember.Web.Attributes;
 using NHibernate.Criterion;
 using Remember.Web.Controllers;
 
-namespace Remember.Web.Areas.Admin.Controllers
+namespace Remember.Web.Controllers
 {
-    public class CardInfoController : BaseController
+    public class CardInfoController : Controller
     {
         #region 列表
         public ViewResult Index(int pageIndex = 1, string keyword = "")

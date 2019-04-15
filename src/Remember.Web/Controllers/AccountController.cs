@@ -17,7 +17,6 @@ namespace Remember.Web.Controllers
         private const string _cookieToken = "Token";
         private const int _rememberMeDayCount = 7;
 
-
         #region 登录
         public ActionResult Login(string returnUrl)
         {

@@ -103,7 +103,7 @@
             shade: 0.4,
             shadeClose: false,
             area: ['500px', '440px'],
-            content: ['/Admin/CardBox/Create', 'yes'],
+            content: ['/CardBox/Create', 'yes'],
             end: function () {
                 location.href = location.href; // 刷新页面
             }
@@ -118,7 +118,7 @@
             shade: 0.4,
             shadeClose: false,
             area: ['500px', '440px'],
-            content: ['/Admin/CardBox/Edit?id=' + id, 'yes'],
+            content: ['/CardBox/Edit?id=' + id, 'yes'],
             end: function () {
                 location.href = location.href; // 刷新页面
             }
@@ -133,7 +133,7 @@
             shade: 0.4,
             shadeClose: false,
             area: ['500px', '440px'],
-            content: ['/Admin/CardBox/Details?id=' + id, 'yes'],
+            content: ['/CardBox/Details?id=' + id, 'yes'],
         });
     }
     function onDelete(id) {
@@ -141,7 +141,7 @@
             // 删除
             $.ajax({
                 type: "post",
-                url: "/Admin/CardBox/Delete",
+                url: "/CardBox/Delete",
                 data: { id: id },
                 dataType: "json",
                 success: function (data) {

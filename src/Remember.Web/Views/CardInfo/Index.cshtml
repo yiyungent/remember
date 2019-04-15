@@ -116,7 +116,7 @@
                 shadeClose: false,
                 area: ['500px', '300px'],
                 maxmin: true,
-                content: ['/Admin/CardInfo/Create', 'yes'],
+                content: ['/CardInfo/Create', 'yes'],
                 end: function () {
                     location.href = location.href; // 刷新页面
                 }
@@ -132,7 +132,7 @@
                 shadeClose: false,
                 area: ['500px', '300px'],
                 maxmin: true,
-                content: ['/Admin/CardInfo/Edit?id=' + id, 'yes'],
+                content: ['/CardInfo/Edit?id=' + id, 'yes'],
                 end: function () {
                     location.href = location.href; // 刷新页面
                 }
@@ -148,7 +148,7 @@
                 shadeClose: false,
                 area: ['500px', '300px'],
                 maxmin: true,
-                content: ['/Admin/CardInfo/Details?id=' + id, 'yes'],
+                content: ['/CardInfo/Details?id=' + id, 'yes'],
             });
         }
         function onDelete(id) {
@@ -156,7 +156,7 @@
                 // 删除
                 $.ajax({
                     type: "post",
-                    url: "/Admin/CardInfo/Delete",
+                    url: "/CardInfo/Delete",
                     data: { id: id },
                     dataType: "json",
                     success: function (data) {

@@ -1,14 +1,12 @@
 ﻿using Remember.Core;
 using Remember.Domain;
 using Remember.Service;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
 
-namespace Remember.Web.HtmlHelpExt
+namespace Remember.Web.HtmlHelps
 {
     public static class CollapseMenu
     {
