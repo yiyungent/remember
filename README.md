@@ -3,7 +3,7 @@
 </p>
 <h1 align="center">remember</h1>
 
-> :cake: remember - 期望能帮到你
+> :blue_book: remember - 期望能帮到你
 
 [![repo size](https://img.shields.io/github/repo-size/yiyungent/remember.svg?style=flat)]()
 [![LICENSE](https://img.shields.io/github/license/yiyungent/remember.svg?style=flat)](https://github.com/yiyungent/remember/blob/master/LICENSE)
