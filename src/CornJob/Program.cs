@@ -13,10 +13,10 @@ namespace CornJob
             HostFactory.Run(x =>
             {
                 // 指定服务类型。这里设置为 TestSchedule
-                x.Service<SearchSchedule>(s =>
+                x.Service<RememberSchedule>(s =>
                 {
                     // 通过 new TestSchedule() 构建一个服务实例 
-                    s.ConstructUsing(name => new SearchSchedule());
+                    s.ConstructUsing(name => new RememberSchedule());
                     // 当服务启动后执行什么
                     s.WhenStarted(tc => tc.Start());
                     // 当服务停止后执行什么
@@ -27,12 +27,11 @@ namespace CornJob
                 x.RunAsLocalSystem();
 
                 // 服务描述信息
-                x.SetDescription("Remember 搜索相关服务");
+                x.SetDescription("Remember相关服务");
                 // 服务显示名称
-                x.SetDisplayName("Remember 搜索");
+                x.SetDisplayName("Remember服务");
                 // 服务名称
-                x.SetServiceName("RememberSearch");
-
+                x.SetServiceName("RememberSchedule");
             });
         }
     }

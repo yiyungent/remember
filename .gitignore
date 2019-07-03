@@ -264,3 +264,4 @@ __pycache__/
 /src/WebUI/Properties/PublishProfiles
 /src/WebUI/App_Data/Plugins
 /src/WebUI/App_Data/Logs
+/src/WebUI/App_Data/LuceneDir

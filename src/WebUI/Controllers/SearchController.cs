@@ -1,9 +1,13 @@
-﻿using Framework.HtmlHelpers;
+﻿using Core;
+using Domain;
+using Framework.HtmlHelpers;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
+using Manager.EF;
 using Newtonsoft.Json;
+using Service;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +22,9 @@ namespace WebUI.Controllers
 {
     public class SearchController : Controller
     {
-        private SearchDbContext _db = new SearchDbContext();
+        private EFDbContext _efDbContext = new EFDbContext();
+
+        private ArticleService _articleService;
 
         private string _indexPath;
 
@@ -32,33 +38,35 @@ namespace WebUI.Controllers
             }
 
             this._indexPath = indexPath;
+
+            this._articleService = Container.Instance.Resolve<ArticleService>();
         }
 
         #region 首页
         public ActionResult Index(string txtSearch, bool? hidfIsOr, int id = 1)
         {
-            PagedList<SearchResult> list = null;
+            PagedList<SearchResult> viewModel = null;
             if (!string.IsNullOrEmpty(txtSearch))//如果点击的是查询按钮
             {
-                //list = Search(txtSearch);
-                list = (hidfIsOr == null || hidfIsOr.Value == false) ? AndSearch(txtSearch, id) : OrSearch(txtSearch, id);
+                viewModel = (hidfIsOr == null || hidfIsOr.Value == false) ? AndSearch(txtSearch, id) : OrSearch(txtSearch, id);
             }
-            var keyWords = _db.SearchTotal.OrderByDescending(a => a.SearchCounts).Select(x => x.KeyWords).Skip(0).Take(6).ToList();
+            var keyWords = _efDbContext.SearchTotal.OrderByDescending(a => a.SearchCount).Select(x => x.KeyWord).Skip(0).Take(6).ToList();
             ViewBag.KeyWords = keyWords;
-            return View(list);
+
+            return View(viewModel);
         }
         #endregion
 
         #region 与查询
         //与查询
-        PagedList<SearchResult> AndSearch(String kw, int pageIndex, int pageSize = 4)
+        PagedList<SearchResult> AndSearch(string keyword, int pageIndex, int pageSize = 4)
         {
             FSDirectory directory = FSDirectory.Open(new DirectoryInfo(_indexPath), new NoLockFactory());
             IndexReader reader = IndexReader.Open(directory, true);
             IndexSearcher searcher = new IndexSearcher(reader);
             PhraseQuery query = new PhraseQuery();//查询条件
             PhraseQuery titleQuery = new PhraseQuery();//标题查询条件
-            List<string> lstkw = LuceneHelper.PanGuSplitWord(kw);//对用户输入的搜索条件进行拆分。
+            List<string> lstkw = LuceneHelper.PanGuSplitWord(keyword);//对用户输入的搜索条件进行拆分。
 
             foreach (string word in lstkw)
             {
@@ -90,7 +98,7 @@ namespace WebUI.Controllers
                 SearchResult result = new SearchResult();
                 result.Id = Convert.ToInt32(doc.Get("Id"));
                 msg = doc.Get("Content");//只有 Field.Store.YES的字段才能用Get查出来
-                result.Description = LuceneHelper.CreateHightLight(kw, msg);//将搜索的关键字高亮显示。
+                result.Description = LuceneHelper.CreateHightLight(keyword, msg);//将搜索的关键字高亮显示。
                 title = doc.Get("Title");
                 foreach (string word in lstkw)
                 {
@@ -99,13 +107,14 @@ namespace WebUI.Controllers
                 //result.Title=LuceneHelper.CreateHightLight(kw, title);
                 result.Title = title;
                 result.CreateTime = Convert.ToDateTime(doc.Get("CreateTime"));
-                result.Url = "/Article/Details?Id=" + result.Id + "&kw=" + kw;
+                // 找出此文章的 url
+                result.Url = _articleService.GetEntity(result.Id).CustomUrl;
                 list.Add(result);
             }
             //先将搜索的词插入到明细表。
-            SearchDetail _SearchDetail = new SearchDetail { Id = Guid.NewGuid(), KeyWords = kw, SearchDateTime = DateTime.Now };
-            _db.SearchDetail.Add(_SearchDetail);
-            int r = _db.SaveChanges();
+            SearchDetail _SearchDetail = new SearchDetail { KeyWord = keyword, SearchTime = DateTime.Now };
+            _efDbContext.SearchDetail.Add(_SearchDetail);
+            int r = _efDbContext.SaveChanges();
 
             PagedList<SearchResult> lst = new PagedList<SearchResult>(list, pageIndex, pageSize, recCount);
 
@@ -115,13 +124,13 @@ namespace WebUI.Controllers
 
         #region 或查询
         //或查询
-        PagedList<SearchResult> OrSearch(String kw, int pageNo, int pageLen = 4)
+        PagedList<SearchResult> OrSearch(string keyword, int pageIndex, int pageSize = 4)
         {
             FSDirectory directory = FSDirectory.Open(new DirectoryInfo(_indexPath), new NoLockFactory());
             IndexReader reader = IndexReader.Open(directory, true);
             IndexSearcher searcher = new IndexSearcher(reader);
             List<PhraseQuery> lstQuery = new List<PhraseQuery>();
-            List<string> lstkw = LuceneHelper.PanGuSplitWord(kw);//对用户输入的搜索条件进行拆分。
+            List<string> lstkw = LuceneHelper.PanGuSplitWord(keyword);//对用户输入的搜索条件进行拆分。
 
             foreach (string word in lstkw)
             {
@@ -146,7 +155,7 @@ namespace WebUI.Controllers
             searcher.Search(bq, null, collector);//使用query这个查询条件进行搜索，搜索结果放入collector
 
             int recCount = collector.GetTotalHits();//总的结果条数
-            ScoreDoc[] docs = collector.TopDocs((pageNo - 1) * pageLen, pageNo * pageLen).scoreDocs;//从查询结果中取出第m条到第n条的数据
+            ScoreDoc[] docs = collector.TopDocs((pageIndex - 1) * pageSize, pageIndex * pageSize).scoreDocs;//从查询结果中取出第m条到第n条的数据
 
             List<SearchResult> list = new List<SearchResult>();
             string msg = string.Empty;
@@ -166,20 +175,28 @@ namespace WebUI.Controllers
                 {
                     title = title.Replace(word, "<span style='color:red;'>" + word + "</span>");
                 }
-                result.Description = LuceneHelper.CreateHightLight(kw, msg);
+                result.Description = LuceneHelper.CreateHightLight(keyword, msg);
                 result.Title = title;
                 result.CreateTime = Convert.ToDateTime(doc.Get("CreateTime"));
-                result.Url = "/Article/Details?Id=" + result.Id + "&kw=" + kw;
+                // 找出此文章的 url
+                result.Url = _articleService.GetEntity(result.Id).CustomUrl;
                 list.Add(result);
             }
             //先将搜索的词插入到明细表。
-            SearchDetail _SearchDetail = new SearchDetail { Id = Guid.NewGuid(), KeyWords = kw, SearchDateTime = DateTime.Now };
-            _db.SearchDetail.Add(_SearchDetail);
-            int r = _db.SaveChanges();
+            SearchDetail _SearchDetail = new SearchDetail { KeyWord = keyword, SearchTime = DateTime.Now };
+            _efDbContext.SearchDetail.Add(_SearchDetail);
+            int r = _efDbContext.SaveChanges();
 
-            PagedList<SearchResult> lst = new PagedList<SearchResult>(list, pageNo, pageLen, recCount);
+            PagedList<SearchResult> lst = new PagedList<SearchResult>(list, pageIndex, pageSize, recCount);
 
             return lst;
+        }
+        #endregion
+
+        #region 获得搜索下拉热词
+        public JsonResult GetKeyWordsList()
+        {
+            return Json(new { });
         }
         #endregion
     }

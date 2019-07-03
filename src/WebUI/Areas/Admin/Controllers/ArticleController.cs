@@ -17,8 +17,6 @@ namespace WebUI.Areas.Admin.Controllers
 {
     public class ArticleController : Controller
     {
-        private SearchDbContext db = new SearchDbContext();
-
         #region 列表
         public ActionResult Index(int pageIndex = 1, int pageSize = 6)
         {
@@ -94,6 +92,11 @@ namespace WebUI.Areas.Admin.Controllers
 
                     articleService.Edit(dbModel);
 
+                    // 添加到队列-删除此文章索引
+                    SearchIndexManager.GetInstance().DeleteQueue(inputModel.ID.ToString());
+                    // 添加到队列-新建此文章索引
+                    SearchIndexManager.GetInstance().AddQueue(inputModel.ID.ToString(), inputModel.Title, inputModel.Content, inputModel.PublishTime);
+
                     return Json(new { code = 1, message = "保存成功" });
                 }
                 else
@@ -116,6 +119,9 @@ namespace WebUI.Areas.Admin.Controllers
             try
             {
                 Container.Instance.Resolve<ArticleService>().Delete(id);
+
+                // 添加到队列-删除此文章索引
+                SearchIndexManager.GetInstance().DeleteQueue(id.ToString());
 
                 return Json(new { code = 1, message = "删除成功" });
             }
@@ -156,7 +162,7 @@ namespace WebUI.Areas.Admin.Controllers
 
                     Container.Instance.Resolve<ArticleService>().Create(dbModel);
 
-                    // 添加到队列-建立索引
+                    // 添加到队列-新建此文章索引
                     SearchIndexManager.GetInstance().AddQueue(inputModel.ID.ToString(), inputModel.Title, inputModel.Content, inputModel.PublishTime);
 
                     return Json(new { code = 1, message = "添加成功" });

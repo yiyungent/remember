@@ -1,18 +1,18 @@
-namespace WebUI.Migrations
+namespace Manager.Migrations
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<WebUI.Models.SearchVM.SearchDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<Manager.EF.EFDbContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(WebUI.Models.SearchVM.SearchDbContext context)
+        protected override void Seed(Manager.EF.EFDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 

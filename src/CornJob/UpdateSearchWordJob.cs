@@ -1,29 +1,30 @@
 ﻿using Quartz;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CornJob
 {
-    public class UpdateSearchWordsJob : IJob
+    public class UpdateSearchWordJob : IJob
     {
         public Task Execute(IJobExecutionContext context)
         {
-            File.AppendAllText(@"C:\Users\lenovo\Desktop\log.txt", DateTime.Now.ToString() + Environment.NewLine);
+            LogHelper.Log("开始更新搜索热词");
             try
             {
-                KeyWordsTotalService bll = new KeyWordsTotalService();
+                KeyWordTotalService bll = new KeyWordTotalService();
                 bll.DeleteAllKeyWordsRank();
                 bll.InsertKeyWordsRank();
+
+                LogHelper.Log("更新完毕");
             }
             catch (Exception ex)
             {
-                File.AppendAllText(@"C:\Users\lenovo\Desktop\log.txt", DateTime.Now.ToString() + Environment.NewLine + ex.Message + Environment.NewLine);
+                LogHelper.Log("更新出错: " + ex.Message);
             }
-
 
             return Task.CompletedTask;
         }

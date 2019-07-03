@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 
 namespace CornJob
 {
-    public class SearchSchedule
+    public class RememberSchedule
     {
-        readonly IScheduler scheduler = null;
+        private readonly IScheduler _scheduler = null;
 
-        public SearchSchedule()
+        public RememberSchedule()
         {
             // 创建作业调度器
-            scheduler = new StdSchedulerFactory().GetScheduler().Result;
+            _scheduler = new StdSchedulerFactory().GetScheduler().Result;
             var jobDataMap = new JobDataMap();
             jobDataMap.Add("times", "1");
 
             // 创建一个作业
-            IJobDetail job = JobBuilder.Create<UpdateSearchWordsJob>()
+            IJobDetail job = JobBuilder.Create<UpdateSearchWordJob>()
                 .WithIdentity("job1", "jobGroup1")
                 .UsingJobData(jobDataMap)
                 .Build();
@@ -34,17 +34,17 @@ namespace CornJob
                     .WithRepeatCount(10))
                 .Build();
 
-            scheduler.ScheduleJob(job, trigger).Wait();
+            _scheduler.ScheduleJob(job, trigger).Wait();
         }
 
         public void Start()
         {
-            scheduler.Start().Wait();
+            _scheduler.Start().Wait();
         }
 
         public void Stop()
         {
-            scheduler.Shutdown().Wait();
+            _scheduler.Shutdown().Wait();
         }
     }
 }

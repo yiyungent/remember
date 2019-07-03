@@ -61,11 +61,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="KeyWordsTotalService.cs" />
+    <Compile Include="KeyWordTotalService.cs" />
+    <Compile Include="LogHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchSchedule.cs" />
-    <Compile Include="UpdateSearchWordsJob.cs" />
+    <Compile Include="RememberSchedule.cs" />
+    <Compile Include="UpdateSearchWordJob.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

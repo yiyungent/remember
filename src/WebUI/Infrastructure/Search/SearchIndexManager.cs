@@ -41,14 +41,17 @@ namespace WebUI.Infrastructure.Search
 {
     public sealed class SearchIndexManager
     {
-        private static readonly SearchIndexManager searchIndexManager = new SearchIndexManager();
+        private static readonly SearchIndexManager _searchIndexManager = new SearchIndexManager();
+
         private SearchIndexManager()
         {
         }
+
         public static SearchIndexManager GetInstance()
         {
-            return searchIndexManager;
+            return _searchIndexManager;
         }
+
         Queue<IndexContent> queue = new Queue<IndexContent>();
         /// <summary>
         /// 向队列中添加数据
@@ -66,6 +69,7 @@ namespace WebUI.Infrastructure.Search
             indexContent.CreateTime = createTime.ToString();
             queue.Enqueue(indexContent);
         }
+
         /// <summary>
         /// 向队列中添加要删除数据
         /// </summary>
@@ -87,6 +91,7 @@ namespace WebUI.Infrastructure.Search
             myThread.IsBackground = true;
             myThread.Start();
         }
+
         private void WriteIndexContent()
         {
             while (true)
@@ -101,6 +106,7 @@ namespace WebUI.Infrastructure.Search
                 }
             }
         }
+
         private void CreateIndexContent()
         {
             string indexPath = ConfigurationManager.AppSettings["LuceneDir"];//注意和磁盘上文件夹的大小写一致，否则会报错。将创建的分词内容放在该目录下。

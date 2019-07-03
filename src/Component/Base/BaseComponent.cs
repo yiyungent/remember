@@ -103,5 +103,10 @@ namespace Component.Base
         {
             return manager.GetPaged(queryConditions, pageIndex, pageSize, out count);
         }
+
+        public int ExecuteNonQuery(string sql, params object[] parameters)
+        {
+            return manager.ExecuteNonQuery(sql, parameters);
+        }
     }
 }

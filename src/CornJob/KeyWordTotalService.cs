@@ -1,14 +1,13 @@
-﻿
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System.Configuration;
 
 namespace CornJob
 {
-    public class KeyWordsTotalService
+    public class KeyWordTotalService
     {
         private string _connStr;
 
-        public KeyWordsTotalService()
+        public KeyWordTotalService()
         {
             this._connStr = ConfigurationManager.ConnectionStrings["CornJobDbContext"].ConnectionString;
         }
@@ -24,7 +23,7 @@ namespace CornJob
                 conn.Open();
                 MySqlCommand cmd = conn.CreateCommand();
 
-                string sql = "insert into SearchTotals(Id,KeyWords,SearchCounts) select uuid(),KeyWords,count(*)  from SearchDetails where DateDiff(SearchDetails.SearchDateTime,now())<=30 group by SearchDetails.KeyWords";
+                string sql = "insert into SearchTotal(KeyWord,SearchCount) select KeyWord,count(*)  from SearchDetail where DateDiff(SearchDetail.SearchTime,now())<=30 group by SearchDetail.KeyWord";
 
                 cmd.CommandText = sql;
 
@@ -43,7 +42,7 @@ namespace CornJob
                 conn.Open();
                 MySqlCommand cmd = conn.CreateCommand();
 
-                string sql = "truncate table SearchTotals";
+                string sql = "truncate table SearchTotal";
 
                 cmd.CommandText = sql;
 

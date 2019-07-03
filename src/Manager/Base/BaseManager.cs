@@ -1,4 +1,5 @@
 ﻿using Castle.ActiveRecord;
+using Manager.EF;
 using NHibernate;
 using NHibernate.Criterion;
 using System;
@@ -11,6 +12,13 @@ namespace Manager.Base
     public class BaseManager<T> : ActiveRecordBase<T>
         where T : class
     {
+        private EFDbContext _efDbContext;
+
+        public BaseManager()
+        {
+            this._efDbContext = new EFDbContext();
+        }
+
         /// <summary>
         /// 新增实体
         /// </summary>
@@ -157,6 +165,11 @@ namespace Manager.Base
             {
                 hql.Append(" and ");
             }
+        }
+
+        public int ExecuteNonQuery(string sql, params object[] parameters)
+        {
+            return _efDbContext.Database.ExecuteSqlCommand(sql, parameters);
         }
     }
 }

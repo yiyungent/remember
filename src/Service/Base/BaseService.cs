@@ -61,5 +61,7 @@ namespace Service.Base
         /// <param name="count">返回满足查询条件</param>
         /// <returns>返回满足查询条件的实体</returns>
         IList<T> GetPaged(IList<KeyValuePair<string, string>> queryConditions, int pageIndex, int pageSize, out int count);
+
+        int ExecuteNonQuery(string sql, params object[] parameters);
     }
 }

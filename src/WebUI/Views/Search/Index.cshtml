@@ -81,7 +81,7 @@
 @using (Html.BeginForm(null, null, FormMethod.Get))
 {
 	@Html.Hidden("hidfIsOr")
-	<div>@Html.TextBox("txtSearch", null, new { @class = "search-text2" })<input type="submit" value="搜索" name="btnSearch" id="btnSearch" class="search-btn2" /><input type="checkbox" id="isOr" value="false" />或查询</div>
+	<div>@Html.TextBox("txtSearch", null, new { @class = "search-text2" })<input type="submit" value="搜索"  id="btnSearch" class="search-btn2" /><input type="checkbox" id="isOr" value="false" />或查询</div>
 	<div id="divKeyWords">
 		<span>热门搜索：</span>@if (ViewBag.KeyWords != null)
 		{
@@ -97,17 +97,18 @@
 			{
 				foreach (var viewModel in Model.List)
 				{
-					<dt><a href="@viewModel.Url" target="_blank">@MvcHtmlString.Create(viewModel.Title)</a><span style="margin-left:50px;">@viewModel.CreateTime</span></dt>
+					<dt><a href="/@viewModel.Url" target="_blank">@MvcHtmlString.Create(viewModel.Title)</a><span style="margin-left:50px;">@viewModel.CreateTime</span></dt>
 					<dd>@MvcHtmlString.Create(viewModel.Description)</dd>
 				}
 			}
 		</dl>
 	</div>
-	<div>@ViewData["ShowInfo"]</div>
+	<div>@ViewData["Message"]</div>
 }
 <script src="~/Scripts/jquery-1.6.4.min.js"></script>
 <script src="~/dist/Autocomplete/js/jquery-ui-1.8.17.custom.min.js"></script>
 <script type="text/javascript">
+
 	$(function () {
 		$("#divKeyWords a").click(function () {
 			$("#txtSearch").val($(this).html());
@@ -126,12 +127,13 @@
 			$("input[type='checkbox']").prop("checked", true);
 		}
 	});
+
 	//自动加载搜索列表
 	function getKeyWordsList(txt) {
 		if (txt == undefined || txt == "")
 			return;
 		$("#" + txt).autocomplete({
-			source: "/LastSearch/GetKeyWordsList",
+			source: "@Url.Action("GetKeyWordsList")",
 			minLength: 1
 		});
 	}

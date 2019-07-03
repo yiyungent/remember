@@ -16,6 +16,7 @@ namespace Domain.Base
         /// </summary>
         [PrimaryKey(PrimaryKeyType.Native)]
         [Display(Name = "编号", AutoGenerateField = false)]
+        [Key]
         public int ID { get; set; }
     }
 }
