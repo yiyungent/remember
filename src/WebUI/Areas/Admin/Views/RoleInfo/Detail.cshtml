@@ -1,0 +1,11 @@
+﻿@using Domain
+@model RoleInfo
+@{
+	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
+}
+
+<div class="input-group">
+	<a class="btn btn-default" href="javascript:history.go(-1);">返回</a>
+	@Html.TextBoxFor(m => m.ID, new { @class = "form-control", @readonly = "readonly" })
+	@Html.TextBoxFor(m => m.Name, new { @class = "form-control", @readonly = "readonly" })
+</div>

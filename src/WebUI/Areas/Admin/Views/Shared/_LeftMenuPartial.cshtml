@@ -1,0 +1,75 @@
+﻿@using Domain
+@{
+	Layout = null;
+	ViewBag.MenuIcon = "fa fa-circle-o";
+	IList<Sys_Menu> allMenuList = ViewBag.AllMenuList as IList<Sys_Menu>;
+}
+@GenerateMenu(allMenuList)
+@helper GenerateMenu(IList<Sys_Menu> allMenuList)
+{
+	IList<Sys_Menu> firstMenuList = (from m in allMenuList
+									 where m.ParentMenu == null
+									 orderby m.SortCode ascending
+									 select m).ToList();
+	<ul class="sidebar-menu" data-widget="tree">
+		<li class="header">菜单列表</li>
+		@foreach (Sys_Menu firstMenuItem in firstMenuList)
+		{
+			if (firstMenuItem.Children == null || firstMenuItem.Children.Count == 0)
+			{
+				<li><a class="js-left-menu-a" href="@Url.Action(firstMenuItem.ActionName, firstMenuItem.ControllerName, new { area = firstMenuItem.AreaName })" target="iframe-content"><i class="@ViewBag.MenuIcon"></i> <span>@firstMenuItem.Name</span></a></li>
+			}
+			else
+			{
+				// 否则又是一个折叠菜单
+				<li class="treeview">
+					<a href="#">
+						<i class="@ViewBag.MenuIcon"></i> <span>@firstMenuItem.Name</span>
+						<span class="pull-right-container">
+							<i class="fa fa-angle-left pull-right"></i>
+						</span>
+					</a>
+					@SubMenuList(firstMenuItem, allMenuList)
+				</li>
+			}
+		}
+	</ul>
+}
+
+@* 递归查找子菜单项 *@
+@helper SubMenuList(Sys_Menu currentMenu, IList<Sys_Menu> allMenuList)
+{
+	IList<Sys_Menu> subMenuList = (from m in allMenuList
+								   where m.ParentMenu != null && m.ParentMenu.ID == currentMenu.ID
+								   orderby m.SortCode ascending
+								   select m).ToList();
+	<ul class="treeview-menu" data-pjax>
+		@*此菜单项下又嵌套一个折叠菜单*@
+		@foreach (Sys_Menu menuItem in subMenuList)
+		{
+			if (menuItem.Children == null || menuItem.Children.Count == 0)
+			{
+				<li><a class="js-left-menu-a" href="@Url.Action(menuItem.ActionName, menuItem.ControllerName, new { area = menuItem.AreaName })" target="iframe-content"><i class="@ViewBag.MenuIcon"></i> <span>@menuItem.Name</span></a></li>
+			}
+			else
+			{
+				<li class="treeview">
+					<a href="#">
+						<i class="@ViewBag.MenuIcon"></i> <span>@menuItem.Name</span>
+						<span class="pull-right-container">
+							<i class="fa fa-angle-left pull-right"></i>
+						</span>
+					</a>
+					@SubMenuList(menuItem, allMenuList)
+				</li>
+			}
+		}
+	</ul>
+}
+
+
+
+
+
+
+

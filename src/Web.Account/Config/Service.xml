@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <components>
+    <component id="UserInfoService"
+               service="Service.UserInfoService,Service"
+               type="Component.UserInfoComponent,Component"
+               isTransactional="true" />
+    <component id="StudentInfoService"
+               service="Service.StudentInfoService,Service"
+               type="Component.StudentInfoComponent,Component"
+               isTransactional="true" />
+    <component id="EmployeeInfoService"
+               service="Service.EmployeeInfoService,Service"
+               type="Component.EmployeeInfoComponent,Component"
+               isTransactional="true" />
+    <component id="ClazzInfoService"
+               service="Service.ClazzInfoService,Service"
+               type="Component.ClazzInfoComponent,Component"
+               isTransactional="true" />
+    <component id="CourseInfoService"
+               service="Service.CourseInfoService,Service"
+               type="Component.CourseInfoComponent,Component"
+               isTransactional="true" />
+    <component id="DepartmentService"
+              service="Service.DepartmentService,Service"
+              type="Component.DepartmentComponent,Component"
+              isTransactional="true" />
+    <component id="RoleInfoService"
+               service="Service.RoleInfoService,Service"
+               type="Component.RoleInfoComponent,Component"
+               isTransactional="true" />
+    <component id="Sys_MenuService"
+               service="Service.Sys_MenuService,Service"
+               type="Component.Sys_MenuComponent,Component"
+               isTransactional="true" />
+    <component id="FunctionInfoService"
+               service="Service.FunctionInfoService,Service"
+               type="Component.FunctionInfoComponent,Component"
+               isTransactional="true" />
+   <component id="SettingService"
+               service="Service.SettingService,Service"
+               type="Component.SettingComponent,Component"
+               isTransactional="true" />
+   <component id="CourseTableService"
+               service="Service.CourseTableService,Service"
+               type="Component.CourseTableComponent,Component"
+               isTransactional="true" />
+  </components>
+</configuration>

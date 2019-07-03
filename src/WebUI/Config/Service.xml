@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <components>
+    <component id="UserInfoService"
+               service="Service.UserInfoService,Service"
+               type="Component.UserInfoComponent,Component"
+               isTransactional="true" />
+    <component id="RoleInfoService"
+               service="Service.RoleInfoService,Service"
+               type="Component.RoleInfoComponent,Component"
+               isTransactional="true" />
+    <component id="Sys_MenuService"
+               service="Service.Sys_MenuService,Service"
+               type="Component.Sys_MenuComponent,Component"
+               isTransactional="true" />
+    <component id="FunctionInfoService"
+               service="Service.FunctionInfoService,Service"
+               type="Component.FunctionInfoComponent,Component"
+               isTransactional="true" />
+    <component id="SettingService"
+                service="Service.SettingService,Service"
+                type="Component.SettingComponent,Component"
+                isTransactional="true" />
+    <component id='ThemeTemplateService'
+               service='Service.ThemeTemplateService,Service'
+               type='Component.ThemeTemplateComponent,Component'
+               isTransactional='true' />
+    <component id='ArticleService'
+               service='Service.ArticleService,Service'
+               type='Component.ArticleComponent,Component'
+               isTransactional='true' />
+    <component id="CardBoxService"
+               service="Service.CardBoxService,Service"
+               type="Component.CardBoxComponent,Component"
+               isTransactional="true" />
+    <component id="CardInfoService"
+               service="Service.CardInfoService,Service"
+               type="Component.CardInfoComponent,Component"
+               isTransactional="true" />
+  </components>
+</configuration>

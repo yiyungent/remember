@@ -1,0 +1,74 @@
+﻿@using Framework.HtmlHelpers
+@using WebUI.Areas.Admin.Models.Common
+@using WebUI.Extensions
+@using Domain
+@{
+	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
+}
+@section head {
+}
+@section body {
+	<script src="~/dist/pview/pview.js"></script>
+	<script src="~/dist/echarts/dist/echarts.min.js"></script>
+	<script>
+
+		function showMessage(message, type) {
+			$("#js-message").fadeIn();
+			switch (type) {
+				case -1:
+					$("#js-message").attr("class", "alert alert-danger").find(".message").html(message);
+					break;
+				case 1:
+					$("#js-message").attr("class", "alert alert-success").find(".message").html(message);
+					break;
+			}
+			// 3s 后隐藏
+			setTimeout(function () {
+				$("#js-message").fadeOut("slow");
+			}, 3000);
+		}
+
+		var pview;
+		$(function () {
+			pview = new PView();
+			pview.init();
+
+			var evaRecordTime = echarts.init($('#js-eva-record-by-time')[0]);
+			evaRecordTime.showLoading();
+			$.post('/Admin/Dashboard/EvaAnalyse', function (data) {
+				evaRecordTime.hideLoading();
+				evaRecordTime.setOption(data);
+			});
+		});
+	</script>
+}
+
+<!-- start 提示框 -->
+@{ Html.RenderPartial("_MessagePartial"); }
+<!-- end 提示框 -->
+
+<input id="js-id" type="hidden" />
+
+<!-- start .box -->
+<div class="box">
+	<!-- start .box-header -->
+	<div class="box-header">
+		<h3 class="box-title">评价分析</h3>
+		<div class="box-tools"></div>
+	</div>
+	<!-- end .box-header -->
+	<!-- start .box-body -->
+	<!-- start 简单表格 -->
+	<div class="box-body">
+		<div id="js-eva-record-by-time" style="width: 600px;height:400px;"></div>
+	</div>
+	<!-- end 简单表格 -->
+	<!-- end .box-body -->
+	<!-- start .box-footer -->
+	<div class="box-footer clearfix">
+		<div class="btn-group pull-left">
+		</div>
+	</div>
+	<!-- end .box-footer -->
+</div>
+<!-- end .box -->

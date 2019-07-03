@@ -1,0 +1,139 @@
+﻿@using Framework.HtmlHelpers
+@using WebUI.Models.SearchVM
+@model PagedList<SearchResult>
+@{
+	ViewBag.Title = "Index";
+}
+
+<link href="~/dist/Autocomplete/css/ui-lightness/jquery-ui-1.8.17.custom.css" rel="stylesheet" />
+<style type="text/css">
+	.search-text2 {
+		display: block;
+		width: 528px;
+		height: 26px;
+		line-height: 26px;
+		float: left;
+		margin: 3px 5px;
+		border: 1px solid gray;
+		outline: none;
+		font-family: 'Microsoft Yahei';
+		font-size: 14px;
+	}
+
+	.search-btn2 {
+		width: 102px;
+		height: 32px;
+		line-height: 32px;
+		cursor: pointer;
+		border: 0px;
+		background-color: #d6000f;
+		font-family: 'Microsoft Yahei';
+		font-size: 16px;
+		color: #f3f3f3;
+	}
+
+	.search-list-con {
+		width: 640px;
+		background-color: #fff;
+		overflow: hidden;
+		margin-top: 0px;
+		padding-bottom: 15px;
+		padding-top: 5px;
+	}
+
+	.search-list {
+		width: 600px;
+		overflow: hidden;
+		margin: 15px 20px 0px 20px;
+	}
+
+		.search-list dt {
+			font-family: 'Microsoft Yahei';
+			font-size: 16px;
+			line-height: 20px;
+			margin-bottom: 7px;
+			font-weight: normal;
+		}
+
+			.search-list dt a {
+				color: #2981a9;
+			}
+
+				.search-list dt a em {
+					font-style: normal;
+					color: #cc0000;
+				}
+
+	#divKeyWords {
+		text-align: left;
+		width: 520px;
+		padding-left: 4px;
+	}
+
+		#divKeyWords a {
+			text-decoration: none;
+		}
+
+			#divKeyWords a:hover {
+				color: red;
+			}
+</style>
+@using (Html.BeginForm(null, null, FormMethod.Get))
+{
+	@Html.Hidden("hidfIsOr")
+	<div>@Html.TextBox("txtSearch", null, new { @class = "search-text2" })<input type="submit" value="搜索" name="btnSearch" id="btnSearch" class="search-btn2" /><input type="checkbox" id="isOr" value="false" />或查询</div>
+	<div id="divKeyWords">
+		<span>热门搜索：</span>@if (ViewBag.KeyWords != null)
+		{
+			foreach (string v in ViewBag.KeyWords)
+			{
+				<a href="#">@v</a>
+			}
+		}
+	</div>
+	<div class="search-list-con">
+		<dl class="search-list">
+			@if (Model != null && Model.List.Count > 0)
+			{
+				foreach (var viewModel in Model.List)
+				{
+					<dt><a href="@viewModel.Url" target="_blank">@MvcHtmlString.Create(viewModel.Title)</a><span style="margin-left:50px;">@viewModel.CreateTime</span></dt>
+					<dd>@MvcHtmlString.Create(viewModel.Description)</dd>
+				}
+			}
+		</dl>
+	</div>
+	<div>@ViewData["ShowInfo"]</div>
+}
+<script src="~/Scripts/jquery-1.6.4.min.js"></script>
+<script src="~/dist/Autocomplete/js/jquery-ui-1.8.17.custom.min.js"></script>
+<script type="text/javascript">
+	$(function () {
+		$("#divKeyWords a").click(function () {
+			$("#txtSearch").val($(this).html());
+			$("#btnSearch").click();
+		});
+		getKeyWordsList("txtSearch");
+		$("#isOr").click(function () {
+			if ($(this).attr("checked") == "checked") {
+				$("#hidfIsOr").val(true);
+			}
+			else {
+				$("#hidfIsOr").val(false);
+			}
+		});
+		if ($("#hidfIsOr").val() == "true") {
+			$("input[type='checkbox']").prop("checked", true);
+		}
+	});
+	//自动加载搜索列表
+	function getKeyWordsList(txt) {
+		if (txt == undefined || txt == "")
+			return;
+		$("#" + txt).autocomplete({
+			source: "/LastSearch/GetKeyWordsList",
+			minLength: 1
+		});
+	}
+
+</script>

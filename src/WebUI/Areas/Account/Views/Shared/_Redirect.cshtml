@@ -1,0 +1,51 @@
+﻿@model WebUI.Areas.Account.Models.RedirectViewModel
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>@Model.Title</title>
+	<link href="~/dist/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="container">
+		<div class="row" style="height: 100px;"></div>
+		<div class="row">
+			<div class="col-6 text-center">
+				<div class="box">
+					<div class="box-header">
+						<h3 class="box-title">@Model.Message</h3>
+					</div>
+					<div class="box-body" style="padding-top: 20px;">
+						<p>
+							<b id="js-wait">@Model.WaitSecond</b> 秒后页面将自动跳转
+						</p>
+						<a id="js-goRedirect" href="@Model.RedirectUrl">如果你的浏览器没有反应，请点击这点</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="~/dist/AdminLTE/bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="~/dist/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script>
+		$(function () {
+			var wait = document.getElementById('js-wait'), href = document.getElementById('js-goRedirect').href;
+			var interval = setInterval(function () {
+				var time = --wait.innerHTML;
+				if (time <= 0) {
+					location.href = href;
+					clearInterval(interval);
+				};
+			}, 1000);
+			window.stop = function () {
+				clearInterval(interval);
+			}
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+﻿@using Domain
+@using WebUI.Areas.Admin.Models
+@using WebUI.Areas.Account.Models
+@using Framework.Models
+@using Framework.Infrastructure.Concrete
+@model UserInfo
+@{
+	Layout = "~/Areas/Account/Views/Shared/_TopNav.cshtml";
+	ViewBag.Title = Model.Name + "- 个人中心 - TES";
+
+	// 当前登录账号
+	CurrentAccountModel currentAccount = AccountManager.GetCurrentAccount();
+	UserInfo currentUserInfo = currentAccount.UserInfo;
+	EditUserInfoViewModel editUserInfoModel = new EditUserInfoViewModel
+	{
+		InputUserName = currentUserInfo.UserName,
+		InputName = currentUserInfo.Name,
+		InputDescription = currentUserInfo.Description,
+		InputEmail = currentUserInfo.Email
+	};
+	// 当前访问的个人中心是否为当前登录账号的个人中心---仅自己可见的内容
+	bool isSelf = Model.ID == currentUserInfo.ID;
+}
+@section head {
+}
+@section body {
+	<script>
+		function loadProfileBox(userName) {
+			loading();
+			$.ajax({
+				url: "@Url.Action("ProfileBoxPartial", "Control")",
+				type: "post",
+				data:{ userName: userName },
+				dataType: "html",
+				success: function (data) {
+					// 包装数据
+					var $obj = $("<code></code>").append($(data));
+					// 需要获取的对应块（如#js-profileBox)
+					var $needHtmlObj = $("#js-profileBox", $obj);
+					$("#js-profileBox").html($needHtmlObj.html());
+				}
+			});
+		}
+		function loading(){
+			$(".js-loading").css("display", "block");
+		}
+		function loadComplete () {
+			$(".js-loading").css("display", "none");
+		}
+		$(function () {
+		});
+	</script>
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+	<h1>
+		@ViewBag.PageHeader
+		<small>@ViewBag.PageHeaderDescription</small>
+	</h1>
+	<ol class="breadcrumb" data-pjax>
+		<li><a href="/"><i class="fa fa-home"></i> 首页</a></li>
+		@foreach (BreadcrumbItem item in ViewBag.BreadcrumbList)
+		{
+			@item.GenerateHtmlTag()
+		}
+	</ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	<div class="row">
+		<div class="col-md-12">
+			<!-- start 提示框 -->
+			@Html.Partial("_MessagePartial")
+			<!-- end 提示框 -->
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3">
+
+			<!-- Profile Image -->
+			@Html.Partial("_ProfileBoxPartial")
+			<!-- /.box -->
+			<!-- About Me Box -->
+			@Html.Partial("_AboutMeBoxPartial")
+			<!-- /.box -->
+		</div>
+		<!-- /.col -->
+		<div class="col-md-9">
+			<div class="nav-tabs-custom">
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#activity" data-toggle="tab">活动</a></li>
+					<li><a href="#timeline" data-toggle="tab">时间轴</a></li>
+					@if (isSelf)
+					{
+						<li><a href="#settings" data-toggle="tab">设置</a></li>
+					}
+				</ul>
+				<div class="tab-content">
+					<div class="active tab-pane" id="activity">
+						@Html.Partial("_ActivityPartial")
+					</div>
+					<!-- /.tab-pane -->
+					<div class="tab-pane" id="timeline">
+						@Html.Partial("_TimeLinePartial")
+					</div>
+					<!-- /.tab-pane -->
+					@if (isSelf)
+					{
+						<div class="tab-pane" id="settings">
+							@Html.Partial("_SettingsPartial", editUserInfoModel)
+						</div>
+						<!-- /.tab-pane -->
+					}
+				</div>
+				<!-- /.tab-content -->
+			</div>
+			<!-- /.nav-tabs-custom -->
+		</div>
+		<!-- /.col -->
+	</div>
+	<!-- /.row -->
+</section>
+<!-- /.content -->
