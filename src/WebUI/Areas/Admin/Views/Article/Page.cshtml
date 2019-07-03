@@ -1,0 +1,17 @@
+﻿@using Domain
+@model Article
+@{
+	Layout = "~/Views/Shared/_TopNav.cshtml";
+	ViewBag.Title = Model.Title;
+}
+
+<div class="row">
+	<div class="col-xs-6 col-xs-offset-6">
+		<h1>@Model.Title</h1>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12">
+		@Html.Raw(Model.Content)
+	</div>
+</div>

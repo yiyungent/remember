@@ -1,0 +1,16 @@
+﻿@{
+	Layout = null;
+}
+
+<!-- start 提示框 -->
+<div id="js-message" class="alert alert-success" role="alert" style="display: none;">
+	<button onclick="closeMsg()" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	<span class="message"></span>
+</div>
+<!-- end 提示框 -->
+<script>
+	// 关闭提示消息
+	function closeMsg() {
+		$("#js-message").css("display", "none");
+	}
+</script>

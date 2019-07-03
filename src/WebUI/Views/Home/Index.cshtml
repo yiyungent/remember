@@ -1,0 +1,33 @@
+﻿@using Domain
+@using Framework.Models
+@model CurrentAccountModel
+@{
+	ViewBag.Title = "教学评价系统 - TES";
+	Layout = "~/Views/Shared/_TopNav.cshtml";
+
+	UserInfo currentUserInfo = Model.UserInfo;
+	IList<Article> articleList = ViewBag.ArticleList;
+	articleList = articleList.OrderByDescending(m => m.LastUpdateTime).Take(5).ToList();
+}
+@section head {
+}
+@section body {
+}
+
+<!-- Main content -->
+<section class="content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="list-group">
+				@foreach (var item in articleList)
+				{
+					<a class="list-group-item" href="/@item.CustomUrl">
+						<span class="badge">@item.LastUpdateTime</span>
+						@item.Title
+					</a>
+				}
+			</div>
+		</div>
+	</div>
+</section>
+<!-- /.content -->

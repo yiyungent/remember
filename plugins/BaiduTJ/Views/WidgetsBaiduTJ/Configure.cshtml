@@ -1,0 +1,25 @@
+﻿@using BaiduTJ.Models
+@model ConfigurationViewModel
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>配置</title>
+	<link href="~/Plugins/BaiduTJ/Content/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+	@using (Html.BeginForm("Configure"))
+	{
+		Html.ValidationSummary();
+		<div class="input-group">
+			@Html.TextAreaFor(m => m.TJCode, new { @class = "form-control", rows = "3" })
+		</div>
+		<input class="btn btn-primary" type="submit" value="保存" />
+	}
+</body>
+</html>

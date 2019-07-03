@@ -1,0 +1,118 @@
+﻿@using WebUI.Areas.Admin.Models.PluginVM
+@model PluginListViewModel
+@{
+	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml"; ;
+}
+@section head {
+}
+@section body {
+	<script src="~/dist/pview/pview.js"></script>
+	<script>
+
+		function showMessage(message, type) {
+			$("#js-message").fadeIn();
+			switch (type) {
+				case -1:
+					$("#js-message").attr("class", "alert alert-danger").find(".message").html(message);
+					break;
+				case 1:
+					$("#js-message").attr("class", "alert alert-success").find(".message").html(message);
+					break;
+			}
+			// 3s 后隐藏
+			setTimeout(function () {
+				$("#js-message").fadeOut("slow");
+			}, 3000);
+		}
+
+		var pview;
+		$(function () {
+			pview = new PView();
+			pview.init();
+
+			$('[id^="js-btn-install"]').on('click', function () {
+				$(this).html('安装中...');
+			});
+			$('[id^="js-btn-uninstall"]').on('click', function () {
+				$(this).html('卸载中...');
+			});
+			$('#js-btn-reload').on('click', function () {
+				$(this).html('加载插件中...');
+			});
+		});
+
+
+	</script>
+}
+
+<!-- start 提示框 -->
+@{ Html.RenderPartial("_MessagePartial"); }
+<!-- end 提示框 -->
+<!-- start 切换页头 -->
+<div class="row" style="padding-bottom: 24px;" pview="header">
+	<div class="col-md-12">
+		<div class="pull-left">
+
+		</div>
+		<div class="pull-right col-md-4">
+			<div class="btn-group">
+				<a class="btn btn-primary" href="@Url.Action("UploadPlugin")">上传本地插件</a>
+				<a id="js-btn-reload" class="btn btn-default" href="@Url.Action("ReloadList")">重新加载插件</a>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end 切换页头 -->
+<!-- start 列表 -->
+<div class="row" pview="list">
+	<div class="col-xs-12">
+		<ul class="media-list">
+			@foreach (var item in Model.List)
+			{
+				<li class="media">
+					<div class="media-left">
+						<a href="#">
+							<img class="media-object" src="/Plugins/@item.SystemName/logo.jpg" alt="@item.FriendlyName">
+						</a>
+					</div>
+					<div class="media-body">
+						<h4 class="media-heading">@item.FriendlyName</h4>
+						<p>
+							<span>插件名称: </span><span>@item.SystemName</span>
+							<span>版本: </span><span class="label label-info">@item.Version</span>
+							<span>作者: </span><span class="label label-success">@item.Author</span>
+							<span>支持版本: </span>
+							@foreach (var version in item.SupportedVersions)
+							{
+								<span class="label label-success">@version</span>
+							}
+						</p>
+						<p id="js-btn-group-@item.SystemName" class="btn-group">
+							@if (item.Installed)
+							{
+								<a id="js-btn-uninstall-@item.SystemName" class="btn btn-danger" href="@Url.Content("~/Admin/Plugin/Uninstall/")?systemName=@item.SystemName">卸载</a>
+							}
+							else
+							{
+								<a id="js-btn-install-@item.SystemName" class="btn btn-primary" href="@Url.Content("~/Admin/Plugin/Install/")?systemName=@item.SystemName">安装</a>
+							}
+							@if (item.HaveConfigure)
+							{
+								<a class="btn btn-info" href="@Url.Content("~/Admin/Plugin/Configure/")?systemName=@item.SystemName">配置</a>
+							}
+						</p>
+					</div>
+				</li>
+			}
+		</ul>
+	</div>
+	<!-- start 分页 -->
+	<div id="js-page" class="col-xs-12">
+		<ul class="pagination pull-right" pview-btn-group pview-targets="header,list">
+			@*@Html.PageLinks(Model.PageInfo, i => Url.Action("Index", new { pageIndex = i, q = Request["q"], type = Request["type"] }))*@
+		</ul>
+	</div>
+	<!-- end 分页 -->
+	<div class=""></div>
+</div>
+<!-- end 列表 -->

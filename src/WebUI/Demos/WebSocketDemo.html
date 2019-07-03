@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title></title>
+	<script src="../Scripts/jquery-1.12.0.min.js"></script>
+</head>
+<body>
+	<input id="js-nickName" type="text" value="" />
+	<button onclick="connect()">开始连接</button>
+	<hr />
+	消息:<input type="text" value="" />
+	<button onclick="sendMessage()">发送消息</button>
+	<script>
+		var webSocket;
+		$(function () {
+
+		});
+
+		function connect() {
+			var nickName = $("#js-nickName").val();
+			webSocket = new WebSocket("ws://" + window.location.hostname + ":" + window.location.port + "/api/ws/connect?nickName=" + nickName);
+			webSocket.onopen = function () {
+				console.log("opened");
+			}
+			webSocket.onerror = function () {
+				console.log("web socket error");
+			}
+			webSocket.onmessage = function (event) {
+				console.log("web socket error");
+			}
+			self.webSocket.onclose = function () { console.log("closed"); }
+		}
+
+		function sendMessage() {
+			$("#btnSend").click(function () {
+				if (ws.readyState == WebSocket.OPEN) {
+					ws.send($("#txtInput").val());
+				}
+				else {
+					$("messageSpan").text("Connection is Closed!");
+				}
+			});
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+﻿@using Domain
+@using WebUI.Areas.Admin.Models
+@using WebUI.Extensions
+@using PluginHub.Mvc5
+@using Framework.Models
+@using Framework.Infrastructure.Concrete
+@{
+	Layout = null;
+	// 当前登录账号
+	CurrentAccountModel currentAccount = AccountManager.GetCurrentAccount();
+	UserInfo currentUserInfo = currentAccount.UserInfo;
+	string roleName = currentUserInfo.RoleInfoList.FirstOrDefault() == null ? "" : currentUserInfo.RoleInfoList.FirstOrDefault().Name;
+
+	ViewBag.CurrentAccount = currentAccount;
+	ViewBag.RoleName = roleName;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>@ViewBag.Title</title>
+	<!-- Tell the browser to be responsive to screen width -->
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" href="/dist/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="/dist/AdminLTE/bower_components/font-awesome/css/font-awesome.min.css">
+	<!-- Ionicons -->
+	<link rel="stylesheet" href="/dist/AdminLTE/bower_components/Ionicons/css/ionicons.min.css">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="/dist/AdminLTE/dist/css/AdminLTE.min.css">
+	<link rel="stylesheet" href="/dist/AdminLTE/dist/css/skins/skin-blue.min.css">
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	@RenderSection("head", false)
+</head>
+<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+<body class="hold-transition skin-blue layout-top-nav">
+	<div class="wrapper">
+
+		<header class="main-header">
+			<nav class="navbar navbar-static-top">
+				<div class="container">
+					<div class="navbar-header">
+						<a href="/" class="navbar-brand"><b>T</b>ES</a>
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+							<i class="fa fa-bars"></i>
+						</button>
+					</div>
+
+					<!-- Collect the nav links, forms, and other content for toggling -->
+					@{ Html.RenderPartial("_TopNav_NavbarCollapsePartial"); }
+					<!-- /.navbar-collapse -->
+					<!-- Navbar Right Menu -->
+					<div class="navbar-custom-menu">
+						<ul class="nav navbar-nav">
+							<!-- Messages: style can be found in dropdown.less-->
+							@{ Html.RenderPartial("_TopNav_MessagesMenuPartial"); }
+							<!-- /.messages-menu -->
+							<!-- Notifications Menu -->
+							@{ Html.RenderPartial("_TopNav_NotificationsMenuPartial"); }
+							<!-- Tasks Menu -->
+							@{ Html.RenderPartial("_TopNav_TasksMenuPartial"); }
+							<!-- User Account Menu -->
+							@{ Html.RenderPartial("_TopNav_UserAccountMenuPartial"); }
+						</ul>
+					</div>
+					<!-- /.navbar-custom-menu -->
+				</div>
+				<!-- /.container-fluid -->
+			</nav>
+		</header>
+		<!-- Full Width Column -->
+		<div class="content-wrapper">
+			<div class="container">
+				@RenderBody()
+			</div>
+			<!-- /.container -->
+		</div>
+		<!-- /.content-wrapper -->
+		<footer class="main-footer">
+			<div class="container">
+				<div class="pull-right hidden-xs">
+					<b>Version</b> 2.3.7
+				</div>
+				<strong>Copyright &copy; 2014-2016 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights
+				reserved.
+			</div>
+			<!-- /.container -->
+		</footer>
+	</div>
+	<!-- ./wrapper -->
+	<!-- jQuery -->
+	<script src="/Scripts/jquery-1.12.0.min.js"></script>
+	<!-- Bootstrap 3.3.7 -->
+	<script src="/dist/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="/dist/AdminLTE/dist/js/adminlte.min.js"></script>
+	<script src="/dist/pjax/jquery.pjax.js"></script>
+	<script src="~/Scripts/jquery.validate.min.js"></script>
+	<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+	<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+	@RenderSection("body", false)
+</body>
+</html>
