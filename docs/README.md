@@ -1,18 +1,18 @@
 <p align="center">
-<img src="_images/TES.png" alt="TES">
+<img src="_images/remember.png" alt="remember">
 </p>
-<h1 align="center">TES</h1>
+<h1 align="center">remember</h1>
 
-> :cake: TES - 期望成为最好用的教学评价系统
+> :cake: remember - 期望能帮到你
 
-[![repo size](https://img.shields.io/github/repo-size/yiyungent/TES.svg?style=flat)]()
-[![LICENSE](https://img.shields.io/github/license/yiyungent/TES.svg?style=flat)](https://mit-license.org/)
+[![repo size](https://img.shields.io/github/repo-size/yiyungent/remember.svg?style=flat)]()
+[![LICENSE](https://img.shields.io/github/license/yiyungent/remember.svg?style=flat)](https://mit-license.org/)
 
 
 
 ## 介绍
 
-TES是一个教学评价系统，同时也是一个多用户多角色的内容管理系统。
+remember 是一个学习辅助工具，一个帮助你记忆知识点的工具。
 
 ## 使用的第三方库
 
