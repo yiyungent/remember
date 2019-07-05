@@ -10,11 +10,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebUI.Areas.Admin.Models.Common;
 using WebUI.Extensions;
 
-namespace WebUI.Areas.Admin.Models
+namespace WebUI.Areas.Admin.Models.UserInfoVM
 {
-    public class UserInfoForEditViewModel
+    public class UserInfoViewModel
     {
         #region Properties
 
@@ -61,12 +62,12 @@ namespace WebUI.Areas.Admin.Models
         public string InputStudentCode { get; set; }
 
         [Display(Name = "角色")]
-        public List<OptionModel> RoleOptions { get; set; } 
+        public List<OptionModel> RoleOptions { get; set; }
 
         #endregion
 
         #region Ctor
-        public UserInfoForEditViewModel()
+        public UserInfoViewModel()
         {
             this.RoleOptions = new List<OptionModel>();
             //this.RoleOptions.Add(new OptionModel
@@ -90,7 +91,7 @@ namespace WebUI.Areas.Admin.Models
         #endregion
 
         #region 数据库模型->视图模型
-        public static explicit operator UserInfoForEditViewModel(UserInfo dbModel)
+        public static explicit operator UserInfoViewModel(UserInfo dbModel)
         {
             IList<RoleInfo> allRole = Container.Instance.Resolve<RoleInfoService>().GetAll();
             allRole = allRole.Where(m => m.Name != "游客").ToList();
@@ -105,7 +106,7 @@ namespace WebUI.Areas.Admin.Models
                     IsSelected = dbModel.RoleInfoList.Contains(role, new RoleInfoEqualityComparer())
                 });
             }
-            UserInfoForEditViewModel viewModel = new UserInfoForEditViewModel
+            UserInfoViewModel viewModel = new UserInfoViewModel
             {
                 ID = dbModel.ID,
                 InputUserName = dbModel.UserName,
@@ -120,7 +121,7 @@ namespace WebUI.Areas.Admin.Models
         #endregion
 
         #region 输入模型->数据库模型
-        public static explicit operator UserInfo(UserInfoForEditViewModel inputModel)
+        public static explicit operator UserInfo(UserInfoViewModel inputModel)
         {
             UserInfo dbModel = null;
             if (inputModel.ID == 0)

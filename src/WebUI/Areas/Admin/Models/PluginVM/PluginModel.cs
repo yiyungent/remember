@@ -38,15 +38,8 @@ namespace WebUI.Areas.Admin.Models.PluginVM
         public string LogoUrl { get; set; }
 
         public IList<PluginLocalizedModel> Locales { get; set; }
-
-
-        ////Store mapping
-        //public bool LimitedToStores { get; set; }
-
-        //public List<StoreModel> AvailableStores { get; set; }
-
-        public int[] SelectedStoreIds { get; set; }
     }
+
     public partial class PluginLocalizedModel
     {
         public int LanguageId { get; set; }

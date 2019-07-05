@@ -17,14 +17,14 @@ namespace Component.Base
         where T : BaseEntity<T>, new()
         where M : BaseManager<T>, new()
     {
-        protected M manager = (M)typeof(M).GetConstructor(Type.EmptyTypes).Invoke(null);
+        protected M _manager = (M)typeof(M).GetConstructor(Type.EmptyTypes).Invoke(null);
 
         /// <summary>
         /// 新增实体
         /// </summary>
         public void Create(T t)
         {
-            manager.Create(t);
+            _manager.Create(t);
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Component.Base
         /// </summary>
         public void Delete(T t)
         {
-            manager.Delete(t);
+            _manager.Delete(t);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Component.Base
         /// </summary>
         public void Delete(int id)
         {
-            manager.Delete(id);
+            _manager.Delete(id);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Component.Base
         /// </summary>
         public void Edit(T t)
         {
-            manager.Edit(t);
+            _manager.Edit(t);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Component.Base
         /// </summary>
         public IList<T> Query(IList<ICriterion> condition)
         {
-            return manager.Query(condition);
+            return _manager.Query(condition);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Component.Base
         /// </summary>
         public IList<T> GetAll()
         {
-            return manager.GetAll();
+            return _manager.GetAll();
         }
 
         /// <summary>
@@ -72,23 +72,23 @@ namespace Component.Base
         /// </summary>
         public T GetEntity(int id)
         {
-            return manager.GetEntity(id);
+            return _manager.GetEntity(id);
         }
 
         public int Count(params ICriterion[] criteria)
         {
-            return manager.Count(criteria);
+            return _manager.Count(criteria);
         }
 
         public bool Exist(int id)
         {
-            return manager.Exist(id);
+            return _manager.Exist(id);
         }
 
         //分页区和取对象集合
         public IList<T> GetPaged(IList<ICriterion> queryConditions, IList<Order> orderList, int pageIndex, int pageSize, out int count)
         {
-            return manager.GetPaged(queryConditions, orderList, pageIndex, pageSize, out count);
+            return _manager.GetPaged(queryConditions, orderList, pageIndex, pageSize, out count);
         }
 
         /// <summary>
@@ -101,12 +101,17 @@ namespace Component.Base
         /// <returns>返回满足查询条件的实体</returns>
         public IList<T> GetPaged(IList<KeyValuePair<string, string>> queryConditions, int pageIndex, int pageSize, out int count)
         {
-            return manager.GetPaged(queryConditions, pageIndex, pageSize, out count);
+            return _manager.GetPaged(queryConditions, pageIndex, pageSize, out count);
         }
 
         public int ExecuteNonQuery(string sql, params object[] parameters)
         {
-            return manager.ExecuteNonQuery(sql, parameters);
+            return _manager.ExecuteNonQuery(sql, parameters);
+        }
+
+        public int GetLastId()
+        {
+            return _manager.GetLastId();
         }
     }
 }

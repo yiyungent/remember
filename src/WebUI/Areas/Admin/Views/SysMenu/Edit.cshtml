@@ -4,7 +4,7 @@
 	Layout = null;
 }
 
-<link href="~/dist/layui/css/layui.css" rel="stylesheet" />
+<link href="/libs/layui/css/layui.css" rel="stylesheet" />
 <div>
 	<form class="layui-form">
 		@Html.HiddenFor(m => m.ID)
@@ -49,8 +49,8 @@
 		</div>
 	</form>
 </div>
-<script src="~/Scripts/jquery-1.12.0.min.js"></script>
-<script src="~/dist/layui/layui.js"></script>
+<script src="/Scripts/jquery-1.12.0.min.js"></script>
+<script src="/libs/layui/layui.js"></script>
 <script>
 	var form, layer;
 	layui.use(['form', 'layer'], function () {

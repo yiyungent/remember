@@ -63,5 +63,7 @@ namespace Service.Base
         IList<T> GetPaged(IList<KeyValuePair<string, string>> queryConditions, int pageIndex, int pageSize, out int count);
 
         int ExecuteNonQuery(string sql, params object[] parameters);
+
+        int GetLastId();
     }
 }

@@ -10,7 +10,7 @@ namespace Component
     {
         public bool Exist(string userName, int exceptId = 0)
         {
-            return manager.Exist(userName, exceptId: exceptId);
+            return _manager.Exist(userName, exceptId: exceptId);
         }
     }
 }

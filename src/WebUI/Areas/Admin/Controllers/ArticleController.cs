@@ -5,6 +5,7 @@ using NHibernate.Criterion;
 using Service;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -17,6 +18,17 @@ namespace WebUI.Areas.Admin.Controllers
 {
     public class ArticleController : Controller
     {
+        #region Fields
+        private ArticleService _articleService; 
+        #endregion
+
+        #region Ctor
+        public ArticleController()
+        {
+            this._articleService = Container.Instance.Resolve<ArticleService>();
+        } 
+        #endregion
+
         #region 列表
         public ActionResult Index(int pageIndex = 1, int pageSize = 6)
         {
@@ -92,9 +104,7 @@ namespace WebUI.Areas.Admin.Controllers
 
                     articleService.Edit(dbModel);
 
-                    // 添加到队列-删除此文章索引
-                    SearchIndexManager.GetInstance().DeleteQueue(inputModel.ID.ToString());
-                    // 添加到队列-新建此文章索引
+                    // 添加到队列-新建此文章索引 -- 不需要先删除，因为 SearchIndexManager 会先删除此ID的索引，再新建
                     SearchIndexManager.GetInstance().AddQueue(inputModel.ID.ToString(), inputModel.Title, inputModel.Content, inputModel.PublishTime);
 
                     return Json(new { code = 1, message = "保存成功" });
@@ -159,11 +169,13 @@ namespace WebUI.Areas.Admin.Controllers
                     dbModel.Author = new UserInfo { ID = AccountManager.GetCurrentUserInfo().ID };
                     dbModel.PublishTime = DateTime.Now;
                     dbModel.LastUpdateTime = DateTime.Now;
+                    dbModel.CustomUrl = inputModel.CustomUrl;
 
-                    Container.Instance.Resolve<ArticleService>().Create(dbModel);
+                    _articleService.Create(dbModel);
+                    int lastId = _articleService.GetLastId();
 
                     // 添加到队列-新建此文章索引
-                    SearchIndexManager.GetInstance().AddQueue(inputModel.ID.ToString(), inputModel.Title, inputModel.Content, inputModel.PublishTime);
+                    SearchIndexManager.GetInstance().AddQueue(lastId.ToString(), inputModel.Title, inputModel.Content, inputModel.PublishTime);
 
                     return Json(new { code = 1, message = "添加成功" });
                 }
@@ -183,7 +195,7 @@ namespace WebUI.Areas.Admin.Controllers
         #region 用于自定义Url的文章内容展示
         public ActionResult Page()
         {
-            Article dbModel = (Article)System.Web.HttpContext.Current.Items["cmspage"];
+            Article dbModel = (Article)System.Web.HttpContext.Current.Items["CmsPage"];
 
             return View(dbModel);
         }

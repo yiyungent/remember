@@ -13,6 +13,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebUI.Areas.Account.Models;
 using WebUI.Areas.Admin.Models;
+using WebUI.Areas.Admin.Models.Common;
 
 namespace WebUI.Areas.Account.Controllers
 {

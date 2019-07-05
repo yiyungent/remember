@@ -15,6 +15,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebUI.Areas.Admin.Models;
 using WebUI.Areas.Admin.Models.Common;
+using WebUI.Areas.Admin.Models.UserInfoVM;
 using WebUI.Extensions;
 
 namespace WebUI.Areas.Admin.Controllers
@@ -107,13 +108,13 @@ namespace WebUI.Areas.Admin.Controllers
         public ViewResult Edit(int id)
         {
             UserInfo dbModel = Container.Instance.Resolve<UserInfoService>().GetEntity(id);
-            UserInfoForEditViewModel viewModel = (UserInfoForEditViewModel)dbModel;
+            UserInfoViewModel viewModel = (UserInfoViewModel)dbModel;
 
             return View(viewModel);
         }
 
         [HttpPost]
-        public JsonResult Edit(UserInfoForEditViewModel inputModel)
+        public JsonResult Edit(UserInfoViewModel inputModel)
         {
             try
             {
@@ -160,13 +161,13 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpGet]
         public ViewResult Create()
         {
-            UserInfoForEditViewModel viewModel = new UserInfoForEditViewModel();
+            UserInfoViewModel viewModel = new UserInfoViewModel();
 
             return View(viewModel);
         }
 
         [HttpPost]
-        public JsonResult Create(UserInfoForEditViewModel inputModel)
+        public JsonResult Create(UserInfoViewModel inputModel)
         {
             try
             {

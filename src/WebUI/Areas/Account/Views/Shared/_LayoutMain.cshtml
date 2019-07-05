@@ -4,7 +4,7 @@
 <head>
 	<meta name="viewport" content="width=device-width" />
 	<title>@ViewBag.Title</title>
-	<link href="~/css/base.css" rel="stylesheet" />
+	<link href="/libs/remember/css/base.css" rel="stylesheet" />
 	<style>
 		.outer {
 			width: 980px;
@@ -22,11 +22,11 @@
 <body>
 	<div class="outer">
 		<div class="top-banner">
-			<img src="~/images/top_banner.png" alt="Banner" />
+			<img src="/libs/remember/images/top_banner.png" alt="Banner" />
 		</div>
 		@RenderBody()
 	</div>
-	<script src="~/Scripts/jquery-1.12.0.min.js"></script>
+	<script src="/Scripts/jquery-1.12.0.min.js"></script>
 	@RenderSection("foot", false)
 </body>
 </html>

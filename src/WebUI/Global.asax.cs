@@ -84,6 +84,7 @@ namespace WebUI
             #endregion
         }
 
+        #region 注册路由
         public static void RegisterRoutes(RouteCollection routes)
         {
             AreaRegistration.RegisterAllAreas();
@@ -95,11 +96,11 @@ namespace WebUI
                 namespaces: new string[] { "WebUI.Controllers" }
             );
 
-            //register custom routes (plugins, etc)
+            // register custom routes (plugins, etc)
             var routePublisher = EngineContext.Current.Resolve<IRoutePublisher>();
             routePublisher.RegisterRoutes(routes);
 
-            // register custom article url
+            // 注册文章页的自定义路由
             var route = routes.MapRoute(
                   name: "ArticleCustomUrl",
                   url: "{*cmsurl}",
@@ -111,7 +112,9 @@ namespace WebUI
 
             RouteConfig.RegisterRoutes(RouteTable.Routes);
         }
+        #endregion
 
+        #region 错误处理
         protected void Application_Error(Object sender, EventArgs e)
         {
             var exception = Server.GetLastError();
@@ -137,6 +140,7 @@ namespace WebUI
                     errorController.Execute(new RequestContext(new HttpContextWrapper(Context), routeData));
                 }
             }
-        }
+        } 
+        #endregion
     }
 }

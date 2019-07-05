@@ -1,17 +1,18 @@
-﻿@using WebUI.Areas.Admin.Models
-@model UserInfoForEditViewModel
+﻿@using WebUI.Areas.Admin.Models.UserInfoVM
+@using WebUI.Areas.Admin.Models.Common
+@model UserInfoViewModel
 @{
 	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
 
 	Html.EnableClientValidation(false);
 }
 @section head {
-	<link href="/dist/AdminLTE/bower_components/select2/dist/css/select2.min.css" rel="stylesheet" />
+	<link href="/libs/AdminLTE/bower_components/select2/dist/css/select2.min.css" rel="stylesheet" />
 	<!-- 重新覆盖掉 select2 所覆盖的主题样式 -->
-	<link rel="stylesheet" href="/dist/AdminLTE/dist/css/AdminLTE.min.css">
+	<link rel="stylesheet" href="/libs/AdminLTE/dist/css/AdminLTE.min.css">
 }
 @section body {
-	<script src="/dist/AdminLTE/bower_components/select2/dist/js/select2.full.min.js"></script>
+	<script src="/libs/AdminLTE/bower_components/select2/dist/js/select2.full.min.js"></script>
 	<script>
 
 		function showMessage(message, type) {

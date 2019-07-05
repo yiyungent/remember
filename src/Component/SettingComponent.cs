@@ -9,12 +9,12 @@ namespace Component
     {
         public string GetSet(string key)
         {
-            return manager.GetSet(key);
+            return _manager.GetSet(key);
         }
 
         public void Set(string key, string value)
         {
-            manager.Set(key, value);
+            _manager.Set(key, value);
         }
     }
 }

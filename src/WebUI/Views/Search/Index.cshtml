@@ -2,140 +2,120 @@
 @using WebUI.Models.SearchVM
 @model PagedList<SearchResult>
 @{
-	ViewBag.Title = "Index";
+	ViewBag.Title = "搜索";
 }
 
-<link href="~/dist/Autocomplete/css/ui-lightness/jquery-ui-1.8.17.custom.css" rel="stylesheet" />
-<style type="text/css">
-	.search-text2 {
-		display: block;
-		width: 528px;
-		height: 26px;
-		line-height: 26px;
-		float: left;
-		margin: 3px 5px;
-		border: 1px solid gray;
-		outline: none;
-		font-family: 'Microsoft Yahei';
-		font-size: 14px;
-	}
+<!DOCTYPE html>
 
-	.search-btn2 {
-		width: 102px;
-		height: 32px;
-		line-height: 32px;
-		cursor: pointer;
-		border: 0px;
-		background-color: #d6000f;
-		font-family: 'Microsoft Yahei';
-		font-size: 16px;
-		color: #f3f3f3;
-	}
-
-	.search-list-con {
-		width: 640px;
-		background-color: #fff;
-		overflow: hidden;
-		margin-top: 0px;
-		padding-bottom: 15px;
-		padding-top: 5px;
-	}
-
-	.search-list {
-		width: 600px;
-		overflow: hidden;
-		margin: 15px 20px 0px 20px;
-	}
-
-		.search-list dt {
-			font-family: 'Microsoft Yahei';
-			font-size: 16px;
-			line-height: 20px;
-			margin-bottom: 7px;
-			font-weight: normal;
-		}
-
-			.search-list dt a {
-				color: #2981a9;
-			}
-
-				.search-list dt a em {
-					font-style: normal;
-					color: #cc0000;
-				}
-
-	#divKeyWords {
-		text-align: left;
-		width: 520px;
-		padding-left: 4px;
-	}
-
-		#divKeyWords a {
-			text-decoration: none;
-		}
-
-			#divKeyWords a:hover {
-				color: red;
-			}
-</style>
-@using (Html.BeginForm(null, null, FormMethod.Get))
-{
-	@Html.Hidden("hidfIsOr")
-	<div>@Html.TextBox("txtSearch", null, new { @class = "search-text2" })<input type="submit" value="搜索"  id="btnSearch" class="search-btn2" /><input type="checkbox" id="isOr" value="false" />或查询</div>
-	<div id="divKeyWords">
-		<span>热门搜索：</span>@if (ViewBag.KeyWords != null)
-		{
-			foreach (string v in ViewBag.KeyWords)
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>@ViewBag.Title</title>
+	<!-- Tell the browser to be responsive to screen width -->
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" href="/libs/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="/libs/AdminLTE/bower_components/font-awesome/css/font-awesome.min.css">
+	<!-- Ionicons -->
+	<link rel="stylesheet" href="/libs/AdminLTE/bower_components/Ionicons/css/ionicons.min.css">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="/libs/AdminLTE/dist/css/AdminLTE.min.css">
+	<link rel="stylesheet" href="/libs/AdminLTE/dist/css/skins/skin-blue.min.css">
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	<link href="/libs/Autocomplete/css/ui-lightness/jquery-ui-1.8.17.custom.css" rel="stylesheet" />
+</head>
+<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+<body class="hold-transition skin-blue layout-top-nav">
+	<div class="container">
+		<form class="search-form" method="get">
+			@Html.Hidden("hidIsOr")
+			<div class="input-group">
+				@Html.TextBox("txtSearch", null, new { @class = "form-control" })
+				<div class="input-group-btn">
+					<button id="js-btn-search" class="btn btn-warning btn-flat" type="submit">
+						<i class="fa fa-search"></i>
+					</button>
+					<div>
+						或查询<input id="js-isOr" type="checkbox" value="false" />
+					</div>
+				</div>
+			</div>
+			<!-- /.input-group -->
+		</form>
+		<div id="js-keywords">
+			<span>热门搜索:</span>
+			@if (ViewBag.KeyWords != null)
 			{
-				<a href="#">@v</a>
-			}
-		}
-	</div>
-	<div class="search-list-con">
-		<dl class="search-list">
-			@if (Model != null && Model.List.Count > 0)
-			{
-				foreach (var viewModel in Model.List)
+				foreach (string keyword in ViewBag.KeyWords)
 				{
-					<dt><a href="/@viewModel.Url" target="_blank">@MvcHtmlString.Create(viewModel.Title)</a><span style="margin-left:50px;">@viewModel.CreateTime</span></dt>
-					<dd>@MvcHtmlString.Create(viewModel.Description)</dd>
+					<a href="#">@keyword</a>
 				}
 			}
-		</dl>
+		</div>
+		<div>
+			<ul class="media-list">
+				@if (Model != null && Model.List.Count > 0)
+				{
+					foreach (var item in Model.List)
+					{
+						<li class="media">
+							<div class="media-left">
+								<a href="/@item.Url">
+									<img class="media-object" src="..." alt="...">
+								</a>
+							</div>
+							<div class="media-body">
+								<h4 class="media-heading">@MvcHtmlString.Create(item.Title)</h4>
+								@MvcHtmlString.Create(item.Description)
+								<h6><i class="glyphicon glyphicon-time"></i>@item.CreateTime</h6>
+							</div>
+						</li>
+					}
+				}
+			</ul>
+		</div>
 	</div>
-	<div>@ViewData["Message"]</div>
-}
-<script src="~/Scripts/jquery-1.6.4.min.js"></script>
-<script src="~/dist/Autocomplete/js/jquery-ui-1.8.17.custom.min.js"></script>
-<script type="text/javascript">
+	<script src="/libs/Autocomplete/js/jquery-ui-1.8.17.custom.min.js"></script>
+	<!-- jQuery -->
+	<script src="/Scripts/jquery-1.12.0.min.js"></script>
+	<!-- Bootstrap 3.3.7 -->
+	<script src="/libs/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="/libs/AdminLTE/dist/js/adminlte.min.js"></script>
+	<script type="text/javascript">
 
-	$(function () {
-		$("#divKeyWords a").click(function () {
-			$("#txtSearch").val($(this).html());
-			$("#btnSearch").click();
-		});
-		getKeyWordsList("txtSearch");
-		$("#isOr").click(function () {
-			if ($(this).attr("checked") == "checked") {
-				$("#hidfIsOr").val(true);
+		$(function () {
+			$("#js-keywords a").click(function () {
+				$("#txtSearch").val($(this).html());
+				$("#js-btn-search").click();
+			});
+			getKeyWordList("txtSearch");
+			$("#js-isOr").click(function () {
+				if ($(this).attr("checked") == "checked") {
+					$("#hidfIsOr").val(true);
+				}
+				else {
+					$("#hidfIsOr").val(false);
+				}
+			});
+			if ($("#hidfIsOr").val() == "true") {
+				$("input[type='checkbox']").prop("checked", true);
 			}
-			else {
-				$("#hidfIsOr").val(false);
-			}
 		});
-		if ($("#hidfIsOr").val() == "true") {
-			$("input[type='checkbox']").prop("checked", true);
+
+		// 自动加载搜索列表
+		function getKeyWordList(txt) {
+			if (txt == undefined || txt == "")
+				return;
+			$("#" + txt).autocomplete({
+				source: "@Url.Action("GetKeyWordList")",
+				minLength: 1
+			});
 		}
-	});
 
-	//自动加载搜索列表
-	function getKeyWordsList(txt) {
-		if (txt == undefined || txt == "")
-			return;
-		$("#" + txt).autocomplete({
-			source: "@Url.Action("GetKeyWordsList")",
-			minLength: 1
-		});
-	}
-
-</script>
+	</script>
+</body>
+</html>

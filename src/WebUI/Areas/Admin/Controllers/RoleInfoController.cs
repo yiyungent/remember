@@ -15,6 +15,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebUI.Areas.Admin.Models;
 using WebUI.Areas.Admin.Models.Common;
+using WebUI.Areas.Admin.Models.RoleInfoVM;
 
 namespace WebUI.Areas.Admin.Controllers
 {
@@ -78,13 +79,13 @@ namespace WebUI.Areas.Admin.Controllers
         public ViewResult Edit(int id)
         {
             RoleInfo roleInfo = Container.Instance.Resolve<RoleInfoService>().GetEntity(id);
-            RoleInfoForEditViewModel model = (RoleInfoForEditViewModel)roleInfo;
+            RoleInfoViewModel model = (RoleInfoViewModel)roleInfo;
 
             return View(model);
         }
 
         [HttpPost]
-        public JsonResult Edit(RoleInfoForEditViewModel model)
+        public JsonResult Edit(RoleInfoViewModel model)
         {
             try
             {

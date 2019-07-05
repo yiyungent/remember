@@ -41,45 +41,51 @@ namespace WebUI.Infrastructure.Search
 {
     public sealed class SearchIndexManager
     {
+        #region Fields
         private static readonly SearchIndexManager _searchIndexManager = new SearchIndexManager();
 
+        private Queue<IndexContent> _queue = new Queue<IndexContent>(); 
+        #endregion
+
+        #region Ctor
         private SearchIndexManager()
         {
         }
+        #endregion
 
+        #region Methods
         public static SearchIndexManager GetInstance()
         {
             return _searchIndexManager;
         }
 
-        Queue<IndexContent> queue = new Queue<IndexContent>();
         /// <summary>
         /// 向队列中添加数据
         /// </summary>
-        /// <param name="Id"></param>
+        /// <param name="id"></param>
         /// <param name="title"></param>
         /// <param name="content"></param>
-        public void AddQueue(string Id, string title, string content, DateTime createTime)
+        public void AddQueue(string id, string title, string content, DateTime createTime)
         {
             IndexContent indexContent = new IndexContent();
-            indexContent.Id = Id;
+            indexContent.Id = id;
             indexContent.Title = title;
             indexContent.Content = content;
             indexContent.LuceneEnum = LuceneEnum.AddType;// 添加
             indexContent.CreateTime = createTime.ToString();
-            queue.Enqueue(indexContent);
+            _queue.Enqueue(indexContent);
         }
 
         /// <summary>
         /// 向队列中添加要删除数据
         /// </summary>
-        /// <param name="Id"></param>
-        public void DeleteQueue(string Id)
+        /// <param name="id"></param>
+        public void DeleteQueue(string id)
         {
             IndexContent indexContent = new IndexContent();
-            indexContent.Id = Id;
+            indexContent.Id = id;
             indexContent.LuceneEnum = LuceneEnum.DeleType;//删除
-            queue.Enqueue(indexContent);
+            _queue.Enqueue(indexContent);
         }
 
         /// <summary>
@@ -96,7 +102,7 @@ namespace WebUI.Infrastructure.Search
         {
             while (true)
             {
-                if (queue.Count > 0)
+                if (_queue.Count > 0)
                 {
                     CreateIndexContent();
                 }
@@ -128,9 +134,9 @@ namespace WebUI.Infrastructure.Search
             }
             IndexWriter writer = new IndexWriter(directory, new PanGuAnalyzer(), !isUpdate, Lucene.Net.Index.IndexWriter.MaxFieldLength.UNLIMITED);//向索引库中写索引。这时在这里加锁。
 
-            while (queue.Count > 0)
+            while (_queue.Count > 0)
             {
-                IndexContent indexContent = queue.Dequeue();//将队列中的数据出队
+                IndexContent indexContent = _queue.Dequeue();//将队列中的数据出队
                 writer.DeleteDocuments(new Term("Id", indexContent.Id.ToString()));
                 if (indexContent.LuceneEnum == LuceneEnum.DeleType)
                 {
@@ -151,6 +157,7 @@ namespace WebUI.Infrastructure.Search
 
             writer.Close();//会自动解锁。
             directory.Close();//不要忘了Close，否则索引结果搜不到
-        }
+        } 
+        #endregion
     }
 }

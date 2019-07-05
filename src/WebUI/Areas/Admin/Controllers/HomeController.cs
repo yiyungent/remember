@@ -12,6 +12,7 @@ using Framework.Models;
 using Framework.Factories;
 using Framework.Mvc;
 using WebUI.Areas.Admin.Models;
+using WebUI.Areas.Admin.Models.Common;
 
 namespace WebUI.Areas.Admin.Controllers
 {

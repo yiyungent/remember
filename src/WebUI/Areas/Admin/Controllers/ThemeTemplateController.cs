@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using WebUI.Areas.Admin.Models;
+using WebUI.Areas.Admin.Models.Common;
 using WebUI.Areas.Admin.Models.ThemeTemplateVM;
 
 namespace WebUI.Areas.Admin.Controllers

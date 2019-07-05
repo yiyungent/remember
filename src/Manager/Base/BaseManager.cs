@@ -171,5 +171,12 @@ namespace Manager.Base
         {
             return _efDbContext.Database.ExecuteSqlCommand(sql, parameters);
         }
+
+        public int GetLastId()
+        {
+            var result = _efDbContext.Database.SqlQuery<int>("SELECT LAST_INSERT_ID()");
+
+            return result.FirstOrDefault();
+        }
     }
 }

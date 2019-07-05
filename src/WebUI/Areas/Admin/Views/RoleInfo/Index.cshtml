@@ -63,28 +63,28 @@
 		<th>角色名</th>
 		<th>操作</th>
 	</tr>
-	@foreach (var cat in Model.DyList)
+	@foreach (var item in Model.List)
 	{
-		<tr data-tr-id="@cat.ID">
-			<td>@cat.ID</td>
-			<td>@cat.Name</td>
+		<tr data-tr-id="@item.ID">
+			<td>@item.ID</td>
+			<td>@item.Name</td>
 			<td>
 				<div class="btn-group" role="group" data-pjax>
 					@if (Html.HasAuth("Admin", "RoleInfo", "Detail"))
 					{
-						<a class="btn btn-success" href="@Url.Action("Detail")?id=@cat.ID">查看</a>
+						<a class="btn btn-success" href="@Url.Action("Detail")?id=@item.ID">查看</a>
 					}
 					@if (Html.HasAuth("Admin", "RoleInfo", "Delete"))
 					{
-						<button class="btn btn-danger" type="button" onclick="deleteOp(@cat.ID)">删除</button>
+						<button class="btn btn-danger" type="button" onclick="deleteOp(@item.ID)">删除</button>
 					}
 					@if (Html.HasAuth("Admin", "RoleInfo", "Edit"))
 					{
-						<a class="btn btn-warning" href="@Url.Action("Edit")?id=@cat.ID">修改</a>
+						<a class="btn btn-warning" href="@Url.Action("Edit")?id=@item.ID">修改</a>
 					}
 					@if (Html.HasAuth("Admin", "RoleInfo", "AssignPower"))
 					{
-						<a class="btn btn-primary" href="@Url.Action("AssignPower")?id=@cat.ID">授权</a>
+						<a class="btn btn-primary" href="@Url.Action("AssignPower")?id=@item.ID">授权</a>
 					}
 				</div>
 			</td>

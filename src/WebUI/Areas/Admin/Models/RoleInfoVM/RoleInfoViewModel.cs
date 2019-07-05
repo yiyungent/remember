@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebUI.Areas.Admin.Models
+namespace WebUI.Areas.Admin.Models.RoleInfoVM
 {
-    public class RoleInfoForEditViewModel
+    public class RoleInfoViewModel
     {
         public int ID { get; set; }
 
@@ -15,9 +15,9 @@ namespace WebUI.Areas.Admin.Models
         /// </summary>
         public string Name { get; set; }
 
-        public static explicit operator RoleInfoForEditViewModel(RoleInfo roleInfo)
+        public static explicit operator RoleInfoViewModel(RoleInfo roleInfo)
         {
-            RoleInfoForEditViewModel rtnModel = new RoleInfoForEditViewModel
+            RoleInfoViewModel rtnModel = new RoleInfoViewModel
             {
                 ID = roleInfo.ID,
                 Name = roleInfo.Name

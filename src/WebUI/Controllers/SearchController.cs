@@ -22,12 +22,15 @@ namespace WebUI.Controllers
 {
     public class SearchController : Controller
     {
+        #region Fields
         private EFDbContext _efDbContext = new EFDbContext();
 
         private ArticleService _articleService;
 
-        private string _indexPath;
+        private string _indexPath; 
+        #endregion
 
+        #region Ctor
         public SearchController()
         {
             string indexPath = System.Configuration.ConfigurationManager.AppSettings["LuceneDir"];
@@ -40,7 +43,8 @@ namespace WebUI.Controllers
             this._indexPath = indexPath;
 
             this._articleService = Container.Instance.Resolve<ArticleService>();
-        }
+        } 
+        #endregion
 
         #region 首页
         public ActionResult Index(string txtSearch, bool? hidfIsOr, int id = 1)
@@ -194,7 +198,7 @@ namespace WebUI.Controllers
         #endregion
 
         #region 获得搜索下拉热词
-        public JsonResult GetKeyWordsList()
+        public JsonResult GetKeyWordList()
         {
             return Json(new { });
         }
