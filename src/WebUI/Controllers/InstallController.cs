@@ -536,7 +536,7 @@ namespace WebUI.Controllers
                 {
                     articleService.Create(new Article
                     {
-                        PublishTime = DateTime.Now,
+                        CreateTime = DateTime.Now,
                         LastUpdateTime = DateTime.Now,
                         Author = new UserInfo { ID = 1 },
                         Title = "测试文章" + (i + 1),

@@ -25,8 +25,6 @@ namespace WebUI.Controllers
         #region Fields
         private EFDbContext _efDbContext = new EFDbContext();
 
-        private ArticleService _articleService;
-
         private SearchTotalService _searchTotalService;
 
         private string _indexPath;
@@ -41,10 +39,7 @@ namespace WebUI.Controllers
             {
                 indexPath = HostingEnvironment.MapPath(indexPath);
             }
-
             this._indexPath = indexPath;
-
-            this._articleService = Container.Instance.Resolve<ArticleService>();
             this._searchTotalService = Container.Instance.Resolve<SearchTotalService>();
         }
         #endregion
@@ -66,7 +61,7 @@ namespace WebUI.Controllers
 
         #region 与查询
         //与查询
-        PagedList<SearchResult> AndSearch(string keyword, int pageIndex, int pageSize = 4)
+        private PagedList<SearchResult> AndSearch(string keyword, int pageIndex, int pageSize = 4)
         {
             FSDirectory directory = FSDirectory.Open(new DirectoryInfo(_indexPath), new NoLockFactory());
             IndexReader reader = IndexReader.Open(directory, true);
@@ -115,7 +110,7 @@ namespace WebUI.Controllers
                 result.Title = title;
                 result.CreateTime = Convert.ToDateTime(doc.Get("CreateTime"));
                 // 找出此文章的 url
-                result.Url = _articleService.GetEntity(result.Id).CustomUrl;
+                result.Url = doc.Get("Url");
                 list.Add(result);
             }
             //先将搜索的词插入到明细表。
@@ -131,7 +126,7 @@ namespace WebUI.Controllers
 
         #region 或查询
         //或查询
-        PagedList<SearchResult> OrSearch(string keyword, int pageIndex, int pageSize = 4)
+        private PagedList<SearchResult> OrSearch(string keyword, int pageIndex, int pageSize = 4)
         {
             FSDirectory directory = FSDirectory.Open(new DirectoryInfo(_indexPath), new NoLockFactory());
             IndexReader reader = IndexReader.Open(directory, true);
@@ -186,7 +181,7 @@ namespace WebUI.Controllers
                 result.Title = title;
                 result.CreateTime = Convert.ToDateTime(doc.Get("CreateTime"));
                 // 找出此文章的 url
-                result.Url = _articleService.GetEntity(result.Id).CustomUrl;
+                result.Url = doc.Get("Url");
                 list.Add(result);
             }
             //先将搜索的词插入到明细表。
@@ -201,14 +196,14 @@ namespace WebUI.Controllers
         #endregion
 
         #region 获得搜索下拉热词
-        public JsonResult GetKeyWordList(string keyword)
+        public JsonResult GetKeyWordList(string term)
         {
-            if (string.IsNullOrWhiteSpace(keyword))
+            if (string.IsNullOrWhiteSpace(term))
             {
                 return null;
             }
 
-            IList<string> searchTotals = _searchTotalService.GetKeyWordList(keyword);
+            IList<string> searchTotals = _searchTotalService.GetKeyWordList(term);
 
             return Json(searchTotals, JsonRequestBehavior.AllowGet);
         }

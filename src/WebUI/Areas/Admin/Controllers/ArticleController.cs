@@ -19,14 +19,14 @@ namespace WebUI.Areas.Admin.Controllers
     public class ArticleController : Controller
     {
         #region Fields
-        private ArticleService _articleService; 
+        private ArticleService _articleService;
         #endregion
 
         #region Ctor
         public ArticleController()
         {
             this._articleService = Container.Instance.Resolve<ArticleService>();
-        } 
+        }
         #endregion
 
         #region 列表
@@ -105,7 +105,7 @@ namespace WebUI.Areas.Admin.Controllers
                     articleService.Edit(dbModel);
 
                     // 添加到队列-新建此文章索引 -- 不需要先删除，因为 SearchIndexManager 会先删除此ID的索引，再新建
-                    SearchIndexManager.GetInstance().AddQueue(inputModel.ID.ToString(), inputModel.Title, inputModel.Content, inputModel.PublishTime);
+                    SearchIndexManager.GetInstance().AddQueue(dbModel.ID.ToString(), dbModel.Title, dbModel.Content, dbModel.CreateTime, dbModel.CustomUrl);
 
                     return Json(new { code = 1, message = "保存成功" });
                 }
@@ -167,7 +167,7 @@ namespace WebUI.Areas.Admin.Controllers
 
                     Article dbModel = inputModel;
                     dbModel.Author = new UserInfo { ID = AccountManager.GetCurrentUserInfo().ID };
-                    dbModel.PublishTime = DateTime.Now;
+                    dbModel.CreateTime = DateTime.Now;
                     dbModel.LastUpdateTime = DateTime.Now;
                     dbModel.CustomUrl = inputModel.CustomUrl;
 
@@ -175,7 +175,7 @@ namespace WebUI.Areas.Admin.Controllers
                     int lastId = _articleService.GetLastId();
 
                     // 添加到队列-新建此文章索引
-                    SearchIndexManager.GetInstance().AddQueue(lastId.ToString(), inputModel.Title, inputModel.Content, inputModel.PublishTime);
+                    SearchIndexManager.GetInstance().AddQueue(lastId.ToString(), dbModel.Title, dbModel.Content, dbModel.CreateTime, dbModel.CustomUrl);
 
                     return Json(new { code = 1, message = "添加成功" });
                 }

@@ -78,9 +78,9 @@
 			</ul>
 		</div>
 	</div>
-	<script src="/libs/Autocomplete/js/jquery-ui-1.8.17.custom.min.js"></script>
 	<!-- jQuery -->
 	<script src="/Scripts/jquery-1.12.0.min.js"></script>
+	<script src="/libs/Autocomplete/js/jquery-ui-1.8.17.custom.min.js"></script>
 	<!-- Bootstrap 3.3.7 -->
 	<script src="/libs/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<!-- AdminLTE App -->
@@ -111,7 +111,7 @@
 			if (txt == undefined || txt == "")
 				return;
 			$("#" + txt).autocomplete({
-				source: "@Url.Action("GetKeyWordList")",
+				source: "/Search/GetKeyWordList",
 				minLength: 1
 			});
 		}

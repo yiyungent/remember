@@ -17,35 +17,35 @@ namespace Domain
         public string Title { get; set; }
 
         /// <summary>
-        /// 班号
+        /// 内容
         /// </summary>
         [Display(Name = "内容")]
         [Property(Length = 2200, NotNull = false)]
         public string Content { get; set; }
 
         /// <summary>
-        /// 班号
+        /// 创建时间
         /// </summary>
-        [Display(Name = "发布时间")]
+        [Display(Name = "创建时间")]
         [Property]
-        public DateTime PublishTime { get; set; }
+        public DateTime CreateTime { get; set; }
 
         /// <summary>
-        /// 班号
+        /// 最近更新
         /// </summary>
         [Display(Name = "最近更新")]
         [Property]
         public DateTime LastUpdateTime { get; set; }
 
         /// <summary>
-        /// 班号
+        /// 作者
         /// </summary>
         [Display(Name = "作者")]
         [BelongsTo(Column = "AuthorId")]
         public UserInfo Author { get; set; }
 
         /// <summary>
-        /// 标题
+        /// 自定义Url
         /// </summary>
         [Display(Name = "自定义Url")]
         [Property(Length = 30, NotNull = false)]

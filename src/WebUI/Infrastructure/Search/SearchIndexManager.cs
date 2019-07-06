@@ -44,7 +44,7 @@ namespace WebUI.Infrastructure.Search
         #region Fields
         private static readonly SearchIndexManager _searchIndexManager = new SearchIndexManager();
 
-        private Queue<IndexContent> _queue = new Queue<IndexContent>(); 
+        private Queue<IndexContent> _queue = new Queue<IndexContent>();
         #endregion
 
         #region Ctor
@@ -65,7 +65,7 @@ namespace WebUI.Infrastructure.Search
         /// <param name="id"></param>
         /// <param name="title"></param>
         /// <param name="content"></param>
-        public void AddQueue(string id, string title, string content, DateTime createTime)
+        public void AddQueue(string id, string title, string content, DateTime createTime, string url)
         {
             IndexContent indexContent = new IndexContent();
             indexContent.Id = id;
@@ -73,6 +73,7 @@ namespace WebUI.Infrastructure.Search
             indexContent.Content = content;
             indexContent.LuceneEnum = LuceneEnum.AddType;// 添加
             indexContent.CreateTime = createTime.ToString();
+            indexContent.Url = url;
             _queue.Enqueue(indexContent);
         }
 
@@ -151,13 +152,14 @@ namespace WebUI.Infrastructure.Search
                 document.Add(new Field("Title", indexContent.Title, Field.Store.YES, Field.Index.ANALYZED, Lucene.Net.Documents.Field.TermVector.WITH_POSITIONS_OFFSETS));
                 document.Add(new Field("Content", indexContent.Content, Field.Store.YES, Field.Index.ANALYZED, Lucene.Net.Documents.Field.TermVector.WITH_POSITIONS_OFFSETS));
                 document.Add(new Field("CreateTime", indexContent.CreateTime, Field.Store.YES, Field.Index.NOT_ANALYZED));
+                document.Add(new Field("Url", indexContent.Url, Field.Store.YES, Field.Index.NOT_ANALYZED));
 
                 writer.AddDocument(document);
             }
 
             writer.Close();//会自动解锁。
             directory.Close();//不要忘了Close，否则索引结果搜不到
-        } 
+        }
         #endregion
     }
 }
