@@ -31,7 +31,7 @@ namespace CornJob
                 .StartNow()
                 .WithSimpleSchedule(x => x
                     .WithIntervalInSeconds(60)
-                    .WithRepeatCount(10))
+                    .RepeatForever())
                 .Build();
 
             _scheduler.ScheduleJob(job, trigger).Wait();
