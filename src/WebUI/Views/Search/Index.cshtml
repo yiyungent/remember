@@ -11,39 +11,23 @@
 <head>
 	<meta name="viewport" content="width=device-width" />
 	<title>@ViewBag.Title</title>
-	<!-- Tell the browser to be responsive to screen width -->
-	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-	<link rel="stylesheet" href="/libs/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css">
-	<!-- Font Awesome -->
-	<link rel="stylesheet" href="/libs/AdminLTE/bower_components/font-awesome/css/font-awesome.min.css">
-	<!-- Ionicons -->
-	<link rel="stylesheet" href="/libs/AdminLTE/bower_components/Ionicons/css/ionicons.min.css">
-	<!-- Theme style -->
-	<link rel="stylesheet" href="/libs/AdminLTE/dist/css/AdminLTE.min.css">
-	<link rel="stylesheet" href="/libs/AdminLTE/dist/css/skins/skin-blue.min.css">
-	<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-	<![endif]-->
-	<link href="/libs/Autocomplete/css/ui-lightness/jquery-ui-1.8.17.custom.css" rel="stylesheet" />
+	<link href="/libs/typeahead.js/search.css" rel="stylesheet" />
+	<link href="/libs/mdui/dist/css/mdui.min.css" rel="stylesheet" />
 </head>
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
 <body class="hold-transition skin-blue layout-top-nav">
 	<div class="container">
 		<form class="search-form" method="get">
 			@Html.Hidden("hidIsOr")
-			<div class="input-group">
-				@Html.TextBox("txtSearch", null, new { @class = "form-control" })
-				<div class="input-group-btn">
-					<button id="js-btn-search" class="btn btn-warning btn-flat" type="submit">
-						<i class="fa fa-search"></i>
-					</button>
-					<div>
-						或查询<input id="js-isOr" type="checkbox" value="false" />
-					</div>
+			<div class="example" id="bloodhound">
+				<div class="demo">
+					@Html.TextBox("txtSearch", null, new { @class = "form-control typeahead" })
+					<button id="js-btn-search" class="mdui-btn mdui-btn-raised mdui-btn-dense" type="submit">搜索</button>
+				</div>
+				<div>
+					或查询<input id="js-isOr" type="checkbox" value="false" />
 				</div>
 			</div>
-			<!-- /.input-group -->
 		</form>
 		<div id="js-keywords">
 			<span>热门搜索:</span>
@@ -56,21 +40,17 @@
 			}
 		</div>
 		<div>
-			<ul class="media-list">
+			<ul class="mdui-list">
 				@if (Model != null && Model.List.Count > 0)
 				{
 					foreach (var item in Model.List)
 					{
-						<li class="media">
-							<div class="media-left">
-								<a href="/@item.Url">
-									<img class="media-object" src="..." alt="...">
-								</a>
-							</div>
-							<div class="media-body">
-								<h4 class="media-heading">@MvcHtmlString.Create(item.Title)</h4>
-								@MvcHtmlString.Create(item.Content)
-								<h6><i class="glyphicon glyphicon-time"></i>@item.CreateTime</h6>
+						<li class="mdui-list-item mdui-ripple">
+							<div class="mdui-list-item-content">
+								<div class="mdui-list-item-title mdui-list-item-one-line">
+									<a href="/@item.Url" target="_blank">@MvcHtmlString.Create(item.Title)</a>
+								</div>
+								<div class="mdui-list-item-text mdui-list-item-two-line">@MvcHtmlString.Create(item.Content) - @item.CreateTime</div>
 							</div>
 						</li>
 					}
@@ -80,11 +60,8 @@
 	</div>
 	<!-- jQuery -->
 	<script src="/Scripts/jquery-1.12.0.min.js"></script>
-	<script src="/libs/Autocomplete/js/jquery-ui-1.8.17.custom.min.js"></script>
-	<!-- Bootstrap 3.3.7 -->
-	<script src="/libs/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-	<!-- AdminLTE App -->
-	<script src="/libs/AdminLTE/dist/js/adminlte.min.js"></script>
+	<script src="/libs/typeahead.js/typeahead.bundle.min.js"></script>
+	<script src="/libs/mdui/dist/js/mdui.min.js"></script>
 	<script type="text/javascript">
 
 		$(function () {
@@ -106,13 +83,30 @@
 			}
 		});
 
+
 		// 自动加载搜索列表
 		function getKeyWordList(txt) {
 			if (txt == undefined || txt == "")
 				return;
-			$("#" + txt).autocomplete({
-				source: "/Search/GetKeyWordList",
+			var remote_cities = new Bloodhound({
+				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('KeyWord'),
+				queryTokenizer: Bloodhound.tokenizers.whitespace,
+				// 在文本框输入字符时才发起请求
+				remote: {
+					url: '/Search/GetKeyWordList?term=%QUERY',
+					wildcard: '%QUERY'
+				}
+			});
+			remote_cities.initialize();
+			$('#' + txt).typeahead({
+				hint: true,
+				highlight: true,
 				minLength: 1
+			}, 
+			{
+				name: 'keywords',
+				displayKey: 'KeyWord',
+				source: remote_cities.ttAdapter(),
 			});
 		}
 

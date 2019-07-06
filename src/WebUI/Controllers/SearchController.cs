@@ -204,9 +204,19 @@ namespace WebUI.Controllers
             }
 
             IList<string> searchTotals = _searchTotalService.GetKeyWordList(term);
+            IList<SearchKeyWord> rtnList = new List<SearchKeyWord>();
+            foreach (var item in searchTotals)
+            {
+                rtnList.Add(new SearchKeyWord { KeyWord = item });
+            }
 
-            return Json(searchTotals, JsonRequestBehavior.AllowGet);
+            return Json(rtnList, JsonRequestBehavior.AllowGet);
         }
         #endregion
+
+        private sealed class SearchKeyWord
+        {
+            public string KeyWord { get; set; }
+        }
     }
 }
