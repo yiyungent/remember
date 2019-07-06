@@ -36,6 +36,7 @@ namespace WebUI.Infrastructure.Search
 {
     public class LuceneHelper
     {
+        #region Methods
         public static List<string> PanGuSplitWord(string msg)
         {
             Analyzer analyzer = new PanGuAnalyzer();
@@ -48,6 +49,7 @@ namespace WebUI.Infrastructure.Search
             }
             return list;
         }
+
         // /创建HTMLFormatter,参数为高亮单词的前后缀
         public static string CreateHightLight(string keywords, string Content)
         {
@@ -62,7 +64,8 @@ namespace WebUI.Infrastructure.Search
             //获取最匹配的摘要段
             return highlighter.GetBestFragment(keywords, Content);
         }
-        static public string GetKeyWordsSplitBySpace(string keywords, PanGuTokenizer ktTokenizer)
+
+        public static string GetKeyWordsSplitBySpace(string keywords, PanGuTokenizer ktTokenizer)
         {
             StringBuilder result = new StringBuilder();
 
@@ -80,6 +83,6 @@ namespace WebUI.Infrastructure.Search
 
             return result.ToString().Trim();
         }
-
+        #endregion
     }
 }

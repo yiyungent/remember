@@ -27,7 +27,9 @@ namespace WebUI.Controllers
 
         private ArticleService _articleService;
 
-        private string _indexPath; 
+        private SearchTotalService _searchTotalService;
+
+        private string _indexPath;
         #endregion
 
         #region Ctor
@@ -43,7 +45,8 @@ namespace WebUI.Controllers
             this._indexPath = indexPath;
 
             this._articleService = Container.Instance.Resolve<ArticleService>();
-        } 
+            this._searchTotalService = Container.Instance.Resolve<SearchTotalService>();
+        }
         #endregion
 
         #region 首页
@@ -102,7 +105,7 @@ namespace WebUI.Controllers
                 SearchResult result = new SearchResult();
                 result.Id = Convert.ToInt32(doc.Get("Id"));
                 msg = doc.Get("Content");//只有 Field.Store.YES的字段才能用Get查出来
-                result.Description = LuceneHelper.CreateHightLight(keyword, msg);//将搜索的关键字高亮显示。
+                result.Content = LuceneHelper.CreateHightLight(keyword, msg);//将搜索的关键字高亮显示。
                 title = doc.Get("Title");
                 foreach (string word in lstkw)
                 {
@@ -116,8 +119,8 @@ namespace WebUI.Controllers
                 list.Add(result);
             }
             //先将搜索的词插入到明细表。
-            SearchDetail _SearchDetail = new SearchDetail { KeyWord = keyword, SearchTime = DateTime.Now };
-            _efDbContext.SearchDetail.Add(_SearchDetail);
+            SearchDetail searchDetail = new SearchDetail { ID = Guid.NewGuid(), KeyWord = keyword, SearchTime = DateTime.Now };
+            _efDbContext.SearchDetail.Add(searchDetail);
             int r = _efDbContext.SaveChanges();
 
             PagedList<SearchResult> lst = new PagedList<SearchResult>(list, pageIndex, pageSize, recCount);
@@ -179,7 +182,7 @@ namespace WebUI.Controllers
                 {
                     title = title.Replace(word, "<span style='color:red;'>" + word + "</span>");
                 }
-                result.Description = LuceneHelper.CreateHightLight(keyword, msg);
+                result.Content = LuceneHelper.CreateHightLight(keyword, msg);
                 result.Title = title;
                 result.CreateTime = Convert.ToDateTime(doc.Get("CreateTime"));
                 // 找出此文章的 url
@@ -187,8 +190,8 @@ namespace WebUI.Controllers
                 list.Add(result);
             }
             //先将搜索的词插入到明细表。
-            SearchDetail _SearchDetail = new SearchDetail { KeyWord = keyword, SearchTime = DateTime.Now };
-            _efDbContext.SearchDetail.Add(_SearchDetail);
+            SearchDetail searchDetail = new SearchDetail { ID = Guid.NewGuid(), KeyWord = keyword, SearchTime = DateTime.Now };
+            _efDbContext.SearchDetail.Add(searchDetail);
             int r = _efDbContext.SaveChanges();
 
             PagedList<SearchResult> lst = new PagedList<SearchResult>(list, pageIndex, pageSize, recCount);
@@ -198,9 +201,16 @@ namespace WebUI.Controllers
         #endregion
 
         #region 获得搜索下拉热词
-        public JsonResult GetKeyWordList()
+        public JsonResult GetKeyWordList(string keyword)
         {
-            return Json(new { });
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                return null;
+            }
+
+            IList<string> searchTotals = _searchTotalService.GetKeyWordList(keyword);
+
+            return Json(searchTotals, JsonRequestBehavior.AllowGet);
         }
         #endregion
     }

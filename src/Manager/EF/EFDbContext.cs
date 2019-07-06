@@ -15,7 +15,7 @@ namespace Manager.EF
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            //移除自动建表时自动加上s的复数形式
+            // 移除自动建表时自动加上s的复数形式
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
 

@@ -23,7 +23,7 @@ namespace CornJob
                 conn.Open();
                 MySqlCommand cmd = conn.CreateCommand();
 
-                string sql = "insert into SearchTotal(KeyWord,SearchCount) select KeyWord,count(*)  from SearchDetail where DateDiff(SearchDetail.SearchTime,now())<=30 group by SearchDetail.KeyWord";
+                string sql = "insert into SearchTotal(ID,KeyWord,SearchCount) select uuid(),KeyWord,count(*)  from SearchDetail where DateDiff(SearchDetail.SearchTime,now())<=30 group by SearchDetail.KeyWord";
 
                 cmd.CommandText = sql;
 

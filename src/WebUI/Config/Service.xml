@@ -37,5 +37,13 @@
                service="Service.CardInfoService,Service"
                type="Component.CardInfoComponent,Component"
                isTransactional="true" />
+    <component id="SearchDetailService"
+               service="Service.SearchDetailService,Service"
+               type="Component.SearchDetailComponent,Component"
+               isTransactional="true" />
+    <component id="SearchTotalService"
+                 service="Service.SearchTotalService,Service"
+                 type="Component.SearchTotalComponent,Component"
+                 isTransactional="true" />
   </components>
 </configuration>

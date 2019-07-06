@@ -12,7 +12,7 @@ namespace Manager.Base
     public class BaseManager<T> : ActiveRecordBase<T>
         where T : class
     {
-        private EFDbContext _efDbContext;
+        protected EFDbContext _efDbContext;
 
         public BaseManager()
         {

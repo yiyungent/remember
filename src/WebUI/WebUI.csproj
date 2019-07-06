@@ -8226,12 +8226,6 @@
     <Content Include="libs\ztree_v3\js\jquery.ztree.exhide.js" />
     <Content Include="libs\ztree_v3\js\jquery.ztree.exhide.min.js" />
     <Content Include="libs\ztree_v3\log v3.x.txt" />
-    <Content Include="Templates\Bilibili\Content\css\base.css" />
-    <Content Include="Templates\Bilibili\Content\images\header\gif-menu.gif" />
-    <Content Include="Templates\Bilibili\Content\images\header\head-banner.png" />
-    <Content Include="Templates\Bilibili\Content\images\header\head-logo.png" />
-    <Content Include="Templates\Bilibili\Content\images\main\video.jpg" />
-    <Content Include="Templates\Bilibili\preview.png" />
     <Content Include="Views\Shared\_TopNav.cshtml" />
     <Content Include="Views\Shared\_TopNav_MessagesMenuPartial.cshtml" />
     <Content Include="Views\Shared\_TopNav_NavbarCollapsePartial.cshtml" />
@@ -8924,16 +8918,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Widget\WidgetsByZone.cshtml" />
     <Content Include="Views\Errors\PageNotFound.cshtml" />
-    <Content Include="Templates\Bilibili\Views\web.config" />
-    <Content Include="Templates\Bilibili\template.json" />
-    <Content Include="Templates\Bilibili\Views\Home\Index.cshtml" />
-    <Content Include="Templates\Bilibili\Content\images\header\i-face.webp" />
-    <Content Include="Templates\Bilibili\Views\Shared\_ParticalTopHeader.cshtml" />
-    <Content Include="Templates\Bilibili\Views\Shared\_ParticalBottomFooter.cshtml" />
-    <Content Include="Templates\Bilibili\Views\Shared\_Layout.cshtml" />
-    <Content Include="Templates\Bilibili\Views\Shared\_BiliTopNav.cshtml" />
-    <Content Include="Templates\Bilibili\Areas\Admin\Views\web.config" />
-    <Content Include="Templates\Bilibili\Areas\Admin\Views\Article\Page.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -8950,6 +8934,7 @@
     <Folder Include="Areas\Admin\Views\Control\" />
     <Folder Include="Areas\Admin\Views\Dashboard\" />
     <Folder Include="Plugins\" />
+    <Folder Include="Templates\" />
     <Folder Include="Upload\images\avatars\" />
     <Folder Include="Upload\TemplateInstallZip\" />
     <Folder Include="Views\NotificationDemo\" />

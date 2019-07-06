@@ -501,9 +501,9 @@ namespace WebUI.Controllers
                 {
                     Name = "超级管理员admin",
                     UserName = "admin",
-                    Avatar = "/images/default-avatar.jpg",
+                    Avatar = "/libs/remember/images/default-avatar.jpg",
                     Password = EncryptHelper.MD5Encrypt32("admin"),
-                    Email = "1439856067@qq.com",
+                    Email = "yiyungent@126.com",
                     Status = 0,
                     RoleInfoList = (from m in allRole where m.ID == 1 select m).ToList(),
                     RegTime = DateTime.Now

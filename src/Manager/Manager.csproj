@@ -66,9 +66,9 @@
     <Compile Include="CardInfoManager.cs" />
     <Compile Include="EF\EFDbContext.cs" />
     <Compile Include="FunctionInfoManager.cs" />
-    <Compile Include="Migrations\201907031251581_InitialCreate.cs" />
-    <Compile Include="Migrations\201907031251581_InitialCreate.Designer.cs">
-      <DependentUpon>201907031251581_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201907060355549_update.cs" />
+    <Compile Include="Migrations\201907060355549_update.Designer.cs">
+      <DependentUpon>201907060355549_update.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -94,8 +94,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201907031251581_InitialCreate.resx">
-      <DependentUpon>201907031251581_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201907060355549_update.resx">
+      <DependentUpon>201907060355549_update.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
