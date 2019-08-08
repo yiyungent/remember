@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Test</title>
+	<link href="/assets/libs/mdui/dist/css/mdui.min.css" rel="stylesheet" />
+	<link href="/assets/css/app.css" rel="stylesheet" />
+	<style>
+		.dialog-content {
+			padding: 30px;
+		}
+
+		#content-main {
+			/*padding: 20px;*/
+			width: 100%;
+			/*height: 700px;*/
+			font-size: 50px;
+		}
+	</style>
+</head>
+<body class="mdui-appbar-with-toolbar mdui-theme-primary-teal mdui-bottom-nav-fixed">
+	<!-- 头部 -->
+	<header class="mdui-appbar mdui-appbar-fixed" id="content-header">
+		<div class="mdui-toolbar mdui-color-white mdui-text-color-theme">
+			<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">navigate_before</i></a>
+			<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">event</i></a>(8/20)
+			<div class="mdui-toolbar-spacer"></div>
+			<div style="width: 30%;">
+				<div class="mdui-textfield mdui-textfield-expandable mdui-float-right">
+					<button class="mdui-textfield-icon mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></button>
+					<input class="mdui-textfield-input" type="text" placeholder="Search" />
+					<button class="mdui-textfield-close mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">close</i></button>
+				</div>
+			</div>
+			<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>
+			<a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-menu="{target: '#js-more-menu'}"><i class="mdui-icon material-icons">more_vert</i></a>
+			<ul id="js-more-menu" class="mdui-menu">
+				<li class="mdui-menu-item">
+					<a href="javascript:;" class="mdui-ripple">
+						<i class="mdui-menu-item-icon mdui-icon material-icons">remove_red_eye</i>Preview
+					</a>
+				</li>
+				<li class="mdui-menu-item">
+					<a href="javascript:;" class="mdui-ripple">
+						<i class="mdui-menu-item-icon mdui-icon material-icons">file_download</i>Download
+					</a>
+				</li>
+				<li class="mdui-divider"></li>
+				<li class="mdui-menu-item">
+					<a href="javascript:;" class="mdui-ripple">
+						<i class="mdui-menu-item-icon mdui-icon material-icons">delete</i>Remove
+					</a>
+				</li>
+				<li class="mdui-menu-item">
+					<a href="javascript:;" class="mdui-ripple">
+						<i class="mdui-menu-item-icon"></i>Empty
+					</a>
+				</li>
+			</ul>
+		</div>
+	</header>
+	<!-- 内容 -->
+	<div class="mdui-container" id="content-main">
+		@RenderBody()
+	</div>
+	<!-- 底部导航栏 -->
+	<div class="mdui-bottom-nav mdui-color-white mdui-text-color-theme">
+		<a href="javascript:;" class="mdui-ripple mdui-bottom-nav-active">
+			<i class="mdui-icon material-icons">favorite</i>
+		</a>
+		<a href="javascript:;" class="mdui-ripple">
+			<i class="mdui-icon material-icons">edit</i>
+		</a>
+		<a href="javascript:;" class="mdui-ripple">
+			<i class="mdui-icon material-icons">arrow_back</i>
+		</a>
+		<a href="javascript:;" class="mdui-ripple">
+			<i class="mdui-icon material-icons">arrow_forward</i>
+		</a>
+	</div>
+	<script src="/assets/libs/mdui/dist/js/mdui.min.js"></script>
+</body>
+</html>

@@ -37,11 +37,19 @@ namespace WebUI.Controllers
         }
         #endregion
 
-        #region 测试首页
+        #region 测试
         public ActionResult Test()
         {
             return View();
         }
         #endregion
+
+        #region 测试2
+        public ActionResult Test2()
+        {
+            return View();
+        }
+        #endregion
+
     }
 }

@@ -213,6 +213,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\css\app.css" />
     <Content Include="assets\libs\AdminLTE\bower_components\bootstrap-colorpicker\dist\css\bootstrap-colorpicker.css" />
     <Content Include="assets\libs\AdminLTE\bower_components\bootstrap-colorpicker\dist\css\bootstrap-colorpicker.min.css" />
     <Content Include="assets\libs\AdminLTE\bower_components\bootstrap-colorpicker\dist\img\bootstrap-colorpicker\alpha-horizontal.png" />
@@ -18247,6 +18248,7 @@
     <Compile Include="Areas\Admin\Models\UserInfoVM\UserInfoViewModel.cs" />
     <Compile Include="Areas\Admin\Models\Common\ZNodeModel.cs" />
     <Compile Include="Attributes\LogErrorAttribute.cs" />
+    <Compile Include="Controllers\CardBoxController.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -18302,6 +18304,10 @@
     <Content Include="Views\Errors\PageNotFound.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Home\Test.cshtml" />
+    <Content Include="Views\Shared\_LayoutApp.cshtml" />
+    <Content Include="Views\Home\Test2.cshtml" />
+    <Content Include="Views\Shared\_LayoutCard.cshtml" />
+    <Content Include="Views\CardBox\Card.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -18320,6 +18326,7 @@
     <Folder Include="Templates\" />
     <Folder Include="Upload\images\avatars\" />
     <Folder Include="Upload\TemplateInstallZip\" />
+    <Folder Include="Views\Card\" />
     <Folder Include="Views\NotificationDemo\" />
     <Folder Include="Views\WebSocket\" />
   </ItemGroup>
