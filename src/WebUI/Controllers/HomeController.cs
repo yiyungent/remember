@@ -34,7 +34,14 @@ namespace WebUI.Controllers
             ViewBag.ArticleList = articleList;
 
             return View(currentAccount);
-        } 
+        }
+        #endregion
+
+        #region 测试首页
+        public ActionResult Test()
+        {
+            return View();
+        }
         #endregion
     }
 }
