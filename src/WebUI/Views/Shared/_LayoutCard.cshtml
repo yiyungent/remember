@@ -33,7 +33,7 @@
 					<button class="mdui-textfield-close mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">close</i></button>
 				</div>
 			</div>
-			<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>
+			<a id="js-refresh" href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>
 			<a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-menu="{target: '#js-more-menu'}"><i class="mdui-icon material-icons">more_vert</i></a>
 			<ul id="js-more-menu" class="mdui-menu">
 				<li class="mdui-menu-item">
@@ -80,5 +80,17 @@
 		</a>
 	</div>
 	<script src="/assets/libs/mdui/dist/js/mdui.min.js"></script>
+	<script>
+		var $$ = mdui.JQ;
+
+		$$(function () {
+
+			$$("#js-refresh").on("click", function () {
+				window.location.href = window.location.href;
+			});
+
+		});
+
+	</script>
 </body>
 </html>

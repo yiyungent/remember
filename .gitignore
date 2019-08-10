@@ -261,7 +261,9 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
 /src/WebUI/Properties/PublishProfiles
 /src/WebUI/App_Data/Plugins
 /src/WebUI/App_Data/Logs
 /src/WebUI/App_Data/LuceneDir
+/src/WebUI/WebUI.zip

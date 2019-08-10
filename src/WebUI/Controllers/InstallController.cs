@@ -501,7 +501,7 @@ namespace WebUI.Controllers
                 {
                     Name = "超级管理员admin",
                     UserName = "admin",
-                    Avatar = "/libs/remember/images/default-avatar.jpg",
+                    Avatar = "/assets/images/default-avatar.jpg",
                     Password = EncryptHelper.MD5Encrypt32("admin"),
                     Email = "yiyungent@126.com",
                     Status = 0,
