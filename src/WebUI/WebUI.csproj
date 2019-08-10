@@ -6573,10 +6573,10 @@
     <Content Include="assets\libs\AdminLTE\plugins\timepicker\bootstrap-timepicker.js" />
     <Content Include="assets\libs\AdminLTE\plugins\timepicker\bootstrap-timepicker.min.css" />
     <Content Include="assets\libs\AdminLTE\plugins\timepicker\bootstrap-timepicker.min.js" />
-    <Content Include="assets\libs\At.js\css\jquery.atwho.css" />
-    <Content Include="assets\libs\At.js\css\jquery.atwho.min.css" />
-    <Content Include="assets\libs\At.js\js\jquery.atwho.js" />
-    <Content Include="assets\libs\At.js\js\jquery.atwho.min.js" />
+    <Content Include="assets\libs\At.js\dist\css\jquery.atwho.css" />
+    <Content Include="assets\libs\At.js\dist\css\jquery.atwho.min.css" />
+    <Content Include="assets\libs\At.js\dist\js\jquery.atwho.js" />
+    <Content Include="assets\libs\At.js\dist\js\jquery.atwho.min.js" />
     <Content Include="assets\libs\Autocomplete\css\ui-lightness\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
     <Content Include="assets\libs\Autocomplete\css\ui-lightness\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
     <Content Include="assets\libs\Autocomplete\css\ui-lightness\images\ui-bg_flat_10_000000_40x100.png" />
@@ -6594,8 +6594,8 @@
     <Content Include="assets\libs\Autocomplete\css\ui-lightness\jquery-ui-1.8.17.custom.css" />
     <Content Include="assets\libs\Autocomplete\js\jquery-ui-1.8.17.custom.min.js" />
     <Content Include="assets\libs\Autocomplete\js\jquery-ui-widget-combobox.js" />
-    <Content Include="assets\libs\Caret.js\jquery.caret.js" />
-    <Content Include="assets\libs\Caret.js\jquery.caret.min.js" />
+    <Content Include="assets\libs\Caret.js\dist\jquery.caret.js" />
+    <Content Include="assets\libs\Caret.js\dist\jquery.caret.min.js" />
     <Content Include="assets\libs\echarts\asset\logo.png" />
     <Content Include="assets\libs\echarts\build\addHeader.js" />
     <Content Include="assets\libs\echarts\build\amd2common.js" />
