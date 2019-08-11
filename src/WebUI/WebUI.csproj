@@ -9542,6 +9542,7 @@
     <Compile Include="Areas\Admin\Controllers\RoleInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ThemeTemplateController.cs" />
     <Compile Include="Areas\Admin\Models\CardBoxVM\CardBoxViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\CardInfoVM\CardInfoViewModel.cs" />
     <Compile Include="Areas\Admin\Models\Common\ListViewModel.cs" />
     <Compile Include="Areas\Admin\Models\Common\QueryType.cs" />
     <Compile Include="Areas\Admin\Models\DashboardVM\EvaAnalyzeChart.cs" />
@@ -9617,8 +9618,9 @@
     <Content Include="Views\Home\Test.cshtml" />
     <Content Include="Views\Shared\_LayoutApp.cshtml" />
     <Content Include="Views\Home\Test2.cshtml" />
-    <Content Include="Views\Shared\_LayoutCard.cshtml" />
     <Content Include="Views\CardBox\Card.cshtml" />
+    <Content Include="Views\CardBox\Index.cshtml" />
+    <Content Include="Views\CardBox\Comment.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
