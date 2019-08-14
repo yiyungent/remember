@@ -97,6 +97,11 @@
 							<p>Second content</p>
 							<p>Second content</p>
 							<p>Second content</p>
+							<div class="mdui-col-xs-12">
+								<label class="mdui-slider mdui-slider-discrete">
+									<input type="range" step="1" min="0" max="100" />
+								</label>
+							</div>
 						</div>
 					</div>
 					<div id="js-discuss" class="mdui-panel-item mdui-hidden">
@@ -116,14 +121,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="mdui-row">
+		<div class="mdui-row mdui-m-t-1 mdui-m-b-2">
 			<div class="mdui-col-xs-12">
-				<button class="mdui-btn mdui-btn-block mdui-btn-raised mdui-color-theme mdui-ripple">查看答案</button>
-			</div>
-			<div class="mdui-col-xs-12">
-				<label class="mdui-slider mdui-slider-discrete">
-					<input type="range" step="1" min="0" max="100" />
-				</label>
+				<button id="js-btn-answer" class="mdui-btn mdui-btn-block mdui-btn-raised mdui-color-theme mdui-ripple">查看答案</button>
 			</div>
 		</div>
 	</div>
@@ -149,9 +149,9 @@
 	<script>
 		var $$ = mdui.JQ;
 
-		$$(function () {
+		$(function () {
 
-			$$("#js-refresh").on("click", function () {
+			$("#js-refresh").on("click", function () {
 				window.location.href = window.location.href;
 			});
 

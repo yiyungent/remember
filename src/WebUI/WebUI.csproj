@@ -9621,6 +9621,7 @@
     <Content Include="Views\CardBox\Card.cshtml" />
     <Content Include="Views\CardBox\Index.cshtml" />
     <Content Include="Views\CardBox\Comment.cshtml" />
+    <Content Include="Views\CardBox\Search.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

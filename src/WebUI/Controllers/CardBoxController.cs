@@ -75,5 +75,12 @@ namespace WebUI.Controllers
             return View();
         }
         #endregion
+
+        #region 搜索卡片
+        public ActionResult Search(int cardBoxId, string q)
+        {
+            return View();
+        }
+        #endregion
     }
 }
