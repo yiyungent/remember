@@ -1,0 +1,45 @@
+﻿
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Index</title>
+</head>
+<body>
+	<div>
+		<a href="http://www.turnjs.com/#getting-started">http://www.turnjs.com/#getting-started</a>
+		<a href="https://github.com/blasten/turn.js">GitHub</a>
+		<h2>翻页效果</h2>
+		<p>
+			https://www.jb51.net/article/86900.htm
+		</p>
+	</div>
+	<p>
+		<hr />
+	</p>
+	<div id="flipbook">
+		<div class="hard"> Turn.js </div>
+		<div class="hard"></div>
+		<div> Page 1 </div>
+		<div> Page 2 </div>
+		<div> Page 3 </div>
+		<div> Page 4 </div>
+		<div class="hard"></div>
+		<div class="hard"></div>
+	</div>
+	<script src="/assets/libs/jquery/dist/jquery.min.js"></script>
+	<script src="/assets/libs/turn.js/turn.min.js"></script>
+	<script type="text/javascript">
+		$("#flipbook").turn({
+			width: 400,
+			height: 300,
+			autoCenter: true
+		});
+	</script>
+</body>
+</html>
