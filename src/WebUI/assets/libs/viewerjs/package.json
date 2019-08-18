@@ -1,0 +1,158 @@
+{
+  "_from": "viewerjs",
+  "_id": "viewerjs@1.3.6",
+  "_inBundle": false,
+  "_integrity": "sha1-Wy5oxIYj8u8RfaLio4IFnKsUffk=",
+  "_location": "/viewerjs",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "viewerjs",
+    "name": "viewerjs",
+    "escapedName": "viewerjs",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npm.taobao.org/viewerjs/download/viewerjs-1.3.6.tgz?cache=0&sync_timestamp=1562239916223&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fviewerjs%2Fdownload%2Fviewerjs-1.3.6.tgz",
+  "_shasum": "5b2e68c48623f2ef117da2e2a382059cab147df9",
+  "_spec": "viewerjs",
+  "_where": "F:\\Com\\me\\Repos\\remember",
+  "author": {
+    "name": "Chen Fengyuan",
+    "url": "https://chenfengyuan.com"
+  },
+  "browser": "dist/viewer.js",
+  "browserslist": [
+    "last 2 versions",
+    "> 1%",
+    "not ie <= 8"
+  ],
+  "bugs": {
+    "url": "https://github.com/fengyuanchen/viewerjs/issues"
+  },
+  "bundleDependencies": false,
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "deprecated": false,
+  "description": "JavaScript image viewer.",
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@commitlint/cli": "^8.0.0",
+    "@commitlint/config-conventional": "^8.0.0",
+    "babel-plugin-istanbul": "^5.1.4",
+    "chai": "^4.2.0",
+    "change-case": "^3.1.0",
+    "codecov": "^3.5.0",
+    "cpy-cli": "^2.0.0",
+    "create-banner": "^1.0.0",
+    "cross-env": "^5.2.0",
+    "cssnano": "^4.1.10",
+    "del-cli": "^2.0.0",
+    "eslint": "^6.0.1",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.0",
+    "husky": "^3.0.0",
+    "karma": "^4.1.0",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage-istanbul-reporter": "^2.0.5",
+    "karma-mocha": "^1.3.0",
+    "karma-mocha-reporter": "^2.2.5",
+    "karma-rollup-preprocessor": "^7.0.0",
+    "lint-staged": "^8.2.1",
+    "mocha": "^6.1.4",
+    "npm-run-all": "^4.1.5",
+    "postcss-cli": "^6.1.2",
+    "postcss-header": "^1.0.0",
+    "postcss-import": "^12.0.1",
+    "postcss-preset-env": "^6.6.0",
+    "postcss-url": "^8.0.0",
+    "puppeteer": "^1.18.1",
+    "rollup": "^1.16.4",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-watch": "^4.3.1",
+    "stylelint": "^10.1.0",
+    "stylelint-config-standard": "^18.3.0",
+    "stylelint-order": "^3.0.0",
+    "uglify-js": "^3.6.0"
+  },
+  "files": [
+    "src",
+    "dist",
+    "types"
+  ],
+  "homepage": "https://fengyuanchen.github.io/viewerjs",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "keywords": [
+    "image",
+    "viewer",
+    "viewerjs",
+    "viewer.js",
+    "html",
+    "css",
+    "javascript",
+    "front-end",
+    "web"
+  ],
+  "license": "MIT",
+  "lint-staged": {
+    "linters": {
+      "*.js": [
+        "eslint --fix",
+        "git add"
+      ],
+      "*.{css,scss,html}": [
+        "stylelint --fix",
+        "git add"
+      ]
+    },
+    "ignore": [
+      "{dist,docs}/**/*.js",
+      "*.min.*"
+    ]
+  },
+  "main": "dist/viewer.common.js",
+  "module": "dist/viewer.esm.js",
+  "name": "viewerjs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fengyuanchen/viewerjs.git"
+  },
+  "scripts": {
+    "build": "npm run build:css && npm run build:js",
+    "build:css": "postcss src/index.css -o dist/viewer.css --no-map",
+    "build:js": "rollup -c",
+    "clear": "del-cli dist",
+    "codecov": "cat coverage/lcov.info | codecov",
+    "compress": "npm run compress:css && npm run compress:js",
+    "compress:css": "postcss dist/viewer.css -u cssnano -o dist/viewer.min.css --no-map",
+    "compress:js": "uglifyjs dist/viewer.js -o dist/viewer.min.js -c -m --comments /^!/",
+    "copy": "cpy dist/viewer.css docs/css",
+    "lint": "npm run lint:js && npm run lint:css",
+    "lint:css": "stylelint {src,docs}/**/*.{css,scss,html} --fix",
+    "lint:js": "eslint src test *.js --fix",
+    "release": "npm run clear && npm run lint && npm run build && npm run compress && npm run copy && npm test",
+    "start": "npm-run-all --parallel watch:*",
+    "test": "cross-env NODE_ENV=test karma start test/karma.conf.js",
+    "watch:css": "postcss src/index.css -o docs/css/viewer.css -m -w",
+    "watch:js": "rollup -c -m -w"
+  },
+  "style": "dist/viewer.css",
+  "types": "types/index.d.ts",
+  "version": "1.3.6"
+}
