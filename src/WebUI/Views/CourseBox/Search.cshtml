@@ -1,0 +1,112 @@
+﻿@using Domain
+@using WebUI.Models.CourseBoxVM
+@model SearchResultViewModel
+@{
+	Layout = null;
+	IList<CourseBox> searchCourseBoxList = ViewBag.SearchCourseBoxList;
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>搜索课程</title>
+	<link href="/assets/libs/mdui/dist/css/mdui.min.css" rel="stylesheet" />
+	<link href="/assets/css/app.css" rel="stylesheet" />
+</head>
+<body class="mdui-appbar-with-toolbar mdui-theme-primary-teal mdui-bottom-nav-fixed">
+	<!-- 头部 -->
+	<header class="mdui-appbar mdui-appbar-fixed">
+		<div class="mdui-toolbar mdui-color-white mdui-text-color-theme">
+			<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">navigate_before</i></a>
+			<a id="js-refresh" href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>
+			<div class="mdui-toolbar-spacer"></div>
+			<div class="mdui-textfield mdui-textfield-expandable mdui-textfield-expanded">
+				<button id="js-btn-search" class="mdui-textfield-icon mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></button>
+				<input id="js-input-keyword" class="mdui-textfield-input" type="text" placeholder="搜索课程" value="@ViewBag.Q" />
+				<button id="js-btn-close" class="mdui-textfield-close mdui-btn mdui-btn-icon mdui-hidden"><i class="mdui-icon material-icons">close</i></button>
+			</div>
+		</div>
+	</header>
+	<!-- 内容 -->
+	<div class="mdui-container">
+		<div class="mdui-row">
+			<div class="mdui-col-xs-12">
+				<ul id="js-suggestion-list" class="mdui-list"></ul>
+			</div>
+			<div class="mdui-col-xs-12">
+				<ul class="mdui-list">
+					@for (int i = 0; i < searchCourseBoxList.Count; i++)
+					{
+						string desc = searchCourseBoxList[i].Description;
+						if (!string.IsNullOrEmpty(searchCourseBoxList[i].Description) && searchCourseBoxList[i].Description.Length > 15)
+						{
+							desc = searchCourseBoxList[i].Description.Substring(0, 15) + " ...";
+						}
+						<li class="mdui-list-item mdui-ripple">
+							<div class="mdui-list-item-avatar"><img src="https://static.runoob.com/images/mix/img_fjords_wide.jpg" /></div>
+							<div class="mdui-list-item-content">
+								<div class="mdui-list-item-title">@searchCourseBoxList[i].Name</div>
+								<div class="mdui-list-item-text mdui-list-item-one-line"><span class="mdui-text-color-theme-text">@searchCourseBoxList[i].Creator.Name</span> - @desc</div>
+							</div>
+						</li>
+						if (i < searchCourseBoxList.Count - 1)
+						{
+							<li class="mdui-divider-inset mdui-m-y-0"></li>
+						}
+					}
+				</ul>
+			</div>
+		</div>
+	</div>
+	<script src="/assets/libs/mdui/dist/js/mdui.min.js"></script>
+	<script src="/assets/libs/jquery/dist/jquery.min.js"></script>
+	<script>
+		var $$ = mdui.JQ;
+
+		$(function () {
+
+			$("#js-refresh").on("click", function () {
+				window.location.href = window.location.href;
+			});
+
+			$("#js-input-keyword").on("input propertychange", function () {
+				var keyword = $(this).val().trim();
+				if (keyword != "" && keyword.length > 0) {
+					$("#js-btn-close").removeClass("mdui-hidden");
+				} else {
+					$("#js-btn-close").addClass("mdui-hidden");
+				}
+				$.ajax({
+					url: '/CourseBox/Search',
+					type: 'POST',
+					data: { q: keyword },
+					success: function (data) {
+						loadSuggestionList(data);
+					}
+				});
+			});
+
+			$("#js-btn-close").on("click", function () {
+				$("#js-input-keyword").val("");
+				$("#js-btn-close").addClass("mdui-hidden");
+
+				return false;
+			});
+
+		});
+
+		function loadSuggestionList(data) {
+			var listHtml = '';
+			for (var i = 0; i < data.length; i++) {
+				item = data[i];
+				listHtml += '<a href="/CourseBox/Search?q=' + item + '" class="mdui-list-item mdui-ripple">' + item + '</a>';
+			}
+			$("#js-suggestion-list").html(listHtml);
+		}
+
+	</script>
+</body>
+</html>

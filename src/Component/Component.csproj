@@ -54,12 +54,16 @@
     <Compile Include="Base\BaseComponent.cs" />
     <Compile Include="CardBoxComponent.cs" />
     <Compile Include="CardInfoComponent.cs" />
+    <Compile Include="CourseBoxTableComponent.cs" />
+    <Compile Include="CourseBoxComponent.cs" />
+    <Compile Include="CourseInfoComponent.cs" />
     <Compile Include="FunctionInfoComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleInfoComponent.cs" />
     <Compile Include="SearchDetailComponent.cs" />
     <Compile Include="SearchTotalComponent.cs" />
     <Compile Include="SettingComponent.cs" />
+    <Compile Include="StudentComponent.cs" />
     <Compile Include="Sys_MenuComponent.cs" />
     <Compile Include="ThemeTemplateComponent.cs" />
     <Compile Include="UserInfoComponent.cs" />

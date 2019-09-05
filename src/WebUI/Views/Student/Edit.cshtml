@@ -1,0 +1,39 @@
+﻿@using Domain
+@model Student
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Edit</title>
+	<link href="~/assets/libs/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				@using (Html.BeginForm())
+				{
+					<div class="input-group">
+						@Html.TextBoxFor(m => m.ID, new { @class = "form-control disabled", @readonly = "readonly" })
+						@Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+						@Html.TextBoxFor(m => m.StudyNumber, new { @class = "form-control" })
+						@Html.TextBoxFor(m => m.CreateTime, new { @class = "form-control", type = "datetime" })
+						<input class="btn btn-primary" type="submit" value="提交" />
+					</div>
+					<div class="input-group">
+						@if (TempData["Message"] != null)
+						{
+							<div class="alert alert-success">@(TempData["Message"]?.ToString())</div>
+						}
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</body>
+</html>

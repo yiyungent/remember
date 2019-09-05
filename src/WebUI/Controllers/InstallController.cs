@@ -51,6 +51,10 @@ namespace WebUI.Controllers
             InitRole();
             InitUser();
             InitArticle();
+            InitCardBox();
+            InitCardInfo();
+            InitCourseBox();
+            InitCourseInfo();
         }
         #endregion
 
@@ -543,6 +547,118 @@ namespace WebUI.Controllers
                         Content = "测试内容" + (i + 1),
                         CustomUrl = $"article-{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.Now.Day}-{i + 1}"
                     });
+                }
+
+                ShowMessage("成功");
+            }
+            catch (Exception)
+            {
+                ShowMessage("失败");
+            }
+        }
+        #endregion
+
+        #region 初始化卡片盒
+        private void InitCardBox()
+        {
+            try
+            {
+                ShowMessage("开始初始化卡片盒");
+
+                CardBoxService cardBoxService = Container.Instance.Resolve<CardBoxService>();
+
+                for (int i = 0; i < 10; i++)
+                {
+                    UserInfo userInfo = Container.Instance.Resolve<UserInfoService>().GetEntity(1);
+                    CardBox cardBox = new CardBox();
+                    cardBox.Name = "测试卡片盒-" + (i + 1);
+                    cardBox.Description = $"这是测试卡片盒-{(i + 1)}的描述";
+                    //cardBox.ReaderList = new List<UserInfo>();
+                    //cardBox.ReaderList.Add(userInfo);
+                    cardBox.Creator = userInfo;
+                    cardBoxService.Create(cardBox);
+                }
+
+                ShowMessage("成功");
+            }
+            catch (Exception)
+            {
+                ShowMessage("失败");
+            }
+        }
+        #endregion
+
+        #region 初始化卡片
+        private void InitCardInfo()
+        {
+            try
+            {
+                ShowMessage("开始初始化卡片");
+
+                CardInfoService cardInfoService = Container.Instance.Resolve<CardInfoService>();
+
+                for (int i = 0; i < 10; i++)
+                {
+                    CardInfo cardInfo = new CardInfo();
+                    cardInfo.Content = $"测试内容{(1 + i)}";
+                    cardInfo.CardBox = new CardBox { ID = (1 + i) };
+                    cardInfoService.Create(cardInfo);
+                }
+
+                ShowMessage("成功");
+            }
+            catch (Exception)
+            {
+                ShowMessage("失败");
+            }
+        }
+        #endregion
+
+        #region 初始化课程盒
+        private void InitCourseBox()
+        {
+            try
+            {
+                ShowMessage("开始初始化课程盒");
+
+                CourseBoxService CourseBoxService = Container.Instance.Resolve<CourseBoxService>();
+
+                for (int i = 0; i < 10; i++)
+                {
+                    UserInfo userInfo = Container.Instance.Resolve<UserInfoService>().GetEntity(1);
+                    CourseBox CourseBox = new CourseBox();
+                    CourseBox.Name = "测试课程盒-" + (i + 1);
+                    CourseBox.Description = $"这是测试课程盒-{(i + 1)}的描述";
+                    //CourseBox.ReaderList = new List<UserInfo>();
+                    //CourseBox.ReaderList.Add(userInfo);
+                    CourseBox.Creator = userInfo;
+                    CourseBoxService.Create(CourseBox);
+                }
+
+                ShowMessage("成功");
+            }
+            catch (Exception)
+            {
+                ShowMessage("失败");
+            }
+        }
+        #endregion
+
+        #region 初始化课程内容
+        private void InitCourseInfo()
+        {
+            try
+            {
+                ShowMessage("开始初始化课程内容");
+
+                CourseInfoService CourseInfoService = Container.Instance.Resolve<CourseInfoService>();
+
+                for (int i = 0; i < 10; i++)
+                {
+                    CourseInfo CourseInfo = new CourseInfo();
+                    CourseInfo.Content = $"测试内容{(1 + i)}";
+                    CourseInfo.CourseBox = new CourseBox { ID = (1 + i) };
+                    CourseInfoService.Create(CourseInfo);
                 }
 
                 ShowMessage("成功");

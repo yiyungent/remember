@@ -47,22 +47,26 @@ namespace Domain
 
         #region Relationships
 
-        /// <summary>
-        /// 用户创建的 CardBox 列表
-        ///     一对多
-        /// </summary>
-        [Display(Name = "用户创建的 CardBox")]
-        [HasMany(ColumnKey = "CreatorId")]
-        public IList<CardBox> CreateCardBoxList { get; set; }
+        ///// <summary>
+        ///// 用户创建的 CardBox 列表
+        /////     一对多
+        ///// </summary>
+        //[Display(Name = "用户创建的 CardBox")]
+        //[HasMany(ColumnKey = "CreatorId")]
+        //public IList<CardBox> CreateCardBoxList { get; set; }
 
-        /// <summary>
-        /// 用户阅读的 CardBox 列表    (不包括他创建的，列表中是其它用户创建的 CardBox)
-        ///     多对多
-        ///         一个用户可以阅读多个 CardBox，一个 CardBox 也可以被多个用户阅读(共享)
-        /// </summary>
-        [Display(Name = "用户阅读的 CardBox")]
-        [HasAndBelongsToMany(Table = "User_CardBox_ForRead", ColumnKey = "UserId", ColumnRef = "CardBoxId")]
-        public IList<CardBox> ReadCardBoxList { get; set; }
+        /////// <summary>
+        /////// 用户阅读的 CardBox 列表    (不包括他创建的，列表中是其它用户创建的 CardBox)
+        ///////     多对多
+        ///////         一个用户可以阅读多个 CardBox，一个 CardBox 也可以被多个用户阅读(共享)
+        /////// </summary>
+        ////[Display(Name = "用户阅读的 CardBox")]
+        ////[HasAndBelongsToMany(Table = "User_CardBox_ForRead", ColumnKey = "UserId", ColumnRef = "CardBoxId")]
+        ////public IList<CardBox> ReadCardBoxList { get; set; }
+
+
+        //[HasMany(ColumnKey = "ReaderId")]
+        //public IList<CardBoxTable> CardBoxTableList { get; set; }
 
         #endregion
 

@@ -64,6 +64,9 @@
     <Compile Include="Base\BaseManager.cs" />
     <Compile Include="CardBoxManager.cs" />
     <Compile Include="CardInfoManager.cs" />
+    <Compile Include="CourseBoxManager.cs" />
+    <Compile Include="CourseBoxTableManager.cs" />
+    <Compile Include="CourseInfoManager.cs" />
     <Compile Include="EF\EFDbContext.cs" />
     <Compile Include="FunctionInfoManager.cs" />
     <Compile Include="Migrations\201907060355549_update.cs" />
@@ -76,6 +79,7 @@
     <Compile Include="SearchDetailManager.cs" />
     <Compile Include="SearchTotalManager.cs" />
     <Compile Include="SettingManager.cs" />
+    <Compile Include="StudentManager.cs" />
     <Compile Include="Sys_MenuManger.cs" />
     <Compile Include="ThemeTemplateManager.cs" />
     <Compile Include="UserInfoManager.cs" />

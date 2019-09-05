@@ -1,0 +1,169 @@
+﻿@using Domain
+@using WebUI.Models.CardBoxVM
+@{
+	Layout = null;
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>创建 - 课程</title>
+	<link href="/assets/libs/mdui/dist/css/mdui.min.css" rel="stylesheet" />
+	<link href="/assets/libs/Mdata.js/css/Mdate.css" rel="stylesheet" />
+	<link href="/assets/css/app.css" rel="stylesheet" />
+	<style>
+		.dialog-content {
+			padding: 30px;
+		}
+
+		#content-main {
+			/*padding: 20px;*/
+			width: 100%;
+			/*height: 700px;*/
+			/*font-size: 50px;*/
+		}
+	</style>
+</head>
+<body class="mdui-appbar-with-toolbar mdui-theme-primary-teal mdui-bottom-nav-fixed">
+	<!-- 头部 -->
+	<header class="mdui-appbar mdui-appbar-fixed" id="content-header">
+		<div class="mdui-toolbar mdui-color-white mdui-text-color-theme">
+			<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">navigate_before</i></a>
+			<a id="js-refresh" href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>
+			@*<a href="" class="mdui-typo-headline">标题</a>*@
+			<a href="" class="mdui-typo-title">创建 - 课程</a>
+			<div class="mdui-toolbar-spacer"></div>
+			<a id="js-btn-save" href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">check</i></a>
+		</div>
+	</header>
+	<!-- 内容 -->
+	<div class="mdui-container" id="content-main">
+		<div class="mdui-row">
+			<div class="mdui-col-xs-12 mdui-col-md-6 mdui-col-offset-md-3">
+				<div id="js-name" class="mdui-textfield mdui-textfield-floating-label">
+					<label class="mdui-textfield-label">课程名</label>
+					<input name="name" class="mdui-textfield-input" type="text" />
+				</div>
+				<div id="js-description" class="mdui-textfield mdui-textfield-floating-label">
+					<label class="mdui-textfield-label">课程描述</label>
+					<textarea name="description" class="mdui-textfield-input" rows="10" maxlength="140"></textarea>
+					<div class="mdui-textfield-error">错误消息</div>
+				</div>
+				<div class="mdui-tab" mdui-tab>
+					<a href="#js-tab1" class="mdui-ripple">有效日期</a>
+					<a href="#js-tab2" class="mdui-ripple">学习天数</a>
+					<a href="#js-tab3" class="mdui-ripple">
+						<i class="mdui-icon material-icons">help</i>
+					</a>
+				</div>
+				<div id="js-tab1" class="mdui-p-a-2">
+					<div id="js-startTime" class="mdui-textfield">
+						<label class="mdui-textfield-label">开始时间</label>
+						<input name="startTime" id="js-input-startTime" class="mdui-textfield-input" type="text" />
+					</div>
+					<div id="js-endTime" class="mdui-textfield">
+						<label class="mdui-textfield-label">结束时间</label>
+						<input name="endTime" id="js-input-endTime" class="mdui-textfield-input" type="text" />
+					</div>
+				</div>
+				<div id="js-tab2" class="mdui-p-a-2">
+					<div class="mdui-textfield">
+						<label class="mdui-textfield-label">加入学习时开始计算天数</label>
+						<input name="learnDay" class="mdui-textfield-input" type="number" />
+					</div>
+				</div>
+				<div id="js-tab3" class="mdui-p-a-2">
+					<p>二选一</p>
+					<p>有效日期: 在日期范围内课程有效</p>
+					<p>学习天数：从课程加入学习开始计时，当抵达天数课程结束</p>
+				</div>
+				<label class="mdui-switch mdui-p-l-2 mdui-valign">
+					<input name="isOpen" type="checkbox" checked />
+					<i class="mdui-switch-icon"></i>&nbsp;&nbsp;公开
+				</label>
+			</div>
+		</div>
+		<div class="mdui-row">
+			<div class="mdui-col-xs-12">
+			</div>
+		</div>
+	</div>
+	<script src="/assets/libs/mdui/dist/js/mdui.min.js"></script>
+	<script src="/assets/libs/jquery/dist/jquery.min.js"></script>
+	<script src="/assets/libs/Mdata.js/js/iScroll.js"></script>
+	<script src="/assets/libs/Mdata.js/js/Mdate.js"></script>
+	<script>
+		var $$ = mdui.JQ;
+
+		$(function () {
+
+			$("#js-refresh").on("click", function () {
+				window.location.href = window.location.href;
+			});
+
+			// start 保存
+			$("#js-btn-save").on("click", function () {
+				$.ajax({
+					url: "/CardBox/Create",
+					type: "POST",
+					data: { 
+						name: $("#js-name input").val().trim(),
+						description: $("#js-description textarea").val().trim(),
+						startTime: $("#js-startTime input").val().trim(),
+						endTime: $("#js-endTime input").val().trim(),
+						learnDay: $('input[name="learnDay"]').val().trim() == '' ? 0: $('input[name="learnDay"]').val().trim(),
+						isOpen: $('input[name="isOpen"]').prop("checked"),
+					},
+					success: function (data) {
+						if (data.code > 0) {
+							window.location.href = "/CardBox?cat=iCreate";
+						} else {
+							mdui.snackbar({
+								message: data.message
+							});
+						}
+					}
+				});
+			});
+			// end 保存
+
+			// start "有效日期"/"学习天数" 二选一
+			$('#js-tab1').on('click', function () {
+				$('#js-tab2 input').val('');	
+			});
+			$('#js-tab2').on('click', function () {
+				$('#js-tab1 input').val('');	
+			});
+			// end "有效日期"/"学习天数" 二选一
+
+			// start 日期选择器
+			var date = new Date();
+			new Mdate("js-input-startTime", { //"dateShowBtn"为你点击触发Mdate的id，必填项
+				acceptId: "dateput",//此项为你要显示选择后的日期的input写默认为上一行的"dateShowBtn"
+				beginYear: date.getFullYear(),//此项为Mdate的初始年份，不填写默认为2000
+				beginMonth: date.getMonth() + 1,//此项为Mdate的初始月份，不填写默认为1
+				beginDay: date.getDate(),//此项为Mdate的初始日期，不填写默认为1
+				endYear: "2099",//此项为Mdate的结束年份，不填写默认为当年
+				endMonth: "12",//此项为Mdate的结束月份，不填写默认为当月
+				endDay: "31",//此项为Mdate的结束日期，不填写默认为当天
+				format: "-"//此项为Mdate需要显示的格式，可填写"/"或"-"或".",不填写默认为年月日
+			});
+			new Mdate("js-input-endTime", { //"dateShowBtn"为你点击触发Mdate的id，必填项
+				acceptId: "dateput",//此项为你要显示选择后的日期的input写默认为上一行的"dateShowBtn"
+				beginYear: date.getFullYear(),//此项为Mdate的初始年份，不填写默认为2000
+				beginMonth: date.getMonth() + 1,//此项为Mdate的初始月份，不填写默认为1
+				beginDay: date.getDate(),//此项为Mdate的初始日期，不填写默认为1
+				endYear: "2099",//此项为Mdate的结束年份，不填写默认为当年
+				endMonth: "12",//此项为Mdate的结束月份，不填写默认为当月
+				endDay: "31",//此项为Mdate的结束日期，不填写默认为当天
+				format: "-"//此项为Mdate需要显示的格式，可填写"/"或"-"或".",不填写默认为年月日
+			});
+			// end 日期选择器
+		});
+
+	</script>
+</body>
+</html>

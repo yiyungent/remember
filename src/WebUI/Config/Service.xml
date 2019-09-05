@@ -45,5 +45,17 @@
                  service="Service.SearchTotalService,Service"
                  type="Component.SearchTotalComponent,Component"
                  isTransactional="true" />
+    <component id="CourseBoxService"
+                 service="Service.CourseBoxService,Service"
+                 type="Component.CourseBoxComponent,Component"
+                 isTransactional="true" />
+    <component id="CourseInfoService"
+                 service="Service.CourseInfoService,Service"
+                 type="Component.CourseInfoComponent,Component"
+                 isTransactional="true" />
+    <component id="CourseBoxTableService"
+                 service="Service.CourseBoxTableService,Service"
+                 type="Component.CourseBoxTableComponent,Component"
+                 isTransactional="true" />
   </components>
 </configuration>

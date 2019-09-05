@@ -51,8 +51,12 @@
     <Compile Include="Article.cs" />
     <Compile Include="Base\BaseEntity.cs" />
     <Compile Include="CardBox.cs" />
+    <Compile Include="CardBoxTable.cs" />
     <Compile Include="CardInfo.cs" />
     <Compile Include="Comment.cs" />
+    <Compile Include="CourseBox.cs" />
+    <Compile Include="CourseBoxTable.cs" />
+    <Compile Include="CourseInfo.cs" />
     <Compile Include="FrameworkBase\Common\CommonEntity.cs" />
     <Compile Include="FrameworkBase\FunctionInfo.cs" />
     <Compile Include="FrameworkBase\RoleInfo.cs" />
@@ -64,6 +68,7 @@
     <Compile Include="SearchDetail.cs" />
     <Compile Include="SearchTotal.cs" />
     <Compile Include="Setting.cs" />
+    <Compile Include="Student.cs" />
     <Compile Include="Sys_Menu.cs" />
     <Compile Include="FrameworkBase\Setting.cs" />
     <Compile Include="ThemeTemplate.cs" />

@@ -1,4 +1,5 @@
-﻿
+﻿@using WebUI.Models.CardBoxVM
+@model SearchResultViewModel
 @{
 	Layout = null;
 }
@@ -34,7 +35,7 @@
 			<div class="mdui-toolbar-spacer"></div>
 			<div class="mdui-textfield mdui-textfield-expandable mdui-textfield-expanded">
 				<button id="js-btn-search" class="mdui-textfield-icon mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></button>
-				<input id="js-input-keyword" class="mdui-textfield-input" type="text" placeholder="Search" />
+				<input id="js-input-keyword" class="mdui-textfield-input" type="text" placeholder="搜索卡片" value="@ViewBag.Q" />
 				<button id="js-btn-close" class="mdui-textfield-close mdui-btn mdui-btn-icon mdui-hidden"><i class="mdui-icon material-icons">close</i></button>
 			</div>
 		</div>
@@ -42,6 +43,19 @@
 	<!-- 内容 -->
 	<div class="mdui-container" id="content-main">
 		<div class="mdui-row">
+			<div class="mdui-col-xs-12">
+				<ul id="js-result-list" class="mdui-list">
+					@foreach (var item in Model.List)
+					{
+						<li class="mdui-list-item mdui-ripple">
+							<a class="mdui-list-item-content" href="@item.Url">
+								<div class="mdui-list-item-title mdui-list-item-one-line">@item.Title</div>
+								<div class="mdui-list-item-text mdui-list-item-two-line">@(item.Description)...</div>
+							</a>
+						</li>
+					}
+				</ul>
+			</div>
 		</div>
 	</div>
 	<script src="/assets/libs/mdui/dist/js/mdui.min.js"></script>
@@ -57,12 +71,19 @@
 
 			$("#js-input-keyword").on("input propertychange", function () {
 				var keyword = $(this).val().trim();
-				console.log(keyword);
 				if (keyword != "" && keyword.length > 0) {
 					$("#js-btn-close").removeClass("mdui-hidden");
 				} else {
 					$("#js-btn-close").addClass("mdui-hidden");
 				}
+				$.ajax({
+					url: '/CardBox/Search',
+					type:'POST',
+					data: { q: keyword },
+					success: function(data) {
+						loadResultList(data);
+					}
+				});
 			});
 
 			$("#js-btn-close").on("click", function () {
@@ -73,6 +94,22 @@
 			});
 
 		});
+
+		function loadResultList(data) {
+			var listHtml = '';
+			var list = data.List;
+			var item = null;
+			for (var i = 0; i < list.length; i++) {
+				item = list[i];
+				listHtml += '<li class="mdui-list-item mdui-ripple">\
+								<a class="mdui-list-item-content" href="'+ item.Url +'">\
+									<div class="mdui-list-item-title mdui-list-item-one-line">' + item.Title + '</div>\
+									<div class="mdui-list-item-text mdui-list-item-two-line">' + item.Description + '...</div>\
+								</a>\
+							 </li>';
+			}
+			$("#js-result-list").html(listHtml);
+		}
 
 	</script>
 </body>

@@ -1,0 +1,51 @@
+﻿@using Domain
+@model IList<Student>
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Index</title>
+	<link href="~/assets/libs/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>姓名</th>
+							<th>学号</th>
+							<th>出生日期</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					@foreach (var item in Model)
+					{
+						<tr>
+							<td>@item.ID</td>
+							<td>@item.Name</td>
+							<td>@item.StudyNumber</td>
+							<td>@item.CreateTime.ToString("yyyy-MM-dd")</td>
+							<td>
+								<a class="btn btn-primary" href="/Student/edit?id=@item.ID">编辑</a>
+							</td>
+						</tr>
+					}
+				</table>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<div>@(TempData["Message"]?.ToString())</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
