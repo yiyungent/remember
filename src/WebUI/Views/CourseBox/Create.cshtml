@@ -109,7 +109,7 @@
 					},
 					success: function (data) {
 						if (data.code > 0) {
-							window.location.href = "/CourseBox?cat=iCreate";
+							window.location.href = "/CourseBox/Catalog?id=" + data.createdCourseBoxId;
 						} else {
 							mdui.snackbar({
 								message: data.message

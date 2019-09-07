@@ -1,81 +1,103 @@
-﻿<!DOCTYPE html>
+﻿@using Domain
+@model CourseBox
+@{
+	UserInfo user = ViewBag.User;
+	CourseBoxTable courseBoxTable = ViewBag.CourseBoxTable;
+	// TODO: "加入学习" 状态下可能已经学习完，课程结束
+	bool isILearn = courseBoxTable != null ? true : false;
+}
+
+<!DOCTYPE html>
 
 <html>
 <head>
 	<meta name="viewport" content="width=device-width" />
-	<title>软件工程</title>
+	<title>@(Model?.Name??"无此课程")</title>
 	<link href="/assets/libs/mdui/dist/css/mdui.min.css" rel="stylesheet" />
 	<link href="/assets/css/app.css" rel="stylesheet" />
-	<style>
-		.dialog-content {
-			padding: 30px;
-		}
-
-		#content-main {
-			/*padding: 20px;*/
-			width: 100%;
-			/*height: 700px;*/
-			font-size: 50px;
-		}
-	</style>
 </head>
 <body class="mdui-appbar-with-toolbar mdui-theme-primary-teal mdui-bottom-nav-fixed">
 	<!-- 头部 -->
-	<header class="mdui-appbar mdui-appbar-fixed" id="content-header">
+	<header class="mdui-appbar mdui-appbar-fixed">
 		<div class="mdui-toolbar mdui-color-white mdui-text-color-theme">
-			<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">navigate_before</i></a>
-			<a id="js-refresh" href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>
-			<a href="javascript:;" class="mdui-typo-title">软件工程</a>
-			<div class="mdui-toolbar-spacer"></div>
-			<a id="js-btn-more-menu" href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-menu="{target: '#js-more-menu'}"><i class="mdui-icon material-icons">more_vert</i></a>
-			<ul id="js-more-menu" class="mdui-menu">
-				<li class="mdui-menu-item">
-					<a href="javascript:;" class="mdui-ripple">
-						<i class="mdui-menu-item-icon mdui-icon material-icons">cancel</i>取消学习
-					</a>
-				</li>
-				<li class="mdui-divider"></li>
-				<li class="mdui-menu-item">
-					<a href="javascript:;" class="mdui-ripple">
-						<i class="mdui-menu-item-icon mdui-icon material-icons">edit</i>编辑
-					</a>
-				</li>
-				<li class="mdui-menu-item">
-					<a href="javascript:;" class="mdui-ripple">
-						<i class="mdui-menu-item-icon mdui-icon material-icons">delete</i>删除
-					</a>
-				</li>
-				<li class="mdui-menu-item">
-					<a href="javascript:;" class="mdui-ripple">
-						<i class="mdui-menu-item-icon mdui-icon material-icons">add</i>添加课件
-					</a>
-				</li>
-				<li class="mdui-divider"></li>
-				<li class="mdui-menu-item">
-					<a href="javascript:;" class="mdui-ripple">
-						<i class="mdui-menu-item-icon mdui-icon material-icons">mood_bad</i>举报
-					</a>
-				</li>
-			</ul>
+			@if (Model != null)
+			{
+				<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">navigate_before</i></a>
+				<a id="js-refresh" href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>
+				<a href="javascript:;" class="mdui-typo-title">@Model.Name</a>
+				<div class="mdui-toolbar-spacer"></div>
+				<a id="js-btn-more-menu" href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-menu="{target: '#js-more-menu'}"><i class="mdui-icon material-icons">more_vert</i></a>
+				<ul id="js-more-menu" class="mdui-menu">
+					@if (isILearn)
+					{
+						<li class="mdui-menu-item">
+							<a href="javascript:;" class="mdui-ripple">
+								<i class="mdui-menu-item-icon mdui-icon material-icons">cancel</i>取消学习
+							</a>
+						</li>
+					}
+					else
+					{
+						<li class="mdui-menu-item">
+							<a href="javascript:;" class="mdui-ripple">
+								<i class="mdui-menu-item-icon mdui-icon material-icons">add</i>加入学习
+							</a>
+						</li>
+					}
+					@if (Model.Creator.ID == user.ID)
+					{
+						<li class="mdui-divider"></li>
+						<li class="mdui-menu-item">
+							<a href="javascript:;" class="mdui-ripple">
+								<i class="mdui-menu-item-icon mdui-icon material-icons">edit</i>编辑
+							</a>
+						</li>
+						<li class="mdui-menu-item">
+							<a href="javascript:;" class="mdui-ripple">
+								<i class="mdui-menu-item-icon mdui-icon material-icons">delete</i>删除
+							</a>
+						</li>
+						<li class="mdui-menu-item">
+							<a href="javascript:;" class="mdui-ripple">
+								<i class="mdui-menu-item-icon mdui-icon material-icons">add</i>添加课件
+							</a>
+						</li>
+					}
+					<li class="mdui-divider"></li>
+					<li class="mdui-menu-item">
+						<a href="/CourseBox/Report?id=@Model.ID" class="mdui-ripple">
+							<i class="mdui-menu-item-icon mdui-icon material-icons">mood_bad</i>举报
+						</a>
+					</li>
+				</ul>
+			}
+			else
+			{
+				<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">navigate_before</i></a>
+				<a id="js-refresh" href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>
+				<a href="javascript:;" class="mdui-typo-title">无此课程</a>
+			}
 		</div>
 	</header>
 	<!-- 内容 -->
-	<div class="mdui-container" id="content-main">
+	<div class="mdui-container">
 		<div class="mdui-row">
 			<div class="mdui-col-xs-12 mdui-col-md-6 mdui-col-offset-md-3">
-				<div class="mdui-card">
+				@if (Model != null)
+				{
+					<div class="mdui-card">
 
 					<!-- 卡片头部，包含头像、标题、副标题 -->
 					<div class="mdui-card-header">
-						<img class="mdui-card-header-avatar" src="/Upload/images/card.jpg" />
+						<img class="mdui-card-header-avatar" src="@user.Avatar" />
 
-						<div class="mdui-card-header-title">超级管理员admin</div>
-						<div class="mdui-card-header-subtitle">admin</div>
+						<div class="mdui-card-header-title">@user.Name</div>
+						<div class="mdui-card-header-subtitle">@user.UserName</div>
 					</div>
 
 					<!-- 卡片的媒体内容，可以包含图片、视频等媒体内容，以及标题、副标题 -->
 					<div class="mdui-card-media">
-						<img src="/Upload/images/card.jpg" />
+						<img src="@Model.PicUrl" />
 
 						<!-- 卡片中可以包含一个或多个菜单按钮 -->
 						<div class="mdui-card-menu">
@@ -85,15 +107,15 @@
 
 					<!-- 卡片的标题和副标题 -->
 					<div class="mdui-card-primary">
-						<div class="mdui-card-primary-title">软件工程</div>
+						<div class="mdui-card-primary-title">@Model.Name</div>
 						<div class="mdui-card-primary-subtitle">学习时长： 222.5h </div>
 					</div>
 
 					<!-- 卡片的内容 -->
 					<div id="js-description" class="mdui-card-content">
-						<input type="hidden" value="子曰：「学而时习之，不亦说乎？有朋自远方来，不亦乐乎？人不知，而不愠，不亦君子乎？」子曰：「学而时习之，不亦说乎？有朋自远方来，不亦乐乎？人不知，而不愠，不亦君子乎？」子曰：「学而时习之，不亦说乎？有朋自远方来，不亦乐乎？人不知，而不愠，不亦君子乎？」子曰：「学而时习之，不亦说乎？有朋自远方来，不亦乐乎？人不知，而不愠，不亦君子乎？」" />
-							<span></span>
-							<button class="mdui-btn mdui-btn-icon mdui-float-right hidden" data-state="0"><i class="mdui-icon material-icons">expand_more</i></button>
+						<input type="hidden" value="@Model.Description" />
+						<span></span>
+						<button class="mdui-btn mdui-btn-icon mdui-float-right hidden" data-state="0"><i class="mdui-icon material-icons">expand_more</i></button>
 					</div>
 
 					<!-- 卡片的按钮 -->
@@ -103,6 +125,13 @@
 					</div>
 
 				</div>
+				}
+				else
+				{
+					<div class="mdui-text-center">
+						<h2>无此课程</h2>
+					</div>
+				}
 			</div>
 		</div>
 	</div>
@@ -112,11 +141,11 @@
 			<i class="mdui-icon material-icons">favorite</i>
 			<label>加入学习</label>
 		</a>
-		<a href="/CardBox/Catalog?id=1" class="mdui-ripple mdui-bottom-nav-active">
+		<a href="/CourseBox/Catalog?id=@Model.ID" class="mdui-ripple mdui-bottom-nav-active">
 			<i class="mdui-icon material-icons">edit</i>
 			<label>课程目录</label>
 		</a>
-		<a href="javascript:;" class="mdui-ripple mdui-bottom-nav-active">
+		<a href="/CourseBox/Comment?id=@Model.ID" class="mdui-ripple mdui-bottom-nav-active">
 			<i class="mdui-icon material-icons">sms</i>
 			<label>评论</label>
 		</a>
@@ -141,6 +170,8 @@
 			if (descText.length > 30) {
 				$("#js-description span").text(descText.substr(0, 30) + '...');
 				$("#js-description button").removeClass("hidden");
+			} else {
+				$("#js-description span").text(descText);
 			}
 
 			$("#js-description button").on("click", function () {

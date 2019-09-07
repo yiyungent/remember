@@ -31,11 +31,19 @@ namespace Domain
         [Property(NotNull = false)]
         public DateTime JoinTime { get; set; }
 
+
+        /// <summary>
+        /// 学习时间:花费时间
+        /// 分钟
+        /// </summary>
+        [Property(NotNull = false)]
+        public double SpendTime { get; set; }
+
         /// <summary>
         /// 学习进度，存储json
         /// {
         ///     CourseInfoId: 2, // 最近学习到的知识卡ID
-        ///     PlayTime: 2444 // 若为视频，则为上次视频播放时间
+        ///     
         /// }
         /// </summary>
         [Property(Length = 300, NotNull = false)]

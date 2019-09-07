@@ -54,6 +54,7 @@ namespace WebUI.Controllers
             InitCardBox();
             InitCardInfo();
             InitCourseBox();
+            InitCourseBoxTable();
             InitCourseInfo();
         }
         #endregion
@@ -621,18 +622,53 @@ namespace WebUI.Controllers
             {
                 ShowMessage("开始初始化课程盒");
 
-                CourseBoxService CourseBoxService = Container.Instance.Resolve<CourseBoxService>();
+                CourseBoxService courseBoxService = Container.Instance.Resolve<CourseBoxService>();
 
                 for (int i = 0; i < 10; i++)
                 {
                     UserInfo userInfo = Container.Instance.Resolve<UserInfoService>().GetEntity(1);
-                    CourseBox CourseBox = new CourseBox();
-                    CourseBox.Name = "测试课程盒-" + (i + 1);
-                    CourseBox.Description = $"这是测试课程盒-{(i + 1)}的描述";
-                    //CourseBox.ReaderList = new List<UserInfo>();
-                    //CourseBox.ReaderList.Add(userInfo);
-                    CourseBox.Creator = userInfo;
-                    CourseBoxService.Create(CourseBox);
+                    CourseBox courseBox = new CourseBox();
+                    courseBox.Name = "测试课程盒-" + (i + 1);
+                    courseBox.Description = $"这是测试课程盒-{(i + 1)}的描述";
+                    courseBox.Creator = userInfo;
+                    courseBox.PicUrl = "https://static.runoob.com/images/mix/img_fjords_wide.jpg";
+
+                    courseBoxService.Create(courseBox);
+                }
+
+                ShowMessage("成功");
+            }
+            catch (Exception)
+            {
+                ShowMessage("失败");
+            }
+        }
+        #endregion
+
+        #region 初始化课程盒表
+        private void InitCourseBoxTable()
+        {
+            try
+            {
+                ShowMessage("开始初始化课程盒表");
+
+                CourseBoxService courseBoxService = Container.Instance.Resolve<CourseBoxService>();
+                CourseBoxTableService courseBoxTableService = Container.Instance.Resolve<CourseBoxTableService>();
+
+                for (int i = 0; i < 10; i++)
+                {
+                    UserInfo userInfo = Container.Instance.Resolve<UserInfoService>().GetEntity(1);
+                    CourseBox courseBox = courseBoxService.GetEntity(i + 1);
+
+                    CourseBoxTable courseBoxTable = new CourseBoxTable
+                    {
+                        CourseBox = courseBox,
+                        JoinTime = DateTime.Now.AddDays(i + 1),
+                        Reader = userInfo,
+                        SpendTime = 100 * (i + 1),
+                    };
+
+                    courseBoxTableService.Create(courseBoxTable);
                 }
 
                 ShowMessage("成功");

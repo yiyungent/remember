@@ -67,7 +67,30 @@ namespace WebUI.Controllers
         /// <returns></returns>
         public ActionResult Details(int id)
         {
-            return View();
+            CourseBox viewModel = null;
+            if (_courseBoxService.Exist(id))
+            {
+                viewModel = _courseBoxService.GetEntity(id);
+            }
+            UserInfo currentUser = AccountManager.GetCurrentUserInfo();
+            ViewBag.User = currentUser;
+
+            CourseBoxTable courseBoxTable = null;
+            if (viewModel != null)
+            {
+                IList<CourseBoxTable> courseBoxTables = _courseBoxTableService.Query(new List<ICriterion>
+                {
+                    Expression.Eq("Reader.ID", currentUser.ID),
+                    Expression.Eq("CourseBox.ID", viewModel.ID)
+                }).ToList();
+                if (courseBoxTables != null && courseBoxTables.Count >= 1)
+                {
+                    courseBoxTable = courseBoxTables[0];
+                }
+            }
+            ViewBag.CourseBoxTable = courseBoxTable;
+
+            return View(viewModel);
         }
         #endregion
 
@@ -198,17 +221,17 @@ namespace WebUI.Controllers
                     }).OrderByDescending(m => m.ID).Take(1).ToList()[0];
 
                     #region 添加示例内容
-                    CourseInfo parentCourseInfo = new CourseInfo
-                    {
-                        Title = "分类1",
-                        CourseBox = createdCourseBox
-                    };
-                    _courseInfoService.Create(parentCourseInfo);
+                    //CourseInfo parentCourseInfo = new CourseInfo
+                    //{
+                    //    Title = "分类1",
+                    //    CourseBox = createdCourseBox
+                    //};
+                    //_courseInfoService.Create(parentCourseInfo);
                     CourseInfo CourseInfo = new CourseInfo
                     {
                         Title = "示例1",
                         Content = "示例内容，可尝试编辑本页面",
-                        Parent = parentCourseInfo,
+                        Parent = null,
                         CourseBox = createdCourseBox
                     };
                     _courseInfoService.Create(CourseInfo);
@@ -216,7 +239,7 @@ namespace WebUI.Controllers
 
 
 
-                    return Json(new { code = 1, message = "添加成功" });
+                    return Json(new { code = 1, message = "添加成功", createdCourseBoxId = createdCourseBox.ID });
                 }
                 else
                 {
@@ -228,6 +251,41 @@ namespace WebUI.Controllers
             {
                 return Json(new { code = -2, message = "添加失败" });
             }
+        }
+        #endregion
+
+        #region 举报
+        public ViewResult Report()
+        {
+            return View();
+        }
+        #endregion
+
+        #region 增加课程内容-视频
+        public ActionResult AddVideo(int id)
+        {
+            return View();
+        }
+        #endregion
+
+        #region 增加课程内容-富文本贴
+        public ActionResult AddRichText(int id)
+        {
+            return View();
+        }
+        #endregion
+
+        #region 增加课程内容-试卷题
+        public ActionResult AddQuestion(int id)
+        {
+            return View();
+        }
+        #endregion
+
+        #region 增加课程内容-附件
+        public ActionResult AddAttachment(int id)
+        {
+            return View();
         }
         #endregion
 

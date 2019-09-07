@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 
-namespace WebUI
+namespace WebApi
 {
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
         {
+            // Web API configuration and services
             // 跨域支持
             config.EnableCors();
 

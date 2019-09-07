@@ -1,0 +1,112 @@
+﻿@{
+	Layout = null;
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>添加学习贴 - 软件工程</title>
+	<link href="/assets/libs/mdui/dist/css/mdui.min.css" rel="stylesheet" />
+	<link href="/assets/libs/At.js/dist/css/jquery.atwho.min.css" rel="stylesheet" />
+	<link href="/assets/libs/wangEditor/wangEditor.min.css" rel="stylesheet" />
+	<link href="/assets/css/app.css" rel="stylesheet" />
+</head>
+<body class="mdui-appbar-with-toolbar mdui-theme-primary-teal mdui-bottom-nav-fixed">
+	<!-- 头部 -->
+	<header class="mdui-appbar mdui-appbar-fixed">
+		<div class="mdui-toolbar mdui-color-white mdui-text-color-theme">
+			<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">navigate_before</i></a>
+			<a id="js-refresh" href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>
+			<a href="" class="mdui-typo-title">添加学习贴 - 软件工程</a>
+			<div class="mdui-toolbar-spacer"></div>
+			<a id="js-btn-save" href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">check</i></a>
+		</div>
+	</header>
+	<!-- 内容 -->
+	<div class="mdui-container">
+		<div class="mdui-row">
+			<div class="mdui-col-xs-12 mdui-col-md-8 mdui-col-offset-md-2 mdui-p-b-4">
+				<div class="mdui-textfield mdui-textfield-floating-label">
+					<i class="mdui-icon material-icons">title</i>
+					<label class="mdui-textfield-label">标题</label>
+					<input class="mdui-textfield-input" name="title" type="text" />
+				</div>
+			</div>
+			<div class="mdui-col-xs-12 mdui-col-md-8 mdui-col-offset-md-2">
+				<div id="js-editArea" class="mdui-col"></div>
+				<textarea id="js-content" name="content" style="display: none;"></textarea>
+			</div>
+		</div>
+		<div class="mdui-row">
+			<div class="mdui-col-xs-12 mdui-col-md-6 mdui-col-offset-md-3">
+			</div>
+		</div>
+	</div>
+	<div id="js-msg-mobile" class="mdui-dialog">
+		<div class="mdui-dialog-title">本页面仅限PC端</div>
+		<div class="mdui-dialog-content">请前往PC端添加学习贴！</div>
+	</div>
+	<script src="/assets/libs/mdui/dist/js/mdui.min.js"></script>
+	<script src="/assets/libs/jquery/dist/jquery.min.js"></script>
+	<script src="/assets/libs/Caret.js/dist/jquery.caret.min.js"></script>
+	<script src="/assets/libs/At.js/dist/js/jquery.atwho.min.js"></script>
+	<script src="/assets/libs/wangEditor/wangEditor.min.js"></script>
+	<script>
+		var $$ = mdui.JQ;
+		let isMobile = /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent);
+		if (isMobile) {
+			$(".mdui-container").html("");
+			var dialog = new mdui.Dialog("#js-msg-mobile", {
+				modal: true,
+				closeOnEsc: false,
+				closeOnCancel: false,
+				closeOnConfirm: false,
+				destroyOnClosed: false
+			});
+			dialog.open();
+		}
+
+		$(function () {
+
+			$("#js-refresh").on("click", function () {
+				window.location.href = window.location.href;
+			});
+
+			// start editor
+			var E = window.wangEditor;
+			var editor = new E('#js-editArea');
+			var $hiddenEditArea = $("#js-content");
+			editor.customConfig.onchange = function (html) {
+				// 监控变化，同步更新到 textarea
+				$hiddenEditArea.val(html);
+			}
+			editor.create();
+			editor.txt.html($hiddenEditArea.val());
+			// 初始化 textarea 的值
+			$hiddenEditArea.val(editor.txt.html())
+			// end editor
+
+			$("#js-btn-save").on("click", function () {
+				$.ajax({
+					type: "post",
+					data: { title: $('input[name="title"]').val().trim(), content: $('textarea[name="content"]').val() },
+					success: function (data) {
+						if (data.code > 0) {
+							window.location.href = "/CourseBox/Catalog?id=" + data.createdCourseBoxId;
+						} else {
+							mdui.snackbar({
+								message: data.message
+							});
+						}
+					}
+				});
+			});
+
+		});
+
+	</script>
+</body>
+</html>

@@ -83,6 +83,12 @@ namespace Domain
         [BelongsTo(Column = "CreatorId")]
         public UserInfo Creator { get; set; }
 
+        /// <summary>
+        /// 课程盒表 列表
+        /// </summary>
+        [HasMany(ColumnKey = "CourseBoxId")]
+        public IList<CourseBoxTable> CourseBoxTableList { get; set; }
+
         ///// <summary>
         ///// 此卡片盒的读者 列表
         /////     多对多

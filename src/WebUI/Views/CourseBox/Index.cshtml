@@ -18,7 +18,7 @@
 </head>
 <body class="mdui-appbar-with-toolbar mdui-appbar-with-tab mdui-theme-primary-teal mdui-bottom-nav-fixed">
 	<!-- 头部 -->
-	<header class="mdui-appbar mdui-appbar-fixed">
+	<header class="mdui-appbar mdui-appbar-fixed mdui-appbar-scroll-toolbar-hide">
 		<div class="mdui-toolbar mdui-color-white mdui-text-color-theme">
 			<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">navigate_before</i></a>
 			<a id="js-refresh" href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>
@@ -97,7 +97,7 @@
 				</div>
 				<div id="js-tab2">
 					<div class="mdui-col-xs-12" style="padding-right: 0;padding-left: 0;">
-						<ul class="mdui-list">
+						<div class="mdui-list">
 							@for (int i = 0; i < iLearnCourseBoxList.Count; i++)
 							{
 								string desc = iLearnCourseBoxList[i].Description;
@@ -105,24 +105,24 @@
 								{
 									desc = iLearnCourseBoxList[i].Description.Substring(0, 15) + " ...";
 								}
-								<li class="mdui-list-item mdui-ripple">
-									<div class="mdui-list-item-avatar"><img src="https://static.runoob.com/images/mix/img_fjords_wide.jpg" /></div>
+								<a class="mdui-list-item mdui-ripple" href="/CourseBox/Details?id=@iCreateCourseBoxList[i].ID">
+									<div class="mdui-list-item-avatar"><img src="@iCreateCourseBoxList[i].PicUrl" /></div>
 									<div class="mdui-list-item-content">
 										<div class="mdui-list-item-title">@iLearnCourseBoxList[i].Name</div>
 										<div class="mdui-list-item-text mdui-list-item-one-line"><span class="mdui-text-color-theme-text">@iLearnCourseBoxList[i].Creator.Name</span> - @desc</div>
 									</div>
-								</li>
+								</a>
 								if (i < iLearnCourseBoxList.Count - 1)
 								{
-									<li class="mdui-divider-inset mdui-m-y-0"></li>
+									<span class="mdui-divider-inset mdui-m-y-0"></span>
 								}
 							}
-						</ul>
+						</div>
 					</div>
 				</div>
 				<div id="js-tab3">
 					<div class="mdui-col-xs-12" style="padding-right: 0;padding-left: 0;">
-						<ul class="mdui-list">
+						<div class="mdui-list">
 							@for (int i = 0; i < iCreateCourseBoxList.Count; i++)
 							{
 								string desc = iCreateCourseBoxList[i].Description;
@@ -130,19 +130,19 @@
 								{
 									desc = iCreateCourseBoxList[i].Description.Substring(0, 15) + " ...";
 								}
-								<li class="mdui-list-item mdui-ripple">
-									<div class="mdui-list-item-avatar"><img src="https://static.runoob.com/images/mix/img_fjords_wide.jpg" /></div>
+								<a class="mdui-list-item mdui-ripple" href="/CourseBox/Details?id=@iCreateCourseBoxList[i].ID">
+									<div class="mdui-list-item-avatar"><img src="@iCreateCourseBoxList[i].PicUrl" /></div>
 									<div class="mdui-list-item-content">
 										<div class="mdui-list-item-title">@iCreateCourseBoxList[i].Name</div>
 										<div class="mdui-list-item-text mdui-list-item-one-line"><span class="mdui-text-color-theme-text">@iCreateCourseBoxList[i].Creator.Name</span> - @desc</div>
 									</div>
-								</li>
+								</a>
 								if (i < iCreateCourseBoxList.Count - 1)
 								{
-									<li class="mdui-divider-inset mdui-m-y-0"></li>
+									<span class="mdui-divider-inset mdui-m-y-0"></span>
 								}
 							}
-						</ul>
+						</div>
 					</div>
 				</div>
 			</div>
