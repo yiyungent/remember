@@ -37,6 +37,12 @@
     <Reference Include="ICSharpCode.SharpZipLib, Version=1.1.0.145, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SharpZipLib.1.1.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="JWT, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\JWT.3.0.1\lib\net35\JWT.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NPOI">
       <HintPath>..\..\libs\NPOI 2.3.0.0\dotnet4\NPOI.dll</HintPath>
     </Reference>
@@ -64,6 +70,7 @@
     <Compile Include="EmailVerifyCode.cs" />
     <Compile Include="FileHelper.cs" />
     <Compile Include="GetRandom.cs" />
+    <Compile Include="JwtHelper.cs" />
     <Compile Include="NPOIHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SendEmailAide.cs" />
@@ -71,6 +78,7 @@
     <Compile Include="VerifyCode.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

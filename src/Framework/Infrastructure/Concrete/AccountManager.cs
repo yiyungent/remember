@@ -50,43 +50,50 @@ namespace Framework.Infrastructure.Concrete
         {
             HttpRequest request = HttpContext.Current.Request;
 
-            // 获取当前登录用户
-            UserInfo rtnUserInfo = Tools.GetSession<UserInfo>(AppConfig.LoginAccountSessionKey);
-            if (rtnUserInfo == null)
+            try
             {
-                #region 验证口令
-                if (request.Cookies.AllKeys.Contains(_tokenCookieKey))
+                // 获取当前登录用户
+                UserInfo rtnUserInfo = Tools.GetSession<UserInfo>(AppConfig.LoginAccountSessionKey);
+                if (rtnUserInfo == null)
                 {
-                    if (request.Cookies[_tokenCookieKey] != null && string.IsNullOrEmpty(request.Cookies[_tokenCookieKey].Value) == false)
+                    #region 验证口令
+                    if (request.Cookies.AllKeys.Contains(_tokenCookieKey))
                     {
-                        string cookieTokenValue = request.Cookies[_tokenCookieKey].Value;
-                        UserInfo dbUser = _dBAccessProvider.GetUserInfoByTokenCookieKey(cookieTokenValue);
+                        if (request.Cookies[_tokenCookieKey] != null && string.IsNullOrEmpty(request.Cookies[_tokenCookieKey].Value) == false)
+                        {
+                            string cookieTokenValue = request.Cookies[_tokenCookieKey].Value;
+                            UserInfo dbUser = _dBAccessProvider.GetUserInfoByTokenCookieKey(cookieTokenValue);
 
-                        if (dbUser == null)
-                        {
-                            // 口令不正确---游客
-                            rtnUserInfo = UserInfo_Guest.Instance;
-                        }
-                        else if (dbUser.TokenExpireAt > DateTime.UtcNow)
-                        {
-                            // 最多 "记住我" 保存7天的 登录状态
-                            rtnUserInfo = dbUser;
-                        }
-                        else
-                        {
-                            // 登录 已过期---游客
-                            rtnUserInfo = UserInfo_Guest.Instance;
+                            if (dbUser == null)
+                            {
+                                // 口令不正确---游客
+                                rtnUserInfo = UserInfo_Guest.Instance;
+                            }
+                            else if (dbUser.TokenExpireAt > DateTime.UtcNow)
+                            {
+                                // 最多 "记住我" 保存7天的 登录状态
+                                rtnUserInfo = dbUser;
+                            }
+                            else
+                            {
+                                // 登录 已过期---游客
+                                rtnUserInfo = UserInfo_Guest.Instance;
+                            }
                         }
                     }
+                    else
+                    {
+                        rtnUserInfo = UserInfo_Guest.Instance;
+                    }
+                    #endregion
                 }
-                else
-                {
-                    rtnUserInfo = UserInfo_Guest.Instance;
-                }
-                #endregion
-            }
 
-            return rtnUserInfo;
+                return rtnUserInfo;
+            }
+            catch (Exception ex)
+            {
+                return UserInfo_Guest.Instance;
+            }
         }
         #endregion
 

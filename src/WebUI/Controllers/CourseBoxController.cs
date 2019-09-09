@@ -65,7 +65,7 @@ namespace WebUI.Controllers
         /// </summary>
         /// <param name="id">卡片盒Id</param>
         /// <returns></returns>
-        public ActionResult Details(int id)
+        public ViewResult Details(int id)
         {
             CourseBox viewModel = null;
             if (_courseBoxService.Exist(id))
@@ -269,21 +269,21 @@ namespace WebUI.Controllers
         #endregion
 
         #region 增加课程内容-富文本贴
-        public ActionResult AddRichText(int id)
+        public ViewResult AddRichText(int id)
         {
             return View();
         }
         #endregion
 
         #region 增加课程内容-试卷题
-        public ActionResult AddQuestion(int id)
+        public ViewResult AddQuestion(int id)
         {
             return View();
         }
         #endregion
 
         #region 增加课程内容-附件
-        public ActionResult AddAttachment(int id)
+        public ViewResult AddAttachment(int id)
         {
             return View();
         }
