@@ -18,8 +18,15 @@ namespace WebApi.Models.Common
         public string UserName { get; set; }
 
         /// <summary>
-        /// 过期时间
+        /// 签发时间
+        /// Unix时间戳
         /// </summary>
-        public DateTime Expire { get; set; }
+        public long Create { get; set; }
+
+        /// <summary>
+        /// 过期时间
+        /// Unix时间戳
+        /// </summary>
+        public long Expire { get; set; }
     }
 }

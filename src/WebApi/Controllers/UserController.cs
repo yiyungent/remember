@@ -180,7 +180,8 @@ namespace WebApi.Controllers
                         {
                             ID = userInfo.ID,
                             UserName = userInfo.UserName,
-                            Expire = DateTime.Now.AddDays(7)
+                            Expire = DateTime.Now.AddDays(7).ToTimeStamp10(),
+                            Create = DateTime.Now.ToTimeStamp10()
                         })
                     };
                 }
