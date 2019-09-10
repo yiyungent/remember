@@ -158,17 +158,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Attributes\NeedAuthAttribute.cs" />
     <Compile Include="Controllers\CourseBoxController.cs" />
-    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\CourseInfoController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\ApiAccountManager.cs" />
-    <Compile Include="Models\CourseBoxViewModel.cs" />
-    <Compile Include="Models\LoginViewModel.cs" />
-    <Compile Include="Models\ResponseData.cs" />
-    <Compile Include="Models\UserInfoViewModel.cs" />
+    <Compile Include="Infrastructure\UserIdentity.cs" />
+    <Compile Include="Infrastructure\UserPrincipal.cs" />
+    <Compile Include="Models\Common\JWTokenViewModel.cs" />
+    <Compile Include="Models\CourseBoxVM\CommentViewModel.cs" />
+    <Compile Include="Models\CourseBoxVM\CourseBoxViewModel.cs" />
+    <Compile Include="Models\CourseInfoVM\CourseInfoViewModel.cs" />
+    <Compile Include="Models\CourseInfoVM\RichTextViewModel.cs" />
+    <Compile Include="Models\CourseInfoVM\VideoViewModel.cs" />
+    <Compile Include="Models\UserInfoVM\LoginViewModel.cs" />
+    <Compile Include="Models\Common\ResponseData.cs" />
+    <Compile Include="Models\UserInfoVM\RegisterViewModel.cs" />
+    <Compile Include="Models\UserInfoVM\UserInfoViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -182,6 +191,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Upload\videos\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

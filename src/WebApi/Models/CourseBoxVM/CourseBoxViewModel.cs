@@ -3,17 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebApi.Models
+namespace WebApi.Models.CourseBoxVM
 {
     public class CourseBoxViewModel
     {
+        /// <summary>
+        /// 课程ID
+        /// </summary>
         public int ID { get; set; }
 
+        /// <summary>
+        /// 课程名
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// 描述
+        /// </summary>
         public string Description { get; set; }
 
-        public string CourseBoxCreatorName { get; set; }
+        /// <summary>
+        /// 创建者的用户名
+        /// </summary>
+        public string CreatorUserName { get; set; }
 
         /// <summary>
         /// 封面图

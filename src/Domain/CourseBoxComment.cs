@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Domain
 {
     [ActiveRecord]
-    public class Comment : BaseEntity<Comment>
+    public class CourseBoxComment : BaseEntity<CourseBoxComment>
     {
         /// <summary>
         /// 内容
@@ -18,8 +18,6 @@ namespace Domain
         [Display(Name = "内容")]
         [Property(Length = 2200, NotNull = false)]
         public string Content { get; set; }
-
-        #region Relationships
 
         /// <summary>
         /// 创建时间
@@ -35,6 +33,9 @@ namespace Domain
         [Property]
         public DateTime LastUpdateTime { get; set; }
 
+
+        #region Relationships
+
         /// <summary>
         /// 作者
         /// </summary>
@@ -43,34 +44,11 @@ namespace Domain
         public UserInfo Author { get; set; }
 
         /// <summary>
-        /// 回复评论（父级评论）
+        /// 评论的课程盒
         /// </summary>
-        [BelongsTo(Column = "ReplyCommentId", NotNull = false)]
-        public Comment ReplyComment { get; set; }
-
-        /// <summary>
-        /// 评论类型
-        /// </summary>
-        [Property]
-        public CommentType? CommentType { get; set; }
-
-        /// <summary>
-        /// 评论对象ID
-        ///     例如评论某卡片，即是此被评论卡片的ID
-        /// </summary>
-        [Property(NotNull = true)]
-        public int CommentTargetId { get; set; }
+        [BelongsTo(Column = "CourseBoxId", NotNull = true)]
+        public CourseBox CourseBox { get; set; }
 
         #endregion
-
-    }
-
-    /// <summary>
-    /// 评论类型（属于在何处的评论）
-    /// </summary>
-    public enum CommentType
-    {
-        CardInfo = 1,
-        CardBox = 2
     }
 }

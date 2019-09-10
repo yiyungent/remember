@@ -51,6 +51,7 @@
     <Compile Include="Base\BaseService.cs" />
     <Compile Include="CardBoxService.cs" />
     <Compile Include="CardInfoService.cs" />
+    <Compile Include="CourseBoxCommentService.cs" />
     <Compile Include="CourseBoxTableService.cs" />
     <Compile Include="CourseInfoService.cs" />
     <Compile Include="CourseBoxService.cs" />

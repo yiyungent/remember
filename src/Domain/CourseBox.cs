@@ -89,15 +89,6 @@ namespace Domain
         [HasMany(ColumnKey = "CourseBoxId")]
         public IList<CourseBoxTable> CourseBoxTableList { get; set; }
 
-        ///// <summary>
-        ///// 此卡片盒的读者 列表
-        /////     多对多
-        /////         一个卡片盒可供多人阅读，一人可阅读多个卡片盒
-        ///// </summary>
-        //[Display(Name = "读者列表")]
-        //[HasAndBelongsToMany(Table = "User_CourseBox_ForRead", ColumnKey = "CourseBoxId", ColumnRef = "UserId")]
-        //public IList<UserInfo> ReaderList { get; set; }
-
         #endregion
     }
 }

@@ -34,6 +34,13 @@ namespace Domain
         [Property(Length = 50, NotNull = false, Unique = true)]
         public string Email { get; set; }
 
+        /// <summary>
+        /// 手机号(唯一，可改，可作为登录使用)
+        /// </summary>
+        [Display(Name = "邮箱")]
+        [Property(Length = 50, NotNull = false, Unique = true)]
+        public string Phone { get; set; }
+
         [Display(Name = "描述")]
         [Property(Length = 300, NotNull = false)]
         public string Description { get; set; }

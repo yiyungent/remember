@@ -64,6 +64,7 @@
     <Compile Include="Base\BaseManager.cs" />
     <Compile Include="CardBoxManager.cs" />
     <Compile Include="CardInfoManager.cs" />
+    <Compile Include="CourseBoxCommentManager.cs" />
     <Compile Include="CourseBoxManager.cs" />
     <Compile Include="CourseBoxTableManager.cs" />
     <Compile Include="CourseInfoManager.cs" />

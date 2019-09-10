@@ -54,6 +54,7 @@
     <Compile Include="Base\BaseComponent.cs" />
     <Compile Include="CardBoxComponent.cs" />
     <Compile Include="CardInfoComponent.cs" />
+    <Compile Include="CourseBoxCommentComponent.cs" />
     <Compile Include="CourseBoxTableComponent.cs" />
     <Compile Include="CourseBoxComponent.cs" />
     <Compile Include="CourseInfoComponent.cs" />

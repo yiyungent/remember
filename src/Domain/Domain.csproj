@@ -53,8 +53,8 @@
     <Compile Include="CardBox.cs" />
     <Compile Include="CardBoxTable.cs" />
     <Compile Include="CardInfo.cs" />
-    <Compile Include="Comment.cs" />
     <Compile Include="CourseBox.cs" />
+    <Compile Include="CourseBoxComment.cs" />
     <Compile Include="CourseBoxTable.cs" />
     <Compile Include="CourseInfo.cs" />
     <Compile Include="FrameworkBase\Common\CommonEntity.cs" />

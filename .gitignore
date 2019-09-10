@@ -268,3 +268,4 @@ __pycache__/
 /src/WebUI/App_Data/LuceneDir
 /src/WebUI/WebUI.zip
 /src/WebUI/Upload/videos
+/src/WebApi/Upload/videos

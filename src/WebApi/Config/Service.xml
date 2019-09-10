@@ -57,5 +57,9 @@
                  service="Service.CourseBoxTableService,Service"
                  type="Component.CourseBoxTableComponent,Component"
                  isTransactional="true" />
+    <component id="CourseBoxCommentService"
+                service="Service.CourseBoxCommentService,Service"
+                type="Component.CourseBoxCommentComponent,Component"
+                isTransactional="true" />
   </components>
 </configuration>
