@@ -24,7 +24,7 @@ namespace WebApi.Controllers
     public class UserController : ApiController
     {
         #region Get: 获取当前登录账号信息
-        [NeedAuth]
+        //[NeedAuth]
         public UserInfoViewModel Get()
         {
             UserInfoViewModel viewModel = null;
