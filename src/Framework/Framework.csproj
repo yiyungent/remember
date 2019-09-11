@@ -112,6 +112,7 @@
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
     <Compile Include="Models\CurrentAccountModel.cs" />
     <Compile Include="Models\ErrorRedirectViewModel.cs" />
+    <Compile Include="Models\JWTokenViewModel.cs" />
     <Compile Include="Mvc\ViewEngines\Templates\DbDriveTemplateViewEngine.cs" />
     <Compile Include="Mvc\ViewEngines\Templates\ITemplateContext.cs" />
     <Compile Include="Mvc\ViewEngines\Templates\ITemplateProvider.cs" />
@@ -133,6 +134,10 @@
     <Compile Include="RequestResult\WithoutAuthResult.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{2B716300-F8DB-4726-AC39-F45D15FB7A9D}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Core\Core.csproj">
       <Project>{c1d08da3-6f81-47df-a5f2-c56020d5f5cf}</Project>
       <Name>Core</Name>

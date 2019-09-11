@@ -1,4 +1,6 @@
 ﻿using Common;
+using Framework.Config;
+using Framework.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,33 +28,41 @@ namespace WebApi.Attributes
         protected override bool IsAuthorized(HttpActionContext actionContext)
         {
             // 获取 token -> 1.header 2.cookie
+            // TODO: 从 Header->Authorization 获取 token
             string token = "";
-            if (actionContext.Request.Headers.TryGetValues("token", out var headerValues))
+            if (actionContext.Request.Headers.TryGetValues(AppConfig.JwtName, out var headerValues))
             {
                 token = headerValues.FirstOrDefault();
+                
+                if (string.IsNullOrEmpty(token))
+                {
+                    // header 中没有 token，尝试从 cookie 中读取
+                    var cookies = actionContext.Request.Headers.GetCookies(AppConfig.JwtName)?.FirstOrDefault();
+                    token = cookies[AppConfig.JwtName]?.Value;
+                }
 
                 var tokenModel = JwtHelper.Decode<JWTokenViewModel>(token, out bool verifyPass);
                 if (verifyPass)
                 {
-                    // 令牌有效 -> 检测是否已经过期
+                    // token有效 -> 检测是否已经过期
                     bool isExpired = DateTimeHelper.NowTimeStamp10() >= tokenModel.Expire;
                     if (!isExpired)
                     {
-                        // 令牌未过期
+                        // token未过期
                         // 将经过效验的用户信息保存
                         actionContext.RequestContext.Principal = new UserPrincipal(new UserIdentity(tokenModel.ID, tokenModel.UserName));
 
-                        return base.IsAuthorized(actionContext);
+                        return true;
                     }
                     else
                     {
-                        // 令牌过期
+                        // token过期
                         return false;
                     }
                 }
                 else
                 {
-                    // 令牌无效
+                    // token无效
                     return false;
                 }
             }

@@ -165,10 +165,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Infrastructure\ApiAccountManager.cs" />
     <Compile Include="Infrastructure\UserIdentity.cs" />
     <Compile Include="Infrastructure\UserPrincipal.cs" />
-    <Compile Include="Models\Common\JWTokenViewModel.cs" />
     <Compile Include="Models\CourseBoxVM\CommentViewModel.cs" />
     <Compile Include="Models\CourseBoxVM\CourseBoxViewModel.cs" />
     <Compile Include="Models\CourseInfoVM\CourseInfoViewModel.cs" />

@@ -11,6 +11,7 @@ using System.Text;
 using System.Web.Mvc;
 using Framework.Infrastructure.Abstract;
 using Framework.Factories;
+using Common;
 
 namespace Framework.Infrastructure.Concrete
 {
@@ -22,7 +23,7 @@ namespace Framework.Infrastructure.Concrete
     public class CurrentAccountModelBinder : IModelBinder
     {
         private string _loginAccountSessionKey = AppConfig.LoginAccountSessionKey;
-        private string _rememberMeTokenCookieKey = AppConfig.TokenCookieKey;
+        private string _rememberMeTokenCookieKey = AppConfig.JwtName;
         private int _rememberMeDayCount = AppConfig.RememberMeDayCount;
 
         private IDBAccessProvider _dBAccessProvider = HttpOneRequestFactory.Get<IDBAccessProvider>();
@@ -34,49 +35,67 @@ namespace Framework.Infrastructure.Concrete
             var user = controllerContext.HttpContext.Session?[_loginAccountSessionKey] as UserInfo;
             if (user == null)
             {
-                // 1-a-A 若 Session 无登录用户，则检查 是否有"记住我" RememberMeTokenCookieKey
+                // 1-a-A 若 Session 无登录用户，则检查 是否有 token: RememberMeTokenCookieKey
 
                 if (controllerContext.HttpContext.Request.Cookies.AllKeys.Contains(_rememberMeTokenCookieKey))
                 {
-                    //  若有 "记住我" 则效验 "记住我" 口令
+                    //  若有 token 则效验 token
                     var request = controllerContext.HttpContext.Request;
                     var response = controllerContext.HttpContext.Response;
                     var session = controllerContext.HttpContext.Session;
-                    string cookieTokenValue = request.Cookies[_rememberMeTokenCookieKey].Value;
-                    UserInfo userFromToken = _dBAccessProvider.GetUserInfoByTokenCookieKey(cookieTokenValue);
+                    string token = request.Cookies[_rememberMeTokenCookieKey].Value;
 
-                    if (userFromToken == null)
+                    var tokenModel = JwtHelper.Decode<JWTokenViewModel>(token, out bool verifyPass);
+                    if (verifyPass)
                     {
-                        // 口令不正确
-                        // 1-a-A-A-B 若 "记住我" 效验失败, 则为 未登录，创建游客角色账号，存于 Session, 并存账号account
-
-                        response.Cookies[_rememberMeTokenCookieKey].Expires = DateTime.UtcNow.AddDays(-1);
-
-                        rtnAccount = new CurrentAccountModel
+                        // token有效 -> 检测是否已经过期
+                        bool isExpired = DateTimeHelper.NowTimeStamp10() >= tokenModel.Expire;
+                        if (!isExpired)
                         {
-                            UserInfo = UserInfo_Guest.Instance,
-                            IsGuest = true
-                        };
-                    }
-                    else if (userFromToken.LastLoginTime.AddDays(_rememberMeDayCount) > DateTime.UtcNow)
-                    {
-                        // 最多 "记住我" 保存7天的 登录状态
+                            // token未过期
+                            // 经过效验的用户信息
+                            user = _dBAccessProvider.GetUserInfoById(tokenModel.ID);
+                            if (user != null)
+                            {
+                                // 保存到 Session
+                                session[_loginAccountSessionKey] = user;
 
-                        // 1-a-A-A-A 若 "记住我" 效验通过，则 账号存于 Session，并 存账号account
+                                rtnAccount = new CurrentAccountModel
+                                {
+                                    UserInfo = user,
+                                    IsGuest = false
+                                };
+                            }
+                            else
+                            {
+                                // 用户不存在 -> 移除装有 token 的 cookie
+                                response.Cookies[_rememberMeTokenCookieKey].Expires = DateTime.UtcNow.AddDays(-1);
 
-                        // 保存到 Session
-                        session[_loginAccountSessionKey] = userFromToken;
-
-                        rtnAccount = new CurrentAccountModel
+                                rtnAccount = new CurrentAccountModel
+                                {
+                                    UserInfo = UserInfo_Guest.Instance,
+                                    IsGuest = true
+                                };
+                            }
+                        }
+                        else
                         {
-                            UserInfo = userFromToken,
-                            IsGuest = false
-                        };
+                            // token 过期
+                            response.Cookies[_rememberMeTokenCookieKey].Expires = DateTime.UtcNow.AddDays(-1);
+
+                            rtnAccount = new CurrentAccountModel
+                            {
+                                UserInfo = UserInfo_Guest.Instance,
+                                IsGuest = true
+                            };
+                        }
                     }
                     else
                     {
-                        // 登录 已过期
+                        // token 无效
+                        // 口令不正确
                         // 1-a-A-A-B 若 "记住我" 效验失败, 则为 未登录，创建游客角色账号，存于 Session, 并存账号account
+                        response.Cookies[_rememberMeTokenCookieKey].Expires = DateTime.UtcNow.AddDays(-1);
 
                         rtnAccount = new CurrentAccountModel
                         {
@@ -87,7 +106,7 @@ namespace Framework.Infrastructure.Concrete
                 }
                 else
                 {
-                    // 若无 "记住我" 则为 未登录, 则为游客
+                    // 若无 token 则为 未登录, 则为游客
                     rtnAccount = new CurrentAccountModel
                     {
                         UserInfo = UserInfo_Guest.Instance,

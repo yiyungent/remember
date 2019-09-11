@@ -7,9 +7,9 @@ namespace Framework.Config
 {
     public class AppConfig
     {
-        public static string LoginAccountSessionKey { get; set; } = "LoginUserInfo";
+        public static readonly string LoginAccountSessionKey = "LoginUserInfo";
 
-        public static string TokenCookieKey { get; set; } = "Token";
+        public static readonly string JwtName = System.Configuration.ConfigurationManager.AppSettings["JwtName"];
 
         public static int RememberMeDayCount { get; set; } = 7;
     }

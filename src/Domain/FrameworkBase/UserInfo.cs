@@ -28,16 +28,8 @@ namespace Domain
         ///     仅用作 “记住我” 记住 登录状态时 使用
         /// </summary>
         [Display(Name = "口令")]
-        [Property(Length = 40, NotNull = false)]
+        [Property(Length = 255, NotNull = false)]
         public string Token { get; set; }
-
-        /// <summary>
-        /// 口令的过期时间
-        ///     口令在何时过期
-        /// </summary>
-        [Property]
-        public DateTime TokenExpireAt { get; set; }
-
 
         /// <summary>
         /// 最后登录时间

@@ -38,17 +38,14 @@ namespace Framework.Infrastructure.Concrete
 
         public UserInfo GetUserInfoById(int id)
         {
-            return Container.Instance.Resolve<UserInfoService>().GetEntity(id);
-        }
-
-        public UserInfo GetUserInfoByTokenCookieKey(string tokenCookieValue)
-        {
-            UserInfo user = Container.Instance.Resolve<UserInfoService>().Query(new List<ICriterion>
+            UserInfo rtnUserInfo = null;
+            UserInfoService userInfoService = Container.Instance.Resolve<UserInfoService>();
+            if (userInfoService.Exist(id))
             {
-                Expression.Eq(AppConfig.TokenCookieKey, tokenCookieValue)
-            }).FirstOrDefault();
+                rtnUserInfo = userInfoService.GetEntity(id);
+            }
 
-            return user;
+            return rtnUserInfo;
         }
 
 

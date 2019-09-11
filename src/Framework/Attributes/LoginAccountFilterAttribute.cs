@@ -13,6 +13,8 @@ namespace Framework.Attributes
     using System.Web.Mvc;
     using Framework.Infrastructure.Abstract;
     using Framework.Factories;
+    using global::Common;
+    using Framework.Models;
 
     /// <summary>
     /// 登录用户Session 维护器
@@ -21,8 +23,7 @@ namespace Framework.Attributes
     public class LoginAccountFilterAttribute : ActionFilterAttribute
     {
         private static string _loginAccountSessionKey = AppConfig.LoginAccountSessionKey;
-        private static string _tokenCookieKey = AppConfig.TokenCookieKey;
-        private static int _rememberMeDayCount = AppConfig.RememberMeDayCount;
+        private static string _tokenCookieKey = AppConfig.JwtName;
 
         private static IDBAccessProvider _dBAccessProvider = HttpOneRequestFactory.Get<IDBAccessProvider>();
 
@@ -62,22 +63,39 @@ namespace Framework.Attributes
             {
                 if (request.Cookies[_tokenCookieKey] != null && string.IsNullOrEmpty(request.Cookies[_tokenCookieKey].Value) == false)
                 {
-                    string cookieTokenValue = request.Cookies[_tokenCookieKey].Value;
-                    UserInfo user = _dBAccessProvider.GetUserInfoByTokenCookieKey(cookieTokenValue);
+                    string token = request.Cookies[_tokenCookieKey].Value;
 
-                    if (user == null)
+                    var tokenModel = JwtHelper.Decode<JWTokenViewModel>(token, out bool verifyPass);
+                    if (verifyPass)
                     {
-                        // 口令不正确
-                        response.Cookies[_tokenCookieKey].Expires = DateTime.UtcNow.AddDays(-1);
-                    }
-                    else if (user.TokenExpireAt > DateTime.UtcNow)
-                    {
-                        // 保存到 Session
-                        session[_loginAccountSessionKey] = user;
+                        // token有效 -> 检测是否已经过期
+                        bool isExpired = DateTimeHelper.NowTimeStamp10() >= tokenModel.Expire;
+                        if (!isExpired)
+                        {
+                            // token未过期
+                            // 经过效验的用户信息
+                            UserInfo user = _dBAccessProvider.GetUserInfoById(tokenModel.ID);
+                            if (user != null)
+                            {
+                                // 保存到 Session
+                                session[_loginAccountSessionKey] = user;
+                            }
+                            else
+                            {
+                                // 用户不存在 -> 移除装有 token 的 cookie
+                                response.Cookies[_tokenCookieKey].Expires = DateTime.UtcNow.AddDays(-1);
+                            }
+                        }
+                        else
+                        {
+                            // token 过期
+                            response.Cookies[_tokenCookieKey].Expires = DateTime.UtcNow.AddDays(-1);
+                        }
                     }
                     else
                     {
-                        // 登录 已过期
+                        // token 无效
+                        response.Cookies[_tokenCookieKey].Expires = DateTime.UtcNow.AddDays(-1);
                     }
                 }
             }

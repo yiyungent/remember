@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using Common;
+using Domain;
 using Framework.Common;
 using Framework.Config;
 using Framework.Factories;
@@ -36,8 +37,7 @@ namespace Framework.Infrastructure.Concrete
     public class AccountManager
     {
         private static string _loginAccountSessionKey = AppConfig.LoginAccountSessionKey;
-        private static string _tokenCookieKey = AppConfig.TokenCookieKey;
-        private static int _rememberMeDayCount = AppConfig.RememberMeDayCount;
+        private static string _jwtName = AppConfig.JwtName;
 
         private static IDBAccessProvider _dBAccessProvider = HttpOneRequestFactory.Get<IDBAccessProvider>();
 
@@ -46,54 +46,80 @@ namespace Framework.Infrastructure.Concrete
         /// 获取当前 <see cref="UserInfo"/>, 若未登录，则为 <see cref="UserInfo_Guest.Instance"/>
         /// </summary>
         /// <returns></returns>
-        public static UserInfo GetCurrentUserInfo()
+        public static UserInfo GetCurrentUserInfo(bool withoutLoginReturnGuest = false)
         {
             HttpRequest request = HttpContext.Current.Request;
-
+            UserInfo rtnUserInfo = null;
             try
             {
                 // 获取当前登录用户
-                UserInfo rtnUserInfo = Tools.GetSession<UserInfo>(AppConfig.LoginAccountSessionKey);
+                try
+                {
+                    rtnUserInfo = Tools.GetSession<UserInfo>(AppConfig.LoginAccountSessionKey);
+                }
+                catch (Exception ex)
+                { }
+
                 if (rtnUserInfo == null)
                 {
-                    #region 验证口令
-                    if (request.Cookies.AllKeys.Contains(_tokenCookieKey))
+                    if (withoutLoginReturnGuest)
                     {
-                        if (request.Cookies[_tokenCookieKey] != null && string.IsNullOrEmpty(request.Cookies[_tokenCookieKey].Value) == false)
+                        rtnUserInfo = UserInfo_Guest.Instance;
+                    }
+                    #region 验证口令
+                    string token = null;
+                    // header -> cookie
+                    try
+                    {
+                        // header 中找 token
+                        // 注意：一定要在这里才能找到自定义 Header，直接HttpContext.Current.Request.Headers是封装过的，没有自定义 Header
+                        token = request.RequestContext.HttpContext.Request.Headers[AppConfig.JwtName];
+                    }
+                    catch (Exception ex)
+                    { }
+                    if (string.IsNullOrEmpty(token))
+                    {
+                        // cookie 中找 token
+                        if (request.Cookies.AllKeys.Contains(_jwtName))
                         {
-                            string cookieTokenValue = request.Cookies[_tokenCookieKey].Value;
-                            UserInfo dbUser = _dBAccessProvider.GetUserInfoByTokenCookieKey(cookieTokenValue);
-
-                            if (dbUser == null)
+                            if (request.Cookies[_jwtName] != null && string.IsNullOrEmpty(request.Cookies[_jwtName].Value) == false)
                             {
-                                // 口令不正确---游客
-                                rtnUserInfo = UserInfo_Guest.Instance;
+                                token = request.Cookies[_jwtName].Value;
                             }
-                            else if (dbUser.TokenExpireAt > DateTime.UtcNow)
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(token))
+                    {
+                        var tokenModel = JwtHelper.Decode<JWTokenViewModel>(token, out bool verifyPass);
+                        if (verifyPass)
+                        {
+                            // token有效 -> 检测是否已经过期
+                            bool isExpired = DateTimeHelper.NowTimeStamp10() >= tokenModel.Expire;
+                            if (!isExpired)
                             {
-                                // 最多 "记住我" 保存7天的 登录状态
-                                rtnUserInfo = dbUser;
-                            }
-                            else
-                            {
-                                // 登录 已过期---游客
-                                rtnUserInfo = UserInfo_Guest.Instance;
+                                // token未过期
+                                // 经过效验的用户信息
+                                rtnUserInfo = _dBAccessProvider.GetUserInfoById(tokenModel.ID);
                             }
                         }
                     }
                     else
                     {
+                        // 找不到 token
                         rtnUserInfo = UserInfo_Guest.Instance;
                     }
                     #endregion
                 }
-
-                return rtnUserInfo;
             }
             catch (Exception ex)
             {
-                return UserInfo_Guest.Instance;
+                if (withoutLoginReturnGuest)
+                {
+                    rtnUserInfo = UserInfo_Guest.Instance;
+                }
             }
+
+            return rtnUserInfo;
         }
         #endregion
 
@@ -101,7 +127,7 @@ namespace Framework.Infrastructure.Concrete
         public static CurrentAccountModel GetCurrentAccount()
         {
             CurrentAccountModel currentAccount = new CurrentAccountModel();
-            currentAccount.UserInfo = GetCurrentUserInfo();
+            currentAccount.UserInfo = GetCurrentUserInfo(withoutLoginReturnGuest: true);
             switch (CheckLoginStatus())
             {
                 case LoginStatus.IsLogin:
@@ -150,38 +176,60 @@ namespace Framework.Infrastructure.Concrete
             UserInfo userInfo = Tools.GetSession<UserInfo>(AppConfig.LoginAccountSessionKey);
             if (userInfo != null)
             {
+                // Session内存中存在 -> 已登录
                 loginStatus = LoginStatus.IsLogin;
             }
             else
             {
-
                 #region 验证口令
-                if (request.Cookies.AllKeys.Contains(_tokenCookieKey))
+                if (request.Cookies.AllKeys.Contains(_jwtName))
                 {
-                    if (request.Cookies[_tokenCookieKey] != null && string.IsNullOrEmpty(request.Cookies[_tokenCookieKey].Value) == false)
+                    if (request.Cookies[_jwtName] != null && string.IsNullOrEmpty(request.Cookies[_jwtName].Value) == false)
                     {
-                        string cookieTokenValue = request.Cookies[_tokenCookieKey].Value;
-                        UserInfo user = _dBAccessProvider.GetUserInfoByTokenCookieKey(cookieTokenValue);
-
-                        if (user == null)
+                        UserInfo user = null;
+                        string token = request.Cookies[_jwtName].Value;
+                        var tokenModel = JwtHelper.Decode<JWTokenViewModel>(token, out bool verifyPass);
+                        if (verifyPass)
                         {
-                            // 口令不正确
-                            loginStatus = LoginStatus.WithoutLogin;
-                        }
-                        else if (user.TokenExpireAt > DateTime.UtcNow)
-                        {
-                            // 最多 "记住我" 保存7天的 登录状态
-                            loginStatus = LoginStatus.IsLogin;
+                            // token有效 -> 检测是否已经过期
+                            bool isExpired = DateTimeHelper.NowTimeStamp10() >= tokenModel.Expire;
+                            if (!isExpired)
+                            {
+                                // token未过期
+                                // 经过效验的用户信息
+                                user = _dBAccessProvider.GetUserInfoById(tokenModel.ID);
+                                if (user != null)
+                                {
+                                    loginStatus = LoginStatus.IsLogin;
+                                }
+                                else
+                                {
+                                    // 不存在此用户 -> 未登录
+                                    loginStatus = LoginStatus.WithoutLogin;
+                                }
+                            }
+                            else
+                            {
+                                // 登录 已过期
+                                // 最多 "记住我" 保存7天的 登录状态
+                                loginStatus = LoginStatus.LoginTimeOut;
+                            }
                         }
                         else
                         {
-                            // 登录 已过期
-                            loginStatus = LoginStatus.LoginTimeOut;
+                            // token 无效 -> 未登录
+                            loginStatus = LoginStatus.WithoutLogin;
                         }
+                    }
+                    else
+                    {
+                        // 无 token -> 未登录
+                        loginStatus = LoginStatus.WithoutLogin;
                     }
                 }
                 else
                 {
+                    // 无 token -> 未登录
                     loginStatus = LoginStatus.WithoutLogin;
                 }
                 #endregion
@@ -219,14 +267,13 @@ namespace Framework.Infrastructure.Concrete
             HttpRequest request = HttpContext.Current.Request;
             HttpResponse response = HttpContext.Current.Response;
             // 浏览器 删除 cookie token
-            if (request.Cookies.AllKeys.Contains(_tokenCookieKey))
+            if (request.Cookies.AllKeys.Contains(_jwtName))
             {
-                response.Cookies[_tokenCookieKey].Expires = DateTime.UtcNow.AddDays(-1);
+                response.Cookies[_jwtName].Expires = DateTime.UtcNow.AddDays(-1);
             }
             // 数据库删除 token，并过期
             UserInfo userInfo = GetCurrentUserInfo();
             userInfo.Token = null;
-            userInfo.TokenExpireAt = DateTime.Now;
             _dBAccessProvider.EditUserInfo(userInfo);
         }
         #endregion

@@ -55,10 +55,17 @@ namespace Framework.Common
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
-        /// <returns></returns>
+        /// <returns>无法获取Session时，或其他原因时返回 T类型的默认值，如null</returns>
         public static T GetSession<T>(string key)
         {
-            return (T)(HttpContext.Current.Session[key]);
+            try
+            {
+                return (T)(HttpContext.Current.Session[key]);
+            }
+            catch (Exception ex)
+            {
+                return default(T);
+            }
         }
 
         #region 加密和解密

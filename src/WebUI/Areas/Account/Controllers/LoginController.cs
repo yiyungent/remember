@@ -12,13 +12,15 @@ using Framework.Config;
 using WebUI.Areas.Account.Models;
 using NHibernate.Criterion;
 using Framework.Infrastructure.Concrete;
+using Common;
+using Framework.Models;
 
 namespace WebUI.Areas.Account.Controllers
 {
     public class LoginController : Controller
     {
         private static string _sessionKeyLoginAccount = AppConfig.LoginAccountSessionKey;
-        private static string _cookieKeyToken = AppConfig.TokenCookieKey;
+        private static string _cookieKeyToken = AppConfig.JwtName;
         private static int _rememberMeDayCount = AppConfig.RememberMeDayCount;
 
         Dictionary<string, string> EmailDic { get; set; }
@@ -120,43 +122,46 @@ namespace WebUI.Areas.Account.Controllers
                 Response.Cookies[_cookieKeyToken].Expires = DateTime.UtcNow.AddDays(-1);
             }
 
-
             // 无论是否 "记住我"，都下发口令
-            string token = Guid.NewGuid().ToString();
-            // token 存入登录用户--数据库
-            dbUser.Token = token;
-
+            JWTokenViewModel tokenModel = new JWTokenViewModel
+            {
+                Create = DateTimeHelper.NowTimeStamp10(),
+                Expire = DateTimeHelper.ToTimeStamp10(DateTime.Now.AddDays(1)),
+                ID = dbUser.ID,
+                UserName = dbUser.UserName
+            };
+            string token = JwtHelper.Encode(tokenModel);
             // 是否“记住我” 的口令过期时间不同--过期时间在数据库，浏览器均不同
             #region 记住我
+            HttpCookie cookieToken;
             if (Request["isRememberMe"] != null && bool.Parse(Request["isRememberMe"].ToString()))
             {
+                // 过期时间延长
+                tokenModel.Expire = DateTimeHelper.ToTimeStamp10(DateTime.Now.AddDays(_rememberMeDayCount));
+                token = JwtHelper.Encode(tokenModel);
                 // token 存入 浏览器
-                HttpCookie cookieToken = new HttpCookie(_cookieKeyToken, token)
+                cookieToken = new HttpCookie(_cookieKeyToken, token)
                 {
                     Expires = DateTime.UtcNow.AddDays(_rememberMeDayCount),
                     HttpOnly = true
                 };
-                Response.Cookies.Add(cookieToken);
-                // token 存入数据库
-                dbUser.TokenExpireAt = DateTime.UtcNow.AddDays(_rememberMeDayCount);
             }
             else
             {
                 // token 存入 浏览器
-                HttpCookie cookieToken = new HttpCookie(_cookieKeyToken, token)
+                cookieToken = new HttpCookie(_cookieKeyToken, token)
                 {
                     // 不设置 cookie 的过期时间，默认关闭浏览器过期
                     HttpOnly = true
                 };
-                Response.Cookies.Add(cookieToken);
-                // token 存入数据库
-                // 非 “记住我” 数据库口令过期时间为20分钟
-                dbUser.TokenExpireAt = DateTime.UtcNow.AddMinutes(20);
             }
             #endregion
+            Response.Cookies.Add(cookieToken);
 
             // 更新用户--最后登录时间等
             dbUser.LastLoginTime = DateTime.UtcNow;
+            dbUser.Token = token;
+
             Container.Instance.Resolve<UserInfoService>().Edit(dbUser);
 
             return Json(new { code = 1, message = "登录成功", returnUrl = returnUrl });

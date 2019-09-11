@@ -14,9 +14,12 @@ namespace Framework.Infrastructure.Abstract
 
         RoleInfo GetGuestRoleInfo();
 
+        /// <summary>
+        /// 若用户ID不存在，返回null
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         UserInfo GetUserInfoById(int id);
-
-        UserInfo GetUserInfoByTokenCookieKey(string tokenCookieValue);
 
         IList<Sys_Menu> AllMenuList();
 

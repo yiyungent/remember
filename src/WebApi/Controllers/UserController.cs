@@ -2,6 +2,8 @@
 using Core;
 using Domain;
 using Framework.Common;
+using Framework.Infrastructure.Concrete;
+using Framework.Models;
 using NHibernate.Criterion;
 using Service;
 using System;
@@ -24,12 +26,12 @@ namespace WebApi.Controllers
     public class UserController : ApiController
     {
         #region Get: 获取当前登录账号信息
-        //[NeedAuth]
+        [NeedAuth]
         public UserInfoViewModel Get()
         {
             UserInfoViewModel viewModel = null;
 
-            UserInfo userInfo = ApiAccountManager.GetCurrentUserInfo();
+            UserInfo userInfo = AccountManager.GetCurrentUserInfo();
             if (userInfo != null)
             {
                 viewModel = new UserInfoViewModel()

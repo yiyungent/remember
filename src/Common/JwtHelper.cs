@@ -1,4 +1,5 @@
 ﻿using JWT;
+using JWT.Algorithms;
 using JWT.Serializers;
 using System;
 using System.Collections.Generic;
@@ -22,23 +23,28 @@ namespace Common
             {
                 key = Secret;
             }
+            IJwtAlgorithm algorithm = new HMACSHA256Algorithm();
             IJsonSerializer serializer = new JsonNetSerializer();
-            IDateTimeProvider provider = new UtcDateTimeProvider();
-            IJwtValidator validator = new JwtValidator(serializer, provider);
             IBase64UrlEncoder urlEncoder = new JwtBase64UrlEncoder();
-            //IJwtEncoder encoder = new JwtEncoder(,);
+            IJwtEncoder encoder = new JwtEncoder(algorithm, serializer, urlEncoder);
 
-            return "";
+            try
+            {
+                return encoder.Encode(payload, key);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
         #endregion
 
         #region 解密
         public static T Decode<T>(string token, out bool verifyPass, string key = null)
         {
-            string secret = key;
             if (string.IsNullOrEmpty(key))
             {
-                secret = Secret;
+                key = Secret;
             }
             IJsonSerializer serializer = new JsonNetSerializer();
             IDateTimeProvider provider = new UtcDateTimeProvider();
@@ -50,7 +56,7 @@ namespace Common
             {
                 verifyPass = true;
 
-                return decoder.DecodeToObject<T>(token, secret, true);
+                return decoder.DecodeToObject<T>(token, key, true);
             }
             catch (Exception)
             {

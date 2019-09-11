@@ -77,7 +77,7 @@ namespace WebApi.Controllers
                 {
                     Name = model.Name,
                     Description = model.Description,
-                    Creator = ApiAccountManager.GetCurrentUserInfo(),
+                    Creator = AccountManager.GetCurrentUserInfo(),
                     StartTime = DateTime.Parse(model.StartTime),
                     EndTime = DateTime.Parse(model.EndTime),
                     LearnDay = model.LearnDay,
