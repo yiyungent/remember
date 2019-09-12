@@ -1,0 +1,326 @@
+{
+	"info": {
+		"_postman_id": "5911d44f-ea52-4275-a580-d5a47238fe6a",
+		"name": "remember-WebApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "课程内容-上传视频",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "apiToken",
+						"value": "wrqerqrer",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/E:/BaiduNetdiskDownload/教程/2016传智24期资料无密码版/01 基础加强六天/2015-04-19基础加强5/2、创建XML文档.avi"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:7784/api/CourseInfo/UploadVideo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7784",
+					"path": [
+						"api",
+						"CourseInfo",
+						"UploadVideo"
+					]
+				},
+				"description": "test"
+			},
+			"response": []
+		},
+		{
+			"name": "课程盒的评论列表",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "apiToken",
+						"value": "wrqerqrer",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/E:/BaiduNetdiskDownload/教程/2016传智24期资料无密码版/01 基础加强六天/2015-04-19基础加强5/2、创建XML文档.avi"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:7784/api/CourseInfo/UploadVideo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7784",
+					"path": [
+						"api",
+						"CourseInfo",
+						"UploadVideo"
+					]
+				},
+				"description": "test"
+			},
+			"response": []
+		},
+		{
+			"name": "获取当前登录用户信息",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6MSwiVXNlck5hbWUiOiJhZG1pbiIsIkNyZWF0ZSI6MTU2ODE3ODI3NCwiRXhwaXJlIjoxNTY4NzgzMDc0fQ.2zrcaAsxffbhkmHbN2Y0FmFmmwx5-DXtQ7Ah6RZ0SPk",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://localhost:7784/api/User",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7784",
+					"path": [
+						"api",
+						"User"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "2",
+							"disabled": true
+						}
+					]
+				},
+				"description": "test"
+			},
+			"response": []
+		},
+		{
+			"name": "热门排行榜-课程",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6MSwiVXNlck5hbWUiOiJhZG1pbiIsIkNyZWF0ZSI6MTU2ODE3ODI3NCwiRXhwaXJlIjoxNTY4NzgzMDc0fQ.2zrcaAsxffbhkmHbN2Y0FmFmmwx5-DXtQ7Ah6RZ0SPk",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{WebApiSite}}/api/Home/RankingCourseBox?number=10",
+					"host": [
+						"{{WebApiSite}}"
+					],
+					"path": [
+						"api",
+						"Home",
+						"RankingCourseBox"
+					],
+					"query": [
+						{
+							"key": "number",
+							"value": "10"
+						}
+					]
+				},
+				"description": "test"
+			},
+			"response": [
+				{
+					"name": "热门排行榜-课程",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:7784/api/Home/RankingCourseBox?number=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7784",
+							"path": [
+								"api",
+								"Home",
+								"RankingCourseBox"
+							],
+							"query": [
+								{
+									"key": "number",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Cache-Control",
+							"value": "no-cache"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Expires",
+							"value": "-1"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/10.0"
+						},
+						{
+							"key": "X-AspNet-Version",
+							"value": "4.0.30319"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?RjpcQ29tXG1lXFJlcG9zXHJlbWVtYmVyXHNyY1xXZWJBcGlcYXBpXEhvbWVcUmFua2luZ0NvdXJzZUJveA==?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 12 Sep 2019 04:09:59 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "3527"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"courseBox\": {\n            \"id\": 1,\n            \"name\": \"测试课程盒-1\",\n            \"description\": \"这是测试课程盒-1的描述\",\n            \"creator\": {\n                \"id\": 1,\n                \"name\": \"测试管理员\",\n                \"userName\": \"admin\",\n                \"description\": null,\n                \"avatar\": \":WebApi:/Upload/avatars/admin/avatar.png\"\n            },\n            \"picUrl\": \"https://static.runoob.com/images/mix/img_fjords_wide.jpg\"\n        },\n        \"learnNum\": 10,\n        \"totalSpendTime\": 1000,\n        \"rankingNum\": 1\n    },\n    {\n        \"courseBox\": {\n            \"id\": 2,\n            \"name\": \"测试课程盒-2\",\n            \"description\": \"这是测试课程盒-2的描述\",\n            \"creator\": {\n                \"id\": 1,\n                \"name\": \"测试管理员\",\n                \"userName\": \"admin\",\n                \"description\": null,\n                \"avatar\": \":WebApi:/Upload/avatars/admin/avatar.png\"\n            },\n            \"picUrl\": \"https://static.runoob.com/images/mix/img_fjords_wide.jpg\"\n        },\n        \"learnNum\": 9,\n        \"totalSpendTime\": 900,\n        \"rankingNum\": 2\n    },\n    {\n        \"courseBox\": {\n            \"id\": 3,\n            \"name\": \"测试课程盒-3\",\n            \"description\": \"这是测试课程盒-3的描述\",\n            \"creator\": {\n                \"id\": 1,\n                \"name\": \"测试管理员\",\n                \"userName\": \"admin\",\n                \"description\": null,\n                \"avatar\": \":WebApi:/Upload/avatars/admin/avatar.png\"\n            },\n            \"picUrl\": \"https://static.runoob.com/images/mix/img_fjords_wide.jpg\"\n        },\n        \"learnNum\": 8,\n        \"totalSpendTime\": 800,\n        \"rankingNum\": 3\n    },\n    {\n        \"courseBox\": {\n            \"id\": 4,\n            \"name\": \"测试课程盒-4\",\n            \"description\": \"这是测试课程盒-4的描述\",\n            \"creator\": {\n                \"id\": 1,\n                \"name\": \"测试管理员\",\n                \"userName\": \"admin\",\n                \"description\": null,\n                \"avatar\": \":WebApi:/Upload/avatars/admin/avatar.png\"\n            },\n            \"picUrl\": \"https://static.runoob.com/images/mix/img_fjords_wide.jpg\"\n        },\n        \"learnNum\": 7,\n        \"totalSpendTime\": 700,\n        \"rankingNum\": 4\n    },\n    {\n        \"courseBox\": {\n            \"id\": 5,\n            \"name\": \"测试课程盒-5\",\n            \"description\": \"这是测试课程盒-5的描述\",\n            \"creator\": {\n                \"id\": 1,\n                \"name\": \"测试管理员\",\n                \"userName\": \"admin\",\n                \"description\": null,\n                \"avatar\": \":WebApi:/Upload/avatars/admin/avatar.png\"\n            },\n            \"picUrl\": \"https://static.runoob.com/images/mix/img_fjords_wide.jpg\"\n        },\n        \"learnNum\": 6,\n        \"totalSpendTime\": 600,\n        \"rankingNum\": 5\n    },\n    {\n        \"courseBox\": {\n            \"id\": 6,\n            \"name\": \"测试课程盒-6\",\n            \"description\": \"这是测试课程盒-6的描述\",\n            \"creator\": {\n                \"id\": 1,\n                \"name\": \"测试管理员\",\n                \"userName\": \"admin\",\n                \"description\": null,\n                \"avatar\": \":WebApi:/Upload/avatars/admin/avatar.png\"\n            },\n            \"picUrl\": \"https://static.runoob.com/images/mix/img_fjords_wide.jpg\"\n        },\n        \"learnNum\": 5,\n        \"totalSpendTime\": 500,\n        \"rankingNum\": 6\n    },\n    {\n        \"courseBox\": {\n            \"id\": 7,\n            \"name\": \"测试课程盒-7\",\n            \"description\": \"这是测试课程盒-7的描述\",\n            \"creator\": {\n                \"id\": 1,\n                \"name\": \"测试管理员\",\n                \"userName\": \"admin\",\n                \"description\": null,\n                \"avatar\": \":WebApi:/Upload/avatars/admin/avatar.png\"\n            },\n            \"picUrl\": \"https://static.runoob.com/images/mix/img_fjords_wide.jpg\"\n        },\n        \"learnNum\": 4,\n        \"totalSpendTime\": 400,\n        \"rankingNum\": 7\n    },\n    {\n        \"courseBox\": {\n            \"id\": 8,\n            \"name\": \"测试课程盒-8\",\n            \"description\": \"这是测试课程盒-8的描述\",\n            \"creator\": {\n                \"id\": 1,\n                \"name\": \"测试管理员\",\n                \"userName\": \"admin\",\n                \"description\": null,\n                \"avatar\": \":WebApi:/Upload/avatars/admin/avatar.png\"\n            },\n            \"picUrl\": \"https://static.runoob.com/images/mix/img_fjords_wide.jpg\"\n        },\n        \"learnNum\": 3,\n        \"totalSpendTime\": 300,\n        \"rankingNum\": 8\n    },\n    {\n        \"courseBox\": {\n            \"id\": 9,\n            \"name\": \"测试课程盒-9\",\n            \"description\": \"这是测试课程盒-9的描述\",\n            \"creator\": {\n                \"id\": 1,\n                \"name\": \"测试管理员\",\n                \"userName\": \"admin\",\n                \"description\": null,\n                \"avatar\": \":WebApi:/Upload/avatars/admin/avatar.png\"\n            },\n            \"picUrl\": \"https://static.runoob.com/images/mix/img_fjords_wide.jpg\"\n        },\n        \"learnNum\": 2,\n        \"totalSpendTime\": 200,\n        \"rankingNum\": 9\n    },\n    {\n        \"courseBox\": {\n            \"id\": 10,\n            \"name\": \"测试课程盒-10\",\n            \"description\": \"这是测试课程盒-10的描述\",\n            \"creator\": {\n                \"id\": 1,\n                \"name\": \"测试管理员\",\n                \"userName\": \"admin\",\n                \"description\": null,\n                \"avatar\": \":WebApi:/Upload/avatars/admin/avatar.png\"\n            },\n            \"picUrl\": \"https://static.runoob.com/images/mix/img_fjords_wide.jpg\"\n        },\n        \"learnNum\": 1,\n        \"totalSpendTime\": 100,\n        \"rankingNum\": 10\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "上传头像-更改自己的头像",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "更新个人基本信息-只能更新当前登录用户",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6MSwiVXNlck5hbWUiOiJhZG1pbiIsIkNyZWF0ZSI6MTU2ODE3ODI3NCwiRXhwaXJlIjoxNTY4NzgzMDc0fQ.2zrcaAsxffbhkmHbN2Y0FmFmmwx5-DXtQ7Ah6RZ0SPk",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "测试管理员",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "测试修改管理员的描述",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:7784/api/User",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7784",
+					"path": [
+						"api",
+						"User"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
