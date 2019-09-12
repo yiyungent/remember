@@ -24,12 +24,10 @@ namespace Domain
         public string Password { get; set; }
 
         /// <summary>
-        /// 口令
-        ///     仅用作 “记住我” 记住 登录状态时 使用
+        /// 刷新Toke
         /// </summary>
-        [Display(Name = "口令")]
         [Property(Length = 255, NotNull = false)]
-        public string Token { get; set; }
+        public string RefreshToken { get; set; }
 
         /// <summary>
         /// 最后登录时间

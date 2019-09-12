@@ -273,7 +273,7 @@ namespace Framework.Infrastructure.Concrete
             }
             // 数据库删除 token，并过期
             UserInfo userInfo = GetCurrentUserInfo();
-            userInfo.Token = null;
+            userInfo.RefreshToken = null;
             _dBAccessProvider.EditUserInfo(userInfo);
         }
         #endregion

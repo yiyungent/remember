@@ -85,7 +85,17 @@ namespace WebUI.Controllers
 
                 Dictionary<string, string> dic = new Dictionary<string, string>()
                 {
-                    { "DefaultTemplateName", "Blue" }
+                    { "DefaultTemplateName", "Blue" },
+
+                    { "WebApiSite", "http://localhost:7784/" },
+                    { "WebApiTitle","remember" },
+                    { "WebApiDescription", "remember是xx推出的专业在线教育平台，聚合大量优质教育机构和名师，下设职业培训、公务员考试、托福雅思、考证考级、英语口语、中小学教育等众多在线学习精品课程，打造老师在线上课教学、学生及时互动学习的课堂。"},
+                    { "WebApiKeywords", "" },
+
+                    { "WebUISite", "http://localhost:21788/" },
+                    { "WebUITitle", "remember - 在线学习" },
+                    { "WebUIDescription", "remember是xx推出的专业在线教育平台，聚合大量优质教育机构和名师，下设职业培训、公务员考试、托福雅思、考证考级、英语口语、中小学教育等众多在线学习精品课程，打造老师在线上课教学、学生及时互动学习的课堂。"},
+                    { "WebUIKeywords", "" },
                 };
 
                 foreach (var keyValue in dic)
@@ -645,30 +655,36 @@ namespace WebUI.Controllers
         }
         #endregion
 
-        #region 初始化课程盒表
+        #region 初始化课程盒关系表
         private void InitCourseBoxTable()
         {
             try
             {
-                ShowMessage("开始初始化课程盒表");
+                ShowMessage("初始化课程盒关系表");
 
                 CourseBoxService courseBoxService = Container.Instance.Resolve<CourseBoxService>();
                 CourseBoxTableService courseBoxTableService = Container.Instance.Resolve<CourseBoxTableService>();
 
+                UserInfo userInfo = Container.Instance.Resolve<UserInfoService>().GetEntity(1);
+
+                // 获取 10 们课程
                 for (int i = 0; i < 10; i++)
                 {
-                    UserInfo userInfo = Container.Instance.Resolve<UserInfoService>().GetEntity(1);
                     CourseBox courseBox = courseBoxService.GetEntity(i + 1);
-
-                    CourseBoxTable courseBoxTable = new CourseBoxTable
+                    // 此课程的学习人数
+                    int learnNum = 10 - i;
+                    for (int j = 0; j < learnNum; j++)
                     {
-                        CourseBox = courseBox,
-                        JoinTime = DateTime.Now.AddDays(i + 1),
-                        Reader = userInfo,
-                        SpendTime = 100 * (i + 1),
-                    };
+                        CourseBoxTable courseBoxTable = new CourseBoxTable
+                        {
+                            CourseBox = courseBox,
+                            JoinTime = DateTime.Now.AddDays(j + 1),
+                            Reader = userInfo,
+                            SpendTime = 100,
+                        };
 
-                    courseBoxTableService.Create(courseBoxTable);
+                        courseBoxTableService.Create(courseBoxTable);
+                    }
                 }
 
                 ShowMessage("成功");
@@ -705,5 +721,6 @@ namespace WebUI.Controllers
             }
         }
         #endregion
+
     }
 }

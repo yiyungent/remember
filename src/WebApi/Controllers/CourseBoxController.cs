@@ -42,7 +42,13 @@ namespace WebApi.Controllers
                     LastUpdateTime = dbModel.LastUpdateTime.ToString("yyyy-MM-dd HH:mm"),
                     LearnDay = dbModel.LearnDay,
                     PicUrl = dbModel.PicUrl,
-                    CreatorUserName = dbModel.Creator.UserName
+                    Creator = new Models.UserInfoVM.UserInfoViewModel
+                    {
+                        ID = dbModel.Creator.ID,
+                        UserName = dbModel.Creator.UserName,
+                        Name = dbModel.Creator.Name,
+                        Avatar = dbModel.Creator.Avatar
+                    }
                 };
 
                 responseData = new ResponseData
@@ -196,7 +202,13 @@ namespace WebApi.Controllers
                         LastUpdateTime = item.LastUpdateTime.ToString("yyyy-MM-dd HH:mm"),
                         LearnDay = item.LearnDay,
                         PicUrl = item.PicUrl,
-                        CreatorUserName = item.Creator.Name
+                        Creator = new Models.UserInfoVM.UserInfoViewModel
+                        {
+                            ID = item.Creator.ID,
+                            UserName = item.Creator.UserName,
+                            Name = item.Creator.Name,
+                            Avatar = item.Creator.Avatar
+                        }
                     });
                 }
             }
@@ -234,7 +246,13 @@ namespace WebApi.Controllers
                         LastUpdateTime = item.LastUpdateTime.ToString("yyyy-MM-dd HH:mm"),
                         LearnDay = item.LearnDay,
                         PicUrl = item.PicUrl,
-                        CreatorUserName = item.Creator.Name
+                        Creator = new Models.UserInfoVM.UserInfoViewModel
+                        {
+                            ID = item.Creator.ID,
+                            UserName = item.Creator.UserName,
+                            Name = item.Creator.Name,
+                            Avatar = item.Creator.Avatar
+                        }
                     });
                 }
             }
@@ -338,6 +356,65 @@ namespace WebApi.Controllers
 
             return responseData;
         }
+        #endregion
+
+        #region 是我创建的课程?
+        [HttpGet]
+        [Route("IsICreate")]
+        public bool IsICreate(int id)
+        {
+            return IsICreateCourseBox(id);
+        }
+        #endregion
+
+        #region 是我学习的课程?
+        [HttpGet]
+        [Route("IsILearn")]
+        public bool IsILearn(int id)
+        {
+            return IsILearnCourseBox(id);
+        }
+        #endregion
+
+        #region Helpers
+
+        #region 是我创建的课程?
+        public static bool IsICreateCourseBox(int courseBoxId)
+        {
+            bool isICreate = false;
+            CourseBoxService courseBoxService = Container.Instance.Resolve<CourseBoxService>();
+            IList<CourseBox> iCreateCourseBoxList = courseBoxService.Query(new List<ICriterion>
+            {
+                Expression.Eq("Creator.ID", AccountManager.GetCurrentUserInfo().ID)
+            }).OrderByDescending(m => m.CreateTime).ToList();
+            if (iCreateCourseBoxList.Select(m => m.ID).Contains(courseBoxId))
+            {
+                isICreate = true;
+            }
+
+            return isICreate;
+        }
+        #endregion
+
+        #region 是我学习的课程？
+        public static bool IsILearnCourseBox(int courseBoxId)
+        {
+            bool isILearn = false;
+            CourseBoxTableService courseBoxTableService = Container.Instance.Resolve<CourseBoxTableService>();
+            IList<CourseBoxTable> iLearnCourseBoxTableList = courseBoxTableService.Query(new List<ICriterion>
+            {
+                Expression.Eq("Reader.ID", AccountManager.GetCurrentUserInfo().ID)
+            }).OrderByDescending(m => m.JoinTime).ToList();
+            IList<CourseBox> iLearnCourseBoxList = iLearnCourseBoxTableList.Select(m => m.CourseBox).ToList();
+            if (iLearnCourseBoxList.Select(m => m.ID).Contains(courseBoxId))
+            {
+                isILearn = true;
+            }
+
+            return isILearn;
+        }
+        #endregion 
+
         #endregion
     }
 }

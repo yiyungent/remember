@@ -23,9 +23,9 @@ namespace WebApi.Models.CourseBoxVM
         public string Description { get; set; }
 
         /// <summary>
-        /// 创建者的用户名
+        /// 创建者
         /// </summary>
-        public string CreatorUserName { get; set; }
+        public UserInfoVM.UserInfoViewModel Creator { get; set; }
 
         /// <summary>
         /// 封面图

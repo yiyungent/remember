@@ -17,6 +17,8 @@ namespace Domain
 
         /// <summary>
         /// 内容
+        /// 视频:视频url
+        /// 富文本贴：内容
         /// </summary>
         [Display(Name = "内容")]
         [Property(Length = 3000, NotNull = true)]
@@ -53,19 +55,13 @@ namespace Domain
     public enum CourseInfoType
     {
         /// <summary>
-        /// 目录分类：节：无内容，仅 Title
-        /// </summary>
-        Cat = 1,
-        /// <summary>
         /// 视频
         /// </summary>
         Video = 2,
+
         /// <summary>
-        /// PPT
-        /// </summary>
-        PPT = 3,
         /// <summary>
-        /// 富文本
+        /// 富文本贴
         /// </summary>
         RichText = 4
 

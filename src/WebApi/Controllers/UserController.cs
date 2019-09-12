@@ -2,15 +2,18 @@
 using Core;
 using Domain;
 using Framework.Common;
+using Framework.Config;
 using Framework.Infrastructure.Concrete;
 using Framework.Models;
 using NHibernate.Criterion;
 using Service;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using WebApi.Attributes;
@@ -34,12 +37,20 @@ namespace WebApi.Controllers
             UserInfo userInfo = AccountManager.GetCurrentUserInfo();
             if (userInfo != null)
             {
+                SettingService settingService = Container.Instance.Resolve<SettingService>();
+                string webApiSite = settingService.Query(new List<ICriterion>
+                {
+                    Expression.Eq("SetKey", "WebApiSite")
+                }).FirstOrDefault()?.SetValue;
+                string avatarUrl = userInfo.Avatar.Replace(":WebApiSite:", webApiSite);
+
                 viewModel = new UserInfoViewModel()
                 {
                     ID = userInfo.ID,
                     UserName = userInfo.UserName,
                     Name = userInfo.Name,
-                    Avatar = userInfo.Avatar
+                    Description = userInfo.Description,
+                    Avatar = avatarUrl
                 };
             }
 
@@ -207,16 +218,165 @@ namespace WebApi.Controllers
         }
         #endregion
 
+        #region 上传头像-更改自己的头像
+        [NeedAuth]
+        [HttpPost]
+        [Route("UploadAvatar")]
+        public ResponseData UploadAvatar()
+        {
+            ResponseData responseData = null;
+            try
+            {
+                string basePath = "~/Upload/avatars/" + User.Identity.Name + "/";
+
+                // 如果路径含有~，即需要服务器映射为绝对路径，则进行映射
+                basePath = (basePath.IndexOf("~") > -1) ? System.Web.HttpContext.Current.Server.MapPath(basePath) : basePath;
+                HttpPostedFile file = System.Web.HttpContext.Current.Request.Files[0];
+                // 如果目录不存在，则创建目录
+                if (!Directory.Exists(basePath))
+                {
+                    Directory.CreateDirectory(basePath);
+                }
+
+                string fileName = System.Web.HttpContext.Current.Request["name"];
+                if (string.IsNullOrEmpty(fileName))
+                {
+                    fileName = file.FileName;
+                }
+                // 文件保存
+                //string saveFileName = Guid.NewGuid().ToString() + "." + file.FileName.Split('.')[1];
+                string saveFileName = "avatar" + "." + file.FileName.Split('.')[1];
+                string fullPath = basePath + saveFileName;
+                file.SaveAs(fullPath);
+
+                // 获取 WebApi 网址 eg: http://localhost:7784/
+                SettingService settingService = Container.Instance.Resolve<SettingService>();
+                string webSite = settingService.Query(new List<ICriterion>
+                {
+                    Expression.Eq("SetKey", "WebApiSite")
+                }).FirstOrDefault().SetValue;
+                if (!string.IsNullOrEmpty(webSite))
+                {
+                    // 去除末尾 '/'
+                    // http://localhost:7784
+                    webSite = webSite[webSite.Length - 1] == '/' ? webSite.Substring(0, webSite.Length - 1) : webSite;
+                }
+                else
+                {
+                    webSite = "";
+                }
+
+                // 更改数据库中用户头像
+                UserInfo userInfo = AccountManager.GetCurrentUserInfo();
+                userInfo.Avatar = ":WebApiSite:" + "/Upload/avatars/" + User.Identity.Name + "/" + saveFileName;
+                UserInfoService userInfoService = Container.Instance.Resolve<UserInfoService>();
+                userInfoService.Edit(userInfo);
+
+                // 全部更新成功后，删除以往头像文件
+                DirectoryInfo avatarDic = new DirectoryInfo(basePath);
+                var needDeleteFiles = avatarDic.GetFiles().Where(m => m.Name != saveFileName).ToList();
+                foreach (var item in needDeleteFiles)
+                {
+                    item.Delete();
+                }
+
+                responseData = new ResponseData
+                {
+                    Code = 1,
+                    Message = "上传头像成功",
+                    Data = new
+                    {
+                        Url = webSite + "/Upload/avatars/" + User.Identity.Name + "/" + saveFileName
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                responseData = new ResponseData
+                {
+                    Code = -1,
+                    Message = "上传头像失败"
+                };
+            }
+
+            return responseData;
+        }
+        #endregion
+
+        #region Put:更新个人基本信息-只能更新当前登录用户
+        /// <summary>
+        /// 只允许更新 Name, Description
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [NeedAuth]
+        public ResponseData Put([FromBody]UserInfoViewModel model)
+        {
+            ResponseData responseData = null;
+            try
+            {
+                UserInfo userInfo = AccountManager.GetCurrentUserInfo();
+                UserInfoService userInfoService = Container.Instance.Resolve<UserInfoService>();
+                if (!string.IsNullOrEmpty(model.Name))
+                {
+                    userInfo.Name = model.Name;
+                }
+                if (!string.IsNullOrEmpty(model.Description))
+                {
+                    userInfo.Description = model.Description;
+                }
+                userInfoService.Edit(userInfo);
+
+                SettingService settingService = Container.Instance.Resolve<SettingService>();
+                string webApiSite = settingService.Query(new List<ICriterion>
+                {
+                    Expression.Eq("SetKey", "WebApiSite")
+                }).FirstOrDefault()?.SetValue;
+                string avatarUrl = userInfo.Avatar.Replace(":WebApiSite:", webApiSite);
+
+                responseData = new ResponseData
+                {
+                    Code = 1,
+                    Message = "更新个人基本信息成功",
+                    Data = new UserInfoViewModel
+                    {
+                        ID = userInfo.ID,
+                        UserName = userInfo.UserName,
+                        Name = userInfo.Name,
+                        Description = userInfo.Description,
+                        Avatar = avatarUrl
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                responseData = new ResponseData
+                {
+                    Code = -1,
+                    Message = "更新个人基本信息失败"
+                };
+            }
+
+            return responseData;
+        }
+        #endregion
+
         #region Helper
 
         private bool IsEmail(string str)
         {
-            return false;
+            bool isEmail = false;
+            isEmail = System.Text.RegularExpressions.Regex.IsMatch(str, @"[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?");
+
+            return isEmail;
         }
 
         private bool IsPhone(string str)
         {
-            return false;
+            bool isPhone = false;
+            isPhone = System.Text.RegularExpressions.Regex.IsMatch(str, @"^[1]+[3,5]+\d{9}");
+
+            return isPhone;
         }
 
         #endregion

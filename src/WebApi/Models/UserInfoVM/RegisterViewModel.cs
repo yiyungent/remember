@@ -27,10 +27,5 @@ namespace WebApi.Models.UserInfoVM
         public int Code { get; set; }
 
         public string Message { get; set; }
-
-        /// <summary>
-        /// JTW Encode 后字符串
-        /// </summary>
-        public string ApiToken { get; set; }
     }
 }
