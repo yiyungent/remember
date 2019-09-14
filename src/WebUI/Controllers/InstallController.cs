@@ -663,7 +663,7 @@ namespace WebUI.Controllers
                 ShowMessage("初始化课程盒关系表");
 
                 CourseBoxService courseBoxService = Container.Instance.Resolve<CourseBoxService>();
-                CourseBoxTableService courseBoxTableService = Container.Instance.Resolve<CourseBoxTableService>();
+                Learner_CourseBoxService courseBoxTableService = Container.Instance.Resolve<Learner_CourseBoxService>();
 
                 UserInfo userInfo = Container.Instance.Resolve<UserInfoService>().GetEntity(1);
 
@@ -675,11 +675,11 @@ namespace WebUI.Controllers
                     int learnNum = 10 - i;
                     for (int j = 0; j < learnNum; j++)
                     {
-                        CourseBoxTable courseBoxTable = new CourseBoxTable
+                        Learner_CourseBox courseBoxTable = new Learner_CourseBox
                         {
                             CourseBox = courseBox,
                             JoinTime = DateTime.Now.AddDays(j + 1),
-                            Reader = userInfo,
+                            Learner = userInfo,
                             SpendTime = 100,
                         };
 

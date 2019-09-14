@@ -53,13 +53,9 @@
                  service="Service.CourseInfoService,Service"
                  type="Component.CourseInfoComponent,Component"
                  isTransactional="true" />
-    <component id="CourseBoxTableService"
-                 service="Service.CourseBoxTableService,Service"
-                 type="Component.CourseBoxTableComponent,Component"
+    <component id="Learner_CourseBoxService"
+                 service="Service.Learner_CourseBoxService,Service"
+                 type="Component.Learner_CourseBoxComponent,Component"
                  isTransactional="true" />
-    <component id="CourseBoxCommentService"
-                service="Service.CourseBoxCommentService,Service"
-                type="Component.CourseBoxCommentComponent,Component"
-                isTransactional="true" />
   </components>
 </configuration>

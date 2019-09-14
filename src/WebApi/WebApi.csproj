@@ -170,7 +170,11 @@
     <Compile Include="Infrastructure\UserPrincipal.cs" />
     <Compile Include="Models\CourseBoxVM\CommentViewModel.cs" />
     <Compile Include="Models\CourseBoxVM\CourseBoxViewModel.cs" />
+    <Compile Include="Models\CourseBoxVM\HistoryViewModel.cs" />
+    <Compile Include="Models\CourseBoxVM\StatViewModel.cs" />
+    <Compile Include="Models\CourseBoxVM\StudyInfoViewModel.cs" />
     <Compile Include="Models\CourseInfoVM\CourseInfoViewModel.cs" />
+    <Compile Include="Models\CourseInfoVM\HistoryViewModel.cs" />
     <Compile Include="Models\CourseInfoVM\RichTextViewModel.cs" />
     <Compile Include="Models\CourseInfoVM\VideoViewModel.cs" />
     <Compile Include="Models\HomeVM\RankingCourseBoxViewModel.cs" />
@@ -191,6 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="DomainExt\" />
     <Folder Include="Upload\avatars\" />
     <Folder Include="Upload\videos\" />
   </ItemGroup>

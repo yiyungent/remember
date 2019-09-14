@@ -13,8 +13,10 @@ namespace Domain
     [Serializable]
     public partial class UserInfo : BaseEntity<UserInfo>
     {
+        #region Properities
+
         /// <summary>
-        /// 展示名(不唯一，可改，不可作为登录使用)
+        /// 昵称/展示名(不唯一，可改，不可作为登录使用)
         /// </summary>
         [Display(Name = "展示名")]
         [Property(Length = 30, NotNull = true)]
@@ -37,43 +39,39 @@ namespace Domain
         /// <summary>
         /// 手机号(唯一，可改，可作为登录使用)
         /// </summary>
-        [Display(Name = "邮箱")]
+        [Display(Name = "手机号")]
         [Property(Length = 50, NotNull = false, Unique = true)]
         public string Phone { get; set; }
 
+        /// <summary>
+        /// 描述
+        /// </summary>
         [Display(Name = "描述")]
         [Property(Length = 300, NotNull = false)]
         public string Description { get; set; }
+
+        /// <summary>
+        /// 硬币数
+        /// </summary>
+        [Property(Length = 3000, NotNull = false)]
+        public long Coin { get; set; }
 
         /// <summary>
         /// 注册时间
         /// </summary>
         [Display(Name = "注册时间")]
         [Property(NotNull = true)]
-        public DateTime RegTime { get; set; }
+        public DateTime RegTime { get; set; } 
+
+        #endregion
 
         #region Relationships
 
-        ///// <summary>
-        ///// 用户创建的 CardBox 列表
-        /////     一对多
-        ///// </summary>
-        //[Display(Name = "用户创建的 CardBox")]
-        //[HasMany(ColumnKey = "CreatorId")]
-        //public IList<CardBox> CreateCardBoxList { get; set; }
-
-        /////// <summary>
-        /////// 用户阅读的 CardBox 列表    (不包括他创建的，列表中是其它用户创建的 CardBox)
-        ///////     多对多
-        ///////         一个用户可以阅读多个 CardBox，一个 CardBox 也可以被多个用户阅读(共享)
-        /////// </summary>
-        ////[Display(Name = "用户阅读的 CardBox")]
-        ////[HasAndBelongsToMany(Table = "User_CardBox_ForRead", ColumnKey = "UserId", ColumnRef = "CardBoxId")]
-        ////public IList<CardBox> ReadCardBoxList { get; set; }
-
-
-        //[HasMany(ColumnKey = "ReaderId")]
-        //public IList<CardBoxTable> CardBoxTableList { get; set; }
+        /// <summary>
+        /// 用户的收藏夹列表
+        /// </summary>
+        [HasMany(ColumnKey = "CreatorId")]
+        public IList<Favorite> FavoriteList { get; set; }
 
         #endregion
 

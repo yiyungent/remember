@@ -61,5 +61,48 @@ namespace WebApi.Models.CourseBoxVM
         /// 有效学习天数
         /// </summary>
         public int LearnDay { get; set; }
+
+        /// <summary>
+        /// 课件数
+        /// </summary>
+        public int Count
+        {
+            get
+            {
+                return this.Pages.Count;
+            }
+        }
+
+        /// <summary>
+        /// 课件列表
+        /// </summary>
+        public IList<CourseInfoViewModel> Pages { get; set; }
+
+        /// <summary>
+        /// 课件
+        /// </summary>
+        public sealed class CourseInfoViewModel
+        {
+            /// <summary>
+            /// 课件ID
+            /// </summary>
+            public int ID { get; set; }
+
+            /// <summary>
+            /// 此课件在课程内的序号
+            /// </summary>
+            public int Page { get; set; }
+
+            /// <summary>
+            /// 课件标题
+            /// </summary>
+            public string Title { get; set; }
+
+            /// <summary>
+            /// 持续时间
+            /// 视频：此课件总需播放时间
+            /// </summary>
+            public long Duration { get; set; }
+        }
     }
 }

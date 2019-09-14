@@ -27,8 +27,8 @@ namespace WebApi.Controllers
         public IList<RankingCourseBoxViewModel> RankingCourseBox(int number)
         {
             IList<RankingCourseBoxViewModel> viewModel = new List<RankingCourseBoxViewModel>();
-            CourseBoxTableService courseBoxTableService = Container.Instance.Resolve<CourseBoxTableService>();
-            IList<CourseBoxTable> allCourseBoxTable = courseBoxTableService.GetAll().Where(m => m.CourseBox.IsOpen = true).ToList();
+            Learner_CourseBoxService courseBoxTableService = Container.Instance.Resolve<Learner_CourseBoxService>();
+            IList<Learner_CourseBox> allCourseBoxTable = courseBoxTableService.GetAll().Where(m => m.CourseBox.IsOpen = true).ToList();
             var query = from a in allCourseBoxTable
                         group a by a.CourseBox.ID
                       into g

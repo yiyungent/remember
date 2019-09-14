@@ -10877,11 +10877,6 @@
     <Compile Include="Areas\Tools\Controllers\ITodayController.cs" />
     <Compile Include="Areas\Tools\ToolsAreaRegistration.cs" />
     <Compile Include="Attributes\LogErrorAttribute.cs" />
-    <Compile Include="Controllers\CardBoxController.cs" />
-    <Compile Include="Controllers\CardInfoController.cs" />
-    <Compile Include="Controllers\CourseBoxApiController.cs" />
-    <Compile Include="Controllers\CourseBoxController.cs" />
-    <Compile Include="Controllers\CourseInfoController.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />

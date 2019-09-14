@@ -81,6 +81,40 @@ namespace WebApi.Controllers
         }
         #endregion
 
+        #region 课件详细历史记录
+        [NeedAuth]
+        public ResponseData History(int courseInfoId)
+        {
+            ResponseData responseData = null;
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return responseData;
+        }
+        #endregion
+
+        #region 课程内所有课件详细历史记录
+        [NeedAuth]
+        public ResponseData HistoryDetails(int courseBoxId)
+        {
+            ResponseData responseData = null;
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return responseData;
+        }
+        #endregion
+
         #region 添加课程内容-视频
         [NeedAuth]
         [HttpPost]

@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using Common;
+using Core;
 using Domain;
 using Framework.Infrastructure.Concrete;
 using NHibernate.Criterion;
@@ -18,7 +19,7 @@ using WebApi.Models.CourseBoxVM;
 
 namespace WebApi.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    //[EnableCors(origins: "*", headers: "*", methods: "*")]
     [RoutePrefix("api/CourseBox")]
     public class CourseBoxController : ApiController
     {
@@ -48,8 +49,19 @@ namespace WebApi.Controllers
                         UserName = dbModel.Creator.UserName,
                         Name = dbModel.Creator.Name,
                         Avatar = dbModel.Creator.Avatar
-                    }
+                    },
+                    Pages = new List<CourseBoxViewModel.CourseInfoViewModel>()
                 };
+                foreach (var item in dbModel.CourseInfoList)
+                {
+                    viewModel.Pages.Add(new CourseBoxViewModel.CourseInfoViewModel
+                    {
+                        ID = item.ID,
+                        Title = item.Title,
+                        Duration = item.Duration,
+                        Page = item.Page
+                    });
+                }
 
                 responseData = new ResponseData
                 {
@@ -165,6 +177,85 @@ namespace WebApi.Controllers
         }
         #endregion
 
+        #region 课程学习情况
+        /// <summary>
+        /// 当前登录用户对于此课程的学习情况
+        /// 没有加入学习 data 为 null
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [NeedAuth]
+        [HttpGet]
+        [Route("StudyInfo")]
+        public ResponseData StudyInfo(int id)
+        {
+            ResponseData responseData = null;
+            try
+            {
+                StudyInfoViewModel viewModel = null;
+                Learner_CourseBoxService courseBoxTableService = Container.Instance.Resolve<Learner_CourseBoxService>();
+                Learner_CourseBox courseBoxTable = courseBoxTableService.Query(new List<ICriterion>
+                {
+                    Expression.And(
+                     Expression.Eq("Reader.ID", ((UserIdentity)User.Identity).ID),
+                     Expression.Eq("CourseBox.ID", id)
+                    )
+                }).FirstOrDefault();
+                if (courseBoxTable != null)
+                {
+                    viewModel = new StudyInfoViewModel
+                    {
+                        JoinTime = courseBoxTable.JoinTime.ToTimeStamp10(),
+                        SpendTime = courseBoxTable.SpendTime,
+                    };
+                }
+
+                responseData = new ResponseData
+                {
+                    Code = 1,
+                    Message = "成功",
+                    Data = viewModel
+                };
+            }
+            catch (Exception ex)
+            {
+                responseData = new ResponseData
+                {
+                    Code = -1,
+                    Message = "获取失败"
+                };
+            }
+            return responseData;
+        }
+        #endregion
+
+        #region 历史记录
+        [NeedAuth]
+        [Route("History")]
+        [HttpGet]
+        public ResponseData History()
+        {
+            ResponseData responseData = null;
+            try
+            {
+                HistoryViewModel viewModel = new HistoryViewModel
+                {
+
+                };
+            }
+            catch (Exception ex)
+            {
+                responseData = new ResponseData
+                {
+                    Code = -1,
+                    Message = "获取历史记录失败"
+                };
+            }
+
+            return responseData;
+        }
+        #endregion
+
         #region 我学习的课程列表
         [HttpGet]
         [NeedAuth]
@@ -175,8 +266,8 @@ namespace WebApi.Controllers
 
             if (User.Identity != null)
             {
-                CourseBoxTableService courseBoxTableService = Container.Instance.Resolve<CourseBoxTableService>();
-                IList<CourseBoxTable> iLearnCourseBoxTableList = courseBoxTableService.Query(new List<ICriterion>
+                Learner_CourseBoxService courseBoxTableService = Container.Instance.Resolve<Learner_CourseBoxService>();
+                IList<Learner_CourseBox> iLearnCourseBoxTableList = courseBoxTableService.Query(new List<ICriterion>
                 {
                     Expression.Eq("Reader.ID", ((UserIdentity)User.Identity).ID)
                 }).OrderByDescending(m => m.JoinTime).ToList();
@@ -270,28 +361,28 @@ namespace WebApi.Controllers
             try
             {
                 IList<CommentViewModel> viewList = new List<CommentViewModel>();
-                CourseBoxCommentService courseBoxCommentService = Container.Instance.Resolve<CourseBoxCommentService>();
+                //CourseBoxCommentService courseBoxCommentService = Container.Instance.Resolve<CourseBoxCommentService>();
 
-                IList<CourseBoxComment> dbList = courseBoxCommentService.Query(new List<ICriterion>
-                {
-                    Expression.Eq("CourseBox.ID", id)
-                }).ToList();
-                foreach (var item in dbList)
-                {
-                    viewList.Add(new CommentViewModel
-                    {
-                        ID = item.ID,
-                        Content = item.Content,
-                        CreateTime = item.CreateTime.ToString("yyyy-MM-dd HH:mm"),
-                        Author = new Models.UserInfoVM.UserInfoViewModel
-                        {
-                            ID = item.Author.ID,
-                            UserName = item.Author.UserName,
-                            Name = item.Author.Name,
-                            Avatar = item.Author.Avatar
-                        }
-                    });
-                }
+                //IList<CourseBoxComment> dbList = courseBoxCommentService.Query(new List<ICriterion>
+                //{
+                //    Expression.Eq("CourseBox.ID", id)
+                //}).ToList();
+                //foreach (var item in dbList)
+                //{
+                //    viewList.Add(new CommentViewModel
+                //    {
+                //        ID = item.ID,
+                //        Content = item.Content,
+                //        CreateTime = item.CreateTime.ToString("yyyy-MM-dd HH:mm"),
+                //        Author = new Models.UserInfoVM.UserInfoViewModel
+                //        {
+                //            ID = item.Author.ID,
+                //            UserName = item.Author.UserName,
+                //            Name = item.Author.Name,
+                //            Avatar = item.Author.Avatar
+                //        }
+                //    });
+                //}
 
                 responseData = new ResponseData
                 {
@@ -322,22 +413,22 @@ namespace WebApi.Controllers
             ResponseData responseData = null;
             try
             {
-                CourseBoxCommentService courseBoxCommentService = Container.Instance.Resolve<CourseBoxCommentService>();
+                //CourseBoxCommentService courseBoxCommentService = Container.Instance.Resolve<CourseBoxCommentService>();
                 UserInfo author = new UserInfo
                 {
                     ID = ((UserIdentity)User.Identity).ID
                 };
-                courseBoxCommentService.Create(new CourseBoxComment
-                {
-                    Content = content,
-                    CreateTime = DateTime.Now,
-                    LastUpdateTime = DateTime.Now,
-                    CourseBox = new CourseBox
-                    {
-                        ID = id
-                    },
-                    Author = author
-                });
+                //courseBoxCommentService.Create(new CourseBoxComment
+                //{
+                //    Content = content,
+                //    CreateTime = DateTime.Now,
+                //    LastUpdateTime = DateTime.Now,
+                //    CourseBox = new CourseBox
+                //    {
+                //        ID = id
+                //    },
+                //    Author = author
+                //});
 
                 responseData = new ResponseData
                 {
@@ -400,8 +491,8 @@ namespace WebApi.Controllers
         public static bool IsILearnCourseBox(int courseBoxId)
         {
             bool isILearn = false;
-            CourseBoxTableService courseBoxTableService = Container.Instance.Resolve<CourseBoxTableService>();
-            IList<CourseBoxTable> iLearnCourseBoxTableList = courseBoxTableService.Query(new List<ICriterion>
+            Learner_CourseBoxService courseBoxTableService = Container.Instance.Resolve<Learner_CourseBoxService>();
+            IList<Learner_CourseBox> iLearnCourseBoxTableList = courseBoxTableService.Query(new List<ICriterion>
             {
                 Expression.Eq("Reader.ID", AccountManager.GetCurrentUserInfo().ID)
             }).OrderByDescending(m => m.JoinTime).ToList();

@@ -69,14 +69,11 @@ namespace Domain
         [BelongsTo(Column = "CreatorId")]
         public UserInfo Creator { get; set; }
 
-        ///// <summary>
-        ///// 此卡片盒的读者 列表
-        /////     多对多
-        /////         一个卡片盒可供多人阅读，一人可阅读多个卡片盒
-        ///// </summary>
-        //[Display(Name = "读者列表")]
-        //[HasAndBelongsToMany(Table = "User_CardBox_ForRead", ColumnKey = "CardBoxId", ColumnRef = "UserId")]
-        //public IList<UserInfo> ReaderList { get; set; }
+        /// <summary>
+        /// 属于哪些收藏夹
+        /// </summary>
+        [HasAndBelongsToMany(ColumnKey = "CardBoxId", ColumnRef = "FavoriteId", Table = "Favorite_CardBox")]
+        public IList<Favorite> FavoriteList { get; set; }
 
         #endregion
     }

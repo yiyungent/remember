@@ -51,8 +51,8 @@
     <Compile Include="Base\BaseService.cs" />
     <Compile Include="CardBoxService.cs" />
     <Compile Include="CardInfoService.cs" />
-    <Compile Include="CourseBoxCommentService.cs" />
-    <Compile Include="CourseBoxTableService.cs" />
+    <Compile Include="Learner_CourseInfoService.cs" />
+    <Compile Include="Learner_CourseBoxService.cs" />
     <Compile Include="CourseInfoService.cs" />
     <Compile Include="CourseBoxService.cs" />
     <Compile Include="FunctionInfoService.cs" />
@@ -61,7 +61,6 @@
     <Compile Include="SearchDetailService.cs" />
     <Compile Include="SearchTotalService.cs" />
     <Compile Include="SettingService.cs" />
-    <Compile Include="StudentService.cs" />
     <Compile Include="Sys_MenuService.cs" />
     <Compile Include="ThemeTemplateService.cs" />
     <Compile Include="UserInfoService.cs" />

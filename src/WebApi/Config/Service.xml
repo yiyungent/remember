@@ -53,7 +53,7 @@
                  service="Service.CourseInfoService,Service"
                  type="Component.CourseInfoComponent,Component"
                  isTransactional="true" />
-    <component id="CourseBoxTableService"
+    <component id="Learner_CourseBoxService"
                  service="Service.CourseBoxTableService,Service"
                  type="Component.CourseBoxTableComponent,Component"
                  isTransactional="true" />

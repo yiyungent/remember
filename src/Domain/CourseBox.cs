@@ -3,6 +3,7 @@ using Domain.Base;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Domain
 {
@@ -12,14 +13,12 @@ namespace Domain
         /// <summary>
         /// 课程名
         /// </summary>
-        [Display(Name = "课程名")]
         [Property(Length = 30, NotNull = true)]
         public string Name { get; set; }
 
         /// <summary>
         /// 描述
         /// </summary>
-        [Display(Name = "描述")]
         [Property(Length = 500, NotNull = false)]
         public string Description { get; set; }
 
@@ -65,13 +64,29 @@ namespace Domain
         [Property(NotNull = false)]
         public int LearnDay { get; set; }
 
+        /// <summary>
+        /// 学习此课程总需时间
+        /// </summary>
+        public long Duration
+        {
+            get
+            {
+                long duration = 0;
+                if (this.CourseInfoList != null && this.CourseInfoList.Count >= 1)
+                {
+                    duration = this.CourseInfoList.Select(m => m.Duration).Sum();
+                }
+
+                return duration;
+            }
+        }
+
         #region Relationships
 
         /// <summary>
-        /// 课程盒包含的课程内容的列表
+        /// 课程盒包含的课件的列表
         ///     一对多
         /// </summary>
-        [Display(Name = "包含课程内容的列表")]
         [HasMany(ColumnKey = "CourseBoxId")]
         public IList<CourseInfo> CourseInfoList { get; set; }
 
@@ -79,15 +94,14 @@ namespace Domain
         /// 课程的创建者
         ///     多对一
         /// </summary>
-        [Display(Name = "创建者")]
         [BelongsTo(Column = "CreatorId")]
         public UserInfo Creator { get; set; }
 
         /// <summary>
-        /// 课程盒表 列表
+        /// 属于哪些收藏夹
         /// </summary>
-        [HasMany(ColumnKey = "CourseBoxId")]
-        public IList<CourseBoxTable> CourseBoxTableList { get; set; }
+        [HasAndBelongsToMany(ColumnKey = "CourseBoxId", ColumnRef = "FavoriteId", Table = "Favorite_CourseBox")]
+        public IList<Favorite> FavoriteList { get; set; }
 
         #endregion
     }

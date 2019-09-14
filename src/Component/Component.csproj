@@ -54,8 +54,8 @@
     <Compile Include="Base\BaseComponent.cs" />
     <Compile Include="CardBoxComponent.cs" />
     <Compile Include="CardInfoComponent.cs" />
-    <Compile Include="CourseBoxCommentComponent.cs" />
-    <Compile Include="CourseBoxTableComponent.cs" />
+    <Compile Include="Learner_CourseInfoComponent.cs" />
+    <Compile Include="Learner_CourseBoxComponent.cs" />
     <Compile Include="CourseBoxComponent.cs" />
     <Compile Include="CourseInfoComponent.cs" />
     <Compile Include="FunctionInfoComponent.cs" />
@@ -64,7 +64,6 @@
     <Compile Include="SearchDetailComponent.cs" />
     <Compile Include="SearchTotalComponent.cs" />
     <Compile Include="SettingComponent.cs" />
-    <Compile Include="StudentComponent.cs" />
     <Compile Include="Sys_MenuComponent.cs" />
     <Compile Include="ThemeTemplateComponent.cs" />
     <Compile Include="UserInfoComponent.cs" />
