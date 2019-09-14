@@ -13,7 +13,7 @@ namespace Domain
     [Serializable]
     public class Learner_CourseInfo : BaseEntity<Learner_CourseInfo>
     {
-        #region Properities
+        #region Properties
 
         /// <summary>
         /// 此学习者在此课件-学习进度

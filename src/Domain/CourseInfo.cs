@@ -17,7 +17,7 @@ namespace Domain
         /// <summary>
         /// 标题
         /// </summary>
-        [Property(Length = 30, NotNull = false)]
+        [Property(Length = 200, NotNull = false)]
         public string Title { get; set; }
 
         /// <summary>

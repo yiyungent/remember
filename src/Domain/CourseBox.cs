@@ -10,10 +10,12 @@ namespace Domain
     [ActiveRecord]
     public class CourseBox : BaseEntity<CourseBox>
     {
+        #region Properties
+
         /// <summary>
         /// 课程名
         /// </summary>
-        [Property(Length = 30, NotNull = true)]
+        [Property(Length = 200, NotNull = true)]
         public string Name { get; set; }
 
         /// <summary>
@@ -79,7 +81,9 @@ namespace Domain
 
                 return duration;
             }
-        }
+        } 
+
+        #endregion
 
         #region Relationships
 

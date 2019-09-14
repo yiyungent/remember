@@ -14,7 +14,7 @@ namespace Domain
     [Serializable]
     public class Learner_CourseBox : BaseEntity<Learner_CourseBox>
     {
-        #region Properities
+        #region Properties
 
         /// <summary>
         /// 加入学习的时间
