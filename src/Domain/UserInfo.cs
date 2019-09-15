@@ -61,7 +61,13 @@ namespace Domain
         /// </summary>
         [Display(Name = "注册时间")]
         [Property(NotNull = true)]
-        public DateTime RegTime { get; set; } 
+        public DateTime RegTime { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        [Property(Length = 300, NotNull = false)]
+        public string Remark { get; set; }
 
         #endregion
 

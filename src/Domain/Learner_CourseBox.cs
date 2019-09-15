@@ -31,10 +31,10 @@ namespace Domain
         public long SpendTime { get; set; }
 
         /// <summary>
-        /// 最新访问课件ID
+        /// 最新访问课件
         /// </summary>
-        [Property(NotNull = false)]
-        public int LastCourseInfoId { get; set; }
+        [BelongsTo(Column = "LastCourseInfoId")]
+        public CourseInfo LastCourseInfo { get; set; }
 
         #endregion
 

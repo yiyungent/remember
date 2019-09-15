@@ -21,5 +21,17 @@ namespace Domain
         /// </summary>
         [Property(Length = 500, NotNull = false)]
         public string SetValue { get; set; }
+
+        /// <summary>
+        /// 中文名
+        /// </summary>
+        [Property(NotNull = false)]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        [Property(Length = 1000, NotNull = false)]
+        public string Remark { get; set; }
     }
 }

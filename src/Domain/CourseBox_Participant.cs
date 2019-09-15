@@ -30,6 +30,12 @@ namespace Domain
         [Property(NotNull = false)]
         public DateTime AgreeTime { get; set; }
 
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        [Property(NotNull = false)]
+        public DateTime CreateTime { get; set; }
+
         #endregion
 
         #region Relationships
