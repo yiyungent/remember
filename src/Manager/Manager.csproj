@@ -64,7 +64,17 @@
     <Compile Include="Base\BaseManager.cs" />
     <Compile Include="CardBoxManager.cs" />
     <Compile Include="CardInfoManager.cs" />
+    <Compile Include="CommentManager.cs" />
+    <Compile Include="Comment_DislikeManager.cs" />
+    <Compile Include="Comment_LikeManager.cs" />
     <Compile Include="CourseBoxManager.cs" />
+    <Compile Include="CourseBox_CommentManager.cs" />
+    <Compile Include="CourseBox_DislikeManager.cs" />
+    <Compile Include="CourseBox_LikeManager.cs" />
+    <Compile Include="CourseBox_ParticipantManager.cs" />
+    <Compile Include="CourseInfo_CommentManager.cs" />
+    <Compile Include="FavoriteManager.cs" />
+    <Compile Include="Follower_FollowedManager.cs" />
     <Compile Include="Learner_CourseInfoManager.cs" />
     <Compile Include="Learner_CourseBoxManager.cs" />
     <Compile Include="CourseInfoManager.cs" />
@@ -75,6 +85,7 @@
       <DependentUpon>201907060355549_update.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="ParticipantInfoManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleInfoManager.cs" />
     <Compile Include="SearchDetailManager.cs" />

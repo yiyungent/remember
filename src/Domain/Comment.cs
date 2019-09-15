@@ -21,18 +21,6 @@ namespace Domain
         public string Content { get; set; }
 
         /// <summary>
-        /// 赞
-        /// </summary>
-        [Property(NotNull = false)]
-        public int LikeNum { get; set; }
-
-        /// <summary>
-        /// 踩
-        /// </summary>
-        [Property(NotNull = false)]
-        public int DislikeNum { get; set; }
-
-        /// <summary>
         /// 创建时间
         /// </summary>
         [Property]

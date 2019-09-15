@@ -53,7 +53,11 @@
     <Compile Include="CardBox.cs" />
     <Compile Include="CardInfo.cs" />
     <Compile Include="Comment.cs" />
+    <Compile Include="Comment_Dislike.cs" />
+    <Compile Include="Comment_Like.cs" />
     <Compile Include="CourseBox.cs" />
+    <Compile Include="CourseBox_Dislike.cs" />
+    <Compile Include="CourseBox_Like.cs" />
     <Compile Include="CourseBox_Participant.cs" />
     <Compile Include="CourseInfo_Comment.cs" />
     <Compile Include="CourseBox_Comment.cs" />
@@ -77,6 +81,7 @@
     <Compile Include="FrameworkBase\Setting.cs" />
     <Compile Include="ThemeTemplate.cs" />
     <Compile Include="UserInfo.cs" />
+    <Compile Include="Follower_Followed.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
