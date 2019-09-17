@@ -5,7 +5,13 @@ using System.Web;
 
 namespace WebApi.Models.CourseBoxVM
 {
-    public class HistoryViewModel
+    public class HistoryDataModel
+    {
+        public IList<HistoryDataModelItem> List { get; set; }
+
+    }
+
+    public class HistoryDataModelItem
     {
         /// <summary>
         /// 课程盒ID
@@ -29,11 +35,6 @@ namespace WebApi.Models.CourseBoxVM
         public long CreateTime { get; set; }
 
         /// <summary>
-        /// 权限
-        /// </summary>
-        public RightsViewModel Rights { get; set; }
-
-        /// <summary>
         /// 创建者
         /// </summary>
         public CreatorViewModel Creator { get; set; }
@@ -44,16 +45,6 @@ namespace WebApi.Models.CourseBoxVM
         public StatViewModel Stat { get; set; }
 
         /// <summary>
-        /// 是否收藏
-        /// </summary>
-        public bool IsFavorite { get; set; }
-
-        /// <summary>
-        /// 是否已经加入学习
-        /// </summary>
-        public bool IsLearn { get; set; }
-
-        /// <summary>
         /// 课程总内容（课件）数
         /// </summary>
         public int Count { get; set; }
@@ -62,14 +53,6 @@ namespace WebApi.Models.CourseBoxVM
         /// 最新进度
         /// </summary>
         public ProgressViewModel Progress { get; set; }
-
-        public sealed class RightsViewModel
-        {
-            /// <summary>
-            /// 是该课程的创建者
-            /// </summary>
-            public bool IsCreator { get; set; }
-        }
 
         public sealed class CreatorViewModel
         {

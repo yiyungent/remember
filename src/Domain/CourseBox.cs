@@ -8,6 +8,7 @@ using System.Linq;
 namespace Domain
 {
     [ActiveRecord]
+    [Serializable]
     public class CourseBox : BaseEntity<CourseBox>
     {
         #region Properties

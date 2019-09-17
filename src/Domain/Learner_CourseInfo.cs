@@ -16,6 +16,18 @@ namespace Domain
         #region Properties
 
         /// <summary>
+        /// 最后访问IP
+        /// </summary>
+        [Property(Length = 100, NotNull = false)]
+        public string LastAccessIp { get; set; }
+
+        /// <summary>
+        /// 最后访问时间
+        /// </summary>
+        [Property(NotNull = false)]
+        public DateTime LastAccessTime { get; set; }
+
+        /// <summary>
         /// 此学习者在此课件-学习进度
         /// <para>学习进度：视频调整播放位置，以前看完过此视频，则学习进度依然为满格状态，不变，而最新播放位置则不同</para>
         /// 毫秒

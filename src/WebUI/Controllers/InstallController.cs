@@ -493,6 +493,14 @@ namespace WebUI.Controllers
                     FunctionInfoList = null
                 });
 
+                Container.Instance.Resolve<RoleInfoService>().Create(new RoleInfo
+                {
+                    Name = "正式会员",
+                    Status = 0,
+                    Sys_MenuList = null,
+                    FunctionInfoList = null
+                });
+
                 ShowMessage("成功");
             }
             catch (Exception ex)
@@ -510,9 +518,12 @@ namespace WebUI.Controllers
             {
                 ShowMessage("开始初始化用户表");
 
+                UserInfoService userInfoService = Container.Instance.Resolve<UserInfoService>();
+
                 var allRole = Container.Instance.Resolve<RoleInfoService>().GetAll();
 
-                Container.Instance.Resolve<UserInfoService>().Create(new UserInfo()
+                // 超级管理员 1
+                userInfoService.Create(new UserInfo()
                 {
                     Name = "超级管理员admin",
                     UserName = "admin",
@@ -524,10 +535,26 @@ namespace WebUI.Controllers
                     RegTime = DateTime.Now
                 });
 
-                UserInfo admin = Container.Instance.Resolve<UserInfoService>().Query(new List<ICriterion>
+                UserInfo admin = userInfoService.Query(new List<ICriterion>
                 {
                     Expression.Eq("UserName", "admin")
                 }).FirstOrDefault();
+
+                // 正式会员 3000
+                for (int i = 0; i < 3000; i++)
+                {
+                    userInfoService.Create(new UserInfo
+                    {
+                        Name = $"会员-{ i + 1 }",
+                        UserName = "acc" + (i + 1),
+                        Avatar = "/assets/images/default-avatar.jpg",
+                        Password = EncryptHelper.MD5Encrypt32("acc" + (i + 1)),
+                        Email = "acc" + (i + 1) + "@qq.com",
+                        Status = 0,
+                        RoleInfoList = (from m in allRole where m.ID == 3 select m).ToList(),
+                        RegTime = DateTime.Now
+                    });
+                }
 
                 ShowMessage("成功");
             }
@@ -625,21 +652,21 @@ namespace WebUI.Controllers
         }
         #endregion
 
-        #region 初始化课程盒
+        #region 初始化课程
         private void InitCourseBox()
         {
             try
             {
-                ShowMessage("开始初始化课程盒");
+                ShowMessage("开始初始化课程");
 
                 CourseBoxService courseBoxService = Container.Instance.Resolve<CourseBoxService>();
 
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < 500; i++)
                 {
                     UserInfo userInfo = Container.Instance.Resolve<UserInfoService>().GetEntity(1);
                     CourseBox courseBox = new CourseBox();
-                    courseBox.Name = "测试课程盒-" + (i + 1);
-                    courseBox.Description = $"这是测试课程盒-{(i + 1)}的描述";
+                    courseBox.Name = "测试课程-" + (i + 1);
+                    courseBox.Description = $"这是测试课程-{(i + 1)}的描述";
                     courseBox.Creator = userInfo;
                     courseBox.PicUrl = "https://static.runoob.com/images/mix/img_fjords_wide.jpg";
 
@@ -696,7 +723,7 @@ namespace WebUI.Controllers
         }
         #endregion
 
-        #region 初始化课程内容
+        #region 初始化课件
         private void InitCourseInfo()
         {
             try
@@ -721,6 +748,156 @@ namespace WebUI.Controllers
             }
         }
         #endregion
+
+        #region 初始化评论
+        private void InitComment()
+        {
+            try
+            {
+                ShowMessage("初始化评论");
+
+                CommentService commentService = Container.Instance.Resolve<CommentService>();
+                UserInfoService userInfoService = Container.Instance.Resolve<UserInfoService>();
+
+                // 课程评论
+                #region 课程评论
+                // 一级评论
+                for (int i = 0; i < 500; i++)
+                {
+                    commentService.Create(new Comment
+                    {
+                        Author = userInfoService.GetEntity(i + 2),
+                        Content = "课程-评论" + (i + 1),
+                        LikeNum = new Random().Next(0, i * 100),
+                        DislikeNum = new Random().Next(0, i * 100),
+                        CreateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
+                        LastUpdateTime = DateTime.Now.AddDays(new Random().Next(0, i))
+                    });
+                }
+                // 二级评论
+                for (int i = 0; i < 500; i++)
+                {
+                    commentService.Create(new Comment
+                    {
+                        Author = userInfoService.GetEntity(i + 2),
+                        Content = "课程-评论" + (i + 1),
+                        LikeNum = new Random().Next(0, i * 100),
+                        DislikeNum = new Random().Next(0, i * 100),
+                        CreateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
+                        LastUpdateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
+                        Parent = commentService.GetEntity(new Random().Next(1, 500))
+                    });
+                }
+                // 三级评论
+                for (int i = 0; i < 500; i++)
+                {
+                    commentService.Create(new Comment
+                    {
+                        Author = userInfoService.GetEntity(i + 2),
+                        Content = "课程-评论" + (i + 1),
+                        LikeNum = new Random().Next(0, i * 100),
+                        DislikeNum = new Random().Next(0, i * 100),
+                        CreateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
+                        LastUpdateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
+                        Parent = commentService.GetEntity(new Random().Next(501, 1000))
+                    });
+                }
+                #endregion
+
+                // 课件评论
+                #region 课件评论
+                // 一级评论
+                for (int i = 0; i < 500; i++)
+                {
+                    commentService.Create(new Comment
+                    {
+                        Author = userInfoService.GetEntity(i + 2),
+                        Content = "课件-评论" + (i + 1),
+                        LikeNum = new Random().Next(0, i * 100),
+                        DislikeNum = new Random().Next(0, i * 100),
+                        CreateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
+                        LastUpdateTime = DateTime.Now.AddDays(new Random().Next(0, i))
+                    });
+                }
+                // 二级评论
+                for (int i = 0; i < 500; i++)
+                {
+                    commentService.Create(new Comment
+                    {
+                        Author = userInfoService.GetEntity(i + 2),
+                        Content = "课件-评论" + (i + 1),
+                        LikeNum = new Random().Next(0, i * 100),
+                        DislikeNum = new Random().Next(0, i * 100),
+                        CreateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
+                        LastUpdateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
+                        Parent = commentService.GetEntity(new Random().Next(1501, 2000))
+                    });
+                }
+                // 三级评论
+                for (int i = 0; i < 500; i++)
+                {
+                    commentService.Create(new Comment
+                    {
+                        Author = userInfoService.GetEntity(i + 2),
+                        Content = "课件-评论" + (i + 1),
+                        LikeNum = new Random().Next(0, i * 100),
+                        DislikeNum = new Random().Next(0, i * 100),
+                        CreateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
+                        LastUpdateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
+                        Parent = commentService.GetEntity(new Random().Next(2500, 3000))
+                    });
+                }
+                #endregion
+
+
+                ShowMessage("成功");
+            }
+            catch (Exception)
+            {
+                ShowMessage("失败");
+            }
+        }
+        #endregion
+
+        #region 初始化课程评论
+        private void InitCourseBox_Comment()
+        {
+            try
+            {
+                ShowMessage("初始化课程评论");
+
+                CourseBox_CommentService courseBox_CommentService = Container.Instance.Resolve<CourseBox_CommentService>();
+                CommentService commentService = Container.Instance.Resolve<CommentService>();
+
+                IList<CourseBox> allCourseBox = Container.Instance.Resolve<CourseBoxService>().GetAll();
+                IList<Comment> allCourseBox_Comment = commentService.Query(new List<ICriterion>
+                {
+                     Expression.Like("Content", "课程", MatchMode.Anywhere)
+                }).ToList();
+
+                for (int i = 0; i < allCourseBox.Count; i++)
+                {
+                    CourseBox courseBox = allCourseBox[i];
+                    for (int j = 0; j < allCourseBox_Comment.Count; j++)
+                    {
+                        courseBox_CommentService.Create(new CourseBox_Comment
+                        {
+                            CourseBox = courseBox,
+                            Comment = allCourseBox_Comment[new Random().Next(0, allCourseBox_Comment.Count)]
+                        });
+                    }
+                }
+
+                ShowMessage("成功");
+            }
+            catch (Exception)
+            {
+                ShowMessage("失败");
+            }
+        }
+        #endregion
+
+
 
     }
 }

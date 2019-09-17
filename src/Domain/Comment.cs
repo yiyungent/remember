@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace Domain
 {
     [ActiveRecord]
+    [Serializable]
     public class Comment : BaseEntity<Comment>
     {
         #region Properities
@@ -32,6 +33,18 @@ namespace Domain
         [Property]
         public DateTime LastUpdateTime { get; set; }
 
+        /// <summary>
+        /// 赞的人数
+        /// </summary>
+        [Property(NotNull = false)]
+        public int LikeNum { get; set; }
+
+        /// <summary>
+        /// 踩的人数
+        /// </summary>
+        [Property(NotNull = false)]
+        public int DislikeNum { get; set; }
+
         #endregion
 
         #region Relationships
@@ -43,10 +56,16 @@ namespace Domain
         public UserInfo Author { get; set; }
 
         /// <summary>
-        /// 回复的评论
+        /// 此条评论回复了谁
         /// </summary>
-        [BelongsTo(Column = "ReplyCommentId", NotNull = false)]
-        public Comment Reply { get; set; }
+        [BelongsTo(Column = "ParentId", NotNull = false)]
+        public Comment Parent { get; set; }
+
+        /// <summary>
+        /// 有哪些评论回复了此条评论
+        /// </summary>
+        [HasMany(ColumnKey = "ParentId")]
+        public IList<Comment> Children { get; set; }
 
         #region 废弃
         ///// <summary>

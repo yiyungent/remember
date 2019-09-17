@@ -33,8 +33,8 @@ namespace Domain
         /// <summary>
         /// 最新访问课件
         /// </summary>
-        [BelongsTo(Column = "LastCourseInfoId")]
-        public CourseInfo LastCourseInfo { get; set; }
+        [BelongsTo(Column = "LastAccessCourseInfoId")]
+        public CourseInfo LasAccesstCourseInfo { get; set; }
 
         #endregion
 

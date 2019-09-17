@@ -10,6 +10,7 @@ namespace Domain
     /// 收藏夹
     /// </summary>
     [ActiveRecord]
+    [Serializable]
     public class Favorite : BaseEntity<Favorite>
     {
         #region Properities

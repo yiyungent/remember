@@ -18,15 +18,15 @@ namespace WebApi.Models.CourseInfoVM
         public string Country { get; set; }
 
         /// <summary>
-        /// 访问时间
-        /// Unix时间戳(秒)
+        /// 最后访问时间
+        /// js时间戳(毫秒)
         /// </summary>
-        public long AccessTime { get; set; }
+        public long LastAccessTime { get; set; }
 
-        /// <summary>
-        /// 访问者
-        /// </summary>
-        public UserInfoViewModel Visitor { get; set; }
+        ///// <summary>
+        ///// 访问者
+        ///// </summary>
+        //public UserInfoViewModel Visitor { get; set; }
 
         /// <summary>
         /// 在此课件内容内的最新播放位置
@@ -35,11 +35,16 @@ namespace WebApi.Models.CourseInfoVM
         public long ProgressAt
         { get; set; }
 
+        ///// <summary>
+        ///// 最后访问课件ID
+        ///// 视频：必须要点击开始播放才算是访问过，不然不记录为播放历史
+        ///// </summary>
+        //public int LastCourseInfoId { get; set; }
+
         /// <summary>
-        /// 最后访问课件ID
-        /// 视频：必须要点击开始播放才算是访问过，不然不记录为播放历史
+        /// 此课件最新播放位置
         /// </summary>
-        public int LastCourseInfoId { get; set; }
+        public long LastPlayAt { get; set; }
 
         /// <summary>
         /// 持续时间

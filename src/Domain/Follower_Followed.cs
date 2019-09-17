@@ -11,6 +11,7 @@ namespace Domain
     /// <para>A关注B -> A成为了B的粉丝</para>
     /// </summary>
     [ActiveRecord]
+    [Serializable]
     public class Follower_Followed : BaseEntity<Follower_Followed>
     {
         #region Properties

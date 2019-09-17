@@ -10,6 +10,7 @@ namespace Domain
     /// 课件
     /// </summary>
     [ActiveRecord]
+    [Serializable]
     public class CourseInfo : BaseEntity<CourseInfo>
     {
         #region Properities

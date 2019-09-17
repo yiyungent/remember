@@ -10,6 +10,7 @@ namespace Domain
     /// 课程-赞的人
     /// </summary>
     [ActiveRecord]
+    [Serializable]
     public class CourseBox_Like : BaseEntity<CourseBox_Like>
     {
         #region Properties

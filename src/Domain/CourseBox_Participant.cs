@@ -11,6 +11,7 @@ namespace Domain
     /// 实体类：课程-参与者
     /// </summary>
     [ActiveRecord]
+    [Serializable]
     public class CourseBox_Participant : BaseEntity<CourseBox_Participant>
     {
         #region Properties

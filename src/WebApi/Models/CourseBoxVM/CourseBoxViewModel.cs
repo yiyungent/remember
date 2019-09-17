@@ -35,12 +35,12 @@ namespace WebApi.Models.CourseBoxVM
         /// <summary>
         /// 创建时间
         /// </summary>
-        public string CreateTime { get; set; }
+        public long CreateTime { get; set; }
 
         /// <summary>
         /// 最近更新时间
         /// </summary>
-        public string LastUpdateTime { get; set; }
+        public long LastUpdateTime { get; set; }
 
         /// <summary>
         /// 是否公开
@@ -50,17 +50,35 @@ namespace WebApi.Models.CourseBoxVM
         /// <summary>
         /// 有效日期 - 开始时间
         /// </summary>
-        public string StartTime { get; set; }
+        public long StartTime { get; set; }
 
         /// <summary>
         /// 有效日期 - 结束时间
         /// </summary>
-        public string EndTime { get; set; }
+        public long EndTime { get; set; }
 
         /// <summary>
         /// 有效学习天数
         /// </summary>
         public int LearnDay { get; set; }
+
+        /// <summary>
+        /// 最新访问的课件
+        /// </summary>
+        public CourseInfoViewModel LastAccessCourseInfo { get; set; }
+
+        /// <summary>
+        /// 加入学习的时间
+        /// js时间戳
+        /// </summary>
+        public long JoinTime { get; set; }
+
+        /// <summary>
+        /// 此学习者在此课程总学习时间: 花费时间
+        /// 毫秒
+        /// <para>注意：不一定是学习者在此课程上的所有课件的进度时间，因为课程存在反复看，反复看时间也要计算在内</para>
+        /// </summary>
+        public long SpendTime { get; set; }
 
         /// <summary>
         /// 课件数
@@ -97,12 +115,6 @@ namespace WebApi.Models.CourseBoxVM
             /// 课件标题
             /// </summary>
             public string Title { get; set; }
-
-            /// <summary>
-            /// 持续时间
-            /// 视频：此课件总需播放时间
-            /// </summary>
-            public long Duration { get; set; }
         }
     }
 }

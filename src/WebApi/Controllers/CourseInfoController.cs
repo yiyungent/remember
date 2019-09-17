@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using Common;
+using Core;
 using Domain;
 using NHibernate.Criterion;
 using Service;
@@ -22,9 +23,9 @@ namespace WebApi.Controllers
     [RoutePrefix("api/CourseInfo")]
     public class CourseInfoController : ApiController
     {
-        #region Get: 获取指定ID的课程内容
+        #region Get: 获取指定ID的课程内容-课件
         /// <summary>
-        /// 需登陆 && (属于 我学习的课程 && 属于 我创建的课程)
+        /// 需登陆 && (属于 我学习的课程 || 属于 我创建的课程)
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -33,23 +34,57 @@ namespace WebApi.Controllers
         {
             ResponseData responseData = null;
 
-            CourseInfoService courseInfoService = Container.Instance.Resolve<CourseInfoService>();
-
-            if (courseInfoService.Exist(id))
+            Learner_CourseInfo learner_CourseInfo = Container.Instance.Resolve<Learner_CourseInfoService>().Query(new List<ICriterion>
             {
-                CourseInfo dbModel = courseInfoService.GetEntity(id);
-                int courseBoxId = dbModel.CourseBox.ID;
+                Expression.And(
+                    Expression.Eq("Learner.ID", ((UserIdentity)User.Identity).ID),
+                    Expression.Eq("CourseInfo.ID", id)
+                )
+            }).FirstOrDefault();
 
-                if (CourseBoxController.IsICreateCourseBox(courseBoxId) || CourseBoxController.IsILearnCourseBox(courseBoxId))
+            if (learner_CourseInfo != null)
+            {
+                // 属于我学习的课程
+                CourseInfo courseInfo = learner_CourseInfo.CourseInfo;
+                int courseBoxId = courseInfo.CourseBox.ID;
+
+                // 我学习的课程列表中有此课程 -> 可以访问
+                CourseInfoViewModel viewModel = new CourseInfoViewModel()
                 {
-                    // 我学习的课程列表和我创建的课程列表中有此课程 -> 可以访问
+                    ID = courseInfo.ID,
+                    Title = courseInfo.Title,
+                    Content = courseInfo.Content,
+                    CourseInfoType = (int)courseInfo.CourseInfoType,
+                    CourseBoxId = courseBoxId,
+                    LastAccessCountry = learner_CourseInfo.LastAccessCountry,
+                    LastAccessIp = learner_CourseInfo.LastAccessIp,
+                    LastAccessTime = learner_CourseInfo.LastAccessTime.ToTimeStamp13(),
+                    LastPlayAt = learner_CourseInfo.LastPlayAt,
+                    ProgressAt = learner_CourseInfo.ProgressAt
+                };
+
+                responseData = new ResponseData
+                {
+                    Code = 1,
+                    Message = "success",
+                    Data = viewModel
+                };
+            }
+            else
+            {
+                // 是否属于我创建的课程
+                CourseInfo courseInfo = Container.Instance.Resolve<CourseInfoService>().GetEntity(id);
+                bool isMeCreate = courseInfo.CourseBox.Creator.ID == ((UserIdentity)User.Identity).ID;
+                if (isMeCreate)
+                {
+                    // 未加入学习，但是我创建的课程
                     CourseInfoViewModel viewModel = new CourseInfoViewModel()
                     {
-                        ID = dbModel.ID,
-                        Title = dbModel.Title,
-                        Content = dbModel.Content,
-                        CourseInfoType = (int)dbModel.CourseInfoType,
-                        CourseBoxId = dbModel.CourseBox.ID,
+                        ID = courseInfo.ID,
+                        Title = courseInfo.Title,
+                        Content = courseInfo.Content,
+                        CourseInfoType = (int)courseInfo.CourseInfoType,
+                        CourseBoxId = courseInfo.CourseBox.ID,
                     };
 
                     responseData = new ResponseData
@@ -63,18 +98,67 @@ namespace WebApi.Controllers
                 {
                     responseData = new ResponseData
                     {
-                        Code = -2,
-                        Message = "你没有学习或创建此课程，无权访问",
+                        Code = -1,
+                        Message = "不存在此课程内容"
                     };
                 }
             }
-            else
+
+            return responseData;
+        }
+        #endregion
+
+        #region  推送观看课件历史
+        /// <summary>
+        /// 推送观看课件历史
+        /// </summary>
+        /// <param name="id">课件ID</param>
+        /// <param name="playPos">播放位置（毫秒）</param>
+        [NeedAuth]
+        [HttpPost]
+        [Route("View")]
+        public ResponseData View(int id, long playPos)
+        {
+            ResponseData responseData = null;
+
+            try
             {
-                responseData = new ResponseData
+                Learner_CourseInfo learner_CourseInfo = Container.Instance.Resolve<Learner_CourseInfoService>().Query(new List<ICriterion>
                 {
-                    Code = -1,
-                    Message = "不存在此课程内容"
-                };
+                    Expression.And(
+                        Expression.Eq("Learner.ID", ((UserIdentity)User.Identity).ID),
+                        Expression.Eq("CourseInfo.ID", id)
+                    )
+                }).FirstOrDefault();
+                if (learner_CourseInfo == null)
+                {
+                    // 第一次学习此课件
+                    Container.Instance.Resolve<Learner_CourseInfoService>().Create(new Learner_CourseInfo
+                    {
+                        CourseInfo = new CourseInfo { ID = id },
+                        Learner = new UserInfo { ID = ((UserIdentity)User.Identity).ID },
+                        LastAccessIp = HttpContext.Current.Request.UserHostName,
+                        LastAccessTime = DateTime.Now,
+                        LastPlayAt = playPos,
+                        ProgressAt = playPos
+                    });
+                }
+                else
+                {
+                    // 再次学习此课件
+                    learner_CourseInfo.LastAccessIp = HttpContext.Current.Request.UserHostName;
+                    learner_CourseInfo.LastAccessTime = DateTime.Now;
+                    learner_CourseInfo.LastPlayAt = playPos;
+                    if (playPos > learner_CourseInfo.ProgressAt)
+                    {
+                        // 如果最新播放位置大于学习进度，则学习进度更新 为 当前播放位置
+                        learner_CourseInfo.ProgressAt = playPos;
+                    }
+                    Container.Instance.Resolve<Learner_CourseInfoService>().Edit(learner_CourseInfo);
+                }
+            }
+            catch (Exception ex)
+            {
             }
 
             return responseData;
@@ -83,32 +167,51 @@ namespace WebApi.Controllers
 
         #region 课件详细历史记录
         [NeedAuth]
+        [HttpGet]
+        [Route("History")]
         public ResponseData History(int courseInfoId)
         {
             ResponseData responseData = null;
             try
             {
+                HistoryViewModel viewModel = null;
 
+                Learner_CourseInfo learner_CourseInfo = Container.Instance.Resolve<Learner_CourseInfoService>().Query(new List<ICriterion>
+                {
+                    Expression.And(
+                        Expression.Eq("CourseInfo.ID", courseInfoId),
+                        Expression.Eq("Learner.ID", ((UserIdentity)User.Identity).ID)
+                    )
+                }).FirstOrDefault();
+
+                if (learner_CourseInfo != null)
+                {
+                    viewModel = new HistoryViewModel()
+                    {
+                        Ip = learner_CourseInfo.LastAccessIp,
+                        Country = learner_CourseInfo.LastAccessCountry,
+                        LastAccessTime = learner_CourseInfo.LastAccessTime.ToTimeStamp13(),
+                        CourseBoxId = learner_CourseInfo.CourseInfo.CourseBox.ID,
+                        Duration = learner_CourseInfo.CourseInfo.Duration,
+                        ProgressAt = learner_CourseInfo.ProgressAt,
+                        LastPlayAt = learner_CourseInfo.LastPlayAt
+                    };
+                }
+
+                responseData = new ResponseData
+                {
+                    Code = 1,
+                    Message = "获取课件详细历史记录成功",
+                    Data = viewModel
+                };
             }
             catch (Exception ex)
             {
-            }
-
-            return responseData;
-        }
-        #endregion
-
-        #region 课程内所有课件详细历史记录
-        [NeedAuth]
-        public ResponseData HistoryDetails(int courseBoxId)
-        {
-            ResponseData responseData = null;
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
+                responseData = new ResponseData
+                {
+                    Code = -1,
+                    Message = "获取课件详细历史记录失败"
+                };
             }
 
             return responseData;

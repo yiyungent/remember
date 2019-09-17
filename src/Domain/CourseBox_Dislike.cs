@@ -10,6 +10,7 @@ namespace Domain
     /// 课程-踩的人
     /// </summary>
     [ActiveRecord]
+    [Serializable]
     public class CourseBox_Dislike : BaseEntity<CourseBox_Dislike>
     {
         #region Properties

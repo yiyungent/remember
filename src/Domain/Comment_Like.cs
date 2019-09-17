@@ -10,6 +10,7 @@ namespace Domain
     /// 评论-赞的人
     /// </summary>
     [ActiveRecord]
+    [Serializable]
     public class Comment_Like : BaseEntity<Comment_Like>
     {
         #region Properties

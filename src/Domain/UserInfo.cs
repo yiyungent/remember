@@ -73,11 +73,11 @@ namespace Domain
 
         #region Relationships
 
-        /// <summary>
-        /// 用户的收藏夹列表
-        /// </summary>
-        [HasMany(ColumnKey = "CreatorId")]
-        public IList<Favorite> FavoriteList { get; set; }
+        ///// <summary>
+        ///// 用户的收藏夹列表
+        ///// </summary>
+        //[HasMany(ColumnKey = "CreatorId")]
+        //public IList<Favorite> FavoriteList { get; set; }
 
         #endregion
 

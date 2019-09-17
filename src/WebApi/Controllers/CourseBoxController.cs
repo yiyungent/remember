@@ -24,41 +24,55 @@ namespace WebApi.Controllers
     public class CourseBoxController : ApiController
     {
         #region Get: 获取指定ID的课程信息
+        [NeedAuth]
         public ResponseData Get(int id)
         {
             ResponseData responseData = null;
-            CourseBoxService courseBoxService = Container.Instance.Resolve<CourseBoxService>();
-            if (courseBoxService.Exist(id))
+            Learner_CourseBox learner_CourseBox = Container.Instance.Resolve<Learner_CourseBoxService>().Query(new List<ICriterion>
             {
-                CourseBox dbModel = courseBoxService.GetEntity(id);
+                Expression.And(
+                 Expression.Eq("Learner.ID", ((UserIdentity)User.Identity).ID),
+                 Expression.Eq("CourseBox.ID", id)
+                 )
+            }).FirstOrDefault();
+            if (learner_CourseBox != null)
+            {
+                CourseBox courseBox = learner_CourseBox.CourseBox;
                 CourseBoxViewModel viewModel = new CourseBoxViewModel()
                 {
-                    ID = dbModel.ID,
-                    Name = dbModel.Name,
-                    Description = dbModel.Description,
-                    CreateTime = dbModel.CreateTime.ToString("yyyy-MM-dd"),
-                    StartTime = dbModel.StartTime.ToString("yyyy-MM-dd"),
-                    EndTime = dbModel.EndTime.ToString("yyyy-MM-dd"),
-                    IsOpen = dbModel.IsOpen,
-                    LastUpdateTime = dbModel.LastUpdateTime.ToString("yyyy-MM-dd HH:mm"),
-                    LearnDay = dbModel.LearnDay,
-                    PicUrl = dbModel.PicUrl,
+                    ID = courseBox.ID,
+                    Name = courseBox.Name,
+                    Description = courseBox.Description,
+                    CreateTime = courseBox.CreateTime.ToTimeStamp13(),
+                    StartTime = courseBox.StartTime.ToTimeStamp13(),
+                    EndTime = courseBox.EndTime.ToTimeStamp13(),
+                    IsOpen = courseBox.IsOpen,
+                    LastUpdateTime = courseBox.LastUpdateTime.ToTimeStamp13(),
+                    LearnDay = courseBox.LearnDay,
+                    PicUrl = courseBox.PicUrl,
                     Creator = new Models.UserInfoVM.UserInfoViewModel
                     {
-                        ID = dbModel.Creator.ID,
-                        UserName = dbModel.Creator.UserName,
-                        Name = dbModel.Creator.Name,
-                        Avatar = dbModel.Creator.Avatar
+                        ID = courseBox.Creator.ID,
+                        UserName = courseBox.Creator.UserName,
+                        Name = courseBox.Creator.Name,
+                        Avatar = courseBox.Creator.Avatar
                     },
+                    JoinTime = learner_CourseBox.JoinTime.ToTimeStamp13(),
+                    LastAccessCourseInfo = new CourseBoxViewModel.CourseInfoViewModel
+                    {
+                        ID = learner_CourseBox.LasAccesstCourseInfo.ID,
+                        Page = learner_CourseBox.LasAccesstCourseInfo.Page,
+                        Title = learner_CourseBox.LasAccesstCourseInfo.Title
+                    },
+                    SpendTime = learner_CourseBox.SpendTime,
                     Pages = new List<CourseBoxViewModel.CourseInfoViewModel>()
                 };
-                foreach (var item in dbModel.CourseInfoList)
+                foreach (var item in courseBox.CourseInfoList)
                 {
                     viewModel.Pages.Add(new CourseBoxViewModel.CourseInfoViewModel
                     {
                         ID = item.ID,
                         Title = item.Title,
-                        Duration = item.Duration,
                         Page = item.Page
                     });
                 }
@@ -75,7 +89,7 @@ namespace WebApi.Controllers
                 responseData = new ResponseData
                 {
                     Code = -1,
-                    Message = "不存在此课程",
+                    Message = "不存在",
                 };
             }
 
@@ -96,8 +110,8 @@ namespace WebApi.Controllers
                     Name = model.Name,
                     Description = model.Description,
                     Creator = AccountManager.GetCurrentUserInfo(),
-                    StartTime = DateTime.Parse(model.StartTime),
-                    EndTime = DateTime.Parse(model.EndTime),
+                    StartTime = model.StartTime.ToDateTime13(),
+                    EndTime = model.EndTime.ToDateTime13(),
                     LearnDay = model.LearnDay,
                     CreateTime = DateTime.Now,
                     LastUpdateTime = DateTime.Now,
@@ -138,8 +152,8 @@ namespace WebApi.Controllers
                     CourseBox courseBox = courseBoxService.GetEntity(id);
                     courseBox.Name = model.Name;
                     courseBox.Description = model.Description;
-                    courseBox.StartTime = DateTime.Parse(model.StartTime);
-                    courseBox.EndTime = DateTime.Parse(model.EndTime);
+                    courseBox.StartTime = model.StartTime.ToDateTime13();
+                    courseBox.EndTime = model.EndTime.ToDateTime13();
                     courseBox.LearnDay = model.LearnDay;
                     courseBox.LastUpdateTime = DateTime.Now;
                     courseBox.IsOpen = model.IsOpen;
@@ -233,14 +247,36 @@ namespace WebApi.Controllers
         [NeedAuth]
         [Route("History")]
         [HttpGet]
-        public ResponseData History()
+        public ResponseData History(int pageNum = 1, int pageSize = 20)
         {
             ResponseData responseData = null;
             try
             {
-                HistoryViewModel viewModel = new HistoryViewModel
-                {
+                IList<HistoryViewModel> data = new List<HistoryViewModel>();
 
+                IList<Learner_CourseBox> learner_CourseBoxes = Container.Instance.Resolve<Learner_CourseBoxService>().Query(new List<ICriterion>
+                {
+                    Expression.Eq("Learner.ID", ((UserIdentity)User.Identity).ID)
+                }).Skip(pageNum * pageSize).Take(pageSize).ToList();
+
+                if (learner_CourseBoxes != null && learner_CourseBoxes.Count >= 1)
+                {
+                    CourseInfo lastAccessCourseInfo = learner_CourseBoxes.FirstOrDefault().LasAccesstCourseInfo;
+
+                    foreach (var item in learner_CourseBoxes)
+                    {
+                        HistoryViewModel viewModel = new HistoryViewModel();
+                        viewModel.
+                        data.Add();
+                    }
+                }
+
+
+                responseData = new ResponseData
+                {
+                    Code = 1,
+                    Message = "获取历史记录成功",
+                    Data = data
                 };
             }
             catch (Exception ex)
@@ -250,6 +286,23 @@ namespace WebApi.Controllers
                     Code = -1,
                     Message = "获取历史记录失败"
                 };
+            }
+
+            return responseData;
+        }
+        #endregion
+
+        #region 课程内所有课件详细历史记录
+        [NeedAuth]
+        public ResponseData HistoryDetails(int courseBoxId)
+        {
+            ResponseData responseData = null;
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
             }
 
             return responseData;
@@ -355,40 +408,51 @@ namespace WebApi.Controllers
         #region 此课程盒的评论列表
         [HttpGet]
         [Route("CommentList")]
-        public ResponseData CommentList(int id)
+        public ResponseData CommentList(int id, int pageNum = 1, int pageSize = 20, int orderType = 1)
         {
             ResponseData responseData = null;
             try
             {
-                IList<CommentViewModel> viewList = new List<CommentViewModel>();
-                //CourseBoxCommentService courseBoxCommentService = Container.Instance.Resolve<CourseBoxCommentService>();
+                CommentListLoadViewModel viewModel = new CommentListLoadViewModel()
+                {
+                    Page = new CommentListLoadViewModel.PageViewModel
+                    {
+                        PageNum = pageNum,
+                        PageSize = pageSize
+                    },
+                    Comments = new List<CommentViewModel>()
+                };
+                CourseBox_CommentService courseBox_CommentService = Container.Instance.Resolve<CourseBox_CommentService>();
 
-                //IList<CourseBoxComment> dbList = courseBoxCommentService.Query(new List<ICriterion>
-                //{
-                //    Expression.Eq("CourseBox.ID", id)
-                //}).ToList();
-                //foreach (var item in dbList)
-                //{
-                //    viewList.Add(new CommentViewModel
-                //    {
-                //        ID = item.ID,
-                //        Content = item.Content,
-                //        CreateTime = item.CreateTime.ToString("yyyy-MM-dd HH:mm"),
-                //        Author = new Models.UserInfoVM.UserInfoViewModel
-                //        {
-                //            ID = item.Author.ID,
-                //            UserName = item.Author.UserName,
-                //            Name = item.Author.Name,
-                //            Avatar = item.Author.Avatar
-                //        }
-                //    });
-                //}
+                // 当前课程的所有评论
+                IList<Comment> comments = courseBox_CommentService.Query(new List<ICriterion>
+                {
+                    Expression.Eq("CourseBox.ID", id)
+                }).Select(m => m.Comment).ToList();
+
+                // 当前课程的一级评论
+                IList<Comment> firstLevelComments = comments.Where(m => m.Parent == null || m.Parent.ID == 0).ToList();
+
+                // 一级评论分页
+                if (orderType == 1)
+                {
+                    // 按热度(赞数-踩数) 从大到小 排序
+                    firstLevelComments = firstLevelComments.OrderByDescending(m => (m.LikeNum - m.DislikeNum)).Skip(pageNum * pageSize).Take(pageSize).ToList();
+                }
+                else if (orderType == 2)
+                {
+                    // 按时间-最新 排序
+                    firstLevelComments = firstLevelComments.OrderByDescending(m => m.CreateTime.ToTimeStamp10()).Skip(pageNum * pageSize).Take(pageSize).ToList();
+                }
+
+                // Comments
+                viewModel.Comments = CommentDBModelToViewModel(firstLevelComments);
 
                 responseData = new ResponseData
                 {
                     Code = 1,
                     Message = "success",
-                    Data = viewList
+                    Data = viewModel
                 };
             }
             catch (Exception ex)
@@ -504,7 +568,63 @@ namespace WebApi.Controllers
 
             return isILearn;
         }
-        #endregion 
+        #endregion
+
+        #region 递归加载评论回复楼中楼 (域模型->视图模型)
+        private IList<CommentViewModel> CommentDBModelToViewModel(IList<Comment> firstLevelComments)
+        {
+            IList<CommentViewModel> rtn = null;
+            foreach (var item in firstLevelComments)
+            {
+                CommentViewModel commentViewModel = new CommentViewModel();
+                commentViewModel.ID = item.ID;
+                commentViewModel.Content = item.Content;
+                commentViewModel.CreateTime = item.CreateTime.ToTimeStamp10();
+                commentViewModel.Author = new Models.UserInfoVM.UserInfoViewModel
+                {
+                    ID = item.Author.ID,
+                    UserName = item.Author.UserName,
+                    Name = item.Author.Name,
+                    Avatar = item.Author.Avatar
+                };
+                commentViewModel.ParentId = item.Parent?.ID ?? 0;
+                //有哪些评论回复了此条评论
+                if (item.Children != null && item.Children.Count >= 1)
+                {
+                    LoadCommentToViewModel(commentViewModel, item.Children);
+                }
+
+            }
+
+            return rtn;
+        }
+
+        private void LoadCommentToViewModel(CommentViewModel viewModel, IList<Comment> children)
+        {
+            viewModel.Children = new List<CommentViewModel>();
+            foreach (var item in children)
+            {
+                CommentViewModel vmItem = new CommentViewModel();
+                vmItem.ID = item.ID;
+                vmItem.Content = item.Content;
+                vmItem.CreateTime = item.CreateTime.ToTimeStamp10();
+                vmItem.Author = new Models.UserInfoVM.UserInfoViewModel
+                {
+                    ID = item.Author.ID,
+                    UserName = item.Author.UserName,
+                    Name = item.Author.Name,
+                    Avatar = item.Author.Avatar
+                };
+                vmItem.ParentId = item.Parent?.ID ?? 0;
+                if (item.Children != null && item.Children.Count >= 1)
+                {
+                    LoadCommentToViewModel(vmItem, item.Children);
+                }
+
+                viewModel.Children.Add(vmItem);
+            }
+        }
+        #endregion
 
         #endregion
     }

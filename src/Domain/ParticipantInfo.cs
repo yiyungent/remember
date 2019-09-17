@@ -11,6 +11,7 @@ namespace Domain
     /// 实体类：参与者信息
     /// </summary>
     [ActiveRecord]
+    [Serializable]
     public class ParticipantInfo : BaseEntity<ParticipantInfo>
     {
         #region Properties
