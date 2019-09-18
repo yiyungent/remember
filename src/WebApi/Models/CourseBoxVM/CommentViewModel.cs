@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using WebApi.Models.UserInfoVM;
 
 namespace WebApi.Models.CourseBoxVM
 {
@@ -13,7 +12,7 @@ namespace WebApi.Models.CourseBoxVM
         public string Content { get; set; }
 
         /// <summary>
-        /// Unix时间戳
+        /// js时间戳
         /// </summary>
         public long CreateTime { get; set; }
 
@@ -36,7 +35,7 @@ namespace WebApi.Models.CourseBoxVM
         /// <summary>
         /// 作者
         /// </summary>
-        public UserInfoViewModel Author { get; set; }
+        public AuthorViewModel Author { get; set; }
 
         /// <summary>
         /// 此条评论回复某条评论的ID
@@ -49,6 +48,17 @@ namespace WebApi.Models.CourseBoxVM
         /// 没有评论回复此条评论，则为 null
         /// </summary>
         public IList<CommentViewModel> Children { get; set; }
+
+        public sealed class AuthorViewModel
+        {
+            public int ID { get; set; }
+
+            public string UserName { get; set; }
+
+            public string Desc { get; set; }
+
+            public string Avatar { get; set; }
+        }
     }
 
     public class CommentListLoadViewModel

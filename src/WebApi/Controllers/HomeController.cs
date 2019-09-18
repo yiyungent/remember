@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using WebApi.Models.Common;
 using WebApi.Models.CourseBoxVM;
 using WebApi.Models.HomeVM;
 
@@ -24,11 +25,11 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("RankingCourseBox")]
-        public IList<RankingCourseBoxViewModel> RankingCourseBox(int number)
+        public ResponseData RankingCourseBox(int number)
         {
+            ResponseData responseData = null;
             IList<RankingCourseBoxViewModel> viewModel = new List<RankingCourseBoxViewModel>();
-            Learner_CourseBoxService courseBoxTableService = Container.Instance.Resolve<Learner_CourseBoxService>();
-            IList<Learner_CourseBox> allCourseBoxTable = courseBoxTableService.GetAll().Where(m => m.CourseBox.IsOpen = true).ToList();
+            IList<Learner_CourseBox> allCourseBoxTable = Container.Instance.Resolve<Learner_CourseBoxService>().GetAll().Where(m => m.CourseBox.IsOpen = true).ToList();
             var query = from a in allCourseBoxTable
                         group a by a.CourseBox.ID
                       into g
@@ -64,7 +65,14 @@ namespace WebApi.Controllers
                 });
             }
 
-            return viewModel;
+            responseData = new ResponseData
+            {
+                Code = 1,
+                Message = "成功获取热门课程",
+                Data = viewModel
+            };
+
+            return responseData;
         }
         #endregion
     }

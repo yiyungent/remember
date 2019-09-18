@@ -5,7 +5,7 @@ using Service;
 
 namespace Component
 {
-    public class CourseInfoComponent : BaseComponent<CourseInfo, CourseInfoManager>, CourseInfoService
+    public class VideoInfoComponent : BaseComponent<VideoInfo, VideoInfoManager>, VideoInfoService
     {
     }
 }

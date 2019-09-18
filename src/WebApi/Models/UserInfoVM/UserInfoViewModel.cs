@@ -13,7 +13,7 @@ namespace WebApi.Models.UserInfoVM
 
         public string UserName { get; set; }
 
-        public string Description { get; set; }
+        public string Desc { get; set; }
 
         public string Avatar { get; set; }
     }

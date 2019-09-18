@@ -30,8 +30,9 @@ namespace WebApi.Controllers
     {
         #region Get: 获取当前登录账号信息
         [NeedAuth]
-        public UserInfoViewModel Get()
+        public ResponseData Get()
         {
+            ResponseData responseData = null;
             UserInfoViewModel viewModel = null;
 
             UserInfo userInfo = AccountManager.GetCurrentUserInfo();
@@ -48,13 +49,18 @@ namespace WebApi.Controllers
                 {
                     ID = userInfo.ID,
                     UserName = userInfo.UserName,
-                    Name = userInfo.Name,
-                    Description = userInfo.Description,
+                    Desc = userInfo.Description,
                     Avatar = avatarUrl
                 };
             }
+            responseData = new ResponseData
+            {
+                Code = 1,
+                Message = "成功获取当前登录账号信息",
+                Data = viewModel
+            };
 
-            return viewModel;
+            return responseData;
         }
         #endregion
 
@@ -99,15 +105,14 @@ namespace WebApi.Controllers
         #region 注册
         [HttpPost]
         [Route("Register")]
-        public RegisterResult Register([FromBody]RegisterViewModel viewModel)
+        public ResponseData Register([FromBody]RegisterViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                UserInfoService userInfoService = Container.Instance.Resolve<UserInfoService>();
-                bool isExist = userInfoService.Exist(viewModel.UserName?.Trim());
+                bool isExist = Container.Instance.Resolve<UserInfoService>().Exist(viewModel.UserName?.Trim());
                 if (!isExist)
                 {
-                    userInfoService.Create(new UserInfo()
+                    Container.Instance.Resolve<UserInfoService>().Create(new UserInfo()
                     {
                         UserName = viewModel.UserName,
                         Password = EncryptHelper.MD5Encrypt32(viewModel.Password),
@@ -115,7 +120,7 @@ namespace WebApi.Controllers
                         Email = viewModel.Email?.Trim()
                     });
 
-                    return new RegisterResult()
+                    return new ResponseData()
                     {
                         Code = 1,
                         Message = "注册成功"
@@ -123,7 +128,7 @@ namespace WebApi.Controllers
                 }
                 else
                 {
-                    return new RegisterResult()
+                    return new ResponseData()
                     {
                         Code = -1,
                         Message = "该用户名已被注册"
@@ -131,7 +136,7 @@ namespace WebApi.Controllers
                 }
             }
 
-            return new RegisterResult()
+            return new ResponseData()
             {
                 Code = -2,
                 Message = "输入项有误"
@@ -142,17 +147,16 @@ namespace WebApi.Controllers
         #region 登录
         [HttpPost]
         [Route("Login")]
-        public LoginResult Login([FromBody]LoginViewModel viewModel)
+        public ResponseData Login([FromBody]LoginViewModel viewModel)
         {
             string loginAccount = viewModel.LoginAccount.Trim();
             if (ModelState.IsValid)
             {
-                UserInfoService userInfoService = Container.Instance.Resolve<UserInfoService>();
                 UserInfo userInfo = null;
                 if (IsEmail(loginAccount))
                 {
                     // 邮箱
-                    userInfo = userInfoService.Query(new List<ICriterion>
+                    userInfo = Container.Instance.Resolve<UserInfoService>().Query(new List<ICriterion>
                     {
                         Expression.And(
                             Expression.Eq("Email", loginAccount),
@@ -163,7 +167,7 @@ namespace WebApi.Controllers
                 else if (IsPhone(loginAccount))
                 {
                     // 手机号
-                    userInfo = userInfoService.Query(new List<ICriterion>
+                    userInfo = Container.Instance.Resolve<UserInfoService>().Query(new List<ICriterion>
                     {
                         Expression.And(
                             Expression.Eq("Phone", loginAccount),
@@ -174,7 +178,7 @@ namespace WebApi.Controllers
                 else
                 {
                     // 用户名
-                    userInfo = userInfoService.Query(new List<ICriterion>
+                    userInfo = Container.Instance.Resolve<UserInfoService>().Query(new List<ICriterion>
                     {
                         Expression.And(
                             Expression.Eq("UserName", loginAccount),
@@ -185,11 +189,11 @@ namespace WebApi.Controllers
                 // 账号密码是否正确
                 if (userInfo != null)
                 {
-                    return new LoginResult
+                    return new ResponseData
                     {
                         Code = 1,
                         Message = "登录成功",
-                        ApiToken = JwtHelper.Encode(new JWTokenViewModel
+                        Data = JwtHelper.Encode(new JWTokenViewModel
                         {
                             ID = userInfo.ID,
                             UserName = userInfo.UserName,
@@ -200,7 +204,7 @@ namespace WebApi.Controllers
                 }
                 else
                 {
-                    return new LoginResult
+                    return new ResponseData
                     {
                         Code = -2,
                         Message = "账号或密码错误"
@@ -209,7 +213,7 @@ namespace WebApi.Controllers
             }
             else
             {
-                return new LoginResult
+                return new ResponseData
                 {
                     Code = -1,
                     Message = "输入项有误"
@@ -269,8 +273,7 @@ namespace WebApi.Controllers
                 // 更改数据库中用户头像
                 UserInfo userInfo = AccountManager.GetCurrentUserInfo();
                 userInfo.Avatar = ":WebApiSite:" + "/Upload/avatars/" + User.Identity.Name + "/" + saveFileName;
-                UserInfoService userInfoService = Container.Instance.Resolve<UserInfoService>();
-                userInfoService.Edit(userInfo);
+                Container.Instance.Resolve<UserInfoService>().Edit(userInfo);
 
                 // 全部更新成功后，删除以往头像文件
                 DirectoryInfo avatarDic = new DirectoryInfo(basePath);
@@ -316,16 +319,15 @@ namespace WebApi.Controllers
             try
             {
                 UserInfo userInfo = AccountManager.GetCurrentUserInfo();
-                UserInfoService userInfoService = Container.Instance.Resolve<UserInfoService>();
                 if (!string.IsNullOrEmpty(model.Name))
                 {
                     userInfo.Name = model.Name;
                 }
-                if (!string.IsNullOrEmpty(model.Description))
+                if (!string.IsNullOrEmpty(model.Desc))
                 {
-                    userInfo.Description = model.Description;
+                    userInfo.Description = model.Desc;
                 }
-                userInfoService.Edit(userInfo);
+                Container.Instance.Resolve<UserInfoService>().Edit(userInfo);
 
                 SettingService settingService = Container.Instance.Resolve<SettingService>();
                 string webApiSite = settingService.Query(new List<ICriterion>
@@ -343,7 +345,7 @@ namespace WebApi.Controllers
                         ID = userInfo.ID,
                         UserName = userInfo.UserName,
                         Name = userInfo.Name,
-                        Description = userInfo.Description,
+                        Desc = userInfo.Description,
                         Avatar = avatarUrl
                     }
                 };
@@ -360,6 +362,9 @@ namespace WebApi.Controllers
             return responseData;
         }
         #endregion
+
+
+
 
         #region Helper
 
@@ -380,7 +385,6 @@ namespace WebApi.Controllers
         }
 
         #endregion
-
 
     }
 }

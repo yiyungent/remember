@@ -25,7 +25,7 @@ namespace WebApi.Models.CourseBoxVM
         /// <summary>
         /// 创建者
         /// </summary>
-        public UserInfoVM.UserInfoViewModel Creator { get; set; }
+        public CreatorViewModel Creator { get; set; }
 
         /// <summary>
         /// 封面图
@@ -77,30 +77,30 @@ namespace WebApi.Models.CourseBoxVM
         /// <summary>
         /// 课件列表
         /// </summary>
-        public IList<CourseInfoViewModel> CourseInfos { get; set; }
+        public IList<VideoInfoViewModel> VideoInfos { get; set; }
 
         #region 需登录
 
         /// <summary>
-        /// 最新访问的课件
+        /// 最新播放的视频课件
         /// </summary>
-        public CourseInfoViewModel LastAccessCourseInfo { get; set; }
+        public VideoInfoViewModel LastPlayVideoInfo { get; set; }
 
         /// <summary>
         /// 加入学习的时间
-        /// js时间戳
+        /// js时间戳(毫秒)
         /// </summary>
         public long JoinTime { get; set; }
 
         #endregion
 
         /// <summary>
-        /// 课件
+        /// 视频课件
         /// </summary>
-        public sealed class CourseInfoViewModel
+        public sealed class VideoInfoViewModel
         {
             /// <summary>
-            /// 课件ID
+            /// 视频课件ID
             /// </summary>
             public int ID { get; set; }
 
@@ -115,9 +115,9 @@ namespace WebApi.Models.CourseBoxVM
             public string Title { get; set; }
 
             /// <summary>
-            /// 课件内容
+            /// 视频播放url地址
             /// </summary>
-            public string Content { get; set; }
+            public string PlayUrl { get; set; }
 
             #region 需登录
             /// <summary>
@@ -141,6 +141,17 @@ namespace WebApi.Models.CourseBoxVM
             public int ShareNum { get; set; }
             public int CommentNum { get; set; }
             public int ViewNum { get; set; }
+        }
+
+        public sealed class CreatorViewModel
+        {
+            public int ID { get; set; }
+
+            public string UserName { get; set; }
+
+            public string Desc { get; set; }
+
+            public string Avatar { get; set; }
         }
     }
 }

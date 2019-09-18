@@ -54,8 +54,9 @@ namespace WebUI.Controllers
             InitCardBox();
             InitCardInfo();
             InitCourseBox();
-            InitCourseBoxTable();
-            InitCourseInfo();
+            InitLearner_CourseBox();
+            InitVideoInfo();
+            InitLearner_VideoInfo();
         }
         #endregion
 
@@ -684,35 +685,34 @@ namespace WebUI.Controllers
         }
         #endregion
 
-        #region 初始化课程盒关系表
-        private void InitCourseBoxTable()
+        #region 初始化Learner_CourseBox表
+        private void InitLearner_CourseBox()
         {
             try
             {
-                ShowMessage("初始化课程盒关系表");
+                ShowMessage("初始化Learner_CourseBox表");
 
-                CourseBoxService courseBoxService = Container.Instance.Resolve<CourseBoxService>();
-                Learner_CourseBoxService courseBoxTableService = Container.Instance.Resolve<Learner_CourseBoxService>();
+                IList<CourseBox> allCourseBox = Container.Instance.Resolve<CourseBoxService>().GetAll();
 
-                UserInfo userInfo = Container.Instance.Resolve<UserInfoService>().GetEntity(1);
+                IList<UserInfo> allUserInfo = Container.Instance.Resolve<UserInfoService>().GetAll();
 
-                // 获取 10 们课程
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < allCourseBox.Count; i++)
                 {
-                    CourseBox courseBox = courseBoxService.GetEntity(i + 1);
                     // 此课程的学习人数
-                    int learnNum = 10 - i;
+                    int learnNum = allUserInfo.Count;
                     for (int j = 0; j < learnNum; j++)
                     {
-                        Learner_CourseBox courseBoxTable = new Learner_CourseBox
+                        CourseBox courseBox = Container.Instance.Resolve<CourseBoxService>().GetEntity(i + 1);
+
+                        Learner_CourseBox learner_CourseBox = new Learner_CourseBox
                         {
                             CourseBox = courseBox,
                             JoinTime = DateTime.Now.AddDays(j + 1),
-                            Learner = userInfo,
+                            Learner = allUserInfo[new Random().Next(0, allUserInfo.Count - 1)],
                             SpendTime = 100,
                         };
 
-                        courseBoxTableService.Create(courseBoxTable);
+                        Container.Instance.Resolve<Learner_CourseBoxService>().Create(learner_CourseBox);
                     }
                 }
 
@@ -725,8 +725,8 @@ namespace WebUI.Controllers
         }
         #endregion
 
-        #region 初始化课件
-        private void InitCourseInfo()
+        #region 初始化视频课件
+        private void InitVideoInfo()
         {
             try
             {
@@ -739,17 +739,84 @@ namespace WebUI.Controllers
                     // 每门课程 10课件
                     for (int j = 0; j < 10; j++)
                     {
-                        CourseInfo courseInfo = new CourseInfo();
+                        VideoInfo courseInfo = new VideoInfo();
                         courseInfo.Title = "视频标题" + (j + 1);
-                        courseInfo.Content = $"/static/upload/videos/" + (j + 1) + ".mp4";
+                        courseInfo.PlayUrl = $"/static/upload/videos/" + (j + 1) + ".mp4";
                         courseInfo.Page = (j + 1);
-                        courseInfo.CourseInfoType = CourseInfoType.Video;
                         courseInfo.CourseBox = courseBox;
 
 
-                        Container.Instance.Resolve<CourseInfoService>().Create(courseInfo);
+                        Container.Instance.Resolve<VideoInfoService>().Create(courseInfo);
                     }
                 }
+
+                ShowMessage("成功");
+            }
+            catch (Exception)
+            {
+                ShowMessage("失败");
+            }
+        }
+        #endregion
+
+        #region 初始化Learner_VideoInfo表
+        private void InitLearner_VideoInfo()
+        {
+            try
+            {
+                ShowMessage("初始化Learner_VideoInfo表");
+
+                IList<CourseBox> allCourseBox = Container.Instance.Resolve<CourseBoxService>().GetAll();
+                IList<Learner_CourseBox> allLearner_CourseBox = Container.Instance.Resolve<Learner_CourseBoxService>().GetAll();
+
+                for (int i = 0; i < allLearner_CourseBox.Count; i++)
+                {
+                    // 当前 学习者-课程
+                    Learner_CourseBox learner_CourseBox = allLearner_CourseBox[i];
+
+                    // 为当前学习者所学的这门课程中的所有视频 加上学习播放记录
+                    for (int j = 0; j < learner_CourseBox.CourseBox.VideoInfos.Count; j++)
+                    {
+                        VideoInfo videoInfo = learner_CourseBox.CourseBox.VideoInfos[j];
+
+                        Container.Instance.Resolve<Learner_VideoInfoService>().Create(new Learner_VideoInfo
+                        {
+                            Learner = learner_CourseBox.Learner,
+                            VideoInfo = videoInfo,
+                            LastAccessIp = "127.0.0." + new Random().Next(0, 255),
+                            LastPlayAt = 60000,
+                            LastPlayTime = DateTime.Now.AddDays(new Random().Next(0, 1000)).AddHours(new Random().Next(0, 60)),
+                            ProgressAt = 670000
+                        });
+                    }
+
+                    // 找出当前这学习者对于这门课程中的所有视频 - 哪个视频是最近观看的 LastPlayTime 最大 - 为其更新为 对于学习者-这门课程而言最新课程
+                    IList<VideoInfo> currentCourseBox_All_VideoInfo = learner_CourseBox.CourseBox.VideoInfos;
+                    long lastNewPlayTime = 0;
+                    int lastNewPlayTime_MapTo_VideoInfoId = 0;
+                    for (int j = 0; j < currentCourseBox_All_VideoInfo.Count; j++)
+                    {
+                        VideoInfo videoInfo = currentCourseBox_All_VideoInfo[j];
+
+                        Learner_VideoInfo learner_VideoInfo = Container.Instance.Resolve<Learner_VideoInfoService>().Query(new List<ICriterion>
+                        {
+                            Expression.And(
+                                    Expression.Eq("Learner.ID", learner_CourseBox.Learner.ID),
+                                    Expression.Eq("VideoInfo.ID", videoInfo.ID)
+                                )
+                        }).FirstOrDefault();
+
+                        if (learner_VideoInfo.LastPlayTime.ToTimeStamp13() > lastNewPlayTime)
+                        {
+                            lastNewPlayTime = learner_VideoInfo.LastPlayTime.ToTimeStamp13();
+                            lastNewPlayTime_MapTo_VideoInfoId = learner_VideoInfo.VideoInfo.ID;
+                        }
+                    }
+
+                    learner_CourseBox.LastPlayVideoInfo = new VideoInfo { ID = lastNewPlayTime_MapTo_VideoInfoId };
+                    Container.Instance.Resolve<Learner_CourseBoxService>().Edit(learner_CourseBox);
+                }
+
 
                 ShowMessage("成功");
             }

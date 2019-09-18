@@ -3,7 +3,7 @@ using Service.Base;
 
 namespace Service
 {
-    public interface CourseInfoService : BaseService<CourseInfo>
+    public interface VideoInfoService : BaseService<VideoInfo>
     {
     }
 }

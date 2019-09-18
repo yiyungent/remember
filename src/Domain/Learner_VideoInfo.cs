@@ -7,11 +7,11 @@ using System.ComponentModel.DataAnnotations;
 namespace Domain
 {
     /// <summary>
-    /// 实体类：学习者-课件
+    /// 实体类：学习者-视频课件
     /// </summary>
     [ActiveRecord]
     [Serializable]
-    public class Learner_CourseInfo : BaseEntity<Learner_CourseInfo>
+    public class Learner_VideoInfo : BaseEntity<Learner_VideoInfo>
     {
         #region Properties
 
@@ -22,24 +22,23 @@ namespace Domain
         public string LastAccessIp { get; set; }
 
         /// <summary>
-        /// 最后访问时间
+        /// 最后播放时间
+        /// eg: 我最后是在 2019-12-12 22:21 时播放了此视频
         /// </summary>
         [Property(NotNull = false)]
-        public DateTime LastAccessTime { get; set; }
+        public DateTime LastPlayTime { get; set; }
 
         /// <summary>
         /// 此学习者在此课件-学习进度
         /// <para>学习进度：视频调整播放位置，以前看完过此视频，则学习进度依然为满格状态，不变，而最新播放位置则不同</para>
         /// 毫秒
-        /// 
-        /// 视频：视频播放位置
-        /// 帖子：记录看时间
+        /// 最大的视频播放位置
         /// </summary>
         [Property(NotNull = false)]
         public long ProgressAt { get; set; }
 
         /// <summary>
-        /// 此学习者在此课件-最新播放位置
+        /// 此学习者在此视频课件-最新播放位置
         /// 毫秒
         /// </summary>
         [Property(NotNull = false)]
@@ -54,9 +53,9 @@ namespace Domain
             get
             {
                 float percent = 0;
-                if (this.CourseInfo != null && this.CourseInfo.Duration != 0)
+                if (this.VideoInfo != null && this.VideoInfo.Duration != 0)
                 {
-                    percent = (float)ProgressAt / (float)this.CourseInfo.Duration;
+                    percent = (float)ProgressAt / (float)this.VideoInfo.Duration;
                 }
 
                 return percent;
@@ -74,10 +73,10 @@ namespace Domain
         public UserInfo Learner { get; set; }
 
         /// <summary>
-        /// 课件
+        /// 视频课件
         /// </summary>
-        [BelongsTo(Column = "CourseInfoId")]
-        public CourseInfo CourseInfo { get; set; }
+        [BelongsTo(Column = "VideoInfoId")]
+        public VideoInfo VideoInfo { get; set; }
 
         #endregion
     }

@@ -3,7 +3,7 @@ using Manager.Base;
 
 namespace Manager
 {
-    public class CourseInfoManager : BaseManager<CourseInfo>
+    public class VideoInfoManager : BaseManager<VideoInfo>
     {
     }
 }

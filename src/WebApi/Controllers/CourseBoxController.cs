@@ -49,11 +49,10 @@ namespace WebApi.Controllers
                     LastUpdateTime = courseBox.LastUpdateTime.ToTimeStamp13(),
                     LearnDay = courseBox.LearnDay,
                     PicUrl = courseBox.PicUrl,
-                    Creator = new Models.UserInfoVM.UserInfoViewModel
+                    Creator = new CourseBoxViewModel.CreatorViewModel
                     {
                         ID = courseBox.Creator.ID,
                         UserName = courseBox.Creator.UserName,
-                        Name = courseBox.Creator.Name,
                         Avatar = creatorAvatar
                     },
                     Stat = new CourseBoxViewModel.StatViewModel
@@ -65,17 +64,17 @@ namespace WebApi.Controllers
                         ShareNum = courseBox.ShareNum,
                         ViewNum = 21
                     },
-                    CourseInfos = new List<CourseBoxViewModel.CourseInfoViewModel>()
+                    VideoInfos = new List<CourseBoxViewModel.VideoInfoViewModel>()
                 };
-                IList<CourseInfo> courseInfos = courseBox.CourseInfoList.OrderBy(m => m.Page).ToList();
+                IList<VideoInfo> courseInfos = courseBox.VideoInfos.OrderBy(m => m.Page).ToList();
                 foreach (var item in courseInfos)
                 {
-                    viewModel.CourseInfos.Add(new CourseBoxViewModel.CourseInfoViewModel
+                    viewModel.VideoInfos.Add(new CourseBoxViewModel.VideoInfoViewModel
                     {
                         ID = item.ID,
                         Title = item.Title,
                         Page = item.Page,
-                        Content = item.Content
+                        PlayUrl = item.PlayUrl
                     });
                 }
 
@@ -91,30 +90,30 @@ namespace WebApi.Controllers
                     }).FirstOrDefault();
                     if (learner_CourseBox != null)
                     {
-                        Learner_CourseInfo learner_LastAccessCourseInfo = Container.Instance.Resolve<Learner_CourseInfoService>().GetEntity(learner_CourseBox.LasAccesstCourseInfo.ID);
+                        Learner_VideoInfo learner_LastAccessVideoInfo = Container.Instance.Resolve<Learner_VideoInfoService>().GetEntity(learner_CourseBox.LastPlayVideoInfo.ID);
                         viewModel.JoinTime = learner_CourseBox.JoinTime.ToTimeStamp13();
-                        viewModel.LastAccessCourseInfo = new CourseBoxViewModel.CourseInfoViewModel
+                        viewModel.LastPlayVideoInfo = new CourseBoxViewModel.VideoInfoViewModel
                         {
-                            ID = learner_CourseBox.LasAccesstCourseInfo.ID,
-                            Page = learner_CourseBox.LasAccesstCourseInfo.Page,
-                            Title = learner_CourseBox.LasAccesstCourseInfo.Title,
-                            LastPlayAt = learner_LastAccessCourseInfo.LastPlayAt,
-                            ProgressAt = learner_LastAccessCourseInfo.ProgressAt
+                            ID = learner_CourseBox.LastPlayVideoInfo.ID,
+                            Page = learner_CourseBox.LastPlayVideoInfo.Page,
+                            Title = learner_CourseBox.LastPlayVideoInfo.Title,
+                            LastPlayAt = learner_LastAccessVideoInfo.LastPlayAt,
+                            ProgressAt = learner_LastAccessVideoInfo.ProgressAt
                         };
                         viewModel.SpendTime = learner_CourseBox.SpendTime;
 
-                        for (int i = 0; i < viewModel.CourseInfos.Count; i++)
+                        for (int i = 0; i < viewModel.VideoInfos.Count; i++)
                         {
-                            int courseInfoId = viewModel.CourseInfos[i].ID;
-                            Learner_CourseInfo learner_CourseInfo = Container.Instance.Resolve<Learner_CourseInfoService>().Query(new List<ICriterion>
+                            int videoInfoId = viewModel.VideoInfos[i].ID;
+                            Learner_VideoInfo learner_VideoInfo = Container.Instance.Resolve<Learner_VideoInfoService>().Query(new List<ICriterion>
                             {
                                 Expression.And(
                                     Expression.Eq("Learner.ID", ((UserIdentity)User.Identity).ID ),
-                                    Expression.Eq("CourseInfo.ID", courseInfoId)
+                                    Expression.Eq("VideoInfo.ID", videoInfoId)
                                 )
                             }).FirstOrDefault();
-                            viewModel.CourseInfos[i].LastPlayAt = learner_CourseInfo.LastPlayAt;
-                            viewModel.CourseInfos[i].ProgressAt = learner_CourseInfo.ProgressAt;
+                            viewModel.VideoInfos[i].LastPlayAt = learner_VideoInfo.LastPlayAt;
+                            viewModel.VideoInfos[i].ProgressAt = learner_VideoInfo.ProgressAt;
                         }
                     }
                 }
@@ -144,15 +143,14 @@ namespace WebApi.Controllers
         [NeedAuth]
         public ResponseData Post(CourseBoxViewModel model)
         {
-            CourseBoxService courseBoxService = Container.Instance.Resolve<CourseBoxService>();
             ResponseData responseData = null;
             try
             {
-                courseBoxService.Create(new CourseBox
+                Container.Instance.Resolve<CourseBoxService>().Create(new CourseBox
                 {
                     Name = model.Name,
                     Description = model.Desc,
-                    Creator = AccountManager.GetCurrentUserInfo(),
+                    Creator = new UserInfo { ID = ((UserIdentity)User).ID },
                     StartTime = model.StartTime.ToDateTime13(),
                     EndTime = model.EndTime.ToDateTime13(),
                     LearnDay = model.LearnDay,
@@ -234,9 +232,9 @@ namespace WebApi.Controllers
         }
         #endregion
 
-        #region 课程内所有课件详细历史记录
+        #region 此课程内-所有视频课件-详细历史记录
         [NeedAuth]
-        public ResponseData HistoryDetails(int courseBoxId)
+        public ResponseData History(int courseBoxId)
         {
             ResponseData responseData = null;
             try
@@ -255,16 +253,16 @@ namespace WebApi.Controllers
         [HttpGet]
         [NeedAuth]
         [Route("ILearnCourseBoxList")]
-        public IList<CourseBoxViewModel> ILearnCourseBoxList()
+        public ResponseData ILearnCourseBoxList()
         {
+            ResponseData responseData = null;
             IList<CourseBoxViewModel> viewModel = new List<CourseBoxViewModel>();
 
             if (User.Identity != null)
             {
-                Learner_CourseBoxService courseBoxTableService = Container.Instance.Resolve<Learner_CourseBoxService>();
-                IList<Learner_CourseBox> iLearnCourseBoxTableList = courseBoxTableService.Query(new List<ICriterion>
+                IList<Learner_CourseBox> iLearnCourseBoxTableList = Container.Instance.Resolve<Learner_CourseBoxService>().Query(new List<ICriterion>
                 {
-                    Expression.Eq("Reader.ID", ((UserIdentity)User.Identity).ID)
+                    Expression.Eq("Learner.ID", ((UserIdentity)User.Identity).ID)
                 }).OrderByDescending(m => m.JoinTime).ToList();
 
                 //IList<CourseBox> iCreateCourseBoxList = _courseBoxService.Query(new List<ICriterion>
@@ -288,26 +286,33 @@ namespace WebApi.Controllers
                         LastUpdateTime = item.LastUpdateTime.ToTimeStamp13(),
                         LearnDay = item.LearnDay,
                         PicUrl = item.PicUrl,
-                        Creator = new Models.UserInfoVM.UserInfoViewModel
+                        Creator = new CourseBoxViewModel.CreatorViewModel
                         {
                             ID = item.Creator.ID,
                             UserName = item.Creator.UserName,
-                            Name = item.Creator.Name,
                             Avatar = item.Creator.Avatar
                         }
                     });
                 }
+
+                responseData = new ResponseData
+                {
+                    Code = 1,
+                    Message = "成功获取 我学习的课程列表",
+                    Data = viewModel
+                };
             }
 
-            return viewModel;
+            return responseData;
         }
         #endregion
 
         #region 我创建的课程列表
         [HttpGet]
         [Route("ICreateCourseBoxList")]
-        public IList<CourseBoxViewModel> ICreateCourseBoxList()
+        public ResponseData ICreateCourseBoxList()
         {
+            ResponseData responseData = null;
             IList<CourseBoxViewModel> viewModel = new List<CourseBoxViewModel>();
 
             if (User.Identity != null)
@@ -332,18 +337,24 @@ namespace WebApi.Controllers
                         LastUpdateTime = item.LastUpdateTime.ToTimeStamp13(),
                         LearnDay = item.LearnDay,
                         PicUrl = item.PicUrl,
-                        Creator = new Models.UserInfoVM.UserInfoViewModel
+                        Creator = new CourseBoxViewModel.CreatorViewModel
                         {
                             ID = item.Creator.ID,
                             UserName = item.Creator.UserName,
-                            Name = item.Creator.Name,
                             Avatar = item.Creator.Avatar
                         }
                     });
                 }
+
+                responseData = new ResponseData
+                {
+                    Code = 1,
+                    Message = "成功获取 我创建的课程列表",
+                    Data = viewModel
+                };
             }
 
-            return viewModel;
+            return responseData;
         }
         #endregion
 
@@ -419,28 +430,41 @@ namespace WebApi.Controllers
             ResponseData responseData = null;
             try
             {
-                //CourseBoxCommentService courseBoxCommentService = Container.Instance.Resolve<CourseBoxCommentService>();
-                UserInfo author = new UserInfo
+                if (Container.Instance.Resolve<CourseBoxService>().Exist(id))
                 {
-                    ID = ((UserIdentity)User.Identity).ID
-                };
-                //courseBoxCommentService.Create(new CourseBoxComment
-                //{
-                //    Content = content,
-                //    CreateTime = DateTime.Now,
-                //    LastUpdateTime = DateTime.Now,
-                //    CourseBox = new CourseBox
-                //    {
-                //        ID = id
-                //    },
-                //    Author = author
-                //});
+                    // 评论课程  
+                    // 1. CourseBox.CommentNum + 1  当前课程 评论数 + 1 
+                    CourseBox courseBox = Container.Instance.Resolve<CourseBoxService>().GetEntity(id);
+                    courseBox.CommentNum = courseBox.CommentNum + 1;
 
-                responseData = new ResponseData
+                    Container.Instance.Resolve<CourseBoxService>().Edit(courseBox);
+
+                    // 2. CourseBox_Comment 插入一条记录
+                    UserInfo userInfo = new UserInfo
+                    {
+                        ID = ((UserIdentity)User.Identity).ID
+                    };
+                    Container.Instance.Resolve<CourseBox_CommentService>().Create(new CourseBox_Comment
+                    {
+                        Comment = new Comment
+                        {
+                            Author = userInfo,
+                            Content = content,
+                            CreateTime = DateTime.Now,
+                            LastUpdateTime = DateTime.Now
+                        },
+                        CourseBox = new CourseBox { ID = id }
+                    });
+                }
+                else
                 {
-                    Code = 1,
-                    Message = "评论成功"
-                };
+                    // 课程不存在
+                    responseData = new ResponseData
+                    {
+                        Code = -2,
+                        Message = "评论的课程不存在"
+                    };
+                }
             }
             catch (Exception ex)
             {
@@ -500,7 +524,7 @@ namespace WebApi.Controllers
             Learner_CourseBoxService courseBoxTableService = Container.Instance.Resolve<Learner_CourseBoxService>();
             IList<Learner_CourseBox> iLearnCourseBoxTableList = courseBoxTableService.Query(new List<ICriterion>
             {
-                Expression.Eq("Reader.ID", AccountManager.GetCurrentUserInfo().ID)
+                Expression.Eq("Learner.ID", AccountManager.GetCurrentUserInfo().ID)
             }).OrderByDescending(m => m.JoinTime).ToList();
             IList<CourseBox> iLearnCourseBoxList = iLearnCourseBoxTableList.Select(m => m.CourseBox).ToList();
             if (iLearnCourseBoxList.Select(m => m.ID).Contains(courseBoxId))
@@ -522,11 +546,10 @@ namespace WebApi.Controllers
                 commentViewModel.ID = item.ID;
                 commentViewModel.Content = item.Content;
                 commentViewModel.CreateTime = item.CreateTime.ToTimeStamp10();
-                commentViewModel.Author = new Models.UserInfoVM.UserInfoViewModel
+                commentViewModel.Author = new CommentViewModel.AuthorViewModel
                 {
                     ID = item.Author.ID,
                     UserName = item.Author.UserName,
-                    Name = item.Author.Name,
                     Avatar = item.Author.Avatar
                 };
                 commentViewModel.ParentId = item.Parent?.ID ?? 0;
@@ -550,11 +573,10 @@ namespace WebApi.Controllers
                 vmItem.ID = item.ID;
                 vmItem.Content = item.Content;
                 vmItem.CreateTime = item.CreateTime.ToTimeStamp10();
-                vmItem.Author = new Models.UserInfoVM.UserInfoViewModel
+                vmItem.Author = new CommentViewModel.AuthorViewModel
                 {
                     ID = item.Author.ID,
                     UserName = item.Author.UserName,
-                    Name = item.Author.Name,
                     Avatar = item.Author.Avatar
                 };
                 vmItem.ParentId = item.Parent?.ID ?? 0;

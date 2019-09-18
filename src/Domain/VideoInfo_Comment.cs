@@ -12,12 +12,12 @@ namespace Domain
     /// </summary>
     [ActiveRecord]
     [Serializable]
-    public class CourseInfo_Comment : BaseEntity<CourseInfo_Comment>
+    public class VideoInfo_Comment : BaseEntity<VideoInfo_Comment>
     {
         #region Relationships
 
-        [BelongsTo(Column = "CourseInfoId")]
-        public CourseInfo CourseInfo { get; set; }
+        [BelongsTo(Column = "VideoInfoId")]
+        public VideoInfo VideoInfo { get; set; }
 
         [BelongsTo(Column = "CommentId")]
         public Comment Comment { get; set; }

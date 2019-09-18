@@ -7,11 +7,11 @@ using System.ComponentModel.DataAnnotations;
 namespace Domain
 {
     /// <summary>
-    /// 课件
+    /// 视频课件
     /// </summary>
     [ActiveRecord]
     [Serializable]
-    public class CourseInfo : BaseEntity<CourseInfo>
+    public class VideoInfo : BaseEntity<VideoInfo>
     {
         #region Properities
 
@@ -22,12 +22,16 @@ namespace Domain
         public string Title { get; set; }
 
         /// <summary>
-        /// 内容
-        /// 视频:视频url
-        /// 富文本贴：内容
+        /// 视频: 视频url
         /// </summary>
-        [Property(Length = 3000, NotNull = true)]
-        public string Content { get; set; }
+        [Property(Length = 1000, NotNull = true)]
+        public string PlayUrl { get; set; }
+
+        /// <summary>
+        /// 视频：字幕url
+        /// </summary>
+        [Property(Length = 1000, NotNull = false)]
+        public string SubTitleUrl { get; set; }
 
         /// <summary>
         /// 持续时间
@@ -40,16 +44,10 @@ namespace Domain
 
         /// <summary>
         /// 排序码
-        /// 第N页
+        /// 此视频属于课程的第几集/页
         /// </summary>
         [Property(NotNull = false)]
         public int Page { get; set; }
-
-        /// <summary>
-        /// 课程内容类型
-        /// </summary>
-        [Property(NotNull = false)]
-        public CourseInfoType CourseInfoType { get; set; }
 
         #endregion
 
@@ -63,22 +61,5 @@ namespace Domain
         public CourseBox CourseBox { get; set; }
 
         #endregion
-    }
-
-    /// <summary>
-    /// 课程内容类型
-    /// </summary>
-    public enum CourseInfoType
-    {
-        /// <summary>
-        /// 视频
-        /// </summary>
-        Video = 2,
-
-        /// <summary>
-        /// <summary>
-        /// 富文本贴
-        /// </summary>
-        RichText = 4
     }
 }

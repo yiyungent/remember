@@ -170,7 +170,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attributes\NeedAuthAttribute.cs" />
     <Compile Include="Controllers\CourseBoxController.cs" />
-    <Compile Include="Controllers\CourseInfoController.cs" />
+    <Compile Include="Controllers\VideoInfoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -180,10 +180,7 @@
     <Compile Include="Infrastructure\UserPrincipal.cs" />
     <Compile Include="Models\CourseBoxVM\CommentViewModel.cs" />
     <Compile Include="Models\CourseBoxVM\CourseBoxViewModel.cs" />
-    <Compile Include="Models\CourseBoxVM\StatViewModel.cs" />
-    <Compile Include="Models\CourseInfoVM\CourseInfoViewModel.cs" />
-    <Compile Include="Models\CourseInfoVM\RichTextViewModel.cs" />
-    <Compile Include="Models\CourseInfoVM\VideoViewModel.cs" />
+    <Compile Include="Models\VideoInfoVM\VideoInfoViewModel.cs" />
     <Compile Include="Models\HomeVM\RankingCourseBoxViewModel.cs" />
     <Compile Include="Models\UserInfoVM\LoginViewModel.cs" />
     <Compile Include="Models\Common\ResponseData.cs" />

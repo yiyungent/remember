@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5EAB8029-112A-4A3D-86DB-60E48E1F6F37}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Manager</RootNamespace>
-    <AssemblyName>Manager</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <ProjectGuid>{809DF905-2A3A-4E26-B7F9-055F9DE3BA88}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MiniCrawler</RootNamespace>
+    <AssemblyName>MiniCrawler</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -31,9 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.ActiveRecord">
-      <HintPath>..\..\libs\Castle.ActiveRecord.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -46,12 +45,16 @@
     <Reference Include="MySql.Data.Entity.EF6, Version=6.9.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MySql.Data.Entity.6.9.12\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate">
-      <HintPath>..\..\libs\NHibernate.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,58 +63,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArticleManager.cs" />
-    <Compile Include="Base\BaseManager.cs" />
-    <Compile Include="CardBoxManager.cs" />
-    <Compile Include="CardInfoManager.cs" />
-    <Compile Include="CommentManager.cs" />
-    <Compile Include="Comment_DislikeManager.cs" />
-    <Compile Include="Comment_LikeManager.cs" />
-    <Compile Include="CourseBoxManager.cs" />
-    <Compile Include="CourseBox_CommentManager.cs" />
-    <Compile Include="CourseBox_DislikeManager.cs" />
-    <Compile Include="CourseBox_LikeManager.cs" />
-    <Compile Include="CourseBox_ParticipantManager.cs" />
-    <Compile Include="VideoInfo_CommentManager.cs" />
-    <Compile Include="FavoriteManager.cs" />
-    <Compile Include="Follower_FollowedManager.cs" />
-    <Compile Include="Learner_VideoInfoManager.cs" />
-    <Compile Include="Learner_CourseBoxManager.cs" />
-    <Compile Include="VideoInfoManager.cs" />
-    <Compile Include="EF\EFDbContext.cs" />
-    <Compile Include="FunctionInfoManager.cs" />
-    <Compile Include="Migrations\201907060355549_update.cs" />
-    <Compile Include="Migrations\201907060355549_update.Designer.cs">
-      <DependentUpon>201907060355549_update.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="ParticipantInfoManager.cs" />
+    <Compile Include="BiliVideoComment.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoleInfoManager.cs" />
-    <Compile Include="SearchDetailManager.cs" />
-    <Compile Include="SearchTotalManager.cs" />
-    <Compile Include="SettingManager.cs" />
-    <Compile Include="Sys_MenuManger.cs" />
-    <Compile Include="ThemeTemplateManager.cs" />
-    <Compile Include="UserInfoManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Domain\Domain.csproj">
-      <Project>{a533e3d6-d54f-4141-ac04-6171dff64e26}</Project>
-      <Name>Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Service\Service.csproj">
-      <Project>{f6e2082c-eb59-4fe6-85bb-ca618b85314e}</Project>
-      <Name>Service</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201907060355549_update.resx">
-      <DependentUpon>201907060355549_update.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

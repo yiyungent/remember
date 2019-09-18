@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebApi.Models.CourseInfoVM
+namespace WebApi.Models.VideoInfoVM
 {
-    public class CourseInfoViewModel
+    public class VideoInfoViewModel
     {
         public int ID { get; set; }
 
         public string Title { get; set; }
 
-        public string Content { get; set; }
-
-        public int CourseInfoType { get; set; }
+        public string PlayUrl { get; set; }
 
         public int CourseBoxId { get; set; }
 
@@ -34,8 +32,6 @@ namespace WebApi.Models.CourseInfoVM
         /// 毫秒
         /// 
         /// 视频：视频播放位置
-        /// 帖子：记录看时间
-        /// (毫秒)
         /// </summary>
         public long ProgressAt { get; set; }
 

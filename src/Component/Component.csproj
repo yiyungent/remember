@@ -61,13 +61,13 @@
     <Compile Include="CourseBox_DislikeComponent.cs" />
     <Compile Include="CourseBox_LikeComponent.cs" />
     <Compile Include="CourseBox_ParticipantComponent.cs" />
-    <Compile Include="CourseInfo_CommentComponent.cs" />
+    <Compile Include="VideoInfo_CommentComponent.cs" />
     <Compile Include="FavoriteComponent.cs" />
     <Compile Include="Follower_FollowedComponent.cs" />
-    <Compile Include="Learner_CourseInfoComponent.cs" />
+    <Compile Include="Learner_VideoInfoComponent.cs" />
     <Compile Include="Learner_CourseBoxComponent.cs" />
     <Compile Include="CourseBoxComponent.cs" />
-    <Compile Include="CourseInfoComponent.cs" />
+    <Compile Include="VideoInfoComponent.cs" />
     <Compile Include="FunctionInfoComponent.cs" />
     <Compile Include="ParticipantInfoComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

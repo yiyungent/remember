@@ -17,7 +17,7 @@ namespace WebUI.Areas.Demo.Controllers
 
         public ViewResult Section(int id)
         {
-            CourseInfo viewModel = new CourseInfo();
+            VideoInfo viewModel = new VideoInfo();
 
             return View(viewModel);
         }

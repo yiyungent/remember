@@ -87,9 +87,9 @@ namespace Domain
             get
             {
                 long duration = 0;
-                if (this.CourseInfoList != null && this.CourseInfoList.Count >= 1)
+                if (this.VideoInfos != null && this.VideoInfos.Count >= 1)
                 {
-                    duration = this.CourseInfoList.Select(m => m.Duration).Sum();
+                    duration = this.VideoInfos.Select(m => m.Duration).Sum();
                 }
 
                 return duration;
@@ -101,11 +101,11 @@ namespace Domain
         #region Relationships
 
         /// <summary>
-        /// 课程盒包含的课件的列表
+        /// 课程包含的视频的列表
         ///     一对多
         /// </summary>
         [HasMany(ColumnKey = "CourseBoxId")]
-        public IList<CourseInfo> CourseInfoList { get; set; }
+        public IList<VideoInfo> VideoInfos { get; set; }
 
         /// <summary>
         /// 课程的创建者
