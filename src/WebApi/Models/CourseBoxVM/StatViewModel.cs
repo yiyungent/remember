@@ -11,7 +11,7 @@ namespace WebApi.Models.CourseBoxVM
     public class StatViewModel
     {
         /// <summary>
-        /// 课程盒统计
+        /// 课程盒ID
         /// </summary>
         public int ID { get; set; }
 
@@ -26,7 +26,7 @@ namespace WebApi.Models.CourseBoxVM
         public int Comment { get; set; }
 
         /// <summary>
-        /// 评论数
+        /// 收藏数
         /// </summary>
         public int Favorite { get; set; }
 

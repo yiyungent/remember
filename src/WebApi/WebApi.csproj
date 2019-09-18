@@ -152,6 +152,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\images\default-avatar.jpg" />
+    <Content Include="assets\images\default-notify.jpg" />
+    <Content Include="assets\images\guest-avatar.jpg" />
+    <Content Include="assets\images\notexist-avatar.jpg" />
+    <Content Include="assets\images\scripts\detect-c.png" />
+    <Content Include="assets\images\scripts\input-error.png" />
+    <Content Include="assets\images\scripts\login.png" />
+    <Content Include="assets\images\scripts\register-title-icon.svg" />
+    <Content Include="assets\images\scripts\truev.png" />
+    <Content Include="assets\images\top_banner.png" />
     <Content Include="Config\Service.xml" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
@@ -170,11 +180,8 @@
     <Compile Include="Infrastructure\UserPrincipal.cs" />
     <Compile Include="Models\CourseBoxVM\CommentViewModel.cs" />
     <Compile Include="Models\CourseBoxVM\CourseBoxViewModel.cs" />
-    <Compile Include="Models\CourseBoxVM\HistoryViewModel.cs" />
     <Compile Include="Models\CourseBoxVM\StatViewModel.cs" />
-    <Compile Include="Models\CourseBoxVM\StudyInfoViewModel.cs" />
     <Compile Include="Models\CourseInfoVM\CourseInfoViewModel.cs" />
-    <Compile Include="Models\CourseInfoVM\HistoryViewModel.cs" />
     <Compile Include="Models\CourseInfoVM\RichTextViewModel.cs" />
     <Compile Include="Models\CourseInfoVM\VideoViewModel.cs" />
     <Compile Include="Models\HomeVM\RankingCourseBoxViewModel.cs" />

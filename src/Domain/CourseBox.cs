@@ -67,6 +67,18 @@ namespace Domain
         [Property(NotNull = false)]
         public int LearnDay { get; set; }
 
+        [Property(NotNull = false)]
+        public int LikeNum { get; set; }
+
+        [Property(NotNull = false)]
+        public int DislikeNum { get; set; }
+
+        [Property(NotNull = false)]
+        public int CommentNum { get; set; }
+
+        [Property(NotNull = false)]
+        public int ShareNum { get; set; }
+
         /// <summary>
         /// 学习此课程总需时间
         /// </summary>
@@ -82,7 +94,7 @@ namespace Domain
 
                 return duration;
             }
-        } 
+        }
 
         #endregion
 

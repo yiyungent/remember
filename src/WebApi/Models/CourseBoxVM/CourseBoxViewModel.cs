@@ -20,7 +20,7 @@ namespace WebApi.Models.CourseBoxVM
         /// <summary>
         /// 描述
         /// </summary>
-        public string Description { get; set; }
+        public string Desc { get; set; }
 
         /// <summary>
         /// 创建者
@@ -63,6 +63,25 @@ namespace WebApi.Models.CourseBoxVM
         public int LearnDay { get; set; }
 
         /// <summary>
+        /// 此学习者在此课程总学习时间: 花费时间
+        /// 毫秒
+        /// <para>注意：不一定是学习者在此课程上的所有课件的进度时间，因为课程存在反复看，反复看时间也要计算在内</para>
+        /// </summary>
+        public long SpendTime { get; set; }
+
+        /// <summary>
+        /// 统计信息
+        /// </summary>
+        public StatViewModel Stat { get; set; }
+
+        /// <summary>
+        /// 课件列表
+        /// </summary>
+        public IList<CourseInfoViewModel> CourseInfos { get; set; }
+
+        #region 需登录
+
+        /// <summary>
         /// 最新访问的课件
         /// </summary>
         public CourseInfoViewModel LastAccessCourseInfo { get; set; }
@@ -73,28 +92,7 @@ namespace WebApi.Models.CourseBoxVM
         /// </summary>
         public long JoinTime { get; set; }
 
-        /// <summary>
-        /// 此学习者在此课程总学习时间: 花费时间
-        /// 毫秒
-        /// <para>注意：不一定是学习者在此课程上的所有课件的进度时间，因为课程存在反复看，反复看时间也要计算在内</para>
-        /// </summary>
-        public long SpendTime { get; set; }
-
-        /// <summary>
-        /// 课件数
-        /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.Pages.Count;
-            }
-        }
-
-        /// <summary>
-        /// 课件列表
-        /// </summary>
-        public IList<CourseInfoViewModel> Pages { get; set; }
+        #endregion
 
         /// <summary>
         /// 课件
@@ -115,6 +113,34 @@ namespace WebApi.Models.CourseBoxVM
             /// 课件标题
             /// </summary>
             public string Title { get; set; }
+
+            /// <summary>
+            /// 课件内容
+            /// </summary>
+            public string Content { get; set; }
+
+            #region 需登录
+            /// <summary>
+            /// 最新播放位置
+            /// </summary>
+            public long LastPlayAt { get; set; }
+
+            /// <summary>
+            /// 学习进度
+            /// </summary>
+            public long ProgressAt { get; set; }
+            #endregion
+        }
+
+        public sealed class StatViewModel
+        {
+            public int LikeNum { get; set; }
+            public int DislikeNum { get; set; }
+            public int Coin { get; set; }
+            public int FavNum { get; set; }
+            public int ShareNum { get; set; }
+            public int CommentNum { get; set; }
+            public int ViewNum { get; set; }
         }
     }
 }

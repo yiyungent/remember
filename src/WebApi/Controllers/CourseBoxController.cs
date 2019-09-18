@@ -24,25 +24,24 @@ namespace WebApi.Controllers
     public class CourseBoxController : ApiController
     {
         #region Get: 获取指定ID的课程信息
-        [NeedAuth]
         public ResponseData Get(int id)
         {
             ResponseData responseData = null;
-            Learner_CourseBox learner_CourseBox = Container.Instance.Resolve<Learner_CourseBoxService>().Query(new List<ICriterion>
+            CourseBoxViewModel viewModel = null;
+
+            try
             {
-                Expression.And(
-                 Expression.Eq("Learner.ID", ((UserIdentity)User.Identity).ID),
-                 Expression.Eq("CourseBox.ID", id)
-                 )
-            }).FirstOrDefault();
-            if (learner_CourseBox != null)
-            {
-                CourseBox courseBox = learner_CourseBox.CourseBox;
-                CourseBoxViewModel viewModel = new CourseBoxViewModel()
+                // 未登录用户返回基本课程数据
+                CourseBox courseBox = Container.Instance.Resolve<CourseBoxService>().GetEntity(id);
+                string creatorAvatar = Container.Instance.Resolve<SettingService>().Query(new List<ICriterion>
+                {
+                    Expression.Eq("SetKey", "WebApiSite")
+                }).FirstOrDefault().SetValue + courseBox.Creator.Avatar;
+                viewModel = new CourseBoxViewModel
                 {
                     ID = courseBox.ID,
                     Name = courseBox.Name,
-                    Description = courseBox.Description,
+                    Desc = courseBox.Description,
                     CreateTime = courseBox.CreateTime.ToTimeStamp13(),
                     StartTime = courseBox.StartTime.ToTimeStamp13(),
                     EndTime = courseBox.EndTime.ToTimeStamp13(),
@@ -55,26 +54,69 @@ namespace WebApi.Controllers
                         ID = courseBox.Creator.ID,
                         UserName = courseBox.Creator.UserName,
                         Name = courseBox.Creator.Name,
-                        Avatar = courseBox.Creator.Avatar
+                        Avatar = creatorAvatar
                     },
-                    JoinTime = learner_CourseBox.JoinTime.ToTimeStamp13(),
-                    LastAccessCourseInfo = new CourseBoxViewModel.CourseInfoViewModel
+                    Stat = new CourseBoxViewModel.StatViewModel
                     {
-                        ID = learner_CourseBox.LasAccesstCourseInfo.ID,
-                        Page = learner_CourseBox.LasAccesstCourseInfo.Page,
-                        Title = learner_CourseBox.LasAccesstCourseInfo.Title
+                        CommentNum = courseBox.CommentNum,
+                        LikeNum = courseBox.LikeNum,
+                        DislikeNum = courseBox.DislikeNum,
+                        FavNum = courseBox.FavoriteList?.Count ?? 0,
+                        ShareNum = courseBox.ShareNum,
+                        ViewNum = 21
                     },
-                    SpendTime = learner_CourseBox.SpendTime,
-                    Pages = new List<CourseBoxViewModel.CourseInfoViewModel>()
+                    CourseInfos = new List<CourseBoxViewModel.CourseInfoViewModel>()
                 };
-                foreach (var item in courseBox.CourseInfoList)
+                IList<CourseInfo> courseInfos = courseBox.CourseInfoList.OrderBy(m => m.Page).ToList();
+                foreach (var item in courseInfos)
                 {
-                    viewModel.Pages.Add(new CourseBoxViewModel.CourseInfoViewModel
+                    viewModel.CourseInfos.Add(new CourseBoxViewModel.CourseInfoViewModel
                     {
                         ID = item.ID,
                         Title = item.Title,
-                        Page = item.Page
+                        Page = item.Page,
+                        Content = item.Content
                     });
+                }
+
+                // 登录用户增加返回学习记录数据
+                if (User.Identity != null && User.Identity is UserIdentity)
+                {
+                    Learner_CourseBox learner_CourseBox = Container.Instance.Resolve<Learner_CourseBoxService>().Query(new List<ICriterion>
+                    {
+                        Expression.And(
+                         Expression.Eq("Learner.ID", ((UserIdentity)User.Identity).ID),
+                         Expression.Eq("CourseBox.ID", id)
+                         )
+                    }).FirstOrDefault();
+                    if (learner_CourseBox != null)
+                    {
+                        Learner_CourseInfo learner_LastAccessCourseInfo = Container.Instance.Resolve<Learner_CourseInfoService>().GetEntity(learner_CourseBox.LasAccesstCourseInfo.ID);
+                        viewModel.JoinTime = learner_CourseBox.JoinTime.ToTimeStamp13();
+                        viewModel.LastAccessCourseInfo = new CourseBoxViewModel.CourseInfoViewModel
+                        {
+                            ID = learner_CourseBox.LasAccesstCourseInfo.ID,
+                            Page = learner_CourseBox.LasAccesstCourseInfo.Page,
+                            Title = learner_CourseBox.LasAccesstCourseInfo.Title,
+                            LastPlayAt = learner_LastAccessCourseInfo.LastPlayAt,
+                            ProgressAt = learner_LastAccessCourseInfo.ProgressAt
+                        };
+                        viewModel.SpendTime = learner_CourseBox.SpendTime;
+
+                        for (int i = 0; i < viewModel.CourseInfos.Count; i++)
+                        {
+                            int courseInfoId = viewModel.CourseInfos[i].ID;
+                            Learner_CourseInfo learner_CourseInfo = Container.Instance.Resolve<Learner_CourseInfoService>().Query(new List<ICriterion>
+                            {
+                                Expression.And(
+                                    Expression.Eq("Learner.ID", ((UserIdentity)User.Identity).ID ),
+                                    Expression.Eq("CourseInfo.ID", courseInfoId)
+                                )
+                            }).FirstOrDefault();
+                            viewModel.CourseInfos[i].LastPlayAt = learner_CourseInfo.LastPlayAt;
+                            viewModel.CourseInfos[i].ProgressAt = learner_CourseInfo.ProgressAt;
+                        }
+                    }
                 }
 
                 responseData = new ResponseData
@@ -84,12 +126,13 @@ namespace WebApi.Controllers
                     Data = viewModel
                 };
             }
-            else
+            catch (Exception ex)
             {
                 responseData = new ResponseData
                 {
                     Code = -1,
-                    Message = "不存在",
+                    Message = "获取课程信息失败",
+                    Data = viewModel
                 };
             }
 
@@ -108,7 +151,7 @@ namespace WebApi.Controllers
                 courseBoxService.Create(new CourseBox
                 {
                     Name = model.Name,
-                    Description = model.Description,
+                    Description = model.Desc,
                     Creator = AccountManager.GetCurrentUserInfo(),
                     StartTime = model.StartTime.ToDateTime13(),
                     EndTime = model.EndTime.ToDateTime13(),
@@ -151,7 +194,7 @@ namespace WebApi.Controllers
                 {
                     CourseBox courseBox = courseBoxService.GetEntity(id);
                     courseBox.Name = model.Name;
-                    courseBox.Description = model.Description;
+                    courseBox.Description = model.Desc;
                     courseBox.StartTime = model.StartTime.ToDateTime13();
                     courseBox.EndTime = model.EndTime.ToDateTime13();
                     courseBox.LearnDay = model.LearnDay;
@@ -184,107 +227,6 @@ namespace WebApi.Controllers
                 {
                     Code = -1,
                     Message = "课程基本信息更新失败"
-                };
-            }
-
-            return responseData;
-        }
-        #endregion
-
-        #region 课程学习情况
-        /// <summary>
-        /// 当前登录用户对于此课程的学习情况
-        /// 没有加入学习 data 为 null
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [NeedAuth]
-        [HttpGet]
-        [Route("StudyInfo")]
-        public ResponseData StudyInfo(int id)
-        {
-            ResponseData responseData = null;
-            try
-            {
-                StudyInfoViewModel viewModel = null;
-                Learner_CourseBoxService courseBoxTableService = Container.Instance.Resolve<Learner_CourseBoxService>();
-                Learner_CourseBox courseBoxTable = courseBoxTableService.Query(new List<ICriterion>
-                {
-                    Expression.And(
-                     Expression.Eq("Reader.ID", ((UserIdentity)User.Identity).ID),
-                     Expression.Eq("CourseBox.ID", id)
-                    )
-                }).FirstOrDefault();
-                if (courseBoxTable != null)
-                {
-                    viewModel = new StudyInfoViewModel
-                    {
-                        JoinTime = courseBoxTable.JoinTime.ToTimeStamp10(),
-                        SpendTime = courseBoxTable.SpendTime,
-                    };
-                }
-
-                responseData = new ResponseData
-                {
-                    Code = 1,
-                    Message = "成功",
-                    Data = viewModel
-                };
-            }
-            catch (Exception ex)
-            {
-                responseData = new ResponseData
-                {
-                    Code = -1,
-                    Message = "获取失败"
-                };
-            }
-            return responseData;
-        }
-        #endregion
-
-        #region 历史记录
-        [NeedAuth]
-        [Route("History")]
-        [HttpGet]
-        public ResponseData History(int pageNum = 1, int pageSize = 20)
-        {
-            ResponseData responseData = null;
-            try
-            {
-                IList<HistoryViewModel> data = new List<HistoryViewModel>();
-
-                IList<Learner_CourseBox> learner_CourseBoxes = Container.Instance.Resolve<Learner_CourseBoxService>().Query(new List<ICriterion>
-                {
-                    Expression.Eq("Learner.ID", ((UserIdentity)User.Identity).ID)
-                }).Skip(pageNum * pageSize).Take(pageSize).ToList();
-
-                if (learner_CourseBoxes != null && learner_CourseBoxes.Count >= 1)
-                {
-                    CourseInfo lastAccessCourseInfo = learner_CourseBoxes.FirstOrDefault().LasAccesstCourseInfo;
-
-                    foreach (var item in learner_CourseBoxes)
-                    {
-                        HistoryViewModel viewModel = new HistoryViewModel();
-                        viewModel.
-                        data.Add();
-                    }
-                }
-
-
-                responseData = new ResponseData
-                {
-                    Code = 1,
-                    Message = "获取历史记录成功",
-                    Data = data
-                };
-            }
-            catch (Exception ex)
-            {
-                responseData = new ResponseData
-                {
-                    Code = -1,
-                    Message = "获取历史记录失败"
                 };
             }
 
@@ -338,12 +280,12 @@ namespace WebApi.Controllers
                     {
                         ID = item.ID,
                         Name = item.Name,
-                        Description = item.Description,
-                        CreateTime = item.CreateTime.ToString("yyyy-MM-dd"),
-                        StartTime = item.StartTime.ToString("yyyy-MM-dd"),
-                        EndTime = item.EndTime.ToString("yyyy-MM-dd"),
+                        Desc = item.Description,
+                        CreateTime = item.CreateTime.ToTimeStamp13(),
+                        StartTime = item.StartTime.ToTimeStamp13(),
+                        EndTime = item.EndTime.ToTimeStamp13(),
                         IsOpen = item.IsOpen,
-                        LastUpdateTime = item.LastUpdateTime.ToString("yyyy-MM-dd HH:mm"),
+                        LastUpdateTime = item.LastUpdateTime.ToTimeStamp13(),
                         LearnDay = item.LearnDay,
                         PicUrl = item.PicUrl,
                         Creator = new Models.UserInfoVM.UserInfoViewModel
@@ -382,12 +324,12 @@ namespace WebApi.Controllers
                     {
                         ID = item.ID,
                         Name = item.Name,
-                        Description = item.Description,
-                        CreateTime = item.CreateTime.ToString("yyyy-MM-dd"),
-                        StartTime = item.StartTime.ToString("yyyy-MM-dd"),
-                        EndTime = item.EndTime.ToString("yyyy-MM-dd"),
+                        Desc = item.Description,
+                        CreateTime = item.CreateTime.ToTimeStamp13(),
+                        StartTime = item.StartTime.ToTimeStamp13(),
+                        EndTime = item.EndTime.ToTimeStamp13(),
                         IsOpen = item.IsOpen,
-                        LastUpdateTime = item.LastUpdateTime.ToString("yyyy-MM-dd HH:mm"),
+                        LastUpdateTime = item.LastUpdateTime.ToTimeStamp13(),
                         LearnDay = item.LearnDay,
                         PicUrl = item.PicUrl,
                         Creator = new Models.UserInfoVM.UserInfoViewModel

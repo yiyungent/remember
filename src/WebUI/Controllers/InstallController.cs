@@ -540,8 +540,8 @@ namespace WebUI.Controllers
                     Expression.Eq("UserName", "admin")
                 }).FirstOrDefault();
 
-                // 正式会员 3000
-                for (int i = 0; i < 3000; i++)
+                // 正式会员 1000
+                for (int i = 0; i < 10; i++)
                 {
                     userInfoService.Create(new UserInfo
                     {
@@ -669,6 +669,8 @@ namespace WebUI.Controllers
                     courseBox.Description = $"这是测试课程-{(i + 1)}的描述";
                     courseBox.Creator = userInfo;
                     courseBox.PicUrl = "https://static.runoob.com/images/mix/img_fjords_wide.jpg";
+                    courseBox.CreateTime = DateTime.Now.AddDays(i);
+                    courseBox.LastUpdateTime = DateTime.Now.AddDays(i);
 
                     courseBoxService.Create(courseBox);
                 }
@@ -730,14 +732,23 @@ namespace WebUI.Controllers
             {
                 ShowMessage("开始初始化课程内容");
 
-                CourseInfoService CourseInfoService = Container.Instance.Resolve<CourseInfoService>();
-
-                for (int i = 0; i < 10; i++)
+                IList<CourseBox> allCourseBox = Container.Instance.Resolve<CourseBoxService>().GetAll();
+                for (int i = 0; i < allCourseBox.Count; i++)
                 {
-                    CourseInfo CourseInfo = new CourseInfo();
-                    CourseInfo.Content = $"测试内容{(1 + i)}";
-                    CourseInfo.CourseBox = new CourseBox { ID = (1 + i) };
-                    CourseInfoService.Create(CourseInfo);
+                    CourseBox courseBox = allCourseBox[i];
+                    // 每门课程 10课件
+                    for (int j = 0; j < 10; j++)
+                    {
+                        CourseInfo courseInfo = new CourseInfo();
+                        courseInfo.Title = "视频标题" + (j + 1);
+                        courseInfo.Content = $"/static/upload/videos/" + (j + 1) + ".mp4";
+                        courseInfo.Page = (j + 1);
+                        courseInfo.CourseInfoType = CourseInfoType.Video;
+                        courseInfo.CourseBox = courseBox;
+
+
+                        Container.Instance.Resolve<CourseInfoService>().Create(courseInfo);
+                    }
                 }
 
                 ShowMessage("成功");

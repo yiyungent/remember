@@ -42,6 +42,7 @@ namespace Domain
         /// 排序码
         /// 第N页
         /// </summary>
+        [Property(NotNull = false)]
         public int Page { get; set; }
 
         /// <summary>

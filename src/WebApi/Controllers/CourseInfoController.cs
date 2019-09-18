@@ -56,7 +56,6 @@ namespace WebApi.Controllers
                     Content = courseInfo.Content,
                     CourseInfoType = (int)courseInfo.CourseInfoType,
                     CourseBoxId = courseBoxId,
-                    LastAccessCountry = learner_CourseInfo.LastAccessCountry,
                     LastAccessIp = learner_CourseInfo.LastAccessIp,
                     LastAccessTime = learner_CourseInfo.LastAccessTime.ToTimeStamp13(),
                     LastPlayAt = learner_CourseInfo.LastPlayAt,
@@ -159,59 +158,6 @@ namespace WebApi.Controllers
             }
             catch (Exception ex)
             {
-            }
-
-            return responseData;
-        }
-        #endregion
-
-        #region 课件详细历史记录
-        [NeedAuth]
-        [HttpGet]
-        [Route("History")]
-        public ResponseData History(int courseInfoId)
-        {
-            ResponseData responseData = null;
-            try
-            {
-                HistoryViewModel viewModel = null;
-
-                Learner_CourseInfo learner_CourseInfo = Container.Instance.Resolve<Learner_CourseInfoService>().Query(new List<ICriterion>
-                {
-                    Expression.And(
-                        Expression.Eq("CourseInfo.ID", courseInfoId),
-                        Expression.Eq("Learner.ID", ((UserIdentity)User.Identity).ID)
-                    )
-                }).FirstOrDefault();
-
-                if (learner_CourseInfo != null)
-                {
-                    viewModel = new HistoryViewModel()
-                    {
-                        Ip = learner_CourseInfo.LastAccessIp,
-                        Country = learner_CourseInfo.LastAccessCountry,
-                        LastAccessTime = learner_CourseInfo.LastAccessTime.ToTimeStamp13(),
-                        CourseBoxId = learner_CourseInfo.CourseInfo.CourseBox.ID,
-                        Duration = learner_CourseInfo.CourseInfo.Duration,
-                        ProgressAt = learner_CourseInfo.ProgressAt,
-                        LastPlayAt = learner_CourseInfo.LastPlayAt
-                    };
-                }
-
-                responseData = new ResponseData
-                {
-                    Code = 1,
-                    Message = "获取课件详细历史记录成功",
-                    Data = viewModel
-                };
-            }
-            catch (Exception ex)
-            {
-                responseData = new ResponseData
-                {
-                    Code = -1,
-                    Message = "获取课件详细历史记录失败"
-                };
             }
 
             return responseData;

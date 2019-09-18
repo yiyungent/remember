@@ -23,12 +23,8 @@ namespace WebApi.Models.CourseInfoVM
         public string LastAccessIp { get; set; }
 
         /// <summary>
-        /// 最后访问国家
-        /// </summary>
-        public string LastAccessCountry { get; set; }
-
-        /// <summary>
         /// 最后访问时间
+        /// (毫秒)
         /// </summary>
         public long LastAccessTime { get; set; }
 
@@ -39,6 +35,7 @@ namespace WebApi.Models.CourseInfoVM
         /// 
         /// 视频：视频播放位置
         /// 帖子：记录看时间
+        /// (毫秒)
         /// </summary>
         public long ProgressAt { get; set; }
 
