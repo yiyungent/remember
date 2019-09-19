@@ -54,6 +54,8 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -64,6 +66,34 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BiliVideoComment.cs" />
+    <Compile Include="EF\article.cs" />
+    <Compile Include="EF\cardbox.cs" />
+    <Compile Include="EF\cardinfo.cs" />
+    <Compile Include="EF\comment.cs" />
+    <Compile Include="EF\comment_dislike.cs" />
+    <Compile Include="EF\comment_like.cs" />
+    <Compile Include="EF\coursebox.cs" />
+    <Compile Include="EF\coursebox_comment.cs" />
+    <Compile Include="EF\coursebox_dislike.cs" />
+    <Compile Include="EF\coursebox_like.cs" />
+    <Compile Include="EF\coursebox_participant.cs" />
+    <Compile Include="EF\C__migrationhistory.cs" />
+    <Compile Include="EF\favorite.cs" />
+    <Compile Include="EF\follower_followed.cs" />
+    <Compile Include="EF\functioninfo.cs" />
+    <Compile Include="EF\learner_coursebox.cs" />
+    <Compile Include="EF\learner_videoinfo.cs" />
+    <Compile Include="EF\Model1.cs" />
+    <Compile Include="EF\participantinfo.cs" />
+    <Compile Include="EF\roleinfo.cs" />
+    <Compile Include="EF\searchdetail.cs" />
+    <Compile Include="EF\searchtotal.cs" />
+    <Compile Include="EF\setting.cs" />
+    <Compile Include="EF\sys_menu.cs" />
+    <Compile Include="EF\themetemplate.cs" />
+    <Compile Include="EF\userinfo.cs" />
+    <Compile Include="EF\videoinfo.cs" />
+    <Compile Include="EF\videoinfo_comment.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -71,5 +101,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

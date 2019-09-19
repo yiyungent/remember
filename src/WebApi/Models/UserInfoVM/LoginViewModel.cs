@@ -18,15 +18,17 @@ namespace WebApi.Models.UserInfoVM
         public string Password { get; set; }
     }
 
-    public class LoginResult
+    public class LoginResultViewModel
     {
-        public int Code { get; set; }
-
-        public string Message { get; set; }
+        /// <summary>
+        /// 加密后的JWToken
+        /// </summary>
+        public string Token { get; set; }
 
         /// <summary>
-        /// JTW Encode 后字符串
+        /// JTW 过期时间
+        /// Unix时间戳
         /// </summary>
-        public string ApiToken { get; set; }
+        public long Expire { get; set; }
     }
 }

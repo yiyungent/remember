@@ -73,7 +73,12 @@ namespace Framework.Infrastructure.Concrete
                     {
                         // header 中找 token
                         // 注意：一定要在这里才能找到自定义 Header，直接HttpContext.Current.Request.Headers是封装过的，没有自定义 Header
-                        token = request.RequestContext.HttpContext.Request.Headers[AppConfig.JwtName];
+                        //token = request.RequestContext.HttpContext.Request.Headers[AppConfig.JwtName];
+                        string authHeader = request.Headers["Authorization"];
+                        if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer"))
+                        {
+                            token = authHeader.Substring("Bearer ".Length).Trim();
+                        }
                     }
                     catch (Exception ex)
                     { }

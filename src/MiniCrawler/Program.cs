@@ -10,6 +10,7 @@ namespace MiniCrawler
     {
         static void Main(string[] args)
         {
+
         }
     }
 }

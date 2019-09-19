@@ -145,11 +145,17 @@ namespace WebApi.Controllers
         #endregion
 
         #region 登录
+        /// <summary>
+        /// 登录
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <returns>返回一个 JWToken 和一个 JWToken 的过期时间（Unix时间戳）</returns>
         [HttpPost]
         [Route("Login")]
         public ResponseData Login([FromBody]LoginViewModel viewModel)
         {
             string loginAccount = viewModel.LoginAccount.Trim();
+            viewModel.Password = EncryptHelper.MD5Encrypt32(viewModel.Password);
             if (ModelState.IsValid)
             {
                 UserInfo userInfo = null;
@@ -189,17 +195,23 @@ namespace WebApi.Controllers
                 // 账号密码是否正确
                 if (userInfo != null)
                 {
+                    long expire = DateTime.Now.AddDays(7).ToTimeStamp10();
+
                     return new ResponseData
                     {
                         Code = 1,
                         Message = "登录成功",
-                        Data = JwtHelper.Encode(new JWTokenViewModel
+                        Data = new LoginResultViewModel
                         {
-                            ID = userInfo.ID,
-                            UserName = userInfo.UserName,
-                            Expire = DateTime.Now.AddDays(7).ToTimeStamp10(),
-                            Create = DateTime.Now.ToTimeStamp10()
-                        })
+                            Token = JwtHelper.Encode(new JWTokenViewModel
+                            {
+                                ID = userInfo.ID,
+                                UserName = userInfo.UserName,
+                                Expire = expire,
+                                Create = DateTime.Now.ToTimeStamp10()
+                            }),
+                            Expire = expire
+                        }
                     };
                 }
                 else

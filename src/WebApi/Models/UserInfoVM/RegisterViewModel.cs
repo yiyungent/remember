@@ -21,11 +21,4 @@ namespace WebApi.Models.UserInfoVM
 
         public string Phone { get; set; }
     }
-
-    public class RegisterResult
-    {
-        public int Code { get; set; }
-
-        public string Message { get; set; }
-    }
 }

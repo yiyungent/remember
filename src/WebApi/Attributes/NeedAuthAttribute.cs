@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -30,10 +31,13 @@ namespace WebApi.Attributes
             // 获取 token -> 1.header 2.cookie
             // TODO: 从 Header->Authorization 获取 token
             string token = "";
-            if (actionContext.Request.Headers.TryGetValues(AppConfig.JwtName, out var headerValues))
+            // Bearer JWToken ->  空格前 Bearer 为 Scheme，空格后 JWToken 为 Parameter
+            AuthenticationHeaderValue authenticationHeader = actionContext.Request.Headers.Authorization;
+            //if (actionContext.Request.Headers.TryGetValues(AppConfig.JwtName, out var headerValues))
+            if (authenticationHeader != null && authenticationHeader.Scheme == "Bearer")
             {
-                token = headerValues.FirstOrDefault();
-                
+                token = authenticationHeader.Parameter;
+
                 if (string.IsNullOrEmpty(token))
                 {
                     // header 中没有 token，尝试从 cookie 中读取
