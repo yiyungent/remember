@@ -732,7 +732,7 @@ namespace WebUI.Controllers
                 for (int i = 0; i < allCourseBox.Count; i++)
                 {
                     // 此课程的学习人数
-                    int learnNum = allUserInfo.Count;
+                    int learnNum = 15;
                     for (int j = 0; j < learnNum; j++)
                     {
                         CourseBox courseBox = Container.Instance.Resolve<CourseBoxService>().GetEntity(i + 1);

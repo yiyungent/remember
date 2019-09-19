@@ -2,31 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using WebApi.Models.CourseBoxVM;
 
 namespace WebApi.Models.HomeVM
 {
-    public class RankingCourseBoxViewModel
+    public class LastCourseBoxViewModel
     {
-        public RankingCourseBoxItem CourseBox { get; set; }
-
-        /// <summary>
-        /// 学习人数
-        /// </summary>
         public int LearnNum { get; set; }
 
-        /// <summary>
-        /// 总共学习时间
-        /// </summary>
-        public double TotalSpendTime { get; set; }
+        public CourseBoxItem CourseBox { get; set; }
 
-        /// <summary>
-        /// 热门排名-第几名
-        /// </summary>
         public int RankingNum { get; set; }
 
-
-        public sealed class RankingCourseBoxItem
+        public sealed class CourseBoxItem
         {
             /// <summary>
             /// 课程ID
@@ -52,6 +39,11 @@ namespace WebApi.Models.HomeVM
             /// 封面图
             /// </summary>
             public string PicUrl { get; set; }
+
+            /// <summary>
+            /// js时间戳
+            /// </summary>
+            public long CreateTime { get; set; }
         }
 
         public sealed class Creator
@@ -66,6 +58,5 @@ namespace WebApi.Models.HomeVM
 
             public string Avatar { get; set; }
         }
-
     }
 }

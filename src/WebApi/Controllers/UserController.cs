@@ -394,14 +394,42 @@ namespace WebApi.Controllers
             {
                 MyFollowViewModel viewModel = new MyFollowViewModel();
 
+                #region 失败，想在这里去重，结果莫名 报错，temp 为 null, 发现原因，原来比较器优先使用 GetHashCode比较，然而默认给的代码抛出未实现异常，似乎编辑器没不捕捉到
+                //Follower_FollowedEqCompare compare;
+                //try
+                //{
+                //    compare = new Follower_FollowedEqCompare();
+                //}
+                //catch (Exception ex)
+                //{
+
+                //    throw;
+                //}
+
+                //try
+                //{
+                //    var temp = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
+                //            Expression.Eq("Follower.ID", ((UserIdentity)User.Identity).ID)
+                //    }).Distinct(compare);
+                //}
+                //catch (Exception ex)
+                //{
+
+                //    throw;
+                //} 
+                #endregion
+
+
+                Follower_FollowedEqCompare compare = new Follower_FollowedEqCompare();
+
                 // 我关注的所有人
                 IList<Follower_Followed> iFollow = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
                     Expression.Eq("Follower.ID", ((UserIdentity)User.Identity).ID)
-               }).Distinct(new Follower_FollowedEqCompare()).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+               }).Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
                 // 关注我的所有人
                 IList<Follower_Followed> iFollowed = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
                     Expression.Eq("Followed.ID", ((UserIdentity)User.Identity).ID)
-               }).Distinct(new Follower_FollowedEqCompare()).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+               }).Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
 
                 // 互粉 = 关注我的所有人  中 挑选出 我关注的人
                 // 我和这些人互粉 （UserInfo.ID）
@@ -468,14 +496,16 @@ namespace WebApi.Controllers
             {
                 MyFansViewModel viewModel = new MyFansViewModel();
 
+                Follower_FollowedEqCompare compare = new Follower_FollowedEqCompare();
+
                 // 我关注的所有人
                 IList<Follower_Followed> iFollow = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
                     Expression.Eq("Follower.ID", ((UserIdentity)User.Identity).ID)
-               }).Distinct(new Follower_FollowedEqCompare()).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+               }).Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
                 // 关注我的所有人
                 IList<Follower_Followed> iFollowed = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
                     Expression.Eq("Followed.ID", ((UserIdentity)User.Identity).ID)
-               }).Distinct(new Follower_FollowedEqCompare()).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+               }).Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
 
                 // 互粉 = 关注我的所有人  中 挑选出 我关注的人
                 // 我和这些人互粉 （UserInfo.ID）
@@ -554,11 +584,11 @@ namespace WebApi.Controllers
     {
         public bool Equals(Follower_Followed x, Follower_Followed y)
         {
-            if (x == null || y == null)
+            if (x == null || y == null || x.Follower == null || y.Follower == null || x.Followed == null || y.Followed == null)
             {
                 return false;
             }
-            else if (x.ID == y.ID)
+            else if (x.Follower.ID == y.Follower.ID && x.Followed.ID == y.Followed.ID)
             {
                 return true;
             }
@@ -568,8 +598,9 @@ namespace WebApi.Controllers
 
         public int GetHashCode(Follower_Followed obj)
         {
-            throw new NotImplementedException();
+            // 注意：必须实现, 并且返回同样数据，因为它首先调取此方法，因为 GetHashCode 比较更快
+            // https://www.zhangshengrong.com/p/JKN8Eqo2X6/
+            return 1;
         }
     }
-
 }

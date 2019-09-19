@@ -55,9 +55,13 @@
     <Reference Include="NPOI.OpenXmlFormats">
       <HintPath>..\..\libs\NPOI 2.3.0.0\dotnet4\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
+    <Reference Include="StackExchange.Redis, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\StackExchange.Redis.1.2.1\lib\net45\StackExchange.Redis.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -67,6 +71,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cache\CacheHelper.cs" />
+    <Compile Include="Cache\ICache.cs" />
+    <Compile Include="Cache\Redis.cs" />
     <Compile Include="DateTimeHelper.cs" />
     <Compile Include="EmailVerifyCode.cs" />
     <Compile Include="FileHelper.cs" />

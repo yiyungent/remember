@@ -189,6 +189,7 @@
     <Compile Include="Infrastructure\UserPrincipal.cs" />
     <Compile Include="Models\CourseBoxVM\CommentViewModel.cs" />
     <Compile Include="Models\CourseBoxVM\CourseBoxViewModel.cs" />
+    <Compile Include="Models\HomeVM\LastCourseBoxViewModel.cs" />
     <Compile Include="Models\UserInfoVM\MyFansViewModel.cs" />
     <Compile Include="Models\UserInfoVM\MyFollowViewModel.cs" />
     <Compile Include="Models\VideoInfoVM\VideoInfoViewModel.cs" />
