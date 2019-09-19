@@ -397,11 +397,11 @@ namespace WebApi.Controllers
                 // 我关注的所有人
                 IList<Follower_Followed> iFollow = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
                     Expression.Eq("Follower.ID", ((UserIdentity)User.Identity).ID)
-               }).ToList().OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+               }).Distinct(new Follower_FollowedEqCompare()).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
                 // 关注我的所有人
                 IList<Follower_Followed> iFollowed = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
                     Expression.Eq("Followed.ID", ((UserIdentity)User.Identity).ID)
-               }).ToList().OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+               }).Distinct(new Follower_FollowedEqCompare()).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
 
                 // 互粉 = 关注我的所有人  中 挑选出 我关注的人
                 // 我和这些人互粉 （UserInfo.ID）
@@ -471,11 +471,11 @@ namespace WebApi.Controllers
                 // 我关注的所有人
                 IList<Follower_Followed> iFollow = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
                     Expression.Eq("Follower.ID", ((UserIdentity)User.Identity).ID)
-               }).ToList().OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+               }).Distinct(new Follower_FollowedEqCompare()).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
                 // 关注我的所有人
                 IList<Follower_Followed> iFollowed = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
                     Expression.Eq("Followed.ID", ((UserIdentity)User.Identity).ID)
-               }).ToList().OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+               }).Distinct(new Follower_FollowedEqCompare()).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
 
                 // 互粉 = 关注我的所有人  中 挑选出 我关注的人
                 // 我和这些人互粉 （UserInfo.ID）
@@ -549,4 +549,27 @@ namespace WebApi.Controllers
         #endregion
 
     }
+
+    public class Follower_FollowedEqCompare : IEqualityComparer<Follower_Followed>
+    {
+        public bool Equals(Follower_Followed x, Follower_Followed y)
+        {
+            if (x == null || y == null)
+            {
+                return false;
+            }
+            else if (x.ID == y.ID)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public int GetHashCode(Follower_Followed obj)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 }

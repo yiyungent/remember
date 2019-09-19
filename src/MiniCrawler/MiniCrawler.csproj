@@ -45,6 +45,9 @@
     <Reference Include="MySql.Data.Entity.EF6, Version=6.9.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MySql.Data.Entity.6.9.12\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -83,7 +86,7 @@
     <Compile Include="EF\functioninfo.cs" />
     <Compile Include="EF\learner_coursebox.cs" />
     <Compile Include="EF\learner_videoinfo.cs" />
-    <Compile Include="EF\Model1.cs" />
+    <Compile Include="EF\RemDbContext.cs" />
     <Compile Include="EF\participantinfo.cs" />
     <Compile Include="EF\roleinfo.cs" />
     <Compile Include="EF\searchdetail.cs" />
@@ -94,6 +97,7 @@
     <Compile Include="EF\userinfo.cs" />
     <Compile Include="EF\videoinfo.cs" />
     <Compile Include="EF\videoinfo_comment.cs" />
+    <Compile Include="Models\CommentModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -101,6 +105,15 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{2b716300-f8db-4726-ac39-f45d15fb7a9d}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Framework\Framework.csproj">
+      <Project>{133DE7B4-457D-46B4-94ED-3CA0379644AE}</Project>
+      <Name>Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

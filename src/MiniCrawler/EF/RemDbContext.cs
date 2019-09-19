@@ -5,9 +5,9 @@ namespace MiniCrawler.EF
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
 
-    public partial class Model1 : DbContext
+    public partial class RemDbContext : DbContext
     {
-        public Model1()
+        public RemDbContext()
             : base("name=RemModel")
         {
         }

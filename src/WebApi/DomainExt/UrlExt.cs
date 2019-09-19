@@ -28,7 +28,7 @@ namespace WebApi.DomainExt
                 Expression.Eq("SetKey", "WebUISite")
             }).FirstOrDefault()?.SetValue;
 
-            string avatarUrl = dbRelativeUrl.Replace(":WebApiSite:", webApiSite).Replace(":WebUISite:", webUISite);
+            rtnStr = dbRelativeUrl.Replace(":WebApiSite:", webApiSite).Replace(":WebUISite:", webUISite);
 
             return rtnStr;
         }

@@ -532,6 +532,7 @@ namespace WebUI.Controllers
                     Avatar = ":WebUISite:/assets/images/default-avatar.jpg",
                     Password = EncryptHelper.MD5Encrypt32("admin"),
                     Email = "yiyungent@126.com",
+                    Description = "我是超级管理员",
                     Status = 0,
                     RoleInfoList = (from m in allRole where m.ID == 1 select m).ToList(),
                     RegTime = DateTime.Now
@@ -549,6 +550,7 @@ namespace WebUI.Controllers
                     {
                         Name = $"会员-{ i + 1 }",
                         UserName = "acc" + (i + 1),
+                        Description = $"我是会员-{i + 1}",
                         Avatar = ":WebUISite:/assets/images/default-avatar.jpg",
                         Password = EncryptHelper.MD5Encrypt32("acc" + (i + 1)),
                         Email = "acc" + (i + 1) + "@qq.com",
@@ -697,7 +699,7 @@ namespace WebUI.Controllers
                 {
                     UserInfo userInfo = Container.Instance.Resolve<UserInfoService>().GetEntity(1);
                     CourseBox courseBox = new CourseBox();
-                    courseBox.Name = "测试课程-" + (i + 1);
+                    courseBox.Name = "课程-" + (i + 1);
                     courseBox.Description = $"这是测试课程-{(i + 1)}的描述";
                     courseBox.Creator = userInfo;
                     courseBox.PicUrl = "https://static.runoob.com/images/mix/img_fjords_wide.jpg";

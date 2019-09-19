@@ -10,7 +10,16 @@ namespace MiniCrawler
     {
         static void Main(string[] args)
         {
+            try
+            {
+                BiliVideoComment.TryVideosComments(length: 500);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
+            Console.ReadKey();
         }
     }
 }

@@ -11,6 +11,7 @@ using System.Web.Http;
 using WebApi.Models.Common;
 using WebApi.Models.CourseBoxVM;
 using WebApi.Models.HomeVM;
+using WebApi.DomainExt;
 
 namespace WebApi.Controllers
 {
@@ -35,19 +36,19 @@ namespace WebApi.Controllers
                       into g
                         select new
                         {
-                            CourseBox = new RankingCourseBoxItem
+                            CourseBox = new RankingCourseBoxViewModel.RankingCourseBoxItem
                             {
                                 ID = g.Key,
-                                Creator = new Models.UserInfoVM.UserInfoViewModel
+                                Creator = new RankingCourseBoxViewModel.Creator
                                 {
                                     ID = g.First().CourseBox.Creator.ID,
                                     UserName = g.First().CourseBox.Creator.UserName,
                                     Name = g.First().CourseBox.Creator.Name,
-                                    Avatar = g.First().CourseBox.Creator.Avatar,
+                                    Avatar = g.First().CourseBox.Creator.Avatar.ToHttpAbsoluteUrl(),
                                 },
                                 Description = g.First().CourseBox.Description,
                                 Name = g.First().CourseBox.Name,
-                                PicUrl = g.First().CourseBox.PicUrl
+                                PicUrl = g.First().CourseBox.PicUrl.ToHttpAbsoluteUrl()
                             },
                             LearnNum = g.Count(),
                             TotalSpendTime = g.Sum(s => s.SpendTime)

@@ -47,7 +47,7 @@ namespace Domain
         /// 描述
         /// </summary>
         [Display(Name = "描述")]
-        [Property(Length = 300, NotNull = false)]
+        [Property(Length = 300, NotNull = false, Default = "")]
         public string Description { get; set; }
 
         /// <summary>
