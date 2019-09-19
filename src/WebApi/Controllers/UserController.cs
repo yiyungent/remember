@@ -41,9 +41,9 @@ namespace WebApi.Controllers
                 SettingService settingService = Container.Instance.Resolve<SettingService>();
                 string webApiSite = settingService.Query(new List<ICriterion>
                 {
-                    Expression.Eq("SetKey", "WebApiSite")
+                    Expression.Eq("SetKey", "WebUISite")
                 }).FirstOrDefault()?.SetValue;
-                string avatarUrl = userInfo.Avatar.Replace(":WebApiSite:", webApiSite);
+                string avatarUrl = userInfo.Avatar.Replace(":WebUISite:", webApiSite);
 
                 viewModel = new UserInfoViewModel()
                 {

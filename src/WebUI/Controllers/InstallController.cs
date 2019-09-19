@@ -528,7 +528,7 @@ namespace WebUI.Controllers
                 {
                     Name = "超级管理员admin",
                     UserName = "admin",
-                    Avatar = "/assets/images/default-avatar.jpg",
+                    Avatar = ":WebUISite:/assets/images/default-avatar.jpg",
                     Password = EncryptHelper.MD5Encrypt32("admin"),
                     Email = "yiyungent@126.com",
                     Status = 0,
@@ -548,7 +548,7 @@ namespace WebUI.Controllers
                     {
                         Name = $"会员-{ i + 1 }",
                         UserName = "acc" + (i + 1),
-                        Avatar = "/assets/images/default-avatar.jpg",
+                        Avatar = ":WebUISite:/assets/images/default-avatar.jpg",
                         Password = EncryptHelper.MD5Encrypt32("acc" + (i + 1)),
                         Email = "acc" + (i + 1) + "@qq.com",
                         Status = 0,

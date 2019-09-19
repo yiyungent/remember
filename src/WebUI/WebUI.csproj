@@ -10851,6 +10851,7 @@
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Admin\Controllers\PluginController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoleInfoController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SettingController.cs" />
     <Compile Include="Areas\Admin\Controllers\ThemeTemplateController.cs" />
     <Compile Include="Areas\Admin\Models\CardBoxVM\CardBoxViewModel.cs" />
     <Compile Include="Areas\Admin\Models\CardInfoVM\CardInfoViewModel.cs" />
@@ -10967,6 +10968,7 @@
     <Folder Include="Areas\Admin\Views\CardBox\" />
     <Folder Include="Areas\Admin\Views\Control\" />
     <Folder Include="Areas\Admin\Views\Dashboard\" />
+    <Folder Include="Areas\Admin\Views\Setting\" />
     <Folder Include="Areas\Demo\Views\Bilibili\" />
     <Folder Include="Areas\Demo\Views\Shared\" />
     <Folder Include="Areas\Tools\Models\" />
