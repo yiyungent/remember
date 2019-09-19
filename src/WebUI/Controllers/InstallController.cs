@@ -49,7 +49,8 @@ namespace WebUI.Controllers
             InitSys_Menu();
             InitFunction();
             InitRole();
-            InitUser();
+            InitUserInfo();
+            InitFollower_Followed();
             InitArticle();
             InitCardBox();
             InitCardInfo();
@@ -513,7 +514,7 @@ namespace WebUI.Controllers
         #endregion
 
         #region 初始化用户表
-        private void InitUser()
+        private void InitUserInfo()
         {
             try
             {
@@ -554,6 +555,36 @@ namespace WebUI.Controllers
                         Status = 0,
                         RoleInfoList = (from m in allRole where m.ID == 3 select m).ToList(),
                         RegTime = DateTime.Now
+                    });
+                }
+
+                ShowMessage("成功");
+            }
+            catch (Exception ex)
+            {
+                ShowMessage("失败");
+                ShowMessage(ex.Message);
+            }
+        }
+        #endregion
+
+        #region 初始化关注者被关注者表
+        private void InitFollower_Followed()
+        {
+            try
+            {
+                ShowMessage("初始化关注者被关注者表");
+
+                IList<UserInfo> allUserInfo = Container.Instance.Resolve<UserInfoService>().GetAll();
+                for (int i = 0; i < allUserInfo.Count; i++)
+                {
+                    UserInfo follower = allUserInfo[new Random().Next(0, allUserInfo.Count - 1)];
+                    IList<UserInfo> exceptAllUserInfo = allUserInfo.Where(m => m.ID != follower.ID).ToList();
+                    Container.Instance.Resolve<Follower_FollowedService>().Create(new Follower_Followed
+                    {
+                        Follower = follower,
+                        Followed = exceptAllUserInfo[new Random().Next(0, exceptAllUserInfo.Count - 1)],
+                        CreateTime = DateTime.Now.AddDays(new Random().Next(0, 100)).AddMinutes(new Random().Next(0, 1000))
                     });
                 }
 

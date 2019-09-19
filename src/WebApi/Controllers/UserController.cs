@@ -17,6 +17,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using WebApi.Attributes;
+using WebApi.DomainExt;
 using WebApi.Infrastructure;
 using WebApi.Models;
 using WebApi.Models.Common;
@@ -45,12 +46,19 @@ namespace WebApi.Controllers
                 }).FirstOrDefault()?.SetValue;
                 string avatarUrl = userInfo.Avatar.Replace(":WebUISite:", webApiSite);
 
+                int followNum = Container.Instance.Resolve<Follower_FollowedService>().Count(Expression.Eq("Follower.ID", userInfo.ID));
+                int fansNum = Container.Instance.Resolve<Follower_FollowedService>().Count(Expression.Eq("Followed.ID", userInfo.ID));
+                int articleNum = Container.Instance.Resolve<ArticleService>().Count(Expression.Eq("Author.ID", userInfo.ID));
+
                 viewModel = new UserInfoViewModel()
                 {
                     ID = userInfo.ID,
                     UserName = userInfo.UserName,
                     Desc = userInfo.Description,
-                    Avatar = avatarUrl
+                    FansNum = fansNum,
+                    FollowNum = followNum,
+                    Avatar = avatarUrl,
+                    ArticleNum = articleNum
                 };
             }
             responseData = new ResponseData
@@ -375,8 +383,150 @@ namespace WebApi.Controllers
         }
         #endregion
 
+        #region 我的关注
+        [NeedAuth]
+        [Route("MyFollow")]
+        [HttpGet]
+        public ResponseData MyFollow()
+        {
+            ResponseData responseData = null;
+            try
+            {
+                MyFollowViewModel viewModel = new MyFollowViewModel();
+
+                // 我关注的所有人
+                IList<Follower_Followed> iFollow = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
+                    Expression.Eq("Follower.ID", ((UserIdentity)User.Identity).ID)
+               }).ToList().OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+                // 关注我的所有人
+                IList<Follower_Followed> iFollowed = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
+                    Expression.Eq("Followed.ID", ((UserIdentity)User.Identity).ID)
+               }).ToList().OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+
+                // 互粉 = 关注我的所有人  中 挑选出 我关注的人
+                // 我和这些人互粉 （UserInfo.ID）
+                IList<int> iAndHeFollow = iFollowed.Select(m => m.Follower.ID).Where((id) =>
+                {
+                    bool exist = iFollow.Select(m => m.Followed.ID).Contains(id);
+
+                    return exist;
+                }).ToList();
 
 
+
+                viewModel.Groups = new List<MyFollowViewModel.MyFollowGroup>();
+                MyFollowViewModel.MyFollowGroup group = new MyFollowViewModel.MyFollowGroup();
+                group.ID = 1;
+                group.GroupName = "默认分组";
+                group.Users = new List<MyFollowViewModel.MyFollowInfo>();
+                foreach (var item in iFollow)
+                {
+                    group.Users.Add(new MyFollowViewModel.MyFollowInfo
+                    {
+                        // 若我关注的人中，被关注者 也关注了我，则为互粉，否则 我 单方面关注他
+                        Relation = iAndHeFollow.Contains(item.Followed.ID) ? 3 : 1,
+                        CreateTime = item.CreateTime.ToTimeStamp13(),
+                        User = new MyFollowViewModel.User
+                        {
+                            ID = item.Followed.ID,
+                            Avatar = item.Followed.Avatar.ToHttpAbsoluteUrl(),
+                            Desc = item.Followed.Description,
+                            UserName = item.Followed.UserName,
+                        }
+                    });
+                }
+                viewModel.Groups.Add(group);
+
+                responseData = new ResponseData
+                {
+                    Code = 1,
+                    Message = "获取我的关注成功",
+                    Data = viewModel
+                };
+            }
+            catch (Exception ex)
+            {
+                responseData = new ResponseData
+                {
+                    Code = -1,
+                    Message = "获取我的关注失败"
+                };
+            }
+
+            return responseData;
+        }
+        #endregion
+
+        #region 我的粉丝
+        [NeedAuth]
+        [Route("MyFans")]
+        [HttpGet]
+        public ResponseData MyFans()
+        {
+            ResponseData responseData = null;
+            try
+            {
+                MyFansViewModel viewModel = new MyFansViewModel();
+
+                // 我关注的所有人
+                IList<Follower_Followed> iFollow = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
+                    Expression.Eq("Follower.ID", ((UserIdentity)User.Identity).ID)
+               }).ToList().OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+                // 关注我的所有人
+                IList<Follower_Followed> iFollowed = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
+                    Expression.Eq("Followed.ID", ((UserIdentity)User.Identity).ID)
+               }).ToList().OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+
+                // 互粉 = 关注我的所有人  中 挑选出 我关注的人
+                // 我和这些人互粉 （UserInfo.ID）
+                IList<int> iAndHeFollow = iFollowed.Select(m => m.Follower.ID).Where((id) =>
+                {
+                    bool exist = iFollow.Select(m => m.Followed.ID).Contains(id);
+
+                    return exist;
+                }).ToList();
+
+                viewModel.Groups = new List<MyFansViewModel.MyFansGroup>();
+                MyFansViewModel.MyFansGroup group = new MyFansViewModel.MyFansGroup();
+                group.ID = 1;
+                group.GroupName = "默认分组";
+                group.Users = new List<MyFansViewModel.MyFansInfo>();
+                foreach (var item in iFollowed)
+                {
+                    group.Users.Add(new MyFansViewModel.MyFansInfo
+                    {
+                        Relation = iAndHeFollow.Contains(item.Follower.ID) ? 3 : 2,
+                        CreateTime = item.CreateTime.ToTimeStamp13(),
+                        User = new MyFansViewModel.User
+                        {
+                            ID = item.Follower.ID,
+                            Avatar = item.Follower.Avatar.ToHttpAbsoluteUrl(),
+                            Desc = item.Follower.Description,
+                            UserName = item.Follower.UserName
+                        }
+                    });
+                }
+                viewModel.Groups.Add(group);
+
+                responseData = new ResponseData
+                {
+                    Code = 1,
+                    Message = "获取我的粉丝成功",
+                    Data = viewModel
+                };
+            }
+            catch (Exception ex)
+            {
+                responseData = new ResponseData
+                {
+                    Code = -1,
+                    Message = "获取我的粉丝失败"
+                };
+            }
+
+            return responseData;
+        }
+        #endregion
 
         #region Helper
 

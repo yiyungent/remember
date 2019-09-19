@@ -181,6 +181,7 @@
     <Compile Include="Controllers\VideoInfoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="DomainExt\UrlExt.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -188,6 +189,8 @@
     <Compile Include="Infrastructure\UserPrincipal.cs" />
     <Compile Include="Models\CourseBoxVM\CommentViewModel.cs" />
     <Compile Include="Models\CourseBoxVM\CourseBoxViewModel.cs" />
+    <Compile Include="Models\UserInfoVM\MyFansViewModel.cs" />
+    <Compile Include="Models\UserInfoVM\MyFollowViewModel.cs" />
     <Compile Include="Models\VideoInfoVM\VideoInfoViewModel.cs" />
     <Compile Include="Models\HomeVM\RankingCourseBoxViewModel.cs" />
     <Compile Include="Models\UserInfoVM\LoginViewModel.cs" />
@@ -207,7 +210,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="DomainExt\" />
     <Folder Include="Upload\avatars\" />
     <Folder Include="Upload\videos\" />
   </ItemGroup>
