@@ -4,18 +4,20 @@
 @using WebUI.Areas.Account.Models
 @using Framework.Models
 @using Framework.Infrastructure.Concrete
+@using Framework.Extensions
+@using WebUI.Extensions
 @model UserInfo
 @{
 	Layout = "~/Areas/Account/Views/Shared/_TopNav.cshtml";
-	ViewBag.Title = Model.Name + "- 个人中心 - TES";
+	ViewBag.Title = Model.UserName + "- 个人中心 - " + WebSetting.Get("WebUITitle");
 
 	// 当前登录账号
 	CurrentAccountModel currentAccount = AccountManager.GetCurrentAccount();
 	UserInfo currentUserInfo = currentAccount.UserInfo;
+	currentUserInfo.Avatar = currentUserInfo.Avatar.ToHttpAbsoluteUrl();
 	EditUserInfoViewModel editUserInfoModel = new EditUserInfoViewModel
 	{
 		InputUserName = currentUserInfo.UserName,
-		InputName = currentUserInfo.Name,
 		InputDescription = currentUserInfo.Description,
 		InputEmail = currentUserInfo.Email
 	};

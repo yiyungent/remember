@@ -13,6 +13,7 @@ using Framework.Factories;
 using Framework.Mvc;
 using WebUI.Areas.Admin.Models;
 using WebUI.Areas.Admin.Models.Common;
+using Framework.Extensions;
 
 namespace WebUI.Areas.Admin.Controllers
 {
@@ -23,8 +24,9 @@ namespace WebUI.Areas.Admin.Controllers
         public HomeController()
         {
             this._authManager = HttpOneRequestFactory.Get<IAuthManager>();
-            ViewBag.PageHeader = "TES";
-            ViewBag.PageHeaderDescription = "教学评价系统";
+            string title = WebSetting.Get("WebUITitle").Split(new string[] { "-", " " }, StringSplitOptions.RemoveEmptyEntries)[0];
+            ViewBag.PageHeader = title.Split(new string[] { "-", " " }, StringSplitOptions.RemoveEmptyEntries)[0];
+            ViewBag.PageHeaderDescription = title;
             ViewBag.BreadcrumbList = new List<BreadcrumbItem>();
 
             UserInfo currentUserInfo = AccountManager.GetCurrentUserInfo();

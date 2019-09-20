@@ -1,8 +1,9 @@
 ﻿@using Domain
 @using Framework.Models
+@using Framework.Extensions
 @model CurrentAccountModel
 @{
-	ViewBag.Title = "教学评价系统 - TES";
+	ViewBag.Title = WebSetting.Get("WebUITitle");
 	Layout = "~/Views/Shared/_TopNav.cshtml";
 
 	UserInfo currentUserInfo = Model.UserInfo;

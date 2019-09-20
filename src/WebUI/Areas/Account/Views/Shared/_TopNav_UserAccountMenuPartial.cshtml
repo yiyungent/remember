@@ -13,9 +13,9 @@
 	<!-- Menu Toggle Button -->
 	<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 		<!-- The user image in the navbar-->
-		<img src="@currentUserInfo.Avatar" class="user-image" alt="User Image">
+		<img src="@currentUserInfo.Avatar.ToHttpAbsoluteUrl()" class="user-image" alt="User Image">
 		<!-- hidden-xs hides the username on small devices so only the image appears. -->
-		<span class="hidden-xs">@currentUserInfo.Name</span>
+		<span class="hidden-xs">@currentUserInfo.UserName</span>
 	</a>
 	<ul class="dropdown-menu">
 		<!-- The user image in the menu -->
@@ -23,7 +23,7 @@
 			<img src="@currentUserInfo.Avatar" class="img-circle" alt="User Image">
 
 			<p>
-				@currentUserInfo.Name - @roleName
+				@currentUserInfo.UserName - @roleName
 				@if (!currentAccount.IsGuest)
 				{
 					<small>加入自 @currentUserInfo.RegTime.ToRegTime()</small>

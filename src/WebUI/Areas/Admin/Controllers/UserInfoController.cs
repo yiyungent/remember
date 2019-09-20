@@ -1,11 +1,13 @@
 ﻿using Core;
 using Domain;
+using Framework.Common;
 using Framework.Factories;
 using Framework.HtmlHelpers;
 using Framework.Infrastructure.Abstract;
 using Framework.Infrastructure.Concrete;
 using Framework.Models;
 using Framework.Mvc;
+using Jdenticon;
 using NHibernate.Criterion;
 using Service;
 using System;
@@ -196,6 +198,12 @@ namespace WebUI.Areas.Admin.Controllers
                     #endregion
 
                     UserInfo dbModel = (UserInfo)inputModel;
+                    // 自动生成头像
+                    Identicon
+                    .FromValue(EncryptHelper.MD5Encrypt32(dbModel.UserName), size: 100)
+                    .SaveAsPng(Server.MapPath("/upload/images/avatars/" + dbModel.UserName + ".png"));
+
+                    dbModel.Avatar = ":WebUISite:/upload/images/avatars/" + dbModel.UserName + ".png";
 
                     Container.Instance.Resolve<UserInfoService>().Create(dbModel);
 

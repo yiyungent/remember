@@ -3,6 +3,7 @@
 @using WebUI.Extensions
 @using PluginHub.Mvc5
 @using Framework.Models
+@using Framework.Extensions
 @using Framework.Infrastructure.Concrete
 @{
 	Layout = null;
@@ -20,7 +21,7 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width" />
-	<title>@ViewBag.Title</title>
+	<title>@WebSetting.Get("WebUITitle")</title>
 	<!-- Tell the browser to be responsive to screen width -->
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 	<link rel="stylesheet" href="/assets/libs/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css">

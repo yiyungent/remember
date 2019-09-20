@@ -18,17 +18,20 @@ namespace WebUI.Extensions
         public static string ToHttpAbsoluteUrl(this string dbRelativeUrl)
         {
             string rtnStr = "";
-            SettingService settingService = Container.Instance.Resolve<SettingService>();
-            string webApiSite = settingService.Query(new List<ICriterion>
+            if (!string.IsNullOrEmpty(dbRelativeUrl))
+            {
+                SettingService settingService = Container.Instance.Resolve<SettingService>();
+                string webApiSite = settingService.Query(new List<ICriterion>
             {
                 Expression.Eq("SetKey", "WebApiSite")
             }).FirstOrDefault()?.SetValue;
-            string webUISite = settingService.Query(new List<ICriterion>
+                string webUISite = settingService.Query(new List<ICriterion>
             {
                 Expression.Eq("SetKey", "WebUISite")
             }).FirstOrDefault()?.SetValue;
 
-            rtnStr = dbRelativeUrl.Replace(":WebApiSite:", webApiSite).Replace(":WebUISite:", webUISite);
+                rtnStr = dbRelativeUrl.Replace(":WebApiSite:", webApiSite).Replace(":WebUISite:", webUISite);
+            }
 
             return rtnStr;
         }

@@ -1,7 +1,8 @@
 ﻿@using WebUI.Areas.Admin.Models
+@using Framework.Extensions
 @{
 	Layout = "~/Areas/Admin/Views/Shared/_Admin.cshtml";
-	ViewBag.Title = "管理中心 - remember";
+	ViewBag.Title = "管理中心 - " + WebSetting.Get("WebUITitle");
 }
 @section head {
 	<!-- Tell the browser to be responsive to screen width -->

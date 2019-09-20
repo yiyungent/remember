@@ -2,6 +2,7 @@
 @using WebUI.Areas.Admin.Models
 @using WebUI.Extensions
 @using Framework.Models
+@using Framework.Extensions
 @using PluginHub.Mvc5
 @using Framework.Infrastructure.Concrete
 @{
@@ -13,6 +14,7 @@
 
 	ViewBag.CurrentAccount = currentAccount;
 	ViewBag.RoleName = roleName;
+	ViewBag.Title = WebSetting.Get("WebUITitle");
 }
 
 <!DOCTYPE html>
@@ -45,7 +47,7 @@
 			<nav class="navbar navbar-static-top">
 				<div class="container">
 					<div class="navbar-header">
-						<a href="/" class="navbar-brand"><b>T</b>ES</a>
+						<a href="/" class="navbar-brand">@ViewBag.Title</a>
 						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
 							<i class="fa fa-bars"></i>
 						</button>

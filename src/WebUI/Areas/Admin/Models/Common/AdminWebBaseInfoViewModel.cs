@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Framework.Extensions;
 
 namespace WebUI.Areas.Admin.Models.Common
 {
@@ -19,9 +20,11 @@ namespace WebUI.Areas.Admin.Models.Common
 
         public AdminWebBaseInfoViewModel()
         {
-            this.Logo_mini = "<b>T</b>ES";
-            this.Logo_lg = "<b>教学</b>评价系统";
-            this.Copyright = "<strong>Copyright &copy; " + DateTime.Now.Year + " <a href=\"#\">Company</a>.</strong> All rights reserved.";
+            string title_mini = WebSetting.Get("WebUITitle").Split(new string[] { "-", " " }, StringSplitOptions.RemoveEmptyEntries)[0];
+            string webUiUrl = WebSetting.Get("WebUISite");
+            this.Logo_mini = title_mini;
+            this.Logo_lg = title_mini;
+            this.Copyright = "<strong>Copyright &copy; " + DateTime.Now.Year + $" <a target='_blank' href=\"{webUiUrl}\">{title_mini}</a>.</strong> All rights reserved.";
             IList<ThemeTemplate> themeTemplates = Container.Instance.Resolve<ThemeTemplateService>().Query(new List<ICriterion>
             {
                 Expression.Eq("Status", 1)

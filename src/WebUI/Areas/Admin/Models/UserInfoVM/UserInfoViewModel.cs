@@ -32,13 +32,6 @@ namespace WebUI.Areas.Admin.Models.UserInfoVM
         public string InputUserName { get; set; }
 
         /// <summary>
-        /// 展示名
-        /// </summary>
-        [Display(Name = "展示名")]
-        [Required(ErrorMessage = "展示名不能为空")]
-        public string InputName { get; set; }
-
-        /// <summary>
         /// 用户头像Url地址
         /// </summary>
         public string InputAvatar { get; set; }
@@ -54,12 +47,6 @@ namespace WebUI.Areas.Admin.Models.UserInfoVM
 
         [Display(Name = "密码")]
         public string InputPassword { get; set; }
-
-        [Display(Name = "绑定员工工号")]
-        public string InputEmployeeCode { get; set; }
-
-        [Display(Name = "绑定学生学号")]
-        public string InputStudentCode { get; set; }
 
         [Display(Name = "角色")]
         public List<OptionModel> RoleOptions { get; set; }
