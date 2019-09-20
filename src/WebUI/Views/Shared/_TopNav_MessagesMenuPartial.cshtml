@@ -1,5 +1,6 @@
 ﻿@using Domain
 @using Framework.Models
+@using WebUI.Extensions
 @{
 	Layout = null;
 	CurrentAccountModel currentAccount = ViewBag.CurrentAccount;
@@ -9,12 +10,12 @@
 
 <li class="dropdown messages-menu">
 	<!-- Menu toggle button -->
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+	@*<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 		<i class="fa fa-envelope-o"></i>
 		<span class="label label-success">4</span>
-	</a>
+	</a>*@
 	<ul class="dropdown-menu">
-		<li class="header">You have 4 messages</li>
+		@*<li class="header">You have 4 messages</li>*@
 		<li>
 			<!-- inner menu: contains the messages -->
 			<ul class="menu">
@@ -23,21 +24,21 @@
 					<a href="#">
 						<div class="pull-left">
 							<!-- User Image -->
-							<img src="@currentAccount.UserInfo.Avatar" class="img-circle" alt="User Image">
+							<img src="@currentAccount.UserInfo.Avatar.ToHttpAbsoluteUrl()" class="img-circle" alt="User Image">
 						</div>
 						<!-- Message title and timestamp -->
-						<h4>
+						@*<h4>
 							Support Team
 							<small><i class="fa fa-clock-o"></i> 5 mins</small>
-						</h4>
+						</h4>*@
 						<!-- The message -->
-						<p>Why not buy a new awesome theme?</p>
+						<p>@*Why not buy a new awesome theme?*@</p>
 					</a>
 				</li>
 				<!-- end message -->
 			</ul>
 			<!-- /.menu -->
 		</li>
-		<li class="footer"><a href="#">查看所有消息</a></li>
+		@*<li class="footer"><a href="#">查看所有消息</a></li>*@
 	</ul>
 </li>

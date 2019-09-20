@@ -10810,6 +10810,7 @@
     <Content Include="assets\libs\vue-router\LICENSE" />
     <Content Include="assets\libs\vue-router\package.json" />
     <Content Include="assets\libs\vue-router\README.md" />
+    <Content Include="Areas\Admin\Views\Setting\Index.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.12.0.intellisense.js" />
     <Content Include="Demos\NotificationDemo.html" />
@@ -10848,6 +10849,7 @@
     <Compile Include="Areas\Admin\Controllers\ArticleController.cs" />
     <Compile Include="Areas\Admin\Controllers\CardBoxController.cs" />
     <Compile Include="Areas\Admin\Controllers\ControlController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CourseBoxController.cs" />
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Admin\Controllers\PluginController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoleInfoController.cs" />
@@ -10864,6 +10866,7 @@
     <Compile Include="Areas\Admin\Models\PluginVM\PluginListViewModel.cs" />
     <Compile Include="Areas\Admin\Models\PluginVM\PluginModel.cs" />
     <Compile Include="Areas\Admin\Models\RoleInfoVM\RoleInfoViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\SettingVM\SettingViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ThemeTemplateVM\OpenCloseItem.cs" />
     <Compile Include="Areas\Admin\Models\ThemeTemplateVM\ThemeTemplateListViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ThemeTemplateVM\InstallZipItem.cs" />
@@ -10911,6 +10914,7 @@
     <Compile Include="Models\CardBoxVM\SearchResultViewModel.cs" />
     <Compile Include="Models\Cms\RenderWidgetModel.cs" />
     <Compile Include="Models\Cms\WidgetModel.cs" />
+    <Compile Include="Extensions\UrlExt.cs" />
     <Compile Include="Models\CourseBoxVM\SearchResultViewModel.cs" />
     <Compile Include="Models\SearchVM\IndexContent.cs" />
     <Compile Include="Models\SearchVM\LuceneEnum.cs" />
@@ -10934,26 +10938,6 @@
     <Content Include="Views\Widget\WidgetsByZone.cshtml" />
     <Content Include="Views\Errors\PageNotFound.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
-    <Content Include="Views\Home\Test.cshtml" />
-    <Content Include="Views\Shared\_LayoutApp.cshtml" />
-    <Content Include="Views\Home\Test2.cshtml" />
-    <Content Include="Views\CardBox\Card.cshtml" />
-    <Content Include="Views\CardBox\Details.cshtml" />
-    <Content Include="Views\CardBox\Comment.cshtml" />
-    <Content Include="Views\CardBox\Search.cshtml" />
-    <Content Include="Views\CardBox\Create.cshtml" />
-    <Content Include="Views\Student\Index.cshtml" />
-    <Content Include="Views\Student\Edit.cshtml" />
-    <Content Include="Views\CardBox\Catalog.cshtml" />
-    <Content Include="Views\CardBox\Index.cshtml" />
-    <Content Include="Views\CourseBox\Catalog.cshtml" />
-    <Content Include="Views\CourseBox\Comment.cshtml" />
-    <Content Include="Views\CourseBox\Create.cshtml" />
-    <Content Include="Views\CourseBox\Details.cshtml" />
-    <Content Include="Views\CourseBox\Index.cshtml" />
-    <Content Include="Views\CourseBox\Search.cshtml" />
-    <Content Include="Views\CourseBox\AddVideo.cshtml" />
-    <Content Include="Views\CourseBox\AddRichText.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -10967,23 +10951,19 @@
     <Folder Include="Areas\Account\Views\Control\" />
     <Folder Include="Areas\Admin\Views\CardBox\" />
     <Folder Include="Areas\Admin\Views\Control\" />
+    <Folder Include="Areas\Admin\Views\CourseBox\" />
     <Folder Include="Areas\Admin\Views\Dashboard\" />
-    <Folder Include="Areas\Admin\Views\Setting\" />
     <Folder Include="Areas\Demo\Views\Bilibili\" />
     <Folder Include="Areas\Demo\Views\Shared\" />
     <Folder Include="Areas\Tools\Models\" />
     <Folder Include="Areas\Tools\Views\Home\" />
     <Folder Include="Areas\Tools\Views\Shared\" />
+    <Folder Include="Models\Common\" />
     <Folder Include="Plugins\" />
     <Folder Include="Templates\" />
     <Folder Include="Upload\images\avatars\" />
     <Folder Include="Upload\TemplateInstallZip\" />
     <Folder Include="Upload\Tools\IToday\" />
-    <Folder Include="Views\CardInfo\" />
-    <Folder Include="Views\Card\" />
-    <Folder Include="Views\CourseInfo\" />
-    <Folder Include="Views\NotificationDemo\" />
-    <Folder Include="Views\WebSocket\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\pluginHub\PluginHub.Mvc5\PluginHub.Mvc5.csproj">

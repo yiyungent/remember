@@ -124,7 +124,6 @@ namespace WebApi.Controllers
                     {
                         UserName = viewModel.UserName,
                         Password = EncryptHelper.MD5Encrypt32(viewModel.Password),
-                        Name = viewModel.Name.Trim(),
                         Email = viewModel.Email?.Trim()
                     });
 
@@ -339,10 +338,6 @@ namespace WebApi.Controllers
             try
             {
                 UserInfo userInfo = AccountManager.GetCurrentUserInfo();
-                if (!string.IsNullOrEmpty(model.Name))
-                {
-                    userInfo.Name = model.Name;
-                }
                 if (!string.IsNullOrEmpty(model.Desc))
                 {
                     userInfo.Description = model.Desc;
@@ -364,7 +359,6 @@ namespace WebApi.Controllers
                     {
                         ID = userInfo.ID,
                         UserName = userInfo.UserName,
-                        Name = userInfo.Name,
                         Desc = userInfo.Description,
                         Avatar = avatarUrl
                     }

@@ -91,6 +91,7 @@
     <Compile Include="Config\FrameworkConfig.cs" />
     <Compile Include="Core\FrameworkException.cs" />
     <Compile Include="Extensions\DomainExt.cs" />
+    <Compile Include="Extensions\WebSetting.cs" />
     <Compile Include="Factories\AuthManagerFactory.cs" />
     <Compile Include="Factories\DBAccessProviderFactory.cs" />
     <Compile Include="Factories\HttpOneRequestFactory.cs" />

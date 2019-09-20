@@ -19,6 +19,7 @@ using System.Threading;
 using WebUI.Attributes;
 using log4net;
 using WebUI.Infrastructure.Search;
+using System.Configuration;
 
 namespace WebUI
 {
@@ -56,31 +57,35 @@ namespace WebUI
             SearchIndexManager.GetInstance().StartThread();
 
             #region log4net
-            log4net.Config.XmlConfigurator.Configure();
-            GlobalFilters.Filters.Add(new LogErrorAttribute());
-            ThreadPool.QueueUserWorkItem(o =>
+            bool enableLog4Net = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableLog4Net"]);
+            if (enableLog4Net)
             {
-                while (true)
+                log4net.Config.XmlConfigurator.Configure();
+                GlobalFilters.Filters.Add(new LogErrorAttribute());
+                ThreadPool.QueueUserWorkItem(o =>
                 {
-                    if (LogErrorAttribute.ExceptionQueue.Count > 0)
+                    while (true)
                     {
-                        Exception ex = LogErrorAttribute.ExceptionQueue.Dequeue();
-                        if (ex != null)
+                        if (LogErrorAttribute.ExceptionQueue.Count > 0)
                         {
-                            ILog logger = LogManager.GetLogger("testError");
-                            logger.Error(ex.ToString()); //将异常信息写入Log4Net中  
+                            Exception ex = LogErrorAttribute.ExceptionQueue.Dequeue();
+                            if (ex != null)
+                            {
+                                ILog logger = LogManager.GetLogger("testError");
+                                logger.Error(ex.ToString()); //将异常信息写入Log4Net中  
+                        }
+                            else
+                            {
+                                Thread.Sleep(50);
+                            }
                         }
                         else
                         {
                             Thread.Sleep(50);
                         }
                     }
-                    else
-                    {
-                        Thread.Sleep(50);
-                    }
-                }
-            });
+                });
+            }
             #endregion
         }
 
@@ -140,7 +145,7 @@ namespace WebUI
                     errorController.Execute(new RequestContext(new HttpContextWrapper(Context), routeData));
                 }
             }
-        } 
+        }
         #endregion
     }
 }

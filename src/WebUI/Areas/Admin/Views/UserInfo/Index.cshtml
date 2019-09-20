@@ -145,7 +145,6 @@
 			<tr>
 				<th>ID</th>
 				<th>用户名</th>
-				<th>展示名</th>
 				<th>头像</th>
 				<th>角色</th>
 				<th>操作</th>
@@ -155,8 +154,7 @@
 				<tr data-tr-id="@item.ID">
 					<td>@item.ID</td>
 					<td>@item.UserName</td>
-					<td>@item.Name</td>
-					<td><img class="img-rounded img-responsive" style="width:30px;" src="@item.Avatar" alt="@item.UserName" /></td>
+					<td><img class="img-rounded img-responsive" style="width:30px;" src="@item.Avatar.ToHttpAbsoluteUrl()" alt="@item.UserName" /></td>
 					<td>
 						@{ string[] colors = { "warning", "primary", "danger", "default" }; }
 						@for (int i = 0; i < item.RoleInfoList.Count; i++)

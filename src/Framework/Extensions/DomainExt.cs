@@ -22,6 +22,5 @@ namespace Framework.Extensions
             return rtn;
         }
 
-
     }
 }

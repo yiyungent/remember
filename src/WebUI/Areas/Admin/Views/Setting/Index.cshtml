@@ -1,0 +1,125 @@
+﻿@using Framework.HtmlHelpers
+@using WebUI.Areas.Admin.Models.Common
+@using WebUI.Extensions
+@using Domain
+@using WebUI.Areas.Admin.Models.SettingVM;
+@model SettingViewModel
+@{
+	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
+}
+
+
+<!-- start 提示框 -->
+@{ Html.RenderPartial("_MessagePartial"); }
+<!-- end 提示框 -->
+
+<input id="js-id" type="hidden" />
+
+<!-- start .box -->
+<div class="box">
+	<!-- start .box-header -->
+	<div class="box-header">
+		<h3 class="box-title">网站设置</h3>
+		<div class="box-tools">
+		</div>
+	</div>
+	<!-- end .box-header -->
+	<!-- start .box-body -->
+	<div class="box-body table-responsive no-padding">
+		<form id="js-settings-form" class="form-horizontal">
+			<div class="form-group">
+				<label for="inputAccount" class="col-sm-2 control-label">PC</label>
+				<div class="col-sm-10">
+					@Html.TextBoxFor(m => m.WebUISite, new { @class = "form-control", placeholder = "PC eg:http://localhost:7784" })
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="inputAccount" class="col-sm-2 control-label">PC网站名称</label>
+				<div class="col-sm-10">
+					@Html.TextBoxFor(m => m.WebUITitle, new { @class = "form-control", placeholder = "PC网站名称" })
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="inputDescription" class="col-sm-2 control-label">SEO - PC 描述</label>
+				<div class="col-sm-10">
+					@Html.TextAreaFor(m => m.WebUIDesc, new { @class = "form-control", placeholder = "SEO - PC 描述" })
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="inputDescription" class="col-sm-2 control-label">SEO - PC 关键词</label>
+				<div class="col-sm-10">
+					@Html.TextAreaFor(m => m.WebUIKeywords, new { @class = "form-control", placeholder = "SEO - PC 关键词" })
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="inputAccount" class="col-sm-2 control-label">Mobile</label>
+				<div class="col-sm-10">
+					@Html.TextBoxFor(m => m.WebApiSite, new { @class = "form-control", placeholder = "Mobile eg:http://localhost:7784" })
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="inputAccount" class="col-sm-2 control-label">Mobile网站名称</label>
+				<div class="col-sm-10">
+					@Html.TextBoxFor(m => m.WebApiTitle, new { @class = "form-control", placeholder = "Mobile网站名称" })
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="inputDescription" class="col-sm-2 control-label">SEO - Mobile 描述</label>
+				<div class="col-sm-10">
+					@Html.TextAreaFor(m => m.WebApiDesc, new { @class = "form-control", placeholder = "SEO - Mobile 描述" })
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="inputDescription" class="col-sm-2 control-label">SEO - Mobile 关键词</label>
+				<div class="col-sm-10">
+					@Html.TextAreaFor(m => m.WebApiKeywords, new { @class = "form-control", placeholder = "SEO - Mobile 关键词" })
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="submit" class="btn btn-danger">保存</button>
+				</div>
+			</div>
+		</form>
+
+	</div>
+	<!-- end .box-body -->
+	<!-- start .box-footer -->
+	<div class="box-footer clearfix">
+	</div>
+	<!-- end .box-footer -->
+</div>
+<!-- end .box -->
+<script>
+	function submitSettings(event) {
+		var event = event || window.event;
+		event.preventDefault();
+		$.ajax({
+			url: "@Url.Action("Edit", "Setting", new { area = "Admin" })",
+			type: "post",
+			data: $("#js-settings-form").serialize(),
+			dataType: "json",
+			success: function (data) {
+				$("#js-message").fadeIn();
+				if (data.code <= 0) {
+					$("#js-message").attr("class", "alert alert-danger").find(".message").html(data.message);
+				} else {
+					$("#js-message").attr("class", "alert alert-success").find(".message").html(data.message);
+				}
+				// 3s 后隐藏
+				setTimeout(function () {
+					$("#js-message").fadeOut("slow");
+				}, 3000);
+			}
+		});
+	}
+
+	window.onload = function () {
+		$("#js-settings-form button[type='submit']").on("click", function () {
+			submitSettings();
+		});
+	}
+
+</script>

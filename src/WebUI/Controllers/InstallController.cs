@@ -52,8 +52,8 @@ namespace WebUI.Controllers
             InitUserInfo();
             InitFollower_Followed();
             InitArticle();
-            InitCardBox();
-            InitCardInfo();
+            //InitCardBox();
+            //InitCardInfo();
             InitCourseBox();
             InitLearner_CourseBox();
             InitVideoInfo();
@@ -91,12 +91,12 @@ namespace WebUI.Controllers
 
                     { "WebApiSite", "http://localhost:7784/" },
                     { "WebApiTitle","remember" },
-                    { "WebApiDescription", "remember是xx推出的专业在线教育平台，聚合大量优质教育机构和名师，下设职业培训、公务员考试、托福雅思、考证考级、英语口语、中小学教育等众多在线学习精品课程，打造老师在线上课教学、学生及时互动学习的课堂。"},
+                    { "WebApiDesc", "remember是xx推出的专业在线教育平台，聚合大量优质教育机构和名师，下设职业培训、公务员考试、托福雅思、考证考级、英语口语、中小学教育等众多在线学习精品课程，打造老师在线上课教学、学生及时互动学习的课堂。"},
                     { "WebApiKeywords", "" },
 
                     { "WebUISite", "http://localhost:21788/" },
                     { "WebUITitle", "remember - 在线学习" },
-                    { "WebUIDescription", "remember是xx推出的专业在线教育平台，聚合大量优质教育机构和名师，下设职业培训、公务员考试、托福雅思、考证考级、英语口语、中小学教育等众多在线学习精品课程，打造老师在线上课教学、学生及时互动学习的课堂。"},
+                    { "WebUIDesc", "remember是xx推出的专业在线教育平台，聚合大量优质教育机构和名师，下设职业培训、公务员考试、托福雅思、考证考级、英语口语、中小学教育等众多在线学习精品课程，打造老师在线上课教学、学生及时互动学习的课堂。"},
                     { "WebUIKeywords", "" },
                 };
 
@@ -195,8 +195,8 @@ namespace WebUI.Controllers
 
                 Container.Instance.Resolve<Sys_MenuService>().Create(new Sys_Menu()
                 {
-                    Name = "站点信息",
-                    ControllerName = "BaseInfo",
+                    Name = "网站设置",
+                    ControllerName = "Setting",
                     ActionName = "Index",
                     AreaName = "Admin",
                     ParentMenu = parentMenu,
@@ -459,6 +459,16 @@ namespace WebUI.Controllers
                 });
                 #endregion
 
+                #region 网站设置
+                Sys_Menu setting_Sys_Menu = Container.Instance.Resolve<Sys_MenuService>().Query(new List<ICriterion> { Expression.Eq("ControllerName", "Setting") }).FirstOrDefault();
+                Container.Instance.Resolve<FunctionInfoService>().Create(new FunctionInfo
+                {
+                    AuthKey = "Admin.Setting.Edit",
+                    Name = "网站设置-修改",
+                    Sys_Menu = setting_Sys_Menu
+                });
+                #endregion
+
                 ShowMessage("成功");
             }
             catch (Exception ex)
@@ -527,7 +537,6 @@ namespace WebUI.Controllers
                 // 超级管理员 1
                 userInfoService.Create(new UserInfo()
                 {
-                    Name = "超级管理员admin",
                     UserName = "admin",
                     Avatar = ":WebUISite:/assets/images/default-avatar.jpg",
                     Password = EncryptHelper.MD5Encrypt32("admin"),
@@ -548,7 +557,6 @@ namespace WebUI.Controllers
                 {
                     userInfoService.Create(new UserInfo
                     {
-                        Name = $"会员-{ i + 1 }",
                         UserName = "acc" + (i + 1),
                         Description = $"我是会员-{i + 1}",
                         Avatar = ":WebUISite:/assets/images/default-avatar.jpg",
@@ -695,7 +703,7 @@ namespace WebUI.Controllers
 
                 CourseBoxService courseBoxService = Container.Instance.Resolve<CourseBoxService>();
 
-                for (int i = 0; i < 500; i++)
+                for (int i = 0; i < 50; i++)
                 {
                     UserInfo userInfo = Container.Instance.Resolve<UserInfoService>().GetEntity(1);
                     CourseBox courseBox = new CourseBox();
@@ -802,7 +810,7 @@ namespace WebUI.Controllers
                 IList<CourseBox> allCourseBox = Container.Instance.Resolve<CourseBoxService>().GetAll();
                 IList<Learner_CourseBox> allLearner_CourseBox = Container.Instance.Resolve<Learner_CourseBoxService>().GetAll();
 
-                for (int i = 0; i < allLearner_CourseBox.Count; i++)
+                for (int i = 0; i < 50; i++)
                 {
                     // 当前 学习者-课程
                     Learner_CourseBox learner_CourseBox = allLearner_CourseBox[i];
@@ -859,6 +867,11 @@ namespace WebUI.Controllers
             }
         }
         #endregion
+
+
+
+
+
 
         #region 初始化评论
         private void InitComment()

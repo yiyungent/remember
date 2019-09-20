@@ -58,7 +58,7 @@ namespace WebUI.MessageHubs
             {
                 Groups.Add(Context.ConnectionId, currentUser.ID.ToString());
                 string accessTime = DateTime.Now.ToString("MM月dd日 hh:mm");
-                string tipMessage = $"{currentUser.Name} - {accessTime}";
+                string tipMessage = $"{currentUser.UserName} - {accessTime}";
                 Clients.Group(currentUser.ID.ToString()).notificationReceive("欢迎!", tipMessage, "/images/default-notify.jpg");
             }
         }

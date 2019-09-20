@@ -48,7 +48,6 @@ namespace WebApi.Controllers
                                 {
                                     ID = g.First().CourseBox.Creator.ID,
                                     UserName = g.First().CourseBox.Creator.UserName,
-                                    Name = g.First().CourseBox.Creator.Name,
                                     Avatar = g.First().CourseBox.Creator.Avatar.ToHttpAbsoluteUrl(),
                                 },
                                 Desc = g.First().CourseBox.Description,

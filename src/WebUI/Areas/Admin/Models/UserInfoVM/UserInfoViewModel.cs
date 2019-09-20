@@ -110,7 +110,6 @@ namespace WebUI.Areas.Admin.Models.UserInfoVM
             {
                 ID = dbModel.ID,
                 InputUserName = dbModel.UserName,
-                InputName = dbModel.Name,
                 InputAvatar = dbModel.Avatar,
                 InputEmail = dbModel.Email,
                 RoleOptions = roleOptions,
@@ -160,7 +159,6 @@ namespace WebUI.Areas.Admin.Models.UserInfoVM
             }
             #endregion
             dbModel.UserName = inputModel.InputUserName?.Trim();
-            dbModel.Name = inputModel.InputName?.Trim();
             //dbModel.Avatar = inputModel.InputAvatar?.Trim();
             dbModel.Email = inputModel.InputEmail?.Trim();
             dbModel.Description = inputModel.InputDescription?.Trim();

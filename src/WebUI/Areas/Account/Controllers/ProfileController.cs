@@ -71,7 +71,6 @@ namespace WebUI.Areas.Account.Controllers
                     Expression.Eq("UserName", currentLoginUserInfo.UserName)
                 }).FirstOrDefault();
 
-                dbUserInfo.Name = inputModel.InputName;
                 dbUserInfo.Email = inputModel.InputEmail;
                 dbUserInfo.Description = inputModel.InputDescription;
 
