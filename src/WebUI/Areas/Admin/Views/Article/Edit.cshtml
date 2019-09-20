@@ -1,4 +1,5 @@
 ﻿@using Domain
+@using Framework.Extensions
 @model Article
 @{
 	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
@@ -57,8 +58,6 @@
 			//Initialize Select2 Elements
 			$(".select2").select2();
 
-			$('#js-basic-url').html(window.location.origin + '/');
-
 			var E = window.wangEditor;
 			var editor = new E('#js-editArea');
 			var $hiddenEditArea = $("#Content");
@@ -97,10 +96,12 @@
 				<div id="js-editArea"></div>
 				@Html.TextAreaFor(model => model.Content, new { style = "display: none;" })
 			</div>
+			<div class="form-group">
+				<label for="CustomUrl">自定义URL</label>
+			</div>
 			<div class="input-group">
-				<label for="js-basic-url">自定义url</label>
-				<span id="js-basic-url" class="input-group-addon"></span>
-				@Html.TextBoxFor(m => m.CustomUrl, new { @class = "form-control", aria_describedby = "js-basic-url" })
+				<span class="input-group-addon">@WebSetting.Get("WebUISite")</span>
+				@Html.TextBoxFor(m => m.CustomUrl, new { @class = "form-control" })
 			</div>
 
 		</div>

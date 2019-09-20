@@ -10811,6 +10811,7 @@
     <Content Include="assets\libs\vue-router\package.json" />
     <Content Include="assets\libs\vue-router\README.md" />
     <Content Include="Areas\Admin\Views\Setting\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\CourseBox\Index.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.12.0.intellisense.js" />
     <Content Include="Demos\NotificationDemo.html" />
@@ -10951,7 +10952,6 @@
     <Folder Include="Areas\Account\Views\Control\" />
     <Folder Include="Areas\Admin\Views\CardBox\" />
     <Folder Include="Areas\Admin\Views\Control\" />
-    <Folder Include="Areas\Admin\Views\CourseBox\" />
     <Folder Include="Areas\Admin\Views\Dashboard\" />
     <Folder Include="Areas\Demo\Views\Bilibili\" />
     <Folder Include="Areas\Demo\Views\Shared\" />

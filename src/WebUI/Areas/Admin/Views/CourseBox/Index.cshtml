@@ -2,7 +2,7 @@
 @using WebUI.Areas.Admin.Models.Common
 @using WebUI.Extensions
 @using Domain
-@model ListViewModel<UserInfo>
+@model ListViewModel<CourseBox>
 @{
 	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
 }
@@ -14,7 +14,7 @@
 	</style>
 }
 @section body {
-	<script src="~/dist/pview/pview.js"></script>
+	<script src="/assets/libs/pview/pview.js"></script>
 	<script>
 
 		// start 删除
@@ -125,8 +125,8 @@
 						<span class="fa fa-caret-down"></span>
 					</button>
 					<ul id="js-search-type-list" class="dropdown-menu">
-						<li search-type="username"><a href="javascript:;">用户名</a></li>
-						<li search-type="name"><a href="javascript:;">展示名</a></li>
+						<li search-type="name"><a href="javascript:;">课程名</a></li>
+						<li search-type="desc"><a href="javascript:;">课程描述</a></li>
 						<li search-type="id"><a href="javascript:;">ID</a></li>
 					</ul>
 				</div>
@@ -139,70 +139,41 @@
 	</div>
 	<!-- end .box-header -->
 	<!-- start .box-body -->
-	<!-- start 简单表格 -->
-	<div class="box-body table-responsive no-padding">
-		<table id="js-table" class="table table-hover" pview="table">
-			<tr>
-				<th>ID</th>
-				<th>用户名</th>
-				<th>展示名</th>
-				<th>角色</th>
-				<th>操作</th>
-			</tr>
-			@foreach (var cat in Model.List)
-			{
-				<tr data-tr-id="@cat.ID">
-					<td>@cat.ID</td>
-					<td>@cat.UserName</td>
-					<td>@cat.Name</td>
-					<td>
-						@{ string[] colors = { "warning", "primary", "danger", "default" }; }
-						@for (int i = 0; i < cat.RoleInfoList.Count; i++)
-						{
-							if (cat.RoleInfoList[i].Name == "教师")
-							{
-								<span class="label label-success">@cat.RoleInfoList[i].Name</span>
-							}
-							else if (cat.RoleInfoList[i].Name == "学生")
-							{
-								<span class="label label-info">@cat.RoleInfoList[i].Name</span>
-							}
-							else
-							{
-								<span class="label label-@colors[i % colors.Length]">@cat.RoleInfoList[i].Name</span>
-							}
-						}
-					</td>
-					<td>
-						<div class="btn-group" role="group" data-pjax>
-							@if (Html.HasAuth("Admin", "UserInfo", "Detail"))
-							{
-								<a class="btn btn-success" href="@Url.Action("Detail")?id=@cat.ID">查看</a>
-							}
-							@if (Html.HasAuth("Admin", "UserInfo", "Delete"))
-							{
-								<button class="btn btn-danger" type="button" onclick="deleteOp(@cat.ID)"><i class="fa fa-close"></i> 删除</button>
-							}
-							@if (Html.HasAuth("Admin", "UserInfo", "Edit"))
-							{
-								<a class="btn btn-warning" href="@Url.Action("Edit")?id=@cat.ID"><i class="fa fa-edit"></i> 修改</a>
-							}
+	<div class="box-body table-responsive no-padding" style="overflow-x: hidden;">
+		<div class="row" pview="list">
+			<div class="col-xs-12">
+				@foreach (var item in Model.List)
+				{
+					<div class="col-sm-6 col-md-3">
+						<div class="thumbnail">
+							<img src="@item.PicUrl.ToHttpAbsoluteUrl()" alt="@item.Name">
+							<div class="caption">
+								<h3>@item.Name</h3>
+								<p><span>创建时间: </span><span>@item.CreateTime.ToString("yyyy-MM-DD hh:mm")</span></p>
+								<p>
+									<span>投稿者:  </span>
+									@item.Creator.UserName
+								</p>
+								<p><span>描述: </span><span>@item.Description</span></p>
+								<p id="js-btn-group-@item.ID" class="btn-group">
+									<button class="btn btn-default">进入</button>
+								</p>
+							</div>
 						</div>
-					</td>
-				</tr>
-			}
-		</table>
+					</div>
+				}
+			</div>
+		</div>
 	</div>
-	<!-- end 简单表格 -->
 	<!-- end .box-body -->
 	<!-- start .box-footer -->
 	<div class="box-footer clearfix">
 		<div class="btn-group pull-left">
-			<a class="btn btn-primary" href="@Url.Action("Create")"><i class="fa fa-plus-square"></i> 添加</a>
+			<a class="btn btn-primary" href="@Url.Action("Create")">添加</a>
 		</div>
 		<!-- start 分页 -->
 		<div id="js-page" pview="pages">
-			<ul class="pagination pull-right" pview-btn-group pview-targets="table,pages">
+			<ul class="pagination pull-right" pview-btn-group pview-targets="list,pages">
 				@Html.PageLinks(Model.PageInfo, i => Url.Action("Index", new { pageIndex = i, q = Request["q"], type = Request["type"] }))
 			</ul>
 		</div>
