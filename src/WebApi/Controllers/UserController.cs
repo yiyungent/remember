@@ -25,7 +25,7 @@ using WebApi.Models.UserInfoVM;
 
 namespace WebApi.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    //[EnableCors(origins: "*", headers: "*", methods: "*")]
     [RoutePrefix("api/User")]
     public class UserController : ApiController
     {

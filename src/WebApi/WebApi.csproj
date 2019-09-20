@@ -169,6 +169,7 @@
     <Content Include="assets\images\scripts\register-title-icon.svg" />
     <Content Include="assets\images\scripts\truev.png" />
     <Content Include="assets\images\top_banner.png" />
+    <Content Include="bin\WebApi.xml" />
     <Content Include="Config\Service.xml" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
@@ -202,6 +203,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -10884,12 +10884,17 @@
     <Compile Include="Areas\Tools\Controllers\ITodayController.cs" />
     <Compile Include="Areas\Tools\ToolsAreaRegistration.cs" />
     <Compile Include="Attributes\LogErrorAttribute.cs" />
+    <Compile Include="Controllers\Cat1Controller.cs" />
+    <Compile Include="Controllers\Cat2Controller.cs" />
+    <Compile Include="Controllers\CourseBoxController.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysMenuController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserInfoController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\MyFriendsController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\WidgetController.cs" />
     <Compile Include="DependencyRegistrar.cs" />
@@ -10935,7 +10940,7 @@
     <Content Include="Areas\Admin\Views\Shared\_AdminContent.cshtml" />
     <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_ErrorRedirect.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <None Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Widget\WidgetsByZone.cshtml" />
     <Content Include="Views\Errors\PageNotFound.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
@@ -10964,6 +10969,11 @@
     <Folder Include="Upload\images\avatars\" />
     <Folder Include="Upload\TemplateInstallZip\" />
     <Folder Include="Upload\Tools\IToday\" />
+    <Folder Include="Views\Cat1\" />
+    <Folder Include="Views\Cat2\" />
+    <Folder Include="Views\CourseBox\" />
+    <Folder Include="Views\Login\" />
+    <Folder Include="Views\MyFriends\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\pluginHub\PluginHub.Mvc5\PluginHub.Mvc5.csproj">

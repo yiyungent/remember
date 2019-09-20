@@ -19,7 +19,6 @@ using WebApi.Models.VideoInfoVM;
 
 namespace WebApi.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
     [RoutePrefix("api/VideoInfo")]
     public class VideoInfoController : ApiController
     {

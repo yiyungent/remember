@@ -15,7 +15,7 @@ namespace WebApi
             // 跨域支持
             //config.EnableCors();
             // 配置默认策略: 全局跨域支持,无需再在每个Controller上标记
-            config.EnableCors(new EnableCorsAttribute(origins: "*", headers: "*", methods: "*"));
+            //config.EnableCors(new EnableCorsAttribute(origins: "*", headers: "*", methods: "*"));
 
             // Use camel case for JSON data.
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
