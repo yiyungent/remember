@@ -93,11 +93,17 @@ namespace WebUI.Controllers
                     { "WebApiTitle","remember" },
                     { "WebApiDesc", "remember是xx推出的专业在线教育平台，聚合大量优质教育机构和名师，下设职业培训、公务员考试、托福雅思、考证考级、英语口语、中小学教育等众多在线学习精品课程，打造老师在线上课教学、学生及时互动学习的课堂。"},
                     { "WebApiKeywords", "" },
+                    { "WebApiStat", "" },
 
                     { "WebUISite", "http://localhost:21788/" },
                     { "WebUITitle", "remember - 在线学习" },
                     { "WebUIDesc", "remember是xx推出的专业在线教育平台，聚合大量优质教育机构和名师，下设职业培训、公务员考试、托福雅思、考证考级、英语口语、中小学教育等众多在线学习精品课程，打造老师在线上课教学、学生及时互动学习的课堂。"},
                     { "WebUIKeywords", "" },
+                    { "WebUIStat", "" },
+
+
+                    { "EnableRedisSession", "1" },
+                    { "EnableLog", "0" }
                 };
 
                 foreach (var keyValue in dic)
@@ -775,7 +781,7 @@ namespace WebUI.Controllers
                     {
                         VideoInfo courseInfo = new VideoInfo();
                         courseInfo.Title = "视频标题" + (j + 1);
-                        courseInfo.PlayUrl = $"/static/upload/videos/" + (j + 1) + ".mp4";
+                        courseInfo.PlayUrl = $"https://remember-1258210930.cos.ap-chongqing.myqcloud.com/videos/{(j + 1)}.mp4";
                         courseInfo.Page = (j + 1);
                         courseInfo.CourseBox = courseBox;
 

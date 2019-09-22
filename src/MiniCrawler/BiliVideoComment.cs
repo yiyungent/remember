@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MiniCrawler
@@ -23,7 +24,17 @@ namespace MiniCrawler
             try
             {
                 EF.RemDbContext remDbContext = new EF.RemDbContext();
-                var allUserInfo = remDbContext.userinfoes.ToList();
+                IList<EF.userinfo> allUserInfo = null;
+                try
+                {
+                    allUserInfo = remDbContext.userinfoes.ToList();
+
+                }
+                catch (Exception ex)
+                {
+                    //Console.WriteLine(ex.InnerException.Message);
+                    //throw;
+                }
 
                 int pageNum = 1;
                 for (int j = 0; j < length; j++)
@@ -50,9 +61,16 @@ namespace MiniCrawler
                                     LastUpdateTime = hot.ctime.ToDateTime10()
                                 });
                                 remDbContext.SaveChanges();
+
+                                Console.WriteLine($"★★★★★★★★★★★★★★★★★★抓取 {hot.content.message}★★★★★★★★★★★★★★★★★★★★★★★★★★★");
                             }
                             catch (Exception ex)
                             {
+                                //Console.WriteLine(ex.Message);
+                                if (ex.InnerException != null)
+                                {
+                                    //Console.WriteLine(ex.Message);
+                                }
                             }
                             if (hot.replies != null && hot.replies.Length >= 1)
                             {
@@ -62,6 +80,11 @@ namespace MiniCrawler
                     }
                     catch (Exception ex)
                     {
+                        //Console.WriteLine(ex.Message);
+                        if (ex.InnerException != null)
+                        {
+                            //Console.WriteLine(ex.Message);
+                        }
                     }
 
                     oid++;
@@ -70,6 +93,7 @@ namespace MiniCrawler
             }
             catch (Exception ex)
             {
+                //Console.WriteLine(ex.Message);
             }
         }
 
@@ -94,9 +118,15 @@ namespace MiniCrawler
                         ParentId = allComment.Where(m => m.Content.StartsWith(currentHot.content.message.Substring(0, 10))).FirstOrDefault().ID
                     });
                     remDbContext.SaveChanges();
+                    Console.WriteLine($"★★★★★★★★★★★★★★★★★★抓取 {hot.content.message}★★★★★★★★★★★★★★★★★★★★★★★★★★★");
                 }
                 catch (Exception ex)
                 {
+                    //Console.WriteLine(ex.Message);
+                    if (ex.InnerException != null)
+                    {
+                        //Console.WriteLine(ex.InnerException.Message);
+                    }
                 }
                 if (hot.replies != null && hot.replies.Length >= 1)
                 {

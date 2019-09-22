@@ -9640,7 +9640,6 @@
     <Content Include="App_Data\InstalledPlugins.txt" />
     <Content Include="Config\Service.xml" />
     <Content Include="Content\Site.css" />
-    <Content Include="Demos\WebSocketDemo.html" />
     <Content Include="ErrorPage.htm" />
     <Content Include="favicon.ico" />
     <Content Include="FileNotFound.htm" />
@@ -10812,9 +10811,10 @@
     <Content Include="assets\libs\vue-router\README.md" />
     <Content Include="Areas\Admin\Views\Setting\Index.cshtml" />
     <Content Include="Areas\Admin\Views\CourseBox\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Setting\WebApi.cshtml" />
+    <Content Include="Areas\Admin\Views\Setting\Advanced.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.12.0.intellisense.js" />
-    <Content Include="Demos\NotificationDemo.html" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.12.0.js" />

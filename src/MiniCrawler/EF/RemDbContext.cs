@@ -243,10 +243,6 @@ namespace MiniCrawler.EF
                 .IsUnicode(false);
 
             modelBuilder.Entity<userinfo>()
-                .Property(e => e.Name)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<userinfo>()
                 .Property(e => e.Avatar)
                 .IsUnicode(false);
 

@@ -1,0 +1,119 @@
+﻿@using Framework.HtmlHelpers
+@using WebUI.Areas.Admin.Models.Common
+@using WebUI.Extensions
+@using Domain
+@using WebUI.Areas.Admin.Models.SettingVM;
+@model SettingViewModel
+@{
+	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
+}
+@section head {
+	<link href="/assets/libs/AdminLTE/plugins/iCheck/all.css" rel="stylesheet" />
+}
+@section body {
+	<script src="/assets/libs/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+	<script>
+
+function submitSettings(event) {
+	var event = event || window.event;
+	event.preventDefault();
+	$.ajax({
+		url: "@Url.Action("WebApi", "Setting", new { area = "Admin" })",
+		type: "post",
+		data: {
+			EnableRedisSession: $("[name='EnableRedisSession']").is(':checked'),
+			EnableLog: $("[name='EnableLog']").is(':checked')
+		},
+		dataType: "json",
+		success: function (data) {
+			$("#js-message").fadeIn();
+			if (data.code <= 0) {
+				$("#js-message").attr("class", "alert alert-danger").find(".message").html(data.message);
+			} else {
+				$("#js-message").attr("class", "alert alert-success").find(".message").html(data.message);
+			}
+			// 3s 后隐藏
+			setTimeout(function () {
+				$("#js-message").fadeOut("slow");
+			}, 3000);
+		}
+	});
+}
+
+window.onload = function () {
+
+	//iCheck for checkbox and radio inputs
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+      checkboxClass: 'icheckbox_minimal-blue',
+      radioClass: 'iradio_minimal-blue'
+    });
+
+	//Flat red color scheme for iCheck
+    $('input[type="checkbox"].flat-blue, input[type="radio"].flat-blue').iCheck({
+      checkboxClass: 'icheckbox_flat-blue',
+      radioClass: 'iradio_flat-blue'
+    });
+}
+
+	</script>
+}
+
+<!-- start 提示框 -->
+@{ Html.RenderPartial("_MessagePartial"); }
+<!-- end 提示框 -->
+
+<input id="js-id" type="hidden" />
+
+<!-- start .box -->
+<div class="box">
+	<!-- start .box-header -->
+	<div class="box-header">
+		<h3 class="box-title">网站设置</h3>
+		<div class="box-tools">
+		</div>
+	</div>
+	<!-- end .box-header -->
+	<!-- start .box-body -->
+	<div class="box-body no-padding">
+		<div class="nav-tabs-custom">
+			<ul class="nav nav-tabs">
+				<li><a href="@Url.Action("Index", "Setting", new { area = "Admin" })">常规</a></li>
+				<li><a href="@Url.Action("WebApi", "Setting", new { area = "Admin" })">WebAPI & Mobile</a></li>
+				<li class="active"><a>高级</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active">
+					<form id="js-settings-form" class="form-horizontal">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">Redis 分布式 Session</label>
+							<div class="col-sm-2">
+								<input type="checkbox" class="flat-blue" name="EnableRedisSession" checked="@(Model.EnableRedisSession?"":null)">
+							</div>
+							<div class="col-xs-8">将Session 存于 Redis，请在 Web.config 中完成相关配置</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">错误日志记录</label>
+							<div class="col-sm-2">
+								<input type="checkbox" class="flat-blue" name="EnableLog" checked="@(Model.EnableLog?"":null)">
+							</div>
+							<div class="col-sm-8">需同时开启 Web.config 配置文件中设置。日志文件位置: /App_Data/Logs/</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<span onclick="submitSettings()" class="btn btn-danger">保存</span>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<!-- /.tab-content -->
+		</div>
+	</div>
+	<!-- end .box-body -->
+	<!-- start .box-footer -->
+	<div class="box-footer clearfix">
+	</div>
+	<!-- end .box-footer -->
+</div>
+<!-- end .box -->

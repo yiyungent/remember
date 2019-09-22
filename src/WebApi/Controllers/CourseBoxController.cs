@@ -16,6 +16,7 @@ using WebApi.Infrastructure;
 using WebApi.Models;
 using WebApi.Models.Common;
 using WebApi.Models.CourseBoxVM;
+using WebApi.DomainExt;
 
 namespace WebApi.Controllers
 {
@@ -32,11 +33,11 @@ namespace WebApi.Controllers
             try
             {
                 // 未登录用户返回基本课程数据
+
                 CourseBox courseBox = Container.Instance.Resolve<CourseBoxService>().GetEntity(id);
-                string creatorAvatar = Container.Instance.Resolve<SettingService>().Query(new List<ICriterion>
-                {
-                    Expression.Eq("SetKey", "WebApiSite")
-                }).FirstOrDefault().SetValue + courseBox.Creator.Avatar;
+                int creatorFansNum = Container.Instance.Resolve<Follower_FollowedService>().Count(Expression.Eq("Followed.ID", courseBox.Creator.ID));
+                int learnViewNum = Container.Instance.Resolve<Learner_CourseBoxService>().Count(Expression.Eq("CourseBox.ID", courseBox.ID));
+
                 viewModel = new CourseBoxViewModel
                 {
                     ID = courseBox.ID,
@@ -48,12 +49,13 @@ namespace WebApi.Controllers
                     IsOpen = courseBox.IsOpen,
                     LastUpdateTime = courseBox.LastUpdateTime.ToTimeStamp13(),
                     LearnDay = courseBox.LearnDay,
-                    PicUrl = courseBox.PicUrl,
+                    PicUrl = courseBox.PicUrl.ToHttpAbsoluteUrl(),
                     Creator = new CourseBoxViewModel.CreatorViewModel
                     {
                         ID = courseBox.Creator.ID,
                         UserName = courseBox.Creator.UserName,
-                        Avatar = creatorAvatar
+                        Avatar = courseBox.Creator.Avatar.ToHttpAbsoluteUrl(),
+                        FansNum = creatorFansNum
                     },
                     Stat = new CourseBoxViewModel.StatViewModel
                     {
@@ -62,7 +64,7 @@ namespace WebApi.Controllers
                         DislikeNum = courseBox.DislikeNum,
                         FavNum = courseBox.FavoriteList?.Count ?? 0,
                         ShareNum = courseBox.ShareNum,
-                        ViewNum = 21
+                        ViewNum = learnViewNum
                     },
                     VideoInfos = new List<CourseBoxViewModel.VideoInfoViewModel>()
                 };
@@ -74,7 +76,7 @@ namespace WebApi.Controllers
                         ID = item.ID,
                         Title = item.Title,
                         Page = item.Page,
-                        PlayUrl = item.PlayUrl
+                        PlayUrl = item.PlayUrl.ToHttpAbsoluteUrl()
                     });
                 }
 

@@ -152,6 +152,8 @@ namespace WebApi.Models.CourseBoxVM
             public string Desc { get; set; }
 
             public string Avatar { get; set; }
+
+            public int FansNum { get; set; }
         }
     }
 }

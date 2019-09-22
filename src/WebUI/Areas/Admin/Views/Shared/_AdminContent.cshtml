@@ -45,27 +45,30 @@
 <![endif]-->
 @RenderSection("head", false)
 
-<div style="height: 100%; background-color: #ecf0f5;">
-	<!-- Content Header (Page header) -->
-	<section class="content-header">
-		<h1>
-			@ViewBag.PageHeader
-			<small>@ViewBag.PageHeaderDescription</small>
-		</h1>
-		<ol class="breadcrumb" data-pjax>
-			<li><a href="@Url.Action("Default", "Home", new { area = "Admin" })"><i class="fa fa-dashboard"></i> Home</a></li>
-			@foreach (BreadcrumbItem item in ViewBag.BreadcrumbList)
-			{
-				@item.GenerateHtmlTag()
-			}
-		</ol>
-	</section>
-	<!-- Main content -->
-	<section class="content container-fluid">
-		@RenderBody()
-	</section>
-	<!-- /.content -->
-</div>
+<body data-senna data-senna-surface>
+	<div class="senna-loading-bar"></div>
+	<div style="height: 100%; background-color: #ecf0f5;">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<h1>
+				@ViewBag.PageHeader
+				<small>@ViewBag.PageHeaderDescription</small>
+			</h1>
+			<ol class="breadcrumb" data-pjax>
+				<li><a href="@Url.Action("Default", "Home", new { area = "Admin" })"><i class="fa fa-dashboard"></i> Home</a></li>
+				@foreach (BreadcrumbItem item in ViewBag.BreadcrumbList)
+				{
+					@item.GenerateHtmlTag()
+				}
+			</ol>
+		</section>
+		<!-- Main content -->
+		<section class="content container-fluid">
+			@RenderBody()
+		</section>
+		<!-- /.content -->
+	</div>
+</body>
 
 <!-- jQuery -->
 <script src="/Scripts/jquery-1.12.0.min.js"></script>

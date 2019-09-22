@@ -20,6 +20,7 @@ using WebUI.Attributes;
 using log4net;
 using WebUI.Infrastructure.Search;
 using System.Configuration;
+using Framework.Extensions;
 
 namespace WebUI
 {
@@ -57,7 +58,21 @@ namespace WebUI
             SearchIndexManager.GetInstance().StartThread();
 
             #region log4net
-            bool enableLog4Net = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableLog4Net"]);
+
+            bool enableLog4Net = true;
+            // 先尝试查询数据库
+            try
+            {
+                enableLog4Net = Convert.ToInt32(WebSetting.Get("EnableLog")) == 1;
+            }
+            catch (Exception ex)
+            { }
+            // 再以配置文件
+            // 启用 = 数据库配置启用 且 配置文件启用
+            if (enableLog4Net)
+            {
+                enableLog4Net = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableLog"]);
+            }
             if (enableLog4Net)
             {
                 log4net.Config.XmlConfigurator.Configure();
@@ -73,7 +88,7 @@ namespace WebUI
                             {
                                 ILog logger = LogManager.GetLogger("testError");
                                 logger.Error(ex.ToString()); //将异常信息写入Log4Net中  
-                        }
+                            }
                             else
                             {
                                 Thread.Sleep(50);

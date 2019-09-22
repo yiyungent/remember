@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace WebUI.Areas.Admin.Models.SettingVM
 {
@@ -22,5 +23,17 @@ namespace WebUI.Areas.Admin.Models.SettingVM
         public string WebApiDesc { get; set; }
 
         public string WebApiKeywords { get; set; }
+
+        /// <summary>
+        /// 网站底部统计代码
+        /// </summary>
+        [AllowHtml]
+        public string WebUIStat { get; set; }
+
+        public string WebApiStat { get; set; }
+
+        public bool EnableRedisSession { get; set; }
+
+        public bool EnableLog { get; set; }
     }
 }

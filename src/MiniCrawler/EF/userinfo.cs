@@ -49,10 +49,6 @@ namespace MiniCrawler.EF
 
         public int? Status { get; set; }
 
-        [Required]
-        [StringLength(30)]
-        public string Name { get; set; }
-
         [StringLength(50)]
         public string Avatar { get; set; }
 
