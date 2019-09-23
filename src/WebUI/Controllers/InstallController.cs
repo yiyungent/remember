@@ -85,6 +85,22 @@ namespace WebUI.Controllers
             {
                 ShowMessage("初始化设置");
 
+                string findPwd_MailContent = "";
+                findPwd_MailContent += "<p>";
+                findPwd_MailContent += "&nbsp; &nbsp;您正在进行找回登录密码的重置操作，本次请求的邮件验证码是：";
+                findPwd_MailContent += "<strong>{{VCode}}</strong>";
+                findPwd_MailContent += "(为了保证你账号的安全性，请在5分钟内完成设置)。本验证码5分钟内有效，请及时输入。";
+                findPwd_MailContent += "<br><br>";
+                findPwd_MailContent += "&nbsp; &nbsp;为保证账号安全，请勿泄漏此验证码。";
+                findPwd_MailContent += "<br>";
+                findPwd_MailContent += "&nbsp; &nbsp;如非本人操作，及时检查账号或";
+                findPwd_MailContent += "<a href='#' target='_blank'>联系在线客服</a>";
+                findPwd_MailContent += "<br>";
+                findPwd_MailContent += "&nbsp; &nbsp;祝在【TES】收获愉快！";
+                findPwd_MailContent += "<br><br>";
+                findPwd_MailContent += "&nbsp; &nbsp;（这是一封自动发送的邮件，请不要直接回复）";
+                findPwd_MailContent += "</p>";
+
                 Dictionary<string, string> dic = new Dictionary<string, string>()
                 {
                     { "DefaultTemplateName", "Blue" },
@@ -101,9 +117,19 @@ namespace WebUI.Controllers
                     { "WebUIKeywords", "" },
                     { "WebUIStat", "" },
 
+                     { "MailUserName", "" },
+                    { "MailPassword", "" },
+                     { "MailDisplayName", "" },
+                    { "MailDisplayAddress", "" },
+                    { "SmtpHost", "smtp.qq.com" },
+                    { "SmtpPort", "25" },
+                    { "SmtpEnableSsl", "1" },
 
                     { "EnableRedisSession", "1" },
-                    { "EnableLog", "0" }
+                    { "EnableLog", "0" },
+
+                    { "FindPwd_MailSubject", "【{{WebUITitle}}】账号安全中心-找回登录密码-{{ReceiveMail}}正在尝试找回密码"},
+                    { "FindPwd_MailContent", findPwd_MailContent }
                 };
 
                 foreach (var keyValue in dic)
@@ -135,7 +161,7 @@ namespace WebUI.Controllers
                 {
                     TemplateName = "Blue",
                     Title = "经典蓝",
-                    Status = 1
+                    IsOpen = 1
                 });
 
                 ShowMessage("成功");
@@ -157,68 +183,93 @@ namespace WebUI.Controllers
                 #region 一级菜单
                 Container.Instance.Resolve<Sys_MenuService>().Create(new Sys_Menu()
                 {
-                    Name = "仪表盘",
+                    Name = "全局",
                     SortCode = 10,
                 });
                 Container.Instance.Resolve<Sys_MenuService>().Create(new Sys_Menu()
                 {
-                    Name = "系统管理",
+                    Name = "界面",
                     SortCode = 20,
                 });
                 Container.Instance.Resolve<Sys_MenuService>().Create(new Sys_Menu()
                 {
-                    Name = "课程管理",
-                    ControllerName = "CourseBox",
-                    ActionName = "Index",
-                    AreaName = "Admin",
+                    Name = "用户",
                     SortCode = 30,
                 });
                 Container.Instance.Resolve<Sys_MenuService>().Create(new Sys_Menu()
                 {
-                    Name = "公告管理",
-                    ControllerName = "Article",
+                    Name = "运营",
+                    SortCode = 40,
+                });
+                Container.Instance.Resolve<Sys_MenuService>().Create(new Sys_Menu()
+                {
+                    Name = "应用",
+                    SortCode = 50,
+                });
+                Container.Instance.Resolve<Sys_MenuService>().Create(new Sys_Menu()
+                {
+                    Name = "课程",
+                    ControllerName = "CourseBox",
                     ActionName = "Index",
                     AreaName = "Admin",
-                    SortCode = 40,
+                    SortCode = 60,
                 });
                 #endregion
 
                 #region 二级菜单
+
                 // 一级菜单项---二级菜单的父菜单项
                 Sys_Menu parentMenu = null;
 
-                #region 仪表盘的二级菜单
+                #region 全局的二级菜单
                 parentMenu = Container.Instance.Resolve<Sys_MenuService>().Query(new List<ICriterion>
                 {
-                    Expression.Eq("Name", "仪表盘")
+                    Expression.Eq("Name", "全局")
                 }).FirstOrDefault();
 
                 Container.Instance.Resolve<Sys_MenuService>().Create(new Sys_Menu()
                 {
-                    Name = "仪表盘-1",
-                    ControllerName = "Dashboard",
-                    ActionName = "One",
-                    AreaName = "Admin",
-                    ParentMenu = parentMenu,
-                    SortCode = 10,
-                });
-                #endregion
-
-                #region 系统管理的二级菜单
-                parentMenu = Container.Instance.Resolve<Sys_MenuService>().Query(new List<ICriterion>
-                {
-                    Expression.Eq("Name", "系统管理")
-                }).FirstOrDefault();
-
-                Container.Instance.Resolve<Sys_MenuService>().Create(new Sys_Menu()
-                {
-                    Name = "网站设置",
+                    Name = "站点设置",
                     ControllerName = "Setting",
                     ActionName = "Index",
                     AreaName = "Admin",
                     ParentMenu = parentMenu,
                     SortCode = 10,
                 });
+                #endregion
+
+                #region 界面的二级菜单
+                parentMenu = Container.Instance.Resolve<Sys_MenuService>().Query(new List<ICriterion>
+                {
+                    Expression.Eq("Name", "界面")
+                }).FirstOrDefault();
+
+                Container.Instance.Resolve<Sys_MenuService>().Create(new Sys_Menu()
+                {
+                    Name = "菜单管理",
+                    ControllerName = "SysMenu",
+                    ActionName = "Index",
+                    AreaName = "Admin",
+                    ParentMenu = parentMenu,
+                    SortCode = 10,
+                });
+                Container.Instance.Resolve<Sys_MenuService>().Create(new Sys_Menu()
+                {
+                    Name = "主题模板",
+                    ControllerName = "ThemeTemplate",
+                    ActionName = "Index",
+                    AreaName = "Admin",
+                    ParentMenu = parentMenu,
+                    SortCode = 20,
+                });
+                #endregion
+
+                #region 用户的二级菜单
+                parentMenu = Container.Instance.Resolve<Sys_MenuService>().Query(new List<ICriterion>
+                {
+                    Expression.Eq("Name", "用户")
+                }).FirstOrDefault();
+
                 Container.Instance.Resolve<Sys_MenuService>().Create(new Sys_Menu()
                 {
                     Name = "用户管理",
@@ -226,7 +277,7 @@ namespace WebUI.Controllers
                     ActionName = "Index",
                     AreaName = "Admin",
                     ParentMenu = parentMenu,
-                    SortCode = 20,
+                    SortCode = 10,
                 });
                 Container.Instance.Resolve<Sys_MenuService>().Create(new Sys_Menu()
                 {
@@ -235,35 +286,33 @@ namespace WebUI.Controllers
                     ActionName = "Index",
                     AreaName = "Admin",
                     ParentMenu = parentMenu,
-                    SortCode = 30,
+                    SortCode = 20,
                 });
+                #endregion
+
+                #region 运营的二级菜单
+                parentMenu = Container.Instance.Resolve<Sys_MenuService>().Query(new List<ICriterion>
+                {
+                    Expression.Eq("Name", "运营")
+                }).FirstOrDefault();
+
                 Container.Instance.Resolve<Sys_MenuService>().Create(new Sys_Menu()
                 {
-                    Name = "菜单管理",
-                    ControllerName = "SysMenu",
+                    Name = "站点公告",
+                    ControllerName = "Article",
                     ActionName = "Index",
                     AreaName = "Admin",
                     ParentMenu = parentMenu,
-                    SortCode = 40,
+                    SortCode = 10,
                 });
-                //Container.Instance.Resolve<Sys_MenuService>().Create(new Sys_Menu()
-                //{
-                //    Name = "操作管理",
-                //    ControllerName = "FunctionInfo",
-                //    ActionName = "Index",
-                //    AreaName = "Admin",
-                //    ParentMenu = parentMenu,
-                //    SortCode = 50,
-                //});
-                Container.Instance.Resolve<Sys_MenuService>().Create(new Sys_Menu()
+                #endregion
+
+                #region 应用的二级菜单
+                parentMenu = Container.Instance.Resolve<Sys_MenuService>().Query(new List<ICriterion>
                 {
-                    Name = "主题模板",
-                    ControllerName = "ThemeTemplate",
-                    ActionName = "Index",
-                    AreaName = "Admin",
-                    ParentMenu = parentMenu,
-                    SortCode = 60,
-                });
+                    Expression.Eq("Name", "应用")
+                }).FirstOrDefault();
+
                 Container.Instance.Resolve<Sys_MenuService>().Create(new Sys_Menu()
                 {
                     Name = "插件管理",
@@ -271,27 +320,10 @@ namespace WebUI.Controllers
                     ActionName = "Index",
                     AreaName = "Admin",
                     ParentMenu = parentMenu,
-                    SortCode = 70,
-                });
-                #endregion
-
-                #endregion
-
-                #region 三级菜单
-                parentMenu = Container.Instance.Resolve<Sys_MenuService>().Query(new List<ICriterion>
-                {
-                    Expression.Eq("Name", "仪表盘-1")
-                }).FirstOrDefault();
-
-                Container.Instance.Resolve<Sys_MenuService>().Create(new Sys_Menu()
-                {
-                    Name = "仪表盘-1 - 测试三级菜单",
-                    AreaName = "Admin",
-                    ControllerName = "RoleInfo",
-                    ActionName = "Index",
-                    ParentMenu = parentMenu,
                     SortCode = 10,
                 });
+                #endregion
+
                 #endregion
 
                 ShowMessage("成功");
@@ -458,13 +490,77 @@ namespace WebUI.Controllers
                 });
                 #endregion
 
-                #region 网站设置
+                #region 全局-站点设置
                 Sys_Menu setting_Sys_Menu = Container.Instance.Resolve<Sys_MenuService>().Query(new List<ICriterion> { Expression.Eq("ControllerName", "Setting") }).FirstOrDefault();
                 Container.Instance.Resolve<FunctionInfoService>().Create(new FunctionInfo
                 {
-                    AuthKey = "Admin.Setting.Edit",
-                    Name = "网站设置-修改",
+                    AuthKey = "Admin.Setting.Index",
+                    Name = "站点设置-常规",
                     Sys_Menu = setting_Sys_Menu
+                });
+                Container.Instance.Resolve<FunctionInfoService>().Create(new FunctionInfo
+                {
+                    AuthKey = "Admin.Setting.WebApi",
+                    Name = "站点设置-WebApi",
+                    Sys_Menu = setting_Sys_Menu
+                });
+                Container.Instance.Resolve<FunctionInfoService>().Create(new FunctionInfo
+                {
+                    AuthKey = "Admin.Setting.FindPwd",
+                    Name = "站点设置-找回密码",
+                    Sys_Menu = setting_Sys_Menu
+                });
+                Container.Instance.Resolve<FunctionInfoService>().Create(new FunctionInfo
+                {
+                    AuthKey = "Admin.Setting.SysEmail",
+                    Name = "站点设置-系统邮箱",
+                    Sys_Menu = setting_Sys_Menu
+                });
+                Container.Instance.Resolve<FunctionInfoService>().Create(new FunctionInfo
+                {
+                    AuthKey = "Admin.Setting.Advanced",
+                    Name = "站点设置-高级",
+                    Sys_Menu = setting_Sys_Menu
+                });
+                #endregion
+
+                #region 课程
+                Sys_Menu courseBox_Sys_Menu = Container.Instance.Resolve<Sys_MenuService>().Query(new List<ICriterion> { Expression.Eq("ControllerName", "CourseBox") }).FirstOrDefault();
+                Container.Instance.Resolve<FunctionInfoService>().Create(new FunctionInfo
+                {
+                    AuthKey = "Admin.CourseBox.Index",
+                    Name = "课程-列表",
+                    Sys_Menu = courseBox_Sys_Menu
+                });
+                Container.Instance.Resolve<FunctionInfoService>().Create(new FunctionInfo
+                {
+                    AuthKey = "Admin.CourseBox.Edit",
+                    Name = "课程-编辑",
+                    Sys_Menu = courseBox_Sys_Menu
+                });
+                Container.Instance.Resolve<FunctionInfoService>().Create(new FunctionInfo
+                {
+                    AuthKey = "Admin.CourseBox.UploadVideo",
+                    Name = "课程-上传视频",
+                    Sys_Menu = courseBox_Sys_Menu
+                });
+                Container.Instance.Resolve<FunctionInfoService>().Create(new FunctionInfo
+                {
+                    AuthKey = "Admin.CourseBox.Delete",
+                    Name = "课程-删除",
+                    Sys_Menu = courseBox_Sys_Menu
+                });
+                Container.Instance.Resolve<FunctionInfoService>().Create(new FunctionInfo
+                {
+                    AuthKey = "Admin.CourseBox.Create",
+                    Name = "课程-创建",
+                    Sys_Menu = courseBox_Sys_Menu
+                });
+                Container.Instance.Resolve<FunctionInfoService>().Create(new FunctionInfo
+                {
+                    AuthKey = "Admin.CourseBox.DeleteVideo",
+                    Name = "视频课件-删除",
+                    Sys_Menu = courseBox_Sys_Menu
                 });
                 #endregion
 

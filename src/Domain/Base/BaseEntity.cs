@@ -18,5 +18,11 @@ namespace Domain.Base
         [Display(Name = "编号", AutoGenerateField = false)]
         [Key]
         public int ID { get; set; }
+
+        /// <summary>
+        /// 状态
+        /// </summary>
+        [Property(Default = "0")]
+        public StatusEnum Status { get; set; }
     }
 }

@@ -1,0 +1,146 @@
+﻿@using Framework.HtmlHelpers
+@using WebUI.Areas.Admin.Models.Common
+@using WebUI.Extensions
+@using Domain
+@using WebUI.Areas.Admin.Models.SettingVM;
+@model SettingViewModel
+@{
+	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
+}
+@section head {
+	<link href="/assets/libs/AdminLTE/plugins/iCheck/all.css" rel="stylesheet" />
+}
+@section body {
+	<script src="/assets/libs/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+	<script>
+
+function saveData(event) {
+	var event = event || window.event;
+	event.preventDefault();
+	$.ajax({
+		url: "@Url.Action("SysEmail", "Setting", new { area = "Admin" })",
+		type: "post",
+		data: $("#js-settings-form").serialize(),
+		dataType: "json",
+		success: function (data) {
+			$("#js-message").fadeIn();
+			if (data.code <= 0) {
+				$("#js-message").attr("class", "alert alert-danger").find(".message").html(data.message);
+			} else {
+				$("#js-message").attr("class", "alert alert-success").find(".message").html(data.message);
+			}
+			// 3s 后隐藏
+			setTimeout(function () {
+				$("#js-message").fadeOut("slow");
+			}, 3000);
+		}
+	});
+}
+
+window.onload = function () {
+	//iCheck for checkbox and radio inputs
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+      checkboxClass: 'icheckbox_minimal-blue',
+      radioClass: 'iradio_minimal-blue'
+    });
+
+	//Flat red color scheme for iCheck
+    $('input[type="checkbox"].flat-blue, input[type="radio"].flat-blue').iCheck({
+      checkboxClass: 'icheckbox_flat-blue',
+      radioClass: 'iradio_flat-blue'
+    });
+}
+
+	</script>
+}
+
+<!-- start 提示框 -->
+@{ Html.RenderPartial("_MessagePartial"); }
+<!-- end 提示框 -->
+
+<input id="js-id" type="hidden" />
+
+<!-- start .box -->
+<div class="box">
+	<!-- start .box-header -->
+	<div class="box-header">
+		<h3 class="box-title">网站设置</h3>
+		<div class="box-tools">
+		</div>
+	</div>
+	<!-- end .box-header -->
+	<!-- start .box-body -->
+	<div class="box-body no-padding">
+		<div class="nav-tabs-custom">
+			<ul class="nav nav-tabs">
+				<li><a href="@Url.Action("Index", "Setting", new { area = "Admin" })">常规</a></li>
+				<li><a href="@Url.Action("WebApi", "Setting", new { are = "Admin" })">WebAPI & Mobile</a></li>
+				<li><a href="@Url.Action("FindPwd", "Setting", new { area = "Admin" })">找回密码</a></li>
+				<li class="active"><a>系统邮箱</a></li>
+				<li><a href="@Url.Action("Advanced", "Setting", new { area = "Admin" })">高级</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active">
+					<form id="js-settings-form" class="form-horizontal">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">发件人用户名</label>
+							<div class="col-sm-10">
+								@Html.TextBoxFor(m => m.MailUserName, new { @class = "form-control", placeholder = "eg: no-reply@example.com" })
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">密码</label>
+							<div class="col-sm-4">
+								@Html.PasswordFor(m => m.MailPassword, new { @class = "form-control", placeholder = "******" })
+							</div>
+							<div class="col-sm-6 form-control-static">不修改请留空</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">发件人显示发件地址</label>
+							<div class="col-sm-10">
+								@Html.TextBoxFor(m => m.MailDisplayAddress, new { @class = "form-control", placeholder = "eg: no-reply@example.com" })
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">发件人显示名</label>
+							<div class="col-sm-10">
+								@Html.TextBoxFor(m => m.MailDisplayName, new { @class = "form-control", placeholder = "eg: system" })
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">SMTP Host</label>
+							<div class="col-sm-10">
+								@Html.TextBoxFor(m => m.SmtpHost, new { @class = "form-control", placeholder = "eg: smtp.163.com" })
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">SMTP Port</label>
+							<div class="col-sm-10">
+								@Html.TextBoxFor(m => m.SmtpPort, new { @class = "form-control", placeholder = "eg: 25" })
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">SMTP 启用SSL</label>
+							<div class="col-sm-10">
+								<input type="checkbox" class="flat-blue" name="SmtpEnableSsl" value="true" checked="@(Model.SmtpEnableSsl?"":null)">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<span onclick="saveData()" class="btn btn-danger">保存</span>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<!-- /.tab-content -->
+		</div>
+	</div>
+	<!-- end .box-body -->
+	<!-- start .box-footer -->
+	<div class="box-footer clearfix">
+	</div>
+	<!-- end .box-footer -->
+</div>
+<!-- end .box -->

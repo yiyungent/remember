@@ -14,15 +14,6 @@ namespace Domain
         [Property(Length = 30, NotNull = true)]
         public string Name { get; set; }
 
-        /// <summary>
-        /// 状态
-        ///     0: 正常
-        ///     1: 禁用
-        /// </summary>
-        [Display(Name = "状态")]
-        [Property]
-        public int Status { get; set; }
-
         #region Relationship
 
         /// <summary>

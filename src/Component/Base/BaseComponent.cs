@@ -37,10 +37,20 @@ namespace Component.Base
 
         /// <summary>
         /// 根据主键删除
+        /// 假删除
         /// </summary>
         public void Delete(int id)
         {
-            _manager.Delete(id);
+            try
+            {
+                T t = _manager.GetEntity(id);
+                t.Status = StatusEnum.Deleted;
+                _manager.Edit(t);
+            }
+            catch (Exception ex)
+            { }
+
+            //_manager.Delete(id);
         }
 
         /// <summary>
@@ -56,7 +66,7 @@ namespace Component.Base
         /// </summary>
         public IList<T> Query(IList<ICriterion> condition)
         {
-            return _manager.Query(condition);
+            return _manager.Query(condition).Where(m => m.Status != StatusEnum.Deleted).ToList();
         }
 
         /// <summary>
@@ -88,6 +98,7 @@ namespace Component.Base
         //分页区和取对象集合
         public IList<T> GetPaged(IList<ICriterion> queryConditions, IList<Order> orderList, int pageIndex, int pageSize, out int count)
         {
+            queryConditions.Add(Expression.Not(Expression.Eq("Status", Domain.Base.StatusEnum.Deleted)));
             return _manager.GetPaged(queryConditions, orderList, pageIndex, pageSize, out count);
         }
 
@@ -101,6 +112,8 @@ namespace Component.Base
         /// <returns>返回满足查询条件的实体</returns>
         public IList<T> GetPaged(IList<KeyValuePair<string, string>> queryConditions, int pageIndex, int pageSize, out int count)
         {
+            // TODO:
+            //queryConditions.Add(Expression.Not(Expression.Eq("Status", Domain.Base.StatusEnum.Deleted)));
             return _manager.GetPaged(queryConditions, pageIndex, pageSize, out count);
         }
 

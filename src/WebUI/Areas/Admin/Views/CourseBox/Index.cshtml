@@ -26,7 +26,7 @@
 			var id = $("#js-id").val();
 			$.ajax({
 				type: 'POST',
-				url: '/Admin/UserInfo/Delete',
+				url: '/Admin/CourseBox/Delete',
 				data: { id: id },
 				dataType: 'json',
 				success: function (data) {
@@ -36,9 +36,9 @@
 					} else {
 						// 删除成功
 						$("#js-message").attr("class", "alert alert-success").find(".message").html(data.message);
-						$(".table").find("tr[data-tr-id='" + id + "']").remove();
+						$("#list").find("[data-tr-id='" + id + "']").remove();
 						// 检查当前当前页面是否已经全部删除完，若是，则点击当前页码，重新加载
-						var trNum = $(".table").find("tr").length - 1;
+						var trNum = $("#list").find(".thumbnail").length - 1;
 						if (trNum == 0) {
 							$("#js-page").find("li[class*='active']>a")[0].click();
 						}
@@ -140,23 +140,30 @@
 	<!-- end .box-header -->
 	<!-- start .box-body -->
 	<div class="box-body table-responsive no-padding" style="overflow-x: hidden;">
-		<div class="row" pview="list">
+		<div id="list" class="row" pview="list">
 			<div class="col-xs-12">
 				@foreach (var item in Model.List)
 				{
-					<div class="col-sm-6 col-md-3">
-						<div class="thumbnail">
-							<img src="@item.PicUrl.ToHttpAbsoluteUrl()" alt="@item.Name">
+					<div data-tr-id="@item.ID" class="col-sm-6 col-md-3">
+						<div class="thumbnail" style="height:314px;width:294px;overflow:hidden;">
+							<img style="width:284px;height:100px;" src="@item.PicUrl.ToHttpAbsoluteUrl()" alt="@item.Name">
 							<div class="caption">
-								<h3>@item.Name</h3>
-								<p><span>创建时间: </span><span>@item.CreateTime.ToString("yyyy-MM-DD hh:mm")</span></p>
+								<h3>@(item.Name.Length > 7 ? item.Name.Substring(0, 8) + "..." : item.Name)</h3>
+								<p><span>创建时间: </span><span>@item.CreateTime.ToString("yyyy-MM-dd hh:mm")</span></p>
 								<p>
 									<span>投稿者:  </span>
 									@item.Creator.UserName
 								</p>
-								<p><span>描述: </span><span>@item.Description</span></p>
+								<p><span>描述: </span><span>@(item.Description.Length > 13 ? item.Description.Substring(0, 13) + "..." : item.Description)</span></p>
 								<p id="js-btn-group-@item.ID" class="btn-group">
-									<button class="btn btn-default">进入</button>
+									@if (Html.HasAuth("Admin", "CourseBox", "Edit"))
+									{
+										<a class="btn btn-primary" href="/Admin/CourseBox/Edit?id=@item.ID">编辑</a>
+									}
+									@if (Html.HasAuth("Admin", "CourseBox", "Delete"))
+									{
+										<button class="btn btn-danger" type="button" onclick="deleteOp(@item.ID)">删除</button>
+									}
 								</p>
 							</div>
 						</div>
@@ -169,7 +176,10 @@
 	<!-- start .box-footer -->
 	<div class="box-footer clearfix">
 		<div class="btn-group pull-left">
-			<a class="btn btn-primary" href="@Url.Action("Create")">添加</a>
+			@if (Html.HasAuth("Admin", "CourseBox", "Create"))
+			{
+				<a class="btn btn-primary" href="@Url.Action("Create")">添加</a>
+			}
 		</div>
 		<!-- start 分页 -->
 		<div id="js-page" pview="pages">

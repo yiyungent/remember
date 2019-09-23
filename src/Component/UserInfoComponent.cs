@@ -1,8 +1,11 @@
 ﻿using Component.Base;
 using Domain;
 using Manager;
+using NHibernate.Criterion;
 using Service;
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Component
 {
@@ -12,5 +15,9 @@ namespace Component
         {
             return _manager.Exist(userName, exceptId: exceptId);
         }
+
+       
+
+
     }
 }

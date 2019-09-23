@@ -25,6 +25,6 @@ namespace Domain
         /// </summary>
         [Display(Name = "状态")]
         [Property]
-        public int Status { get; set; }
+        public int IsOpen { get; set; }
     }
 }

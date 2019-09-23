@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Article.cs" />
     <Compile Include="Base\BaseEntity.cs" />
+    <Compile Include="Base\StatusEnum.cs" />
     <Compile Include="CardBox.cs" />
     <Compile Include="CardInfo.cs" />
     <Compile Include="Comment.cs" />

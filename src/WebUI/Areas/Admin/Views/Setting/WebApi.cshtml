@@ -12,7 +12,7 @@
 @section body {
 	<script>
 
-function submitSettings(event) {
+function saveData(event) {
 	var event = event || window.event;
 	event.preventDefault();
 	$.ajax({
@@ -63,6 +63,8 @@ window.onload = function () {
 			<ul class="nav nav-tabs">
 				<li><a href="@Url.Action("Index", "Setting", new { area = "Admin" })">常规</a></li>
 				<li class="active"><a>WebAPI & Mobile</a></li>
+				<li><a href="@Url.Action("FindPwd", "Setting", new { area = "Admin" })">找回密码</a></li>
+				<li><a href="@Url.Action("SysEmail", "Setting", new { area = "Admin" })">系统邮箱</a></li>
 				<li><a href="@Url.Action("Advanced", "Setting", new { area = "Admin" })">高级</a></li>
 			</ul>
 			<div class="tab-content">
@@ -101,7 +103,7 @@ window.onload = function () {
 
 						<div class="form-group">
 							<div class="col-sm-offset-2 col-sm-10">
-								<span onclick="submitSettings()" class="btn btn-danger">保存</span>
+								<span onclick="saveData()" class="btn btn-danger">保存</span>
 							</div>
 						</div>
 					</form>

@@ -26,17 +26,14 @@ namespace WebUI.Controllers
         #region 首页
         public ActionResult Index()
         {
-            //// 当前登录账号/未登录
-            //CurrentAccountModel currentAccount = AccountManager.GetCurrentAccount();
+            // 当前登录账号/未登录
+            CurrentAccountModel currentAccount = AccountManager.GetCurrentAccount();
 
-            //ArticleService articleService = Container.Instance.Resolve<ArticleService>();
-            //var articleList = articleService.GetAll();
-            //ViewBag.ArticleList = articleList;
+            ArticleService articleService = Container.Instance.Resolve<ArticleService>();
+            var articleList = articleService.GetAll();
+            ViewBag.ArticleList = articleList;
 
-            //return View(currentAccount);
-
-
-            return View();
+            return View(currentAccount);
         }
         #endregion
 

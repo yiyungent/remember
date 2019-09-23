@@ -80,6 +80,10 @@
     <Compile Include="UserInfoComponent.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{2b716300-f8db-4726-ac39-f45d15fb7a9d}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Domain\Domain.csproj">
       <Project>{a533e3d6-d54f-4141-ac04-6171dff64e26}</Project>
       <Name>Domain</Name>

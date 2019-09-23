@@ -109,7 +109,7 @@ namespace WebUI.Areas.Account.Controllers
             {
                 return Json(new { code = -1, message = "用户名或密码错误" });
             }
-            if (dbUser.Status == 1)
+            if (dbUser.Status == Domain.Base.StatusEnum.Banned)
             {
                 return Json(new { code = -1, message = "账号被禁用" });
             }
@@ -225,7 +225,10 @@ namespace WebUI.Areas.Account.Controllers
                 string emailType = actions[1].Split(new string[] { "@" }, StringSplitOptions.RemoveEmptyEntries)[1];
                 string emailLoginAddress = EmailDic[emailType];
                 // 邮件验证码
-                Common.EmailVerifyCode.SendEmailVerifyCode(actions[1], Common.SendReason.RPwd);
+                Container.Instance.Resolve<SettingService>().SendMailVerifyCodeForFindPwd(actions[1], out string vCode);
+                // 保存到Session["vCode"];
+                Session["vCode"] = vCode;
+
                 return Json(new { code = 1, message = $"验证码短信/邮件已发出，5分钟内有效，请注意<a target=\"_blank\" href=\"//{emailLoginAddress}\" style=\"font-size: 14px;\">查收</a>" });
             }
             else

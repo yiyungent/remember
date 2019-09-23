@@ -17,7 +17,7 @@ namespace Manager
                 value = Query(new List<ICriterion>
                 {
                     Expression.Eq("SetKey", key)
-                }).FirstOrDefault().SetValue;
+                }).FirstOrDefault()?.SetValue ?? "";
             }
             catch (Exception ex)
             { }

@@ -166,14 +166,14 @@ namespace WebUI.Areas.Admin.Controllers
                 }
                 ThemeTemplate dbModel = Container.Instance.Resolve<ThemeTemplateService>().GetEntity(id);
                 string msg = "";
-                switch (dbModel.Status)
+                switch (dbModel.IsOpen)
                 {
                     case 0:
                         msg = "启用";
-                        dbModel.Status = 1;
+                        dbModel.IsOpen = 1;
                         break;
                     case 1:
-                        dbModel.Status = 0;
+                        dbModel.IsOpen = 0;
                         string defaultTemplateName = Container.Instance.Resolve<SettingService>().GetSet("DefaultTemplateName");
                         if (defaultTemplateName.ToLower() == dbModel.TemplateName)
                         {
@@ -205,7 +205,7 @@ namespace WebUI.Areas.Admin.Controllers
                 }
 
                 ThemeTemplate dbModel = Container.Instance.Resolve<ThemeTemplateService>().GetEntity(id);
-                if (dbModel.Status == 0)
+                if (dbModel.IsOpen == 0)
                 {
                     return Json(new { code = -2, message = "模板未启用，请先启用再设置为默认模板" });
                 }
@@ -237,7 +237,7 @@ namespace WebUI.Areas.Admin.Controllers
                     return Json(new { code = -3, message = "切换模板失败, 不存在此模板" });
                 }
                 ThemeTemplate dbModel = Container.Instance.Resolve<ThemeTemplateService>().GetEntity(id);
-                if (dbModel.Status == 0)
+                if (dbModel.IsOpen == 0)
                 {
                     return Json(new { code = -4, message = "切换模板失败，此模板被禁用" });
                 }
@@ -278,7 +278,7 @@ namespace WebUI.Areas.Admin.Controllers
                     TemplateName = templateName,
                     Title = templateName,
                     // 默认安装后 启用
-                    Status = 1,
+                    IsOpen = 1,
                 });
 
                 return true;

@@ -27,7 +27,7 @@ namespace WebUI.Areas.Admin.Models.Common
             this.Copyright = "<strong>Copyright &copy; " + DateTime.Now.Year + $" <a target='_blank' href=\"{webUiUrl}\">{title_mini}</a>.</strong> All rights reserved.";
             IList<ThemeTemplate> themeTemplates = Container.Instance.Resolve<ThemeTemplateService>().Query(new List<ICriterion>
             {
-                Expression.Eq("Status", 1)
+                Expression.Eq("IsOpen", 1)
             });
             this.ThemeTemplateDic = new Dictionary<int, string>();
             foreach (var item in themeTemplates)

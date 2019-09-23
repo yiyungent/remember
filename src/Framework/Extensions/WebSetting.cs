@@ -17,7 +17,7 @@ namespace Framework.Extensions
             string value = Container.Instance.Resolve<SettingService>().Query(new List<ICriterion>
             {
                 Expression.Eq("SetKey", key)
-            }).FirstOrDefault().SetValue;
+            }).FirstOrDefault()?.SetValue ?? "";
 
             return value;
         }

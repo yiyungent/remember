@@ -8,5 +8,7 @@ namespace Service
         string GetSet(string key);
 
         void Set(string key, string value);
+
+        bool SendMailVerifyCodeForFindPwd(string mail, out string vCode);
     }
 }
