@@ -53,6 +53,9 @@ namespace WebUI.Areas.Admin.Models.Common
                 case "Domain.CourseBox":
                     tempAllList = Container.Instance.Resolve<CourseBoxService>().GetPaged(queryConditions, orderList, pageIndex, pageSize, out totalCount);
                     break;
+                case "Domain.VideoInfo":
+                    tempAllList = Container.Instance.Resolve<VideoInfoService>().GetPaged(queryConditions, orderList, pageIndex, pageSize, out totalCount);
+                    break;
             }
             IList<dynamic> allList = tempAllList;
             IList<T> tempList = new List<T>();

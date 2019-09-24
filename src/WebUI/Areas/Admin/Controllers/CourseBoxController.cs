@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using Common;
+using Core;
 using Domain;
 using Framework.Infrastructure.Concrete;
 using NHibernate.Criterion;
@@ -66,89 +67,6 @@ namespace WebUI.Areas.Admin.Controllers
         }
         #endregion
 
-        #region 编辑课程基本信息
-        [HttpGet]
-        public ViewResult Edit(int id)
-        {
-            CourseBox viewModel = Container.Instance.Resolve<CourseBoxService>().GetEntity(id);
-
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        public JsonResult Edit(CourseBox inputModel)
-        {
-            try
-            {
-                CourseBox dbModel = Container.Instance.Resolve<CourseBoxService>().GetEntity(inputModel.ID);
-                dbModel.Name = inputModel.Name;
-                dbModel.Description = inputModel.Description;
-                dbModel.LastUpdateTime = DateTime.Now;
-                dbModel.StartTime = inputModel.StartTime;
-                dbModel.EndTime = inputModel.EndTime;
-                if (!string.IsNullOrEmpty(inputModel.PicUrl))
-                {
-                    dbModel.PicUrl = inputModel.PicUrl;
-                }
-
-                Container.Instance.Resolve<CourseBoxService>().Edit(dbModel);
-
-                return Json(new { code = 1, message = "编辑课程信息成功" });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { code = -1, message = "编辑课程信息失败" });
-            }
-        }
-        #endregion
-
-        #region 展示此课程的视频课件列表
-        [HttpGet]
-        public ViewResult Videos(int id)
-        {
-            CourseBox viewModel = Container.Instance.Resolve<CourseBoxService>().GetEntity(id);
-
-            return View(viewModel);
-        }
-        #endregion
-
-        #region 为课程添加视频课件
-        [HttpGet]
-        public ViewResult AddVideo(int courseBoxId)
-        {
-            CourseBox viewModel = Container.Instance.Resolve<CourseBoxService>().GetEntity(courseBoxId);
-
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        public JsonResult AddVideo(int courseBoxId, VideoInfo inputModel)
-        {
-            try
-            {
-                Container.Instance.Resolve<VideoInfoService>().Create(new VideoInfo
-                {
-                    CourseBox = new CourseBox { ID = courseBoxId },
-                    Page = inputModel.Page,
-                    PlayUrl = inputModel.PlayUrl,
-                    SubTitleUrl = inputModel.SubTitleUrl,
-                    Title = inputModel.Title,
-                    //Duration=
-                });
-
-
-                return Json(new { code = 1, message = "添加视频课件成功" });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { code = -1, message = "添加视频课件失败" });
-            }
-        }
-        #endregion
-
-
-
-
         #region 创建课程-基本信息
         [HttpGet]
         public ViewResult Create()
@@ -204,6 +122,113 @@ namespace WebUI.Areas.Admin.Controllers
             }
         }
         #endregion
+
+
+        #region 编辑课程基本信息
+        [HttpGet]
+        public ViewResult Edit(int id)
+        {
+            CourseBox viewModel = Container.Instance.Resolve<CourseBoxService>().GetEntity(id);
+            string picUrl = viewModel.PicUrl.ToHttpAbsoluteUrl();
+            FileHelper.GetRemoteImageInfo(picUrl, out long size, out string widthxHeight);
+            ViewBag.PicUrl = picUrl;
+            ViewBag.PicSize = size;
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public JsonResult Edit(CourseBox inputModel)
+        {
+            try
+            {
+                CourseBox dbModel = Container.Instance.Resolve<CourseBoxService>().GetEntity(inputModel.ID);
+                dbModel.Name = inputModel.Name;
+                dbModel.Description = inputModel.Description;
+                dbModel.LastUpdateTime = DateTime.Now;
+                dbModel.StartTime = inputModel.StartTime;
+                dbModel.EndTime = inputModel.EndTime;
+                if (string.IsNullOrEmpty(inputModel.PicUrl))
+                {
+                    // 默认课程封面
+                    dbModel.PicUrl = "https://static.runoob.com/images/mix/img_fjords_wide.jpg";
+                }
+                else
+                {
+                    dbModel.PicUrl = inputModel.PicUrl;
+                }
+
+                Container.Instance.Resolve<CourseBoxService>().Edit(dbModel);
+
+                return Json(new { code = 1, message = "编辑课程信息成功" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = -1, message = "编辑课程信息失败" });
+            }
+        }
+        #endregion
+
+        #region 展示此课程的视频课件列表
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">课程ID CourseBOx.ID</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ViewResult Videos(int id, int pageIndex = 1, int pageSize = 6)
+        {
+            IList<ICriterion> queryConditions = new List<ICriterion>();
+            // 此课程的视频课件
+            queryConditions.Add(Expression.Eq("CourseBox.ID", id));
+
+            ListViewModel<VideoInfo> viewModel = new ListViewModel<VideoInfo>(queryConditions, pageIndex: pageIndex, pageSize: pageSize);
+            TempData["RedirectUrl"] = Request.RawUrl;
+
+            // 按排序码排序
+            viewModel.List = viewModel.List.OrderBy(m => m.Page).ToList();
+
+            ViewBag.CourseBox = Container.Instance.Resolve<CourseBoxService>().GetEntity(id);
+
+            return View(viewModel);
+        }
+        #endregion
+
+        #region 为课程添加视频课件
+        [HttpGet]
+        public ViewResult AddVideo(int courseBoxId)
+        {
+            CourseBox viewModel = Container.Instance.Resolve<CourseBoxService>().GetEntity(courseBoxId);
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public JsonResult AddVideo(int courseBoxId, VideoInfo inputModel)
+        {
+            try
+            {
+                Container.Instance.Resolve<VideoInfoService>().Create(new VideoInfo
+                {
+                    CourseBox = new CourseBox { ID = courseBoxId }, // 注意！！！
+                    Page = inputModel.Page,
+                    PlayUrl = inputModel.PlayUrl,
+                    SubTitleUrl = inputModel.SubTitleUrl,
+                    Title = inputModel.Title,
+                    Size = inputModel.Size
+                });
+
+
+                return Json(new { code = 1, message = "添加视频课件成功" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = -1, message = "添加视频课件失败" });
+            }
+        }
+        #endregion
+
+
 
         #region 删除视频课件
         /// <summary>
@@ -262,6 +287,46 @@ namespace WebUI.Areas.Admin.Controllers
         }
         #endregion
 
+        #region 编辑视频课件
+        [HttpGet]
+        public ViewResult EditVideo(int id)
+        {
+            VideoInfo viewModel = Container.Instance.Resolve<VideoInfoService>().GetEntity(id);
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public JsonResult EditVideo(VideoInfo inputModel)
+        {
+            try
+            {
+                VideoInfo dbModel = Container.Instance.Resolve<VideoInfoService>().GetEntity(inputModel.ID);
+                dbModel.Title = inputModel.Title;
+                dbModel.PlayUrl = inputModel.PlayUrl;
+                dbModel.SubTitleUrl = inputModel.SubTitleUrl;
+                dbModel.Page = inputModel.Page;
+                dbModel.Size = inputModel.Size;
+
+
+                Container.Instance.Resolve<VideoInfoService>().Edit(dbModel);
+
+                return Json(new { code = 1, message = "编辑视频课件成功" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = -1, message = "编辑视频课件失败" });
+            }
+        }
+        #endregion
+
+
+
+
+
+
+
+
         #region 上传视频-为某课程上传视频
         /// <summary>
         /// 上传视频-为某课程上传视频
@@ -302,20 +367,17 @@ namespace WebUI.Areas.Admin.Controllers
                     // TODO: 临时
                     return Json(new
                     {
-                        Code = 1,
-                        Message = "上传成功",
-                        Data = new
-                        {
-                            Url = "/Upload/videos/" + courseBoxCreatorId + "/" + saveFileName
-                        }
+                        result = "success",
+                        message = "上传视频成功",
+                        url = (":WebUISite:/Upload/videos/" + courseBoxCreatorId + "/" + saveFileName)
                     });
                 }
                 else
                 {
                     return Json(new
                     {
-                        Code = -2,
-                        Message = "上传失败，该课程不存在"
+                        result = "failed",
+                        message = "上传失败，该课程不存在"
                     });
                 }
             }
@@ -323,8 +385,73 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 return Json(new
                 {
-                    Code = -1,
-                    Message = "上传失败"
+                    result = "failed",
+                    message = "上传失败"
+                });
+            }
+        }
+        #endregion
+
+        #region 上传视频-为某课程上传字幕
+        /// <summary>
+        /// 上传视频-为某课程上传视频
+        /// </summary>
+        /// <param name="id">课程ID</param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult UploadSubTitle(int id)
+        {
+            try
+            {
+                if (Container.Instance.Resolve<CourseBoxService>().Exist(id))
+                {
+                    int courseBoxCreatorId = Container.Instance.Resolve<CourseBoxService>().GetEntity(id).Creator.ID;
+
+                    // 保存到课程创建者的文件夹
+                    string basePath = "~/Upload/subtitles/" + courseBoxCreatorId + "/";
+
+                    // 如果路径含有~，即需要服务器映射为绝对路径，则进行映射
+                    basePath = (basePath.IndexOf("~") > -1) ? System.Web.HttpContext.Current.Server.MapPath(basePath) : basePath;
+                    HttpPostedFile file = System.Web.HttpContext.Current.Request.Files[0];
+                    // 如果目录不存在，则创建目录
+                    if (!Directory.Exists(basePath))
+                    {
+                        Directory.CreateDirectory(basePath);
+                    }
+
+                    string fileName = System.Web.HttpContext.Current.Request["name"];
+                    if (string.IsNullOrEmpty(fileName))
+                    {
+                        fileName = file.FileName;
+                    }
+                    // 文件保存
+                    string saveFileName = Guid.NewGuid().ToString() + "." + file.FileName.Split('.')[1];
+                    string fullPath = basePath + saveFileName;
+                    file.SaveAs(fullPath);
+
+                    // TODO: 临时
+                    return Json(new
+                    {
+                        result = "success",
+                        message = "上传成功",
+                        url = (":WebUISite:/Upload/subtitles/" + courseBoxCreatorId + "/" + saveFileName)
+                    });
+                }
+                else
+                {
+                    return Json(new
+                    {
+                        result = "failed",
+                        message = "上传失败，该课程不存在",
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    result = "failed",
+                    message = "上传失败"
                 });
             }
         }
@@ -378,5 +505,8 @@ namespace WebUI.Areas.Admin.Controllers
             }
         }
         #endregion
+
+        // TODO: 当在 编辑课程基本信息 页，删除封面图时，发送请求到后端，删除物理文件
+
     }
 }

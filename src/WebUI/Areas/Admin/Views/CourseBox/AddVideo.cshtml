@@ -1,11 +1,7 @@
 ﻿@using Domain
-@using Framework.Extensions
 @model CourseBox
 @{
 	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
-
-	string picUrl = ViewBag.PicUrl;
-	long picSize = ViewBag.PicSize;
 
 	Html.EnableClientValidation(false);
 }
@@ -41,7 +37,10 @@
 
 		function onSuccess(data) {
 			if (data.code <= 0) {
-				showMessage(data.message, -1);
+				showMessage(data.message + "，准备跳转...", -1);
+				setTimeout(function () {
+					window.location.href = "@Url.Action("Videos", new { area = "Admin", id = Model.ID })";
+				}, 1000);
 			} else {
 				showMessage(data.message, 1);
 			}
@@ -51,7 +50,7 @@
 		function saveData() {
 			$("#js-btn-save").val("保存中").attr("disabled", "disabled");
 			$.ajax({
-				url: "/Admin/CourseBox/Edit",
+				url: "/Admin/CourseBox/AddVideo",
 				type: "post",
 				dataType: "json",
 				data: $("#js-form").serialize(),
@@ -63,37 +62,51 @@
 		$(function () {
 
 
-			$('#uploader-area').uploader({
+			$('#video-uploader-area').uploader({
 				autoUpload: true,            // 当选择文件后立即自动进行上传操作
-				url: '/Admin/CourseBox/UploadPic',  // 文件上传提交地址
+				url: '/Admin/CourseBox/UploadVideo?id=@Model.ID',  // 文件上传提交地址
 				filters: {
-					// 只允许上传图片或图标（.ico）
-					mime_types: [
-						{ title: '图片', extensions: 'jpg,gif,png' },
-						{ title: '图标', extensions: 'ico' }
-					],
-					// 最大上传文件为 1MB
-					max_file_size: '10mb',
-					// 不允许上传重复文件
-					prevent_duplicates: false,
-					chunk_size: 0, // 关闭分片上传
+					// 允许上传重复文件
+					prevent_duplicates: false
 				},
 				multi_selection: false,
+				chunk_size: 0, // 关闭分片上传
 				limitFilesCount: 1,
-				staticFiles: [
-					  {name: '@picUrl', size: @picSize , url: '@picUrl'},
-				],
 				deleteActionOnDone: function(file, doRemoveFile) {
 					doRemoveFile();
-					$("#PicUrl").val("");
+					$("#PlayUrl").val("");
 				},
 				responseHandler: function (responseObject, file) {
 					var res = JSON.parse(responseObject.response);
 					if (res.result == "ok") {
-						$("#PicUrl").val(res.url);
+						$("#PlayUrl").val(res.url);
+						$("#SubTitleUrl").val(res.url);
+						$("#Size").val(file.size);
 					}
 				}
 			});
+
+			$('#subTitle-uploader-area').uploader({
+				autoUpload: true,            // 当选择文件后立即自动进行上传操作
+				url: '/Admin/CourseBox/UploadSubTitle?id=@Model.ID',  // 文件上传提交地址
+				filters: {
+					// 允许上传重复文件
+					prevent_duplicates: false
+				},
+				multi_selection: false,
+				limitFilesCount: 1,
+				deleteActionOnDone: function(file, doRemoveFile) {
+					doRemoveFile();
+					$("#SubTitleUrl").val("");
+				},
+				responseHandler: function (responseObject, file) {
+					var res = JSON.parse(responseObject.response);
+					if (res.result == "ok") {
+						$("#SubTitleUrl").val(res.url);
+					}
+				}
+			});
+
 		});
 
 	</script>
@@ -105,7 +118,7 @@
 <!-- general form elements -->
 <div class="box box-primary">
 	<div class="box-header with-border">
-		<h3 class="box-title">@Model.Name</h3>
+		<h3 class="box-title">添加课件 - 课程 @Model.Name</h3>
 	</div>
 	<!-- /.box-header -->
 	<!-- form start -->
@@ -114,38 +127,43 @@
 
 		<div class="nav-tabs-custom">
 			<ul class="nav nav-tabs">
-				<li class="active"><a>课程基本信息</a></li>
+				<li><a href="@Url.Action("Edit", "CourseBox", new { area = "Admin" , id = Model.ID})">课程基本信息</a></li>
 				<li><a href="@Url.Action("Videos", "CourseBox", new { area = "Admin" , id = Model.ID })">课程课件</a></li>
-				<li><a href="@Url.Action("AddVideo", "CourseBox", new { area = "Admin", courseBoxId = Model.ID })">添加课件</a></li>
+				<li class="active"><a>添加课件</a></li>
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active">
 					<form id="js-form">
-						@Html.HiddenFor(m => m.ID)
+						@Html.Hidden("courseBoxId", Model.ID)
 						<div class="form-group">
-							<label>课程名</label>
-							@Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+							<label>课件标题</label>
+							@Html.TextBox("Title", "", new { @class = "form-control" })
 						</div>
 						<div class="form-group">
-							<label for="InputEmail">课程描述</label>
-							@Html.TextBoxFor(m => m.Description, new { @class = "form-control", placeholder = "请输入课程描述", type = "email" })
-						</div>
-						<div class="form-group">
-							<label>开始时间</label>
-							@Html.TextBox("StartTime", Model.StartTime.ToString("yyyy-MM-dd"), new { @class = "form-control", type = "date" })
-						</div>
-						<div class="form-group">
-							<label>结束时间</label>
-							@Html.TextBox("EndTime", Model.EndTime.ToString("yyyy-MM-dd"), new { @class = "form-control", type = "date" })
+							<label>课件排序码</label>
+							@Html.TextBox("Page", "", new { @class = "form-control", type = "number" })
 						</div>
 						<div class="form-group" style="display: none;">
-							@Html.HiddenFor(m => m.PicUrl)
+							@Html.Hidden("PlayUrl")
+						</div>
+						<div class="form-group" style="display: none;">
+							@Html.Hidden("SubTitleUrl")
+						</div>
+						<div class="form-group" style="display: none;">
+							@Html.Hidden("Size")
 						</div>
 						<div class="form-group">
-							<label>课程封面图</label>
-							<div id="uploader-area" class="uploader">
+							<label>上传视频</label>
+							<div id="video-uploader-area" class="uploader">
 								<div class="file-list" data-drag-placeholder="请拖拽文件到此处"></div>
-								<button type="button" class="btn btn-primary uploader-btn-browse"><i class="icon icon-cloud-upload"></i> 选择文件</button>
+								<button type="button" class="btn btn-primary uploader-btn-browse"><i class="icon icon-cloud-upload"></i> 选择视频文件</button>
+							</div>
+						</div>
+						<div class="form-group">
+							<label>上传字幕</label>
+							<div id="subTitle-uploader-area" class="uploader">
+								<div class="file-list" data-drag-placeholder="请拖拽文件到此处"></div>
+								<button type="button" class="btn btn-primary uploader-btn-browse"><i class="icon icon-cloud-upload"></i> 选择字幕文件</button>
 							</div>
 						</div>
 					</form>
@@ -158,7 +176,7 @@
 
 	<div class="box-footer">
 		<div class="btn-group">
-			<a class="btn btn-default" href="@Url.Action("Index", "CourseBox", new { area = "Admin" })">返回</a>
+			<a class="btn btn-default" href="@Url.Action("Videos", "CourseBox", new { area = "Admin",id = Model.ID })">返回</a>
 			<input id="js-btn-save" class="btn btn-primary" type="submit" value="保存" onclick="return saveData();" />
 		</div>
 	</div>

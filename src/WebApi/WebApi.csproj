@@ -159,10 +159,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assets\images\default-avatar.jpg" />
     <Content Include="assets\images\default-notify.jpg" />
-    <Content Include="assets\images\guest-avatar.jpg" />
     <Content Include="assets\images\notexist-avatar.jpg" />
+    <Content Include="assets\images\guest-avatar.jpg" />
+    <Content Include="assets\images\default-avatar.jpg" />
     <Content Include="assets\images\scripts\detect-c.png" />
     <Content Include="assets\images\scripts\input-error.png" />
     <Content Include="assets\images\scripts\login.png" />

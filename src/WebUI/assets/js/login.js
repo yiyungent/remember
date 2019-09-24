@@ -65,6 +65,7 @@ $(function () {
 					$(".password input").val("");
 				} else if (data.code == 1) {
 					if (data.returnUrl && data.returnUrl != '') {
+						$(".btn-login").html("登录中...");
 						window.location.href = data.returnUrl;
 					} else {
 						window.location.href = "/";

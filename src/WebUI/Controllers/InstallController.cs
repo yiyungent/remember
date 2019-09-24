@@ -558,8 +558,20 @@ namespace WebUI.Controllers
                 });
                 Container.Instance.Resolve<FunctionInfoService>().Create(new FunctionInfo
                 {
+                    AuthKey = "Admin.CourseBox.AddVideo",
+                    Name = "视频课件-添加",
+                    Sys_Menu = courseBox_Sys_Menu
+                });
+                Container.Instance.Resolve<FunctionInfoService>().Create(new FunctionInfo
+                {
                     AuthKey = "Admin.CourseBox.DeleteVideo",
                     Name = "视频课件-删除",
+                    Sys_Menu = courseBox_Sys_Menu
+                });
+                Container.Instance.Resolve<FunctionInfoService>().Create(new FunctionInfo
+                {
+                    AuthKey = "Admin.CourseBox.EditVideo",
+                    Name = "视频课件-编辑",
                     Sys_Menu = courseBox_Sys_Menu
                 });
                 #endregion

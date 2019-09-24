@@ -1,0 +1,187 @@
+﻿@using Domain
+@using Framework.Extensions
+@model VideoInfo
+@{
+	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
+
+	string playUrl = Model.PlayUrl.ToHttpAbsoluteUrl();
+	long size = Model.Size;
+
+	Html.EnableClientValidation(false);
+}
+@section head {
+	<!-- date-range-picker -->
+	<link href="/assets/libs/AdminLTE/bower_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+	<link href="/assets/libs/zui/dist/css/zui.min.css" rel="stylesheet" />
+	<link href="/assets/libs/zui/dist/lib/uploader/zui.uploader.css" rel="stylesheet" />
+}
+@section body {
+	<!-- date-range-picker -->
+	<script src="/assets/libs/AdminLTE/bower_components/moment/min/moment.min.js"></script>
+	<script src="/assets/libs/AdminLTE/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+	<script src="/assets/libs/zui/dist/js/zui.min.js"></script>
+	<script src="/assets/libs/zui/dist/lib/uploader/zui.uploader.min.js"></script>
+	<script>
+
+		function showMessage(message, type) {
+			$("#js-message").fadeIn();
+			switch (type) {
+				case -1:
+					$("#js-message").attr("class", "alert alert-danger").find(".message").html(message);
+					break;
+				case 1:
+					$("#js-message").attr("class", "alert alert-success").find(".message").html(message);
+					break;
+			}
+			// 3s 后隐藏
+			setTimeout(function () {
+				$("#js-message").fadeOut("slow");
+			}, 3000);
+		}
+
+		function onSuccess(data) {
+			if (data.code <= 0) {
+				showMessage(data.message + "，准备跳转...", -1);
+				setTimeout(function () {
+					window.location.href = "@Url.Action("Videos", new { area = "Admin", id = Model.CourseBox.ID })";
+				}, 1000);
+			} else {
+				showMessage(data.message, 1);
+			}
+			$("#js-btn-save").val("保存").removeAttr("disabled");
+		}
+
+		function saveData() {
+			$("#js-btn-save").val("保存中").attr("disabled", "disabled");
+			$.ajax({
+				url: "/Admin/CourseBox/EditVideo",
+				type: "post",
+				dataType: "json",
+				data: $("#js-form").serialize(),
+				success: onSuccess
+			});
+			return false;
+		}
+
+		$(function () {
+
+
+			$('#video-uploader-area').uploader({
+				autoUpload: true,            // 当选择文件后立即自动进行上传操作
+				url: '/Admin/CourseBox/UploadVideo?id=@Model.CourseBox.ID',  // 文件上传提交地址
+				filters: {
+					// 允许上传重复文件
+					prevent_duplicates: false
+				},
+				limitFilesCount: 1,
+				multi_selection: false,
+				chunk_size: 0, // 关闭分片上传
+				staticFiles: [
+						{name: '@playUrl', url: '@playUrl', size: @size}
+				],
+				deleteActionOnDone: function(file, doRemoveFile) {
+					doRemoveFile();
+					$("#PlayUrl").val("");
+				},
+				responseHandler: function (responseObject, file) {
+					var res = JSON.parse(responseObject.response);
+					if (res.result == "ok") {
+						$("#PlayUrl").val(res.url);
+						$("#Size").val(file.size);
+					}
+				}
+			});
+
+			$('#subTitle-uploader-area').uploader({
+				autoUpload: true,            // 当选择文件后立即自动进行上传操作
+				url: '/Admin/CourseBox/UploadSubTitle?id=@Model.CourseBox.ID',  // 文件上传提交地址
+				filters: {
+					// 允许上传重复文件
+					prevent_duplicates: false
+				},
+				staticFiles: [
+						@if (!string.IsNullOrEmpty(Model.SubTitleUrl))
+						{
+							@Html.Raw("{name: '字幕.vtt', url: '"+Model.SubTitleUrl.ToHttpAbsoluteUrl()+"'}")
+						}
+				],
+				deleteActionOnDone: function(file, doRemoveFile) {
+					doRemoveFile();
+					$("#SubTitleUrl").val("");
+				},
+				limitFilesCount: 1,
+				multi_selection: false,
+				responseHandler: function (responseObject, file) {
+					console.log(responseObject);
+						var res = JSON.parse(responseObject.response);
+						if (res.result == "ok") {
+							$("#SubTitleUrl").val(res.url);
+						}
+					}
+				});
+
+		});
+
+	</script>
+}
+
+<!-- start 提示框 -->
+@Html.Partial("_MessagePartial")
+<!-- end 提示框 -->
+<!-- general form elements -->
+<div class="box box-primary">
+	<div class="box-header with-border">
+		<h3 class="box-title">所属课程 @Model.CourseBox.Name</h3>
+	</div>
+	<!-- /.box-header -->
+	<!-- form start -->
+
+	<div class="box-body">
+
+		<form id="js-form">
+			@Html.HiddenFor(m => m.ID)
+			<div class="form-group">
+				<label>课件标题</label>
+				@Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+			</div>
+			<div class="form-group">
+				<label>课件排序码</label>
+				@Html.TextBoxFor(m => m.Page, new { @class = "form-control", type = "number" })
+			</div>
+			<div class="form-group" style="display: none;">
+				@Html.HiddenFor(m => m.PlayUrl)
+			</div>
+			<div class="form-group" style="display: none;">
+				@Html.HiddenFor(m => m.SubTitleUrl)
+			</div>
+			<div class="form-group" style="display: none;">
+				@Html.HiddenFor(m => m.Size)
+			</div>
+			<div class="form-group">
+				<label>上传视频</label>
+				<div id="video-uploader-area" class="uploader">
+					<div class="file-list" data-drag-placeholder="请拖拽文件到此处"></div>
+					<button type="button" class="btn btn-primary uploader-btn-browse"><i class="icon icon-cloud-upload"></i> 选择视频文件</button>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>上传字幕</label>
+				<div id="subTitle-uploader-area" class="uploader">
+					<div class="file-list" data-drag-placeholder="请拖拽文件到此处"></div>
+					<button type="button" class="btn btn-primary uploader-btn-browse"><i class="icon icon-cloud-upload"></i> 选择字幕文件</button>
+				</div>
+			</div>
+		</form>
+
+	</div>
+	<!-- /.box-body -->
+
+	<div class="box-footer">
+		<div class="btn-group">
+			<a class="btn btn-default" href="@Url.Action("Videos", "CourseBox", new { area = "Admin", id = Model.CourseBox.ID })">返回</a>
+			<input id="js-btn-save" class="btn btn-primary" type="submit" value="保存" onclick="return saveData();" />
+		</div>
+	</div>
+
+</div>
+<!-- /.box -->

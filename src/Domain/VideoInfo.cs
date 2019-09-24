@@ -43,6 +43,13 @@ namespace Domain
         public long Duration { get; set; }
 
         /// <summary>
+        /// 视频文件大小
+        /// 字节B
+        /// </summary>
+        [Property(NotNull = false)]
+        public long Size { get; set; }
+
+        /// <summary>
         /// 排序码
         /// 此视频属于课程的第几集/页
         /// </summary>
