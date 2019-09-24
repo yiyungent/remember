@@ -60,6 +60,7 @@
     <Compile Include="CourseBox_Dislike.cs" />
     <Compile Include="CourseBox_Like.cs" />
     <Compile Include="CourseBox_Participant.cs" />
+    <Compile Include="Favorite_CourseBox.cs" />
     <Compile Include="VideoInfo_Comment.cs" />
     <Compile Include="CourseBox_Comment.cs" />
     <Compile Include="Learner_CourseBox.cs" />

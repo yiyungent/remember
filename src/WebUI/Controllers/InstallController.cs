@@ -51,13 +51,14 @@ namespace WebUI.Controllers
             InitRole();
             InitUserInfo();
             InitFollower_Followed();
+            InitFavorite();
             InitArticle();
             //InitCardBox();
             //InitCardInfo();
             InitCourseBox();
-            InitLearner_CourseBox();
+            //InitLearner_CourseBox();
             InitVideoInfo();
-            InitLearner_VideoInfo();
+            //InitLearner_VideoInfo();
         }
         #endregion
 
@@ -704,6 +705,39 @@ namespace WebUI.Controllers
                         CreateTime = DateTime.Now.AddDays(new Random().Next(0, 100)).AddMinutes(new Random().Next(0, 1000))
                     });
                 }
+
+                ShowMessage("成功");
+            }
+            catch (Exception ex)
+            {
+                ShowMessage("失败");
+                ShowMessage(ex.Message);
+            }
+        }
+        #endregion
+
+        #region 初始化收藏夹表
+        private void InitFavorite()
+        {
+            try
+            {
+                ShowMessage("开始初始化收藏夹表");
+
+                IList<UserInfo> allUserInfo = Container.Instance.Resolve<UserInfoService>().GetAll();
+
+                // 每个用户都有一个默认收藏夹（不可删除）
+                foreach (var user in allUserInfo)
+                {
+                    Container.Instance.Resolve<FavoriteService>().Create(new Favorite
+                    {
+                        Name = "默认收藏夹",
+                        Description = "默认自带收藏夹，不可删除",
+                        IsOpen = false,
+                        CreateTime = DateTime.Now,
+                        Creator = user
+                    });
+                }
+
 
                 ShowMessage("成功");
             }

@@ -72,6 +72,7 @@
     <Compile Include="CourseBox_DislikeManager.cs" />
     <Compile Include="CourseBox_LikeManager.cs" />
     <Compile Include="CourseBox_ParticipantManager.cs" />
+    <Compile Include="Favorite_CourseBoxManager.cs" />
     <Compile Include="VideoInfo_CommentManager.cs" />
     <Compile Include="FavoriteManager.cs" />
     <Compile Include="Follower_FollowedManager.cs" />

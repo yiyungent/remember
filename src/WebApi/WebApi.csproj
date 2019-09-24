@@ -179,6 +179,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attributes\NeedAuthAttribute.cs" />
     <Compile Include="Controllers\CourseBoxController.cs" />
+    <Compile Include="Controllers\FavoriteController.cs" />
     <Compile Include="Controllers\VideoInfoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="Infrastructure\UserPrincipal.cs" />
     <Compile Include="Models\CourseBoxVM\CommentViewModel.cs" />
     <Compile Include="Models\CourseBoxVM\CourseBoxViewModel.cs" />
+    <Compile Include="Models\FavoriteVM\MyFavListViewModel.cs" />
     <Compile Include="Models\HomeVM\LastCourseBoxViewModel.cs" />
     <Compile Include="Models\UserInfoVM\MyFansViewModel.cs" />
     <Compile Include="Models\UserInfoVM\MyFollowViewModel.cs" />

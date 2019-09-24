@@ -61,6 +61,7 @@
     <Compile Include="CourseBox_DislikeComponent.cs" />
     <Compile Include="CourseBox_LikeComponent.cs" />
     <Compile Include="CourseBox_ParticipantComponent.cs" />
+    <Compile Include="Favorite_CourseBoxComponent.cs" />
     <Compile Include="VideoInfo_CommentComponent.cs" />
     <Compile Include="FavoriteComponent.cs" />
     <Compile Include="Follower_FollowedComponent.cs" />

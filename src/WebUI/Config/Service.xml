@@ -105,5 +105,9 @@
                  service="Service.ParticipantInfoService,Service"
                  type="Component.ParticipantInfoComponent,Component"
                  isTransactional="true" />
+    <component id="Favorite_CourseBoxService"
+                 service="Service.Favorite_CourseBoxService,Service"
+                 type="Component.Favorite_CourseBoxComponent,Component"
+                 isTransactional="true" />
   </components>
 </configuration>

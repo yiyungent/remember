@@ -58,6 +58,7 @@
     <Compile Include="CourseBox_DislikeService.cs" />
     <Compile Include="CourseBox_LikeService.cs" />
     <Compile Include="CourseBox_ParticipantService.cs" />
+    <Compile Include="Favorite_CourseBoxService.cs" />
     <Compile Include="VideoInfo_CommentService.cs" />
     <Compile Include="FavoriteService.cs" />
     <Compile Include="Follower_FollowedService.cs" />
