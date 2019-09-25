@@ -1,6 +1,8 @@
-﻿using Core;
+﻿using Common;
+using Core;
 using Domain;
 using Framework.Extensions;
+using Framework.Infrastructure.Concrete;
 using NHibernate.Criterion;
 using Service;
 using System;
@@ -19,6 +21,173 @@ namespace WebApi.Controllers
     [RoutePrefix("api/Favorite")]
     public class FavoriteController : ApiController
     {
+        #region 指定收藏夹内容
+        public ResponseData Get(int id)
+        {
+            ResponseData responseData = null;
+            FavoriteViewModel viewModel = null;
+            try
+            {
+                // 此收藏夹是否公开
+                // 公开：无需登录，谁都可以看
+                // 私密：只有创建者可以看
+                if (Container.Instance.Resolve<FavoriteService>().Exist(id))
+                {
+                    Favorite favorite = Container.Instance.Resolve<FavoriteService>().GetEntity(id);
+                    if (favorite.IsOpen)
+                    {
+                        // 公开：谁都可以访问，无需登录
+
+                        #region 获取收藏夹内容数据->视图模型
+                        // 此收藏夹内的课程-按加入收藏夹的时间-从最新到最早
+                        IList<Favorite_CourseBox> favorite_CourseBoxes = Container.Instance.Resolve<Favorite_CourseBoxService>().Query(new List<ICriterion>
+                        {
+                            Expression.Eq("Favorite.ID", favorite.ID)
+                        }).OrderByDescending(m => m.CreateTime).ToList();
+
+                        viewModel = new FavoriteViewModel();
+                        viewModel.ID = favorite.ID;
+                        viewModel.Name = favorite.Name;
+                        viewModel.Desc = favorite.Description;
+                        viewModel.CreateTime = favorite.CreateTime.ToTimeStamp13();
+                        viewModel.Creator = new FavoriteViewModel.CreatorViewModel
+                        {
+                            ID = favorite.Creator.ID,
+                            UserName = favorite.Creator.UserName
+                        };
+                        if (favorite.CourseBoxList == null || favorite.CourseBoxList.Count <= 0)
+                        {
+                            // 无收藏内容，默认封面图
+                            viewModel.PicUrl = ":WebApi:/assets/images/default-favorite-pic.jpg".ToHttpAbsoluteUrl();
+                        }
+                        else
+                        {
+                            viewModel.PicUrl = favorite_CourseBoxes.FirstOrDefault().CourseBox.PicUrl.ToHttpAbsoluteUrl();
+                        }
+                        viewModel.CourseBoxs = new List<FavoriteViewModel.CourseBox>();
+                        foreach (var item in favorite_CourseBoxes)
+                        {
+                            // 此课程的学习人数
+                            int learnNum = Container.Instance.Resolve<Learner_CourseBoxService>().Count(Expression.Eq("CourseBox.ID", item.CourseBox.ID));
+
+                            viewModel.CourseBoxs.Add(new FavoriteViewModel.CourseBox
+                            {
+                                ID = item.CourseBox.ID,
+                                Creator = new FavoriteViewModel.CreatorViewModel
+                                {
+                                    ID = item.CourseBox.Creator.ID,
+                                    UserName = item.CourseBox.Creator.UserName
+                                },
+                                Name = item.CourseBox.Name,
+                                PicUrl = item.CourseBox.PicUrl.ToHttpAbsoluteUrl(),
+                                FavTime = item.CreateTime.ToTimeStamp13(),
+                                LearnNum = learnNum
+                            });
+                        }
+                        #endregion
+
+
+                        responseData = new ResponseData
+                        {
+                            Code = 1,
+                            Message = "获取收藏夹内容成功",
+                            Data = viewModel
+                        };
+                    }
+                    else
+                    {
+                        // 私密：判断是否当前用户为此收藏夹的创建者
+                        if (favorite.Creator.ID == (AccountManager.GetCurrentUserInfo()?.ID ?? 0))
+                        {
+                            // 此收藏夹虽然私密，当为当前用户创建，可以查看
+
+                            #region 获取收藏夹内容数据->视图模型
+                            // 此收藏夹内的课程-按加入收藏夹的时间-从最新到最早
+                            IList<Favorite_CourseBox> favorite_CourseBoxes = Container.Instance.Resolve<Favorite_CourseBoxService>().Query(new List<ICriterion>
+                            {
+                                Expression.Eq("Favorite.ID", favorite.ID)
+                            }).OrderByDescending(m => m.CreateTime).ToList();
+
+                            viewModel = new FavoriteViewModel();
+                            viewModel.ID = favorite.ID;
+                            viewModel.Name = favorite.Name;
+                            viewModel.Desc = favorite.Description;
+                            viewModel.CreateTime = favorite.CreateTime.ToTimeStamp13();
+                            viewModel.Creator = new FavoriteViewModel.CreatorViewModel
+                            {
+                                ID = favorite.Creator.ID,
+                                UserName = favorite.Creator.UserName
+                            };
+                            if (favorite.CourseBoxList == null || favorite.CourseBoxList.Count <= 0)
+                            {
+                                // 无收藏内容，默认封面图
+                                viewModel.PicUrl = ":WebApi:/assets/images/default-favorite-pic.jpg".ToHttpAbsoluteUrl();
+                            }
+                            else
+                            {
+                                viewModel.PicUrl = favorite_CourseBoxes.FirstOrDefault().CourseBox.PicUrl.ToHttpAbsoluteUrl();
+                            }
+                            viewModel.CourseBoxs = new List<FavoriteViewModel.CourseBox>();
+                            foreach (var item in favorite_CourseBoxes)
+                            {
+                                // 此课程的学习人数
+                                int learnNum = Container.Instance.Resolve<Learner_CourseBoxService>().Count(Expression.Eq("CourseBox.ID", item.CourseBox.ID));
+
+                                viewModel.CourseBoxs.Add(new FavoriteViewModel.CourseBox
+                                {
+                                    ID = item.CourseBox.ID,
+                                    Creator = new FavoriteViewModel.CreatorViewModel
+                                    {
+                                        ID = item.CourseBox.Creator.ID,
+                                        UserName = item.CourseBox.Creator.UserName
+                                    },
+                                    Name = item.CourseBox.Name,
+                                    PicUrl = item.CourseBox.PicUrl.ToHttpAbsoluteUrl(),
+                                    FavTime = item.CreateTime.ToTimeStamp13(),
+                                    LearnNum = learnNum
+                                });
+                            }
+                            #endregion
+
+                            responseData = new ResponseData
+                            {
+                                Code = 1,
+                                Message = "获取收藏夹内容成功",
+                                Data = viewModel
+                            };
+                        }
+                        else
+                        {
+                            responseData = new ResponseData
+                            {
+                                Code = -3,
+                                Message = "此收藏夹为私密，你无权查看"
+                            };
+                        }
+                    }
+                }
+                else
+                {
+                    responseData = new ResponseData
+                    {
+                        Code = -2,
+                        Message = "此收藏夹不存在"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                responseData = new ResponseData
+                {
+                    Code = -1,
+                    Message = "获取收藏夹内容失败"
+                };
+            }
+
+            return responseData;
+        }
+        #endregion
+
         #region 我的收藏夹列表
         [HttpGet]
         [Route("MyFavList")]

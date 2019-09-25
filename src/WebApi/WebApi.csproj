@@ -159,6 +159,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\images\default-favorite-pic.jpg" />
     <Content Include="assets\images\default-notify.jpg" />
     <Content Include="assets\images\notexist-avatar.jpg" />
     <Content Include="assets\images\guest-avatar.jpg" />
@@ -191,6 +192,7 @@
     <Compile Include="Infrastructure\UserPrincipal.cs" />
     <Compile Include="Models\CourseBoxVM\CommentViewModel.cs" />
     <Compile Include="Models\CourseBoxVM\CourseBoxViewModel.cs" />
+    <Compile Include="Models\FavoriteVM\FavoriteViewModel.cs" />
     <Compile Include="Models\FavoriteVM\MyFavListViewModel.cs" />
     <Compile Include="Models\HomeVM\LastCourseBoxViewModel.cs" />
     <Compile Include="Models\UserInfoVM\MyFansViewModel.cs" />
