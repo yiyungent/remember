@@ -260,23 +260,23 @@ namespace WebApi.Controllers
         [HttpPost]
         [Route("FavCourseBox")]
         [NeedAuth]
-        public ResponseData FavCourseBox(int courseBoxId, int favoriteId)
+        public ResponseData FavCourseBox(FavCourseBoxInputModel inputModel)
         {
             ResponseData responseData = null;
             try
             {
                 // 先检验是否此收藏夹是我创建的，只有是我创建的才能操作此收藏夹
-                if (Container.Instance.Resolve<FavoriteService>().Exist(favoriteId))
+                if (Container.Instance.Resolve<FavoriteService>().Exist(inputModel.FavoriteId))
                 {
-                    Favorite favorite = Container.Instance.Resolve<FavoriteService>().GetEntity(favoriteId);
+                    Favorite favorite = Container.Instance.Resolve<FavoriteService>().GetEntity(inputModel.FavoriteId);
                     if (favorite.Creator.ID == ((UserIdentity)User.Identity).ID)
                     {
                         // 该收藏夹是你创建的
                         // 将课程放入此收藏夹
                         // 查询此课程是否已经放入此收藏夹，防止再次插入出现脏数据
                         bool isExist = Container.Instance.Resolve<Favorite_CourseBoxService>().Count(Expression.And(
-                             Expression.Eq("CourseBox.ID", courseBoxId),
-                             Expression.Eq("Favorite.ID", favoriteId)
+                             Expression.Eq("CourseBox.ID", inputModel.CourseBoxId),
+                             Expression.Eq("Favorite.ID", inputModel.FavoriteId)
                         )) >= 1;
 
                         if (!isExist)
@@ -286,8 +286,8 @@ namespace WebApi.Controllers
                             {
                                 Container.Instance.Resolve<Favorite_CourseBoxService>().Create(new Favorite_CourseBox
                                 {
-                                    CourseBox = new CourseBox { ID = courseBoxId },
-                                    Favorite = new Favorite { ID = favoriteId },
+                                    CourseBox = new CourseBox { ID = inputModel.CourseBoxId },
+                                    Favorite = new Favorite { ID = inputModel.FavoriteId },
                                     CreateTime = DateTime.Now
                                 });
 
@@ -342,6 +342,30 @@ namespace WebApi.Controllers
                     Code = -1,
                     Message = "收藏课程失败"
                 };
+            }
+
+            return responseData;
+        }
+        #endregion
+
+        #region 此课程 被我创建的哪些收藏夹 收藏/或没有被收藏
+        /// <summary>
+        /// 对于此课程，我的收藏情况
+        /// </summary>
+        /// <param name="courseBoxId"></param>
+        /// <returns></returns>
+        [NeedAuth]
+        [HttpGet]
+        [Route("FavStatInCourseBox")]
+        public ResponseData FavStatInCourseBox(int courseBoxId)
+        {
+            ResponseData responseData = null;
+            try
+            {
+                // TODO:
+            }
+            catch (Exception ex)
+            {
             }
 
             return responseData;
