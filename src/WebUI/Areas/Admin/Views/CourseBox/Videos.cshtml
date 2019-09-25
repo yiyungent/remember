@@ -80,9 +80,35 @@
 	</script>
 }
 
+<!-- start 删除确认框 -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">确认框</h4>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="form-group">
+						<label for="message-text" class="control-label">确定要删除？</label>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+				<button onclick="deleteSubmit()" type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end 删除确认框 -->
 <!-- start 提示框 -->
 @Html.Partial("_MessagePartial")
 <!-- end 提示框 -->
+
+<input id="js-id" type="hidden" />
+
 <!-- general form elements -->
 <div class="box box-primary">
 	<div class="box-header with-border">
@@ -106,7 +132,6 @@
 						<tr>
 							<th>ID</th>
 							<th>标题</th>
-							<th>持续时间</th>
 							<th>文件大小</th>
 							<th>操作</th>
 						</tr>
@@ -115,8 +140,7 @@
 							<tr data-tr-id="@item.ID">
 								<td>@item.ID</td>
 								<td>@item.Title</td>
-								<td>@item.Duration</td>
-								<td>@(Math.Round((double)item.Size / 8 / 1024, 2))MB</td>
+								<td>@(Math.Round((double)item.Size / 8 / 1024 / 1024, 2))MB</td>
 								<td>
 									<div class="btn-group" role="group" data-pjax>
 										@if (Html.HasAuth("Admin", "CourseBox", "DeleteVideo"))

@@ -50,14 +50,14 @@ namespace WebUI.Controllers
             InitFunction();
             InitRole();
             InitUserInfo();
-            InitFollower_Followed();
+            //InitFollower_Followed();
             InitFavorite();
             InitArticle();
             //InitCardBox();
             //InitCardInfo();
-            InitCourseBox();
+            //InitCourseBox();
             //InitLearner_CourseBox();
-            InitVideoInfo();
+            //InitVideoInfo();
             //InitLearner_VideoInfo();
         }
         #endregion
@@ -731,7 +731,7 @@ namespace WebUI.Controllers
                     Container.Instance.Resolve<FavoriteService>().Create(new Favorite
                     {
                         Name = "默认收藏夹",
-                        Description = "默认自带收藏夹，不可删除",
+                        Description = "默认自带收藏夹，不可删除，不可编辑",
                         IsOpen = false,
                         CreateTime = DateTime.Now,
                         Creator = user

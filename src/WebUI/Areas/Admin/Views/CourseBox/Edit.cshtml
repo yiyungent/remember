@@ -63,25 +63,24 @@
 		$(function () {
 
 
-			$('#uploader-area').uploader({
+			$('#pic-uploader-area').uploader({
 				autoUpload: true,            // 当选择文件后立即自动进行上传操作
 				url: '/Admin/CourseBox/UploadPic',  // 文件上传提交地址
 				filters: {
-					// 只允许上传图片或图标（.ico）
+					// 只允许上传图片
 					mime_types: [
-						{ title: '图片', extensions: 'jpg,gif,png' },
-						{ title: '图标', extensions: 'ico' }
+						{ title: '图片', extensions: 'jpg,gif,png' }
 					],
-					// 最大上传文件为 1MB
+					// 最大上传文件为 10MB
 					max_file_size: '10mb',
 					// 不允许上传重复文件
 					prevent_duplicates: false,
-					chunk_size: 0, // 关闭分片上传
 				},
+				chunk_size: 0, // 关闭分片上传
 				multi_selection: false,
 				limitFilesCount: 1,
 				staticFiles: [
-					  {name: '@picUrl', size: @picSize , url: '@picUrl'},
+					  {name: '@picUrl', size: @picSize , url: '@picUrl', type: 'image/jpeg'},
 				],
 				deleteActionOnDone: function(file, doRemoveFile) {
 					doRemoveFile();
@@ -143,7 +142,7 @@
 						</div>
 						<div class="form-group">
 							<label>课程封面图</label>
-							<div id="uploader-area" class="uploader">
+							<div id="pic-uploader-area" class="uploader">
 								<div class="file-list" data-drag-placeholder="请拖拽文件到此处"></div>
 								<button type="button" class="btn btn-primary uploader-btn-browse"><i class="icon icon-cloud-upload"></i> 选择文件</button>
 							</div>

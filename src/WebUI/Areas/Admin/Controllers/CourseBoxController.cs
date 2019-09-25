@@ -25,7 +25,7 @@ namespace WebUI.Areas.Admin.Controllers
         #endregion
 
         #region 课程列表
-        public ViewResult Index(int pageIndex = 1, int pageSize = 6)
+        public ViewResult Index(int pageIndex = 1, int pageSize = 8)
         {
             IList<ICriterion> queryConditions = new List<ICriterion>();
             Query(queryConditions);
@@ -367,7 +367,7 @@ namespace WebUI.Areas.Admin.Controllers
                     // TODO: 临时
                     return Json(new
                     {
-                        result = "success",
+                        result = "ok",
                         message = "上传视频成功",
                         url = (":WebUISite:/Upload/videos/" + courseBoxCreatorId + "/" + saveFileName)
                     });
@@ -432,7 +432,7 @@ namespace WebUI.Areas.Admin.Controllers
                     // TODO: 临时
                     return Json(new
                     {
-                        result = "success",
+                        result = "ok",
                         message = "上传成功",
                         url = (":WebUISite:/Upload/subtitles/" + courseBoxCreatorId + "/" + saveFileName)
                     });

@@ -145,16 +145,10 @@
 				@foreach (var item in Model.List)
 				{
 					<div data-tr-id="@item.ID" class="col-sm-6 col-md-3">
-						<div class="thumbnail" style="height:314px;width:294px;overflow:hidden;">
+						<div class="thumbnail" style="height: 234px;width: 212px;overflow:hidden;">
 							<img style="width:284px;height:100px;" src="@item.PicUrl.ToHttpAbsoluteUrl()" alt="@item.Name">
 							<div class="caption">
-								<h3>@(item.Name.Length > 7 ? item.Name.Substring(0, 8) + "..." : item.Name)</h3>
-								<p><span>创建时间: </span><span>@item.CreateTime.ToString("yyyy-MM-dd hh:mm")</span></p>
-								<p>
-									<span>投稿者:  </span>
-									@item.Creator.UserName
-								</p>
-								<p><span>描述: </span><span>@(item.Description.Length > 13 ? item.Description.Substring(0, 13) + "..." : item.Description)</span></p>
+								<h4 style="margin-top:0;">@(item.Name.Length > 7 ? item.Name.Substring(0, 8) + "..." : item.Name)</h4>
 								<p id="js-btn-group-@item.ID" class="btn-group">
 									@if (Html.HasAuth("Admin", "CourseBox", "Edit"))
 									{
@@ -165,6 +159,7 @@
 										<button class="btn btn-danger" type="button" onclick="deleteOp(@item.ID)">删除</button>
 									}
 								</p>
+								<p><span>描述: </span><span>@(item.Description.Length > 13 ? item.Description.Substring(0, 13) + "..." : item.Description)</span></p>
 							</div>
 						</div>
 					</div>
