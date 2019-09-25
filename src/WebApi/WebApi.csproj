@@ -159,7 +159,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assets\images\default-favorite-pic.jpg" />
     <Content Include="assets\images\default-notify.jpg" />
     <Content Include="assets\images\notexist-avatar.jpg" />
     <Content Include="assets\images\guest-avatar.jpg" />
@@ -169,6 +168,7 @@
     <Content Include="assets\images\scripts\login.png" />
     <Content Include="assets\images\scripts\register-title-icon.svg" />
     <Content Include="assets\images\scripts\truev.png" />
+    <Content Include="assets\images\default-favorite-pic.jpg" />
     <Content Include="assets\images\top_banner.png" />
     <Content Include="bin\WebApi.xml" />
     <Content Include="Config\Service.xml" />

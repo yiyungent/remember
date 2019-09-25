@@ -58,7 +58,7 @@ namespace WebApi.Controllers
                         if (favorite.CourseBoxList == null || favorite.CourseBoxList.Count <= 0)
                         {
                             // 无收藏内容，默认封面图
-                            viewModel.PicUrl = ":WebApi:/assets/images/default-favorite-pic.jpg".ToHttpAbsoluteUrl();
+                            viewModel.PicUrl = ":WebApiSite:/assets/images/default-favorite-pic.jpg".ToHttpAbsoluteUrl();
                         }
                         else
                         {
@@ -121,7 +121,7 @@ namespace WebApi.Controllers
                             if (favorite.CourseBoxList == null || favorite.CourseBoxList.Count <= 0)
                             {
                                 // 无收藏内容，默认封面图
-                                viewModel.PicUrl = ":WebApi:/assets/images/default-favorite-pic.jpg".ToHttpAbsoluteUrl();
+                                viewModel.PicUrl = ":WebApiSite:/assets/images/default-favorite-pic.jpg".ToHttpAbsoluteUrl();
                             }
                             else
                             {
@@ -210,19 +210,29 @@ namespace WebApi.Controllers
                 foreach (var item in favorites)
                 {
                     // 此收藏夹的课程列表 - 按时间倒序排序
-                    IList<Favorite_CourseBox> favorite_CourseBoxes = Container.Instance.Resolve<Favorite_CourseBoxService>().Query(new List<ICriterion>
+                    int favorite_CourseBox_Num = Container.Instance.Resolve<Favorite_CourseBoxService>().Count(Expression.Eq("Favorite.ID", item.ID));
+                    string picUrl = "";
+                    if (favorite_CourseBox_Num >= 1)
                     {
-                        Expression.Eq("Favorite.ID", item.ID)
-                    }).OrderByDescending(m => m.CreateTime).ToList();
+                        IList<Favorite_CourseBox> favorite_CourseBoxes = Container.Instance.Resolve<Favorite_CourseBoxService>().Query(new List<ICriterion>
+                        {
+                            Expression.Eq("Favorite.ID", item.ID)
+                        }).OrderByDescending(m => m.CreateTime).ToList();
+                        picUrl = favorite_CourseBoxes.FirstOrDefault()?.CourseBox?.PicUrl.ToHttpAbsoluteUrl();
+                    }
+                    else
+                    {
+                        picUrl= ":WebApiSite:/assets/images/default-favorite-pic.jpg".ToHttpAbsoluteUrl();
+                    }
 
                     favList.Add(new MyFavListViewModel.Favorite
                     {
                         ID = item.ID,
                         Name = item.Name,
                         IsOpen = item.IsOpen,
-                        Count = item.CourseBoxList?.Count ?? 0,
+                        Count = favorite_CourseBox_Num,
                         // 取 最新收藏的课程  的 PicUrl
-                        PicUrl = favorite_CourseBoxes.FirstOrDefault()?.CourseBox?.PicUrl.ToHttpAbsoluteUrl()
+                        PicUrl = picUrl
                     });
                 }
 
