@@ -140,7 +140,7 @@
 							<tr data-tr-id="@item.ID">
 								<td>@item.ID</td>
 								<td>@item.Title</td>
-								<td>@(Math.Round((double)item.Size / 8 / 1024 / 1024, 2))MB</td>
+								<td>@(Math.Round((double)item.Size / 1024 / 1024, 2))MB</td>
 								<td>
 									<div class="btn-group" role="group" data-pjax>
 										@if (Html.HasAuth("Admin", "CourseBox", "DeleteVideo"))
