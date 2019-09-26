@@ -494,5 +494,41 @@ namespace WebApi.Controllers
         }
         #endregion
 
+
+        #region 创建收藏夹
+        [HttpPost]
+        [Route("Create")]
+        [NeedAuth]
+        public ResponseData Create(CreateInputModel inputModel)
+        {
+            ResponseData responseData = null;
+            try
+            {
+                Container.Instance.Resolve<FavoriteService>().Create(new Favorite
+                {
+                    IsOpen = inputModel.IsOpen,
+                    Name = inputModel.Name,
+                    Description = inputModel.Desc,
+                    Creator = new UserInfo { ID = ((UserIdentity)User.Identity).ID }
+                });
+
+                responseData = new ResponseData
+                {
+                    Code = 1,
+                    Message = "创建收藏夹成功"
+                };
+            }
+            catch (Exception ex)
+            {
+                responseData = new ResponseData
+                {
+                    Code = -1,
+                    Message = "创建收藏夹失败"
+                };
+            }
+
+            return responseData;
+        }
+        #endregion
     }
 }

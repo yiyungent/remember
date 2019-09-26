@@ -192,6 +192,7 @@
     <Compile Include="Infrastructure\UserPrincipal.cs" />
     <Compile Include="Models\CourseBoxVM\CommentViewModel.cs" />
     <Compile Include="Models\CourseBoxVM\CourseBoxViewModel.cs" />
+    <Compile Include="Models\FavoriteVM\CreateInputModel.cs" />
     <Compile Include="Models\FavoriteVM\FavCourseBoxInputModel.cs" />
     <Compile Include="Models\FavoriteVM\FavoriteViewModel.cs" />
     <Compile Include="Models\FavoriteVM\FavStatInCourseBoxViewModel.cs" />
