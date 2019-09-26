@@ -194,6 +194,7 @@
     <Compile Include="Models\CourseBoxVM\CourseBoxViewModel.cs" />
     <Compile Include="Models\FavoriteVM\FavCourseBoxInputModel.cs" />
     <Compile Include="Models\FavoriteVM\FavoriteViewModel.cs" />
+    <Compile Include="Models\FavoriteVM\FavStatInCourseBoxViewModel.cs" />
     <Compile Include="Models\FavoriteVM\MyFavListViewModel.cs" />
     <Compile Include="Models\HomeVM\LastCourseBoxViewModel.cs" />
     <Compile Include="Models\UserInfoVM\MyFansViewModel.cs" />

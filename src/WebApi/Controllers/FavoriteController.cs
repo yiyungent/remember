@@ -222,7 +222,7 @@ namespace WebApi.Controllers
                     }
                     else
                     {
-                        picUrl= ":WebApiSite:/assets/images/default-favorite-pic.jpg".ToHttpAbsoluteUrl();
+                        picUrl = ":WebApiSite:/assets/images/default-favorite-pic.jpg".ToHttpAbsoluteUrl();
                     }
 
                     favList.Add(new MyFavListViewModel.Favorite
@@ -265,7 +265,6 @@ namespace WebApi.Controllers
         #endregion
 
 
-
         #region 收藏指定课程
         [HttpPost]
         [Route("FavCourseBox")]
@@ -275,75 +274,145 @@ namespace WebApi.Controllers
             ResponseData responseData = null;
             try
             {
-                // 先检验是否此收藏夹是我创建的，只有是我创建的才能操作此收藏夹
-                if (Container.Instance.Resolve<FavoriteService>().Exist(inputModel.FavoriteId))
+                #region 废弃
+                //// 先检验是否此收藏夹是我创建的，只有是我创建的才能操作此收藏夹
+                //if (Container.Instance.Resolve<FavoriteService>().Exist(inputModel.FavoriteId))
+                //{
+                //    Favorite favorite = Container.Instance.Resolve<FavoriteService>().GetEntity(inputModel.FavoriteId);
+                //    if (favorite.Creator.ID == ((UserIdentity)User.Identity).ID)
+                //    {
+                //        // 该收藏夹是你创建的
+                //        // 将课程放入此收藏夹
+                //        // 查询此课程是否已经放入此收藏夹，防止再次插入出现脏数据
+                //        bool isExist = Container.Instance.Resolve<Favorite_CourseBoxService>().Count(Expression.And(
+                //             Expression.Eq("CourseBox.ID", inputModel.CourseBoxId),
+                //             Expression.Eq("Favorite.ID", inputModel.FavoriteId)
+                //        )) >= 1;
+
+                //        if (!isExist)
+                //        {
+                //            // 此收藏夹 还未收藏 此课程
+                //            try
+                //            {
+                //                Container.Instance.Resolve<Favorite_CourseBoxService>().Create(new Favorite_CourseBox
+                //                {
+                //                    CourseBox = new CourseBox { ID = inputModel.CourseBoxId },
+                //                    Favorite = new Favorite { ID = inputModel.FavoriteId },
+                //                    CreateTime = DateTime.Now
+                //                });
+
+                //                responseData = new ResponseData
+                //                {
+                //                    Code = 1,
+                //                    Message = "收藏课程成功"
+                //                };
+                //            }
+                //            catch (Exception ex)
+                //            {
+                //                responseData = new ResponseData
+                //                {
+                //                    Code = -4,
+                //                    Message = "收藏课程失败"
+                //                };
+                //            }
+                //        }
+                //        else
+                //        {
+                //            // 此收藏夹已经收藏此课程
+                //            responseData = new ResponseData
+                //            {
+                //                Code = -5,
+                //                Message = "收藏课程失败，此收藏夹已经收藏此课程"
+                //            };
+                //        }
+                //    }
+                //    else
+                //    {
+                //        // 该收藏夹不是我创建的
+                //        responseData = new ResponseData
+                //        {
+                //            Code = -3,
+                //            Message = "该收藏夹非你创建，你无权操作"
+                //        };
+                //    }
+                //}
+                //else
+                //{
+                //    responseData = new ResponseData
+                //    {
+                //        Code = -2,
+                //        Message = "不存在此收藏夹"
+                //    };
+                //} 
+                #endregion
+
+
+                try
                 {
-                    Favorite favorite = Container.Instance.Resolve<FavoriteService>().GetEntity(inputModel.FavoriteId);
-                    if (favorite.Creator.ID == ((UserIdentity)User.Identity).ID)
+                    string[] favIdsStr = inputModel.FavListIds?.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries) ?? new string[0];
+                    IList<int> favIds = new List<int>();
+                    foreach (var item in favIdsStr)
                     {
-                        // 该收藏夹是你创建的
-                        // 将课程放入此收藏夹
-                        // 查询此课程是否已经放入此收藏夹，防止再次插入出现脏数据
-                        bool isExist = Container.Instance.Resolve<Favorite_CourseBoxService>().Count(Expression.And(
-                             Expression.Eq("CourseBox.ID", inputModel.CourseBoxId),
-                             Expression.Eq("Favorite.ID", inputModel.FavoriteId)
-                        )) >= 1;
+                        favIds.Add(Convert.ToInt32(item));
+                    }
 
-                        if (!isExist)
-                        {
-                            // 此收藏夹 还未收藏 此课程
-                            try
-                            {
-                                Container.Instance.Resolve<Favorite_CourseBoxService>().Create(new Favorite_CourseBox
-                                {
-                                    CourseBox = new CourseBox { ID = inputModel.CourseBoxId },
-                                    Favorite = new Favorite { ID = inputModel.FavoriteId },
-                                    CreateTime = DateTime.Now
-                                });
+                    IList<Favorite> myAllFavList = Container.Instance.Resolve<FavoriteService>().Query(new List<ICriterion>
+                    {
+                        Expression.Eq("Creator.ID", ((UserIdentity)User.Identity).ID)
+                    });
 
-                                responseData = new ResponseData
-                                {
-                                    Code = 1,
-                                    Message = "收藏课程成功"
-                                };
-                            }
-                            catch (Exception ex)
-                            {
-                                responseData = new ResponseData
-                                {
-                                    Code = -4,
-                                    Message = "收藏课程失败"
-                                };
-                            }
-                        }
-                        else
+                    // 先将我的收藏夹列表与此课程的所有关系都删除
+                    IList<Favorite_CourseBox> favorite_CourseBoxes = Container.Instance.Resolve<Favorite_CourseBoxService>().Query(new List<ICriterion>
+                    {
+                        Expression.And(
+                            Expression.Eq("CourseBox.ID", inputModel.CourseBoxId),
+                            Expression.In("Favorite.ID", myAllFavList.Select(m=>m.ID).ToArray())
+                        )
+                    });
+                    foreach (var item in favorite_CourseBoxes)
+                    {
+                        Container.Instance.Resolve<Favorite_CourseBoxService>().Delete(item.ID);
+                    }
+                    if (favIds != null && favIds.Count >= 1)
+                    {
+                        // 在此列表内的 - 此课程加入收藏
+                        foreach (var favId in favIds)
                         {
-                            // 此收藏夹已经收藏此课程
-                            responseData = new ResponseData
+                            Container.Instance.Resolve<Favorite_CourseBoxService>().Create(new Favorite_CourseBox
                             {
-                                Code = -5,
-                                Message = "收藏课程失败，此收藏夹已经收藏此课程"
-                            };
+                                CourseBox = new CourseBox { ID = inputModel.CourseBoxId },
+                                Favorite = new Favorite { ID = favId },
+                                CreateTime = DateTime.Now
+                            });
                         }
                     }
-                    else
+
+
+                    #region 废弃
+                    //// 不在此列表内的，移除 此收藏夹与此课程的关系
+                    //IList<int> myAllFavListIds = myAllFavList.Select(m => m.ID).ToList();
+                    //// myAllFavListIds - inputModel.FavListIds
+                    //foreach (var favId in myAllFavListIds)
+                    //{
+
+                    //} 
+                    #endregion
+
+                    responseData = new ResponseData
                     {
-                        // 该收藏夹不是我创建的
-                        responseData = new ResponseData
-                        {
-                            Code = -3,
-                            Message = "该收藏夹非你创建，你无权操作"
-                        };
-                    }
+                        Code = 1,
+                        Message = "收藏课程成功"
+                    };
                 }
-                else
+                catch (Exception ex)
                 {
                     responseData = new ResponseData
                     {
                         Code = -2,
-                        Message = "不存在此收藏夹"
+                        Message = "收藏课程失败"
                     };
                 }
+
             }
             catch (Exception ex)
             {
@@ -358,28 +427,72 @@ namespace WebApi.Controllers
         }
         #endregion
 
-        #region 此课程 被我创建的哪些收藏夹 收藏/或没有被收藏
+        #region 对于此课程的收藏情况（包括我的收藏统计对于此课程）
         /// <summary>
-        /// 对于此课程，我的收藏情况
+        /// 对于此课程的收藏情况
         /// </summary>
         /// <param name="courseBoxId"></param>
         /// <returns></returns>
-        [NeedAuth]
         [HttpGet]
         [Route("FavStatInCourseBox")]
         public ResponseData FavStatInCourseBox(int courseBoxId)
         {
             ResponseData responseData = null;
+            FavStatInCourseBoxViewModel viewModel = null;
             try
             {
-                // TODO:
+                int courseBoxFavCount = Container.Instance.Resolve<Favorite_CourseBoxService>().Count(Expression.Eq("CourseBox.ID", courseBoxId));
+                viewModel = new FavStatInCourseBoxViewModel
+                {
+                    CourseBoxFavCount = courseBoxFavCount,
+                };
+
+                // 登录用户，追加登录用户对于此课程的收藏统计
+                var user = AccountManager.GetCurrentUserInfo(false);
+                if (user != null)
+                {
+                    // 查询我有哪些收藏夹
+                    IList<Favorite> myFavList = Container.Instance.Resolve<FavoriteService>().Query(new List<ICriterion>
+                    {
+                        Expression.Eq("Creator.ID", user.ID)
+                    });
+                    IList<int> myFavListIds = myFavList.Select(m => m.ID).ToList();
+
+                    // 关于这门课程，我的这些收藏夹收藏了，附带每个收藏夹多久收藏了这么课程的详细情况
+                    IList<Favorite_CourseBox> fav_CourseBox_InMyFav = Container.Instance.Resolve<Favorite_CourseBoxService>().Query(new List<ICriterion>
+                    {
+                        Expression.And(
+                            Expression.Eq("CourseBox.ID", courseBoxId),
+                            Expression.In("Favorite.ID", myFavListIds.ToArray())
+                        )
+                    });
+                    // 关于这门课程我的这些收藏夹收藏了，按创建收藏夹的时间倒序排序，****与获取我的收藏夹列表的顺序相同******
+                    IList<Favorite> myFavListInCourseBox = fav_CourseBox_InMyFav.Select(m => m.Favorite).OrderByDescending(m => m.CreateTime).ToList();
+
+                    viewModel.MyFavStat = new FavStatInCourseBoxViewModel.MyFavStatViewModel();
+                    viewModel.MyFavStat.FavIds = myFavListInCourseBox.Select(m => m.ID).ToList();
+                }
+
+
+                responseData = new ResponseData
+                {
+                    Code = 1,
+                    Message = "对于此课程，获取我的收藏情况成功",
+                    Data = viewModel
+                };
             }
             catch (Exception ex)
             {
+                responseData = new ResponseData
+                {
+                    Code = -1,
+                    Message = "对于此课程，获取我的收藏情况失败"
+                };
             }
 
             return responseData;
         }
         #endregion
+
     }
 }
