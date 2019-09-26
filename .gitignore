@@ -270,3 +270,4 @@ __pycache__/
 /src/WebUI/Upload/videos
 /src/WebApi/Upload/videos
 /src/WebUI/Upload
+/src/WebUI/Templates

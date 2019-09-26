@@ -27,7 +27,7 @@ remember 是一个学习辅助工具，一个帮助你记忆知识点的工具�
 - Log4Net：一个非常优秀的开源日志记录组件
 - Microsoft.AspNet.SignalR：Websocket实时通信
 - Newtonsoft.Json：Json序列化和反序列化工具
-- StackExchange.Redis.StrongName：redis 的.net客户端之一
+- StackExchange.Redis.StrongName：Redis 的.Net客户端之一
 
 ### 前端
 
@@ -68,6 +68,21 @@ remember 是一个学习辅助工具，一个帮助你记忆知识点的工具�
 - [ ] 防水墙（频繁访问，操作等给与全局验证，拦截）
 - [ ] 邮件提醒（Redis队列）
 - [ ] CDN（内容分发网络）
+
+### 功能点
+
+- [x] 课程
+  - [x] 管理中心-课程管理
+  - [x] 一个课程用有多个视频课件
+  - [x] 视频课件字幕支持
+  - [ ] 课程评论
+  - [ ] 课程分类
+  - [ ] 课程标签
+- [ ] 我的收藏
+  - [x] 展示我的收藏夹
+  - [x] 展示收藏夹内课程
+  - [x] 使用收藏夹收藏课程
+  - [ ] 收藏夹管理（新建，编辑基本信息，删除）
 
 
 
