@@ -200,6 +200,21 @@ namespace WebUI.Areas.Admin.Controllers
         {
             CourseBox viewModel = Container.Instance.Resolve<CourseBoxService>().GetEntity(courseBoxId);
 
+
+            #region 七牛云上传 token 生成
+
+            Qiniu.Util.Mac mac = new Qiniu.Util.Mac("-qcYpNjgUPskDq5-0LlBsKrWERYhKVZIjx4EL3uY", "bapt2y5mwQIjtMhA1FqeCKSvZVEIuzGfIU5Sk4RA");
+            Qiniu.Storage.PutPolicy putPolicy = new Qiniu.Storage.PutPolicy();
+            putPolicy.Scope = "rem-static";
+            // 自定义七牛返回消息
+            putPolicy.ReturnBody = "{\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"fsiz\":$(fsize),\"bucket\":\"$(bucket)\",\"name\":\"$(x:name)\"}";
+            string token = Qiniu.Util.Auth.CreateUploadToken(mac, putPolicy.ToJsonString());
+            ViewBag.UpToken = token;
+
+            #endregion
+
+
+
             return View(viewModel);
         }
 
