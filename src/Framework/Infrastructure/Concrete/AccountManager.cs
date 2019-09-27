@@ -173,6 +173,7 @@ namespace Framework.Infrastructure.Concrete
         /// <returns></returns>
         public static LoginStatus CheckLoginStatus()
         {
+            // TODO:未进行检测 Headers JWT
             LoginStatus loginStatus = LoginStatus.WithoutLogin;
 
             HttpRequest request = HttpContext.Current.Request;

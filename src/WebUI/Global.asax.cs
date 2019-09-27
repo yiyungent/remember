@@ -49,9 +49,6 @@ namespace WebUI
             //initialize engine context
             EngineContext.Initialize(false);
 
-            // Web Api
-            GlobalConfiguration.Configure(WebApiConfig.Register);
-
             FrameworkConfig.Register();
 
             // 开启线程扫描队列将数据取出来写到Lucene.NET中。

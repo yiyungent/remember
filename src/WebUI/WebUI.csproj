@@ -8080,6 +8080,11 @@
     <Content Include="Areas\Admin\Views\Shared\_LeftMenuPartial.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_MessagePartial.cshtml" />
     <Content Include="Areas\Account\Views\Shared\_MessagePartial.cshtml" />
+    <Content Include="Upload\images\courseBoxPics\1.jpeg" />
+    <Content Include="Upload\images\courseBoxPics\2.png" />
+    <Content Include="Upload\images\courseBoxPics\3.jpg" />
+    <Content Include="Upload\images\courseBoxPics\4.jpg" />
+    <Content Include="Upload\images\courseBoxPics\5.jpg" />
     <Content Include="Upload\images\card.jpg" />
     <Content Include="Upload\videos\demo.mp4" />
     <Content Include="Views\Shared\_TopNav.cshtml" />
@@ -8852,7 +8857,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Account\AccountAreaRegistration.cs" />
     <Compile Include="Areas\Account\Controllers\ControlController.cs" />
     <Compile Include="Areas\Account\Controllers\LoginController.cs" />
@@ -8899,17 +8903,12 @@
     <Compile Include="Areas\Tools\Controllers\ITodayController.cs" />
     <Compile Include="Areas\Tools\ToolsAreaRegistration.cs" />
     <Compile Include="Attributes\LogErrorAttribute.cs" />
-    <Compile Include="Controllers\Cat1Controller.cs" />
-    <Compile Include="Controllers\Cat2Controller.cs" />
-    <Compile Include="Controllers\CourseBoxController.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysMenuController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserInfoController.cs" />
-    <Compile Include="Controllers\LoginController.cs" />
-    <Compile Include="Controllers\MyFriendsController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\WidgetController.cs" />
     <Compile Include="DependencyRegistrar.cs" />
@@ -8985,11 +8984,6 @@
     <Folder Include="Upload\subtitles\" />
     <Folder Include="Upload\TemplateInstallZip\" />
     <Folder Include="Upload\Tools\IToday\" />
-    <Folder Include="Views\Cat1\" />
-    <Folder Include="Views\Cat2\" />
-    <Folder Include="Views\CourseBox\" />
-    <Folder Include="Views\Login\" />
-    <Folder Include="Views\MyFriends\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\pluginHub\PluginHub.Mvc5\PluginHub.Mvc5.csproj">

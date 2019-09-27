@@ -40,28 +40,6 @@ namespace WebUI.Controllers
         }
         #endregion
 
-        #region 创建数据库
-        private void CreateDB()
-        {
-            CreateSchema();
-            InitSetting();
-            InitThemeTemplate();
-            InitSys_Menu();
-            InitFunction();
-            InitRole();
-            InitUserInfo();
-            //InitFollower_Followed();
-            InitFavorite();
-            InitArticle();
-            //InitCardBox();
-            //InitCardInfo();
-            //InitCourseBox();
-            //InitLearner_CourseBox();
-            //InitVideoInfo();
-            //InitLearner_VideoInfo();
-        }
-        #endregion
-
         #region 创建数据库表结构
         private void CreateSchema()
         {
@@ -78,6 +56,30 @@ namespace WebUI.Controllers
             }
         }
         #endregion
+
+        #region 创建数据库
+        private void CreateDB()
+        {
+            CreateSchema();
+
+            InitSetting();
+            InitThemeTemplate();
+            InitSys_Menu();
+            InitFunction();
+            InitRole();
+            InitUserInfo();
+            InitArticle();
+
+            InitFollower_Followed();
+            InitFavorite();
+            InitCourseBox();
+            InitVideoInfo();
+            InitLearner_CourseBox();
+            InitLearner_VideoInfo();
+            InitComment();
+        }
+        #endregion
+
 
         #region 初始化设置
         private void InitSetting()
@@ -106,13 +108,13 @@ namespace WebUI.Controllers
                 {
                     { "DefaultTemplateName", "Blue" },
 
-                    { "WebApiSite", "http://localhost:7784/" },
+                    { "WebApiSite", "http://api.tikotiko.fun/" },
                     { "WebApiTitle","remember" },
                     { "WebApiDesc", "remember是xx推出的专业在线教育平台，聚合大量优质教育机构和名师，下设职业培训、公务员考试、托福雅思、考证考级、英语口语、中小学教育等众多在线学习精品课程，打造老师在线上课教学、学生及时互动学习的课堂。"},
                     { "WebApiKeywords", "" },
                     { "WebApiStat", "" },
 
-                    { "WebUISite", "http://localhost:21788/" },
+                    { "WebUISite", "http://www.tikotiko.fun/" },
                     { "WebUITitle", "remember - 在线学习" },
                     { "WebUIDesc", "remember是xx推出的专业在线教育平台，聚合大量优质教育机构和名师，下设职业培训、公务员考试、托福雅思、考证考级、英语口语、中小学教育等众多在线学习精品课程，打造老师在线上课教学、学生及时互动学习的课堂。"},
                     { "WebUIKeywords", "" },
@@ -597,6 +599,9 @@ namespace WebUI.Controllers
                 var allMenu = Container.Instance.Resolve<Sys_MenuService>().GetAll();
                 var allFunction = Container.Instance.Resolve<FunctionInfoService>().GetAll();
 
+                // 系统组
+                #region 系统组
+                // 1
                 Container.Instance.Resolve<RoleInfoService>().Create(new RoleInfo
                 {
                     Name = "超级管理员",
@@ -604,7 +609,31 @@ namespace WebUI.Controllers
                     Sys_MenuList = allMenu,
                     FunctionInfoList = allFunction
                 });
-
+                // 2
+                Container.Instance.Resolve<RoleInfoService>().Create(new RoleInfo
+                {
+                    Name = "站长",
+                    Status = 0,
+                    Sys_MenuList = allMenu,
+                    FunctionInfoList = allFunction
+                });
+                // 3
+                Container.Instance.Resolve<RoleInfoService>().Create(new RoleInfo
+                {
+                    Name = "副站长",
+                    Status = 0,
+                    Sys_MenuList = allMenu,
+                    FunctionInfoList = allFunction
+                });
+                // 4
+                Container.Instance.Resolve<RoleInfoService>().Create(new RoleInfo
+                {
+                    Name = "运营",
+                    Status = 0,
+                    Sys_MenuList = allMenu,
+                    FunctionInfoList = allFunction
+                });
+                // 5
                 Container.Instance.Resolve<RoleInfoService>().Create(new RoleInfo
                 {
                     Name = "游客",
@@ -612,14 +641,27 @@ namespace WebUI.Controllers
                     Sys_MenuList = null,
                     FunctionInfoList = null
                 });
+                #endregion
 
+                // 自定义用户组
+                #region 自定义用户组
+                // 6
                 Container.Instance.Resolve<RoleInfoService>().Create(new RoleInfo
                 {
-                    Name = "正式会员",
+                    Name = "学生",
                     Status = 0,
                     Sys_MenuList = null,
                     FunctionInfoList = null
                 });
+                // 7
+                Container.Instance.Resolve<RoleInfoService>().Create(new RoleInfo
+                {
+                    Name = "教师",
+                    Status = 0,
+                    Sys_MenuList = null,
+                    FunctionInfoList = null
+                });
+                #endregion
 
                 ShowMessage("成功");
             }
@@ -660,19 +702,28 @@ namespace WebUI.Controllers
                     Expression.Eq("UserName", "admin")
                 }).FirstOrDefault();
 
-                // 正式会员 1000
-                for (int i = 0; i < 10; i++)
+                // 正式会员 50
+                string userName = "", avatar = "";
+                int randomNum = 6;
+                for (int i = 0; i < 50; i++)
                 {
+                    userName = GetRandom.GetRandomName();
+
+                    Identicon
+                   .FromValue(EncryptHelper.MD5Encrypt32(userName), size: 100)
+                   .SaveAsPng(Server.MapPath("/upload/images/avatars/" + (i + 2).ToString() + ".png"));
+
+                    randomNum = new Random().Next(6, 7);
                     userInfoService.Create(new UserInfo
                     {
-                        UserName = "acc" + (i + 1),
+                        UserName = userName,
                         Description = $"我是会员-{i + 1}",
-                        Avatar = ":WebUISite:/assets/images/default-avatar.jpg",
-                        Password = EncryptHelper.MD5Encrypt32("acc" + (i + 1)),
+                        Avatar = $":WebUISite:/upload/images/avatars/{(i + 2)}.png",
+                        Password = EncryptHelper.MD5Encrypt32(userName),
                         Email = "acc" + (i + 1) + "@qq.com",
                         Status = 0,
-                        RoleInfoList = (from m in allRole where m.ID == 3 select m).ToList(),
-                        RegTime = DateTime.Now
+                        RoleInfoList = (from m in allRole where m.ID == randomNum select m).ToList(),
+                        RegTime = DateTime.Now.AddDays(i).AddMinutes(i + 1)
                     });
                 }
 
@@ -686,6 +737,39 @@ namespace WebUI.Controllers
         }
         #endregion
 
+        #region 初始化公告
+        private void InitArticle()
+        {
+            try
+            {
+                ShowMessage("开始初始化公告");
+
+                ArticleService articleService = Container.Instance.Resolve<ArticleService>();
+                for (int i = 0; i < 10; i++)
+                {
+                    articleService.Create(new Article
+                    {
+                        CreateTime = DateTime.Now,
+                        LastUpdateTime = DateTime.Now,
+                        Author = new UserInfo { ID = 1 },
+                        Title = "测试公告" + (i + 1),
+                        Content = "测试内容" + (i + 1),
+                        CustomUrl = $"article-{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.Now.Day}-{i + 1}"
+                    });
+                }
+
+                ShowMessage("成功");
+            }
+            catch (Exception)
+            {
+                ShowMessage("失败");
+            }
+        }
+        #endregion
+
+
+
+
         #region 初始化关注者被关注者表
         private void InitFollower_Followed()
         {
@@ -693,18 +777,7 @@ namespace WebUI.Controllers
             {
                 ShowMessage("初始化关注者被关注者表");
 
-                IList<UserInfo> allUserInfo = Container.Instance.Resolve<UserInfoService>().GetAll();
-                for (int i = 0; i < allUserInfo.Count; i++)
-                {
-                    UserInfo follower = allUserInfo[new Random().Next(0, allUserInfo.Count - 1)];
-                    IList<UserInfo> exceptAllUserInfo = allUserInfo.Where(m => m.ID != follower.ID).ToList();
-                    Container.Instance.Resolve<Follower_FollowedService>().Create(new Follower_Followed
-                    {
-                        Follower = follower,
-                        Followed = exceptAllUserInfo[new Random().Next(0, exceptAllUserInfo.Count - 1)],
-                        CreateTime = DateTime.Now.AddDays(new Random().Next(0, 100)).AddMinutes(new Random().Next(0, 1000))
-                    });
-                }
+
 
                 ShowMessage("成功");
             }
@@ -749,24 +822,50 @@ namespace WebUI.Controllers
         }
         #endregion
 
-        #region 初始化文章
-        private void InitArticle()
+        #region 初始化课程
+        private void InitCourseBox()
         {
             try
             {
-                ShowMessage("开始初始化文章");
+                ShowMessage("开始初始化课程");
+                string[] names = {
+                    "高等数学（一）",
+                    "Python语言程序设计 ",
+                    "沟通心理学",
+                    "程序设计入门——C语言",
+                    "金融学"
+                };
+                string[] descs = {
+                    "高等数学是以微积分为主要内容的课程，它不但是理工类各专业，也是其他众多专业最重要的基础课程之一。我们的工作、科研以及生活中的很多例子，如：卫星成功驶进预定轨道，火车在弯道上飞驰而过，经济金融、天气预报和深海下潜，都与数学有着深深的联系。现在就让我们一起去高等数学的殿堂探索吧！",
 
-                ArticleService articleService = Container.Instance.Resolve<ArticleService>();
-                for (int i = 0; i < 10; i++)
+                    "计算机是运算工具，更是创新平台，高效有趣地利用计算机需要更简洁实用的编程语言。Python简洁却强大、简单却专业，它是当今世界最受欢迎的编程语言，学好它终身受用。请跟随我们，学习并掌握Python语言，一起动起来，站在风口、享受创新！",
+
+                    "视角独特的“主持型”心理课，正能量的“烧脑”之旅。言语犀利，案例丰富，思维训练，实用性强，主讲人裴秋宇老师凝聚19年心理医生“心战”经历、15年世界五百强员工心理内训精华，获得2016最受欢迎慕课top1、2017十大最受欢迎国家精品在线课程。",
+
+                    "C语言是古老而长青的编程语言，它具备了现代程序设计的基础要求，它的语法是很多其他编程语言的基础，在系统程序、嵌入式系统等领域依然是无可替代的编程语言，在各类编程语言排行榜上常年占据前两名的位置。 本课程是零基础的编程入门课，是后续的操作系统、编译原理、体系结构等课程的基石。",
+
+                    "本课程是金融专业统帅性基础理论课。教学资源丰富，教学理念先进，教学方法多元。采用宽口径的范畴，涵盖货币、信用、金融资产与价格、金融市场、金融机构、金融总量与均衡、调控与监管、金融发展等所有金融活动的集合。有利于认识金融原理，了解金融现状，掌握分析方法，培养解决金融问题的能力。"
+                };
+                string[] picUrls = {
+                    ":WebUISite:/upload/images/courseBoxPics/1.jpeg",
+                    ":WebUISite:/upload/images/courseBoxPics/2.png",
+                    ":WebUISite:/upload/images/courseBoxPics/3.jpg",
+                    ":WebUISite:/upload/images/courseBoxPics/4.jpg",
+                    ":WebUISite:/upload/images/courseBoxPics/5.jpg",
+                };
+
+                for (int i = 0; i < names.Length; i++)
                 {
-                    articleService.Create(new Article
+                    Container.Instance.Resolve<CourseBoxService>().Create(new CourseBox
                     {
-                        CreateTime = DateTime.Now,
-                        LastUpdateTime = DateTime.Now,
-                        Author = new UserInfo { ID = 1 },
-                        Title = "测试文章" + (i + 1),
-                        Content = "测试内容" + (i + 1),
-                        CustomUrl = $"article-{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.Now.Day}-{i + 1}"
+                        CreateTime = DateTime.Now.AddDays(i),
+                        LastUpdateTime = DateTime.Now.AddDays(i),
+                        Creator = new UserInfo { ID = 1 },
+                        StartTime = DateTime.Now.AddDays(i),
+                        EndTime = DateTime.Now.AddMonths(7).AddDays(i),
+                        Name = names[i],
+                        Description = descs[i],
+                        PicUrl = picUrls[i]
                     });
                 }
 
@@ -778,6 +877,155 @@ namespace WebUI.Controllers
             }
         }
         #endregion
+
+        #region 初始化视频课件
+        private void InitVideoInfo()
+        {
+            try
+            {
+                ShowMessage("开始初始化视频课件");
+
+                string[] playUrls = {
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/1%E3%80%81%E5%A7%94%E6%89%98%E5%A4%8D%E4%B9%A0.mp4",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/2%E3%80%81%E6%B3%9B%E5%9E%8B%E5%A7%94%E6%89%98.mp4",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/3%E3%80%81%E5%A4%9A%E6%92%AD%E5%A7%94%E6%89%98.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/4%E3%80%81%E4%BD%BF%E7%94%A8%E5%A7%94%E6%89%98%E8%BF%9B%E8%A1%8C%E7%AA%97%E4%BD%93%E4%BC%A0%E5%80%BC.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/5%E3%80%81%E4%BA%8B%E4%BB%B6.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/6%E3%80%81%E4%BA%8B%E4%BB%B6%E7%BB%93%E6%9D%9F.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/6%E3%80%81%E4%BA%8B%E4%BB%B6%E7%BB%93%E6%9D%9F.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/7%E3%80%81%E5%8F%8D%E5%B0%84.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/8%E3%80%81%E7%A8%8B%E5%BA%8F%E9%9B%86%E4%B8%AD%E7%9A%843%E4%B8%AA%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0.mp4",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/9%E3%80%81%E4%BD%BF%E7%94%A8%E5%8F%8D%E5%B0%84%E5%88%B6%E4%BD%9C%E8%AE%A1%E7%AE%97%E5%99%A8.mp4",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8A%E5%8D%8802-%E6%96%87%E6%A1%A3%E7%BB%93%E6%9E%841.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8A%E5%8D%8803-%E8%A7%86%E5%8F%A3.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8A%E5%8D%8804-Bootstrap%E9%BB%98%E8%AE%A4%E6%A8%A1%E7%89%88.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8A%E5%8D%8805-%E5%85%A8%E5%B1%80CSS%E6%A0%B7%E5%BC%8F.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8A%E5%8D%8806-Bootstrap%E7%BB%84%E4%BB%B6%E5%BF%AB%E9%80%9F%E8%BF%87.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8B%E5%8D%8802-%E9%A1%B6%E9%83%A8%E9%80%9A%E6%A0%8F%EF%BC%88%E5%AD%97%E4%BD%93%E5%9B%BE%E6%A0%87%EF%BC%89.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8B%E5%8D%8804-%E5%8A%A0%E5%8F%B7%E9%80%89%E6%8B%A9%E5%99%A8.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8B%E5%8D%8806-%E5%9B%BE%E6%A0%87%E5%AD%97%E4%BD%93%E5%9B%9E%E9%A1%BE.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8B%E5%8D%8808-%E5%AF%BC%E8%88%AA%E6%A0%B7%E5%BC%8F.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8B%E5%8D%8810-%E5%93%8D%E5%BA%94%E5%BC%8F%E8%8F%9C%E5%8D%95.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/5%E3%80%81%E5%AF%B9XML%E6%96%87%E6%A1%A3%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%282%29.mp4",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8A%E5%8D%881-ASPX%E9%80%92%E5%BD%92%E5%88%86%E7%B1%BB.wmv",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8A%E5%8D%882-FlipView.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8A%E5%8D%883-Hub%2BPivot.wmv",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8A%E5%8D%884-%E5%B9%BF%E5%91%8A%E5%B9%B3%E5%8F%B0.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8A%E5%8D%886-%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E6%A0%8F%E5%92%8CWebView.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8A%E5%8D%887-%E6%8E%A7%E4%BB%B6%E8%A1%A5%E5%85%85.wmv",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8B%E5%8D%882-Style%E7%9A%84%E7%BB%A7%E6%89%BF.wmv",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8B%E5%8D%884-Timer%E6%A8%A1%E6%8B%9F%E5%8A%A8%E7%94%BB.wmv",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8B%E5%8D%886-%E5%85%B3%E9%94%AE%E5%B8%A7%E5%8A%A8%E7%94%BB%E5%92%8C%E4%BE%9D%E8%B5%96%E5%B1%9E%E6%80%A7%E5%8A%A8%E7%94%BB%E8%A1%A5%E5%85%85.wmv",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8B%E5%8D%887-%E5%8A%A8%E7%94%BB%E6%93%8D%E4%BD%9C%E8%A1%A5%E5%85%85.avi",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8B%E5%8D%888-%E5%89%8D%E7%AB%AF%E5%B0%8F%E7%9F%A5%E8%AF%86%E5%88%86%E4%BA%AB.wmv",
+                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8B%E5%8D%889-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%BB%98%E5%9B%BEAPI.avi"
+                };
+
+
+                // 共5门课程
+                int playIndex = 0;
+                for (int i = 0; i < 5; i++)
+                {
+                    // 每门课程 3个课件
+                    for (int j = 0; j < 3; j++)
+                    {
+                        Container.Instance.Resolve<VideoInfoService>().Create(new VideoInfo
+                        {
+                            CourseBox = new CourseBox { ID = i + 1 },
+                            Page = j + 1,
+                            PlayUrl = playUrls[playIndex],
+                            Title = Server.UrlDecode(playUrls[playIndex]).Substring(Server.UrlDecode(playUrls[playIndex]).LastIndexOf("/")),
+                            Size = 141344,
+                        });
+                        playIndex++;
+                    }
+                }
+
+
+                ShowMessage("成功");
+            }
+            catch (Exception)
+            {
+                ShowMessage("失败");
+            }
+        }
+        #endregion
+
+        #region 初始化Learner_CourseBox表
+        private void InitLearner_CourseBox()
+        {
+            try
+            {
+                ShowMessage("初始化Learner_CourseBox表");
+
+
+
+                ShowMessage("成功");
+            }
+            catch (Exception)
+            {
+                ShowMessage("失败");
+            }
+        }
+        #endregion
+
+        #region 初始化Learner_VideoInfo表
+        private void InitLearner_VideoInfo()
+        {
+            try
+            {
+                ShowMessage("初始化Learner_VideoInfo表");
+
+
+
+
+                ShowMessage("成功");
+            }
+            catch (Exception)
+            {
+                ShowMessage("失败");
+            }
+        }
+        #endregion
+
+        #region 初始化评论
+        private void InitComment()
+        {
+            try
+            {
+                ShowMessage("初始化评论");
+
+
+
+                ShowMessage("成功");
+            }
+            catch (Exception)
+            {
+                ShowMessage("失败");
+            }
+        }
+        #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         #region 初始化卡片盒
         private void InitCardBox()
@@ -834,335 +1082,6 @@ namespace WebUI.Controllers
             }
         }
         #endregion
-
-        #region 初始化课程
-        private void InitCourseBox()
-        {
-            try
-            {
-                ShowMessage("开始初始化课程");
-
-                CourseBoxService courseBoxService = Container.Instance.Resolve<CourseBoxService>();
-
-                for (int i = 0; i < 50; i++)
-                {
-                    UserInfo userInfo = Container.Instance.Resolve<UserInfoService>().GetEntity(1);
-                    CourseBox courseBox = new CourseBox();
-                    courseBox.Name = "课程-" + (i + 1);
-                    courseBox.Description = $"这是测试课程-{(i + 1)}的描述";
-                    courseBox.Creator = userInfo;
-                    courseBox.PicUrl = "https://static.runoob.com/images/mix/img_fjords_wide.jpg";
-                    courseBox.CreateTime = DateTime.Now.AddDays(i);
-                    courseBox.LastUpdateTime = DateTime.Now.AddDays(i);
-
-                    courseBoxService.Create(courseBox);
-                }
-
-                ShowMessage("成功");
-            }
-            catch (Exception)
-            {
-                ShowMessage("失败");
-            }
-        }
-        #endregion
-
-        #region 初始化Learner_CourseBox表
-        private void InitLearner_CourseBox()
-        {
-            try
-            {
-                ShowMessage("初始化Learner_CourseBox表");
-
-                IList<CourseBox> allCourseBox = Container.Instance.Resolve<CourseBoxService>().GetAll();
-
-                IList<UserInfo> allUserInfo = Container.Instance.Resolve<UserInfoService>().GetAll();
-
-                for (int i = 0; i < allCourseBox.Count; i++)
-                {
-                    // 此课程的学习人数
-                    int learnNum = 15;
-                    for (int j = 0; j < learnNum; j++)
-                    {
-                        CourseBox courseBox = Container.Instance.Resolve<CourseBoxService>().GetEntity(i + 1);
-
-                        Learner_CourseBox learner_CourseBox = new Learner_CourseBox
-                        {
-                            CourseBox = courseBox,
-                            JoinTime = DateTime.Now.AddDays(j + 1),
-                            Learner = allUserInfo[new Random().Next(0, allUserInfo.Count - 1)],
-                            SpendTime = 100,
-                        };
-
-                        Container.Instance.Resolve<Learner_CourseBoxService>().Create(learner_CourseBox);
-                    }
-                }
-
-                ShowMessage("成功");
-            }
-            catch (Exception)
-            {
-                ShowMessage("失败");
-            }
-        }
-        #endregion
-
-        #region 初始化视频课件
-        private void InitVideoInfo()
-        {
-            try
-            {
-                ShowMessage("开始初始化课程内容");
-
-                IList<CourseBox> allCourseBox = Container.Instance.Resolve<CourseBoxService>().GetAll();
-                for (int i = 0; i < allCourseBox.Count; i++)
-                {
-                    CourseBox courseBox = allCourseBox[i];
-                    // 每门课程 10课件
-                    for (int j = 0; j < 10; j++)
-                    {
-                        VideoInfo courseInfo = new VideoInfo();
-                        courseInfo.Title = "视频标题" + (j + 1);
-                        courseInfo.PlayUrl = $"https://remember-1258210930.cos.ap-chongqing.myqcloud.com/videos/{(j + 1)}.mp4";
-                        courseInfo.Page = (j + 1);
-                        courseInfo.CourseBox = courseBox;
-
-
-                        Container.Instance.Resolve<VideoInfoService>().Create(courseInfo);
-                    }
-                }
-
-                ShowMessage("成功");
-            }
-            catch (Exception)
-            {
-                ShowMessage("失败");
-            }
-        }
-        #endregion
-
-        #region 初始化Learner_VideoInfo表
-        private void InitLearner_VideoInfo()
-        {
-            try
-            {
-                ShowMessage("初始化Learner_VideoInfo表");
-
-                IList<CourseBox> allCourseBox = Container.Instance.Resolve<CourseBoxService>().GetAll();
-                IList<Learner_CourseBox> allLearner_CourseBox = Container.Instance.Resolve<Learner_CourseBoxService>().GetAll();
-
-                for (int i = 0; i < 50; i++)
-                {
-                    // 当前 学习者-课程
-                    Learner_CourseBox learner_CourseBox = allLearner_CourseBox[i];
-
-                    // 为当前学习者所学的这门课程中的所有视频 加上学习播放记录
-                    for (int j = 0; j < learner_CourseBox.CourseBox.VideoInfos.Count; j++)
-                    {
-                        VideoInfo videoInfo = learner_CourseBox.CourseBox.VideoInfos[j];
-
-                        Container.Instance.Resolve<Learner_VideoInfoService>().Create(new Learner_VideoInfo
-                        {
-                            Learner = learner_CourseBox.Learner,
-                            VideoInfo = videoInfo,
-                            LastAccessIp = "127.0.0." + new Random().Next(0, 255),
-                            LastPlayAt = 60000,
-                            LastPlayTime = DateTime.Now.AddDays(new Random().Next(0, 1000)).AddHours(new Random().Next(0, 60)),
-                            ProgressAt = 670000
-                        });
-                    }
-
-                    // 找出当前这学习者对于这门课程中的所有视频 - 哪个视频是最近观看的 LastPlayTime 最大 - 为其更新为 对于学习者-这门课程而言最新课程
-                    IList<VideoInfo> currentCourseBox_All_VideoInfo = learner_CourseBox.CourseBox.VideoInfos;
-                    long lastNewPlayTime = 0;
-                    int lastNewPlayTime_MapTo_VideoInfoId = 0;
-                    for (int j = 0; j < currentCourseBox_All_VideoInfo.Count; j++)
-                    {
-                        VideoInfo videoInfo = currentCourseBox_All_VideoInfo[j];
-
-                        Learner_VideoInfo learner_VideoInfo = Container.Instance.Resolve<Learner_VideoInfoService>().Query(new List<ICriterion>
-                        {
-                            Expression.And(
-                                    Expression.Eq("Learner.ID", learner_CourseBox.Learner.ID),
-                                    Expression.Eq("VideoInfo.ID", videoInfo.ID)
-                                )
-                        }).FirstOrDefault();
-
-                        if (learner_VideoInfo.LastPlayTime.ToTimeStamp13() > lastNewPlayTime)
-                        {
-                            lastNewPlayTime = learner_VideoInfo.LastPlayTime.ToTimeStamp13();
-                            lastNewPlayTime_MapTo_VideoInfoId = learner_VideoInfo.VideoInfo.ID;
-                        }
-                    }
-
-                    learner_CourseBox.LastPlayVideoInfo = new VideoInfo { ID = lastNewPlayTime_MapTo_VideoInfoId };
-                    Container.Instance.Resolve<Learner_CourseBoxService>().Edit(learner_CourseBox);
-                }
-
-
-                ShowMessage("成功");
-            }
-            catch (Exception)
-            {
-                ShowMessage("失败");
-            }
-        }
-        #endregion
-
-
-
-
-
-
-        #region 初始化评论
-        private void InitComment()
-        {
-            try
-            {
-                ShowMessage("初始化评论");
-
-                CommentService commentService = Container.Instance.Resolve<CommentService>();
-                UserInfoService userInfoService = Container.Instance.Resolve<UserInfoService>();
-
-                // 课程评论
-                #region 课程评论
-                // 一级评论
-                for (int i = 0; i < 500; i++)
-                {
-                    commentService.Create(new Comment
-                    {
-                        Author = userInfoService.GetEntity(i + 2),
-                        Content = "课程-评论" + (i + 1),
-                        LikeNum = new Random().Next(0, i * 100),
-                        DislikeNum = new Random().Next(0, i * 100),
-                        CreateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
-                        LastUpdateTime = DateTime.Now.AddDays(new Random().Next(0, i))
-                    });
-                }
-                // 二级评论
-                for (int i = 0; i < 500; i++)
-                {
-                    commentService.Create(new Comment
-                    {
-                        Author = userInfoService.GetEntity(i + 2),
-                        Content = "课程-评论" + (i + 1),
-                        LikeNum = new Random().Next(0, i * 100),
-                        DislikeNum = new Random().Next(0, i * 100),
-                        CreateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
-                        LastUpdateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
-                        Parent = commentService.GetEntity(new Random().Next(1, 500))
-                    });
-                }
-                // 三级评论
-                for (int i = 0; i < 500; i++)
-                {
-                    commentService.Create(new Comment
-                    {
-                        Author = userInfoService.GetEntity(i + 2),
-                        Content = "课程-评论" + (i + 1),
-                        LikeNum = new Random().Next(0, i * 100),
-                        DislikeNum = new Random().Next(0, i * 100),
-                        CreateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
-                        LastUpdateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
-                        Parent = commentService.GetEntity(new Random().Next(501, 1000))
-                    });
-                }
-                #endregion
-
-                // 课件评论
-                #region 课件评论
-                // 一级评论
-                for (int i = 0; i < 500; i++)
-                {
-                    commentService.Create(new Comment
-                    {
-                        Author = userInfoService.GetEntity(i + 2),
-                        Content = "课件-评论" + (i + 1),
-                        LikeNum = new Random().Next(0, i * 100),
-                        DislikeNum = new Random().Next(0, i * 100),
-                        CreateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
-                        LastUpdateTime = DateTime.Now.AddDays(new Random().Next(0, i))
-                    });
-                }
-                // 二级评论
-                for (int i = 0; i < 500; i++)
-                {
-                    commentService.Create(new Comment
-                    {
-                        Author = userInfoService.GetEntity(i + 2),
-                        Content = "课件-评论" + (i + 1),
-                        LikeNum = new Random().Next(0, i * 100),
-                        DislikeNum = new Random().Next(0, i * 100),
-                        CreateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
-                        LastUpdateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
-                        Parent = commentService.GetEntity(new Random().Next(1501, 2000))
-                    });
-                }
-                // 三级评论
-                for (int i = 0; i < 500; i++)
-                {
-                    commentService.Create(new Comment
-                    {
-                        Author = userInfoService.GetEntity(i + 2),
-                        Content = "课件-评论" + (i + 1),
-                        LikeNum = new Random().Next(0, i * 100),
-                        DislikeNum = new Random().Next(0, i * 100),
-                        CreateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
-                        LastUpdateTime = DateTime.Now.AddDays(new Random().Next(0, i)),
-                        Parent = commentService.GetEntity(new Random().Next(2500, 3000))
-                    });
-                }
-                #endregion
-
-
-                ShowMessage("成功");
-            }
-            catch (Exception)
-            {
-                ShowMessage("失败");
-            }
-        }
-        #endregion
-
-        #region 初始化课程评论
-        private void InitCourseBox_Comment()
-        {
-            try
-            {
-                ShowMessage("初始化课程评论");
-
-                CourseBox_CommentService courseBox_CommentService = Container.Instance.Resolve<CourseBox_CommentService>();
-                CommentService commentService = Container.Instance.Resolve<CommentService>();
-
-                IList<CourseBox> allCourseBox = Container.Instance.Resolve<CourseBoxService>().GetAll();
-                IList<Comment> allCourseBox_Comment = commentService.Query(new List<ICriterion>
-                {
-                     Expression.Like("Content", "课程", MatchMode.Anywhere)
-                }).ToList();
-
-                for (int i = 0; i < allCourseBox.Count; i++)
-                {
-                    CourseBox courseBox = allCourseBox[i];
-                    for (int j = 0; j < allCourseBox_Comment.Count; j++)
-                    {
-                        courseBox_CommentService.Create(new CourseBox_Comment
-                        {
-                            CourseBox = courseBox,
-                            Comment = allCourseBox_Comment[new Random().Next(0, allCourseBox_Comment.Count)]
-                        });
-                    }
-                }
-
-                ShowMessage("成功");
-            }
-            catch (Exception)
-            {
-                ShowMessage("失败");
-            }
-        }
-        #endregion
-
-
 
     }
 }
