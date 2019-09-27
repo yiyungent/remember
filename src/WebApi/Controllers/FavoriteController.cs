@@ -401,7 +401,7 @@ namespace WebApi.Controllers
                     responseData = new ResponseData
                     {
                         Code = 1,
-                        Message = "收藏课程成功"
+                        Message = "成功"
                     };
                 }
                 catch (Exception ex)
@@ -409,7 +409,7 @@ namespace WebApi.Controllers
                     responseData = new ResponseData
                     {
                         Code = -2,
-                        Message = "收藏课程失败"
+                        Message = "失败"
                     };
                 }
 
@@ -419,7 +419,7 @@ namespace WebApi.Controllers
                 responseData = new ResponseData
                 {
                     Code = -1,
-                    Message = "收藏课程失败"
+                    Message = "失败"
                 };
             }
 

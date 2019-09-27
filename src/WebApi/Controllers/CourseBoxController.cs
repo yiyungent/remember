@@ -251,6 +251,115 @@ namespace WebApi.Controllers
         }
         #endregion
 
+
+        #region 加入学习/取消学习此课程
+        /// <summary>
+        /// 如果我已经加入学习此课程，则取消对此课程的学习，否则加入学习
+        /// </summary>
+        /// <param name="courseBoxId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("LearnCourseBox")]
+        [NeedAuth]
+        public ResponseData LearnCourseBox(LearnCourseBoxInputModel inputModel)
+        {
+            ResponseData responseData = null;
+            int courseBoxId = inputModel.CourseBoxId;
+            try
+            {
+                bool isExist = Container.Instance.Resolve<CourseBoxService>().Exist(courseBoxId);
+                if (isExist)
+                {
+                    bool isLearned = Container.Instance.Resolve<Learner_CourseBoxService>().Count(Expression.And
+                    (
+                        Expression.Eq("CourseBox.ID", courseBoxId),
+                        Expression.Eq("Learner.ID", ((UserIdentity)User.Identity).ID)
+                    )) >= 1;
+                    if (isLearned)
+                    {
+                        try
+                        {
+                            // 取消学习
+                            IList<Learner_CourseBox> learner_CourseBoxes = Container.Instance.Resolve<Learner_CourseBoxService>().Query(new List<ICriterion>
+                        {
+                            Expression.And(
+                                Expression.Eq("CourseBox.ID", courseBoxId),
+                                Expression.Eq("Learner.ID", ((UserIdentity)User.Identity).ID)
+                            )
+                        });
+                            // 移除 此学习者与此课程的相关所有记录
+                            foreach (var item in learner_CourseBoxes)
+                            {
+                                Container.Instance.Resolve<Learner_CourseBoxService>().Delete(item.ID);
+                            }
+                            // TODO: 此学习者与此课程，与此课程的视频课件的相关记录 Learner_VideoInfo
+
+                            responseData = new ResponseData
+                            {
+                                Code = 1,
+                                Message = "取消学习此课程成功"
+                            };
+                        }
+                        catch (Exception ex)
+                        {
+                            responseData = new ResponseData
+                            {
+                                Code = -1,
+                                Message = "取消学习此课程失败"
+                            };
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            // 加入学习
+                            Container.Instance.Resolve<Learner_CourseBoxService>().Create(new Learner_CourseBox
+                            {
+                                JoinTime = DateTime.Now,
+                                CourseBox = Container.Instance.Resolve<CourseBoxService>().GetEntity(courseBoxId),
+                                Learner = new UserInfo { ID = ((UserIdentity)User.Identity).ID },
+                            });
+
+                            responseData = new ResponseData
+                            {
+                                Code = 1,
+                                Message = "加入学习此课程成功"
+                            };
+                        }
+                        catch (Exception ex)
+                        {
+                            responseData = new ResponseData
+                            {
+                                Code = -1,
+                                Message = "加入学习此课程失败"
+                            };
+                        }
+                    }
+                }
+                else
+                {
+                    responseData = new ResponseData
+                    {
+                        Code = -3,
+                        Message = "不存在此课程"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                responseData = new ResponseData
+                {
+                    Code = -2,
+                    Message = "失败"
+                };
+            }
+
+            return responseData;
+        }
+        #endregion
+
+
         #region 我学习的课程列表
         [HttpGet]
         [NeedAuth]
