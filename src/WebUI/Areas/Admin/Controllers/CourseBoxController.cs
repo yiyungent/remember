@@ -1,4 +1,6 @@
-﻿using Common;
+﻿using Aliyun.OSS;
+using Aliyun.OSS.Util;
+using Common;
 using Core;
 using Domain;
 using Framework.Infrastructure.Concrete;
@@ -13,6 +15,7 @@ using System.Web.Mvc;
 using WebUI.Areas.Admin.Models.Common;
 using WebUI.Areas.Admin.Models.CourseBoxVM;
 using WebUI.Extensions;
+using WebUI.Models.Common;
 
 namespace WebUI.Areas.Admin.Controllers
 {
@@ -522,6 +525,149 @@ namespace WebUI.Areas.Admin.Controllers
         #endregion
 
         // TODO: 当在 编辑课程基本信息 页，删除封面图时，发送请求到后端，删除物理文件
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /// <summary>
+        /// 上传轮播图片
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Upload()
+        {
+            #region + 变量
+            //文件大小（字节数）
+            long fileSize = 0;
+            //重命名的文件名称
+            string tempName = "";
+            //物理路径+重命名的文件名称
+            string fileName = "";
+            //文件扩展名
+            string extname = "";
+            //虚拟路径
+            string virtualPath = "/Uploads/temp/videos/";
+            //上传固定路径
+            string path = Server.MapPath(virtualPath);
+            //上传文件夹名称
+            string dir = "";
+            //获取提交的文件
+            var file = Request.Files[0];
+            //反馈对象        
+            ResponseData _response = new ResponseData();
+            #endregion
+
+            #region + 服务器本地文件上传处理
+
+            try
+            {
+                if (file != null && !string.IsNullOrEmpty(file.FileName))
+                {
+                    dir = DateTime.Now.ToString("yyyy-MM-dd");
+                    if (!Directory.Exists(path + dir))
+                    {
+                        Directory.CreateDirectory(path + dir);
+                    }
+                    extname = file.FileName.Substring(file.FileName.LastIndexOf('.'), (file.FileName.Length - file.FileName.LastIndexOf('.')));
+                    tempName = Guid.NewGuid().ToString().Substring(0, 6) + extname;
+                    fileName = path + dir + "/" + tempName;
+                    fileSize += file.ContentLength;
+                    using (FileStream fs = System.IO.File.Create(fileName))
+                    {
+                        file.InputStream.CopyTo(fs);
+                        fs.Flush();
+                    }
+                    _response.data = new
+                    {
+                        src = virtualPath + dir + "/" + tempName,
+                    };
+                    _response.message = "服务器本地上传成功";
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.code = -1;
+                _response.message = "服务器本地上传失败/n" + "错误信息：" + ex.Message;
+            }
+
+            #endregion
+
+            #region + OSS对象云存储上传
+            try
+            {
+                FileStream fstream = new FileStream(Server.MapPath(virtualPath + dir + "/" + tempName), FileMode.Open);
+                int nBytes = (int)fstream.Length;//计算流的长度
+                byte[] byteArray = new byte[nBytes];//初始化用于MemoryStream的Buffer
+                int nBytesRead = fstream.Read(byteArray, 0, nBytes);//将File里的内容一次性的全部读到byteArray中去
+                                                                    //上传到阿里云  
+                using (Stream fileStream = new MemoryStream(byteArray))//转成Stream流  
+                {
+                    string md5 = OssUtils.ComputeContentMd5(fileStream, nBytes);
+                    string today = DateTime.Now.ToString("yyyyMMdd");
+                    string FileName = tempName;//文件名=文件名+当前上传时间  
+                    string FilePath = "adv/index/" + today + "/" + FileName;//云文件保存路径  
+                    OSSConfig config = new OSSConfig();
+                    //这边的AccessKey 等等信息可以从配置文件获取 也可以直接写死
+                    //初始化阿里云配置--外网Endpoint、访问ID、访问password  
+                    OssClient aliyun = new OssClient(config.OSSEndPoint, config.OSSAccessKey, config.OSSAccessSecret);
+
+                    //将文件md5值赋值给meat头信息，服务器验证文件MD5  
+                    var objectMeta = new ObjectMetadata
+                    {
+                        ContentMd5 = md5,
+                    };
+                    //文件上传--空间名、文件保存路径、文件流、meta头信息(文件md5) //返回meta头信息(文件md5)  
+                    aliyun.PutObject(config.Bucket, FilePath, fileStream, objectMeta);
+
+                    _response.data = new
+                    {
+                        src = config.OSSBindDomain + FilePath,
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.code = -2;
+                _response.message = "OSS对象云存储上传失败/n" + "错误信息：" + ex.Message;
+                //删除本地上传的图片
+                System.IO.File.Delete(fileName);
+            }
+            #endregion
+            return Json(_response);
+        }
+
+
+
+        #region OSS配置类
+        public sealed class OSSConfig
+        {
+            public string OSSAccessKey { get; set; } = "";
+
+            public string OSSAccessSecret { get; set; } = "";
+
+            public string OSSEndPoint { get; set; } = "oss-cn-beijing.aliyuncs.com";
+
+            public string Bucket { get; set; } = "remstatic";
+
+            public string OSSBindDomain { get; set; } = "remstatic.oss-cn-beijing.aliyuncs.com";
+        }
+        #endregion
+
+
+
+
 
     }
 }
