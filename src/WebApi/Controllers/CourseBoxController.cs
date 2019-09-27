@@ -66,6 +66,8 @@ namespace WebApi.Controllers
                         ShareNum = courseBox.ShareNum,
                         ViewNum = learnViewNum
                     },
+                    // NOTE: 未登录用户 为 未对此课程加入学习，加入学习时间为 0，前端可通过判断这个知道是否加入学习此课程
+                    JoinTime = 0,
                     VideoInfos = new List<CourseBoxViewModel.VideoInfoViewModel>()
                 };
                 IList<VideoInfo> courseInfos = courseBox.VideoInfos.OrderBy(m => m.Page).ToList();
@@ -90,6 +92,7 @@ namespace WebApi.Controllers
                          Expression.Eq("CourseBox.ID", id)
                          )
                     }).FirstOrDefault();
+                    // 此用户有学习此课程
                     if (learner_CourseBox != null)
                     {
                         Learner_VideoInfo learner_LastAccessVideoInfo = Container.Instance.Resolve<Learner_VideoInfoService>().GetEntity(learner_CourseBox.LastPlayVideoInfo.ID);
