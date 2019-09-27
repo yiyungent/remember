@@ -934,7 +934,7 @@ namespace WebUI.Controllers
                             CourseBox = new CourseBox { ID = i + 1 },
                             Page = j + 1,
                             PlayUrl = playUrls[playIndex],
-                            Title = Server.UrlDecode(playUrls[playIndex]).Substring(Server.UrlDecode(playUrls[playIndex]).LastIndexOf("/")),
+                            Title = Server.UrlDecode(playUrls[playIndex]).Substring(Server.UrlDecode(playUrls[playIndex]).LastIndexOf("/") + 1),
                             Size = 141344,
                         });
                         playIndex++;

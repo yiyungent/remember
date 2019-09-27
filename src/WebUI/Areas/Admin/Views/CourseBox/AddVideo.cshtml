@@ -11,7 +11,7 @@
 }
 @section body {
 	<!-- 在 zui.js 和 uploader.js 加载之前引入七牛 js-sdk -->
-	<script src="https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.min.js"></script>
+	@*<script src="https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.min.js"></script>*@
 	<script src="/assets/libs/zui/dist/js/zui.min.js"></script>
 	<script src="/assets/libs/zui/dist/lib/uploader/zui.uploader.min.js"></script>
 	<script>
@@ -61,11 +61,11 @@
 
 			$('#video-uploader-area').uploader({
 				autoUpload: true,            // 当选择文件后立即自动进行上传操作
-				@*url: '/Admin/CourseBox/UploadVideo?id=@Model.ID',  // 文件上传提交地址*@
-				qiniu: {
+				url: '/Admin/CourseBox/UploadVideo?id=@Model.ID',  // 文件上传提交地址
+				@*qiniu: {
 					domain: 'http://pyfkzo66m.bkt.clouddn.com',
 					uptoken : '@ViewBag.UpToken'
-				},
+				},*@
 				filters: {
 					 // 只允许上传视频
 					mime_types: [
