@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LogInfoService.cs" />
     <Compile Include="ArticleService.cs" />
     <Compile Include="Base\BaseService.cs" />
     <Compile Include="CardBoxService.cs" />

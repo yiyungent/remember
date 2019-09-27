@@ -109,5 +109,9 @@
                  service="Service.Favorite_CourseBoxService,Service"
                  type="Component.Favorite_CourseBoxComponent,Component"
                  isTransactional="true" />
+    <component id="LogInfoService"
+                 service="Service.LogInfoService,Service"
+                 type="Component.LogInfoComponent,Component"
+                 isTransactional="true" />
   </components>
 </configuration>

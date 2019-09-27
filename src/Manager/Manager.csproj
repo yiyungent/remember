@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LogInfoManager.cs" />
     <Compile Include="ArticleManager.cs" />
     <Compile Include="Base\BaseManager.cs" />
     <Compile Include="CardBoxManager.cs" />

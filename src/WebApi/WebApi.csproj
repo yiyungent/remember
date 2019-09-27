@@ -170,6 +170,7 @@
     <Content Include="assets\images\scripts\truev.png" />
     <Content Include="assets\images\default-favorite-pic.jpg" />
     <Content Include="assets\images\top_banner.png" />
+    <Content Include="assets\js\log.js" />
     <Content Include="bin\WebApi.xml" />
     <Content Include="Config\Service.xml" />
     <Content Include="Global.asax" />
@@ -181,6 +182,7 @@
     <Compile Include="Attributes\NeedAuthAttribute.cs" />
     <Compile Include="Controllers\CourseBoxController.cs" />
     <Compile Include="Controllers\FavoriteController.cs" />
+    <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\VideoInfoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -199,6 +201,7 @@
     <Compile Include="Models\FavoriteVM\FavStatInCourseBoxViewModel.cs" />
     <Compile Include="Models\FavoriteVM\MyFavListViewModel.cs" />
     <Compile Include="Models\HomeVM\LastCourseBoxViewModel.cs" />
+    <Compile Include="Models\LogVM\AccessLogInputModel.cs" />
     <Compile Include="Models\UserInfoVM\MyFansViewModel.cs" />
     <Compile Include="Models\UserInfoVM\MyFollowViewModel.cs" />
     <Compile Include="Models\VideoInfoVM\VideoInfoViewModel.cs" />
