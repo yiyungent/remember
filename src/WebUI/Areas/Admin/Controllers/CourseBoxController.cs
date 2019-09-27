@@ -50,11 +50,11 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 case "name":
                     queryType.Text = "课程名";
-                    queryConditions.Add(Expression.Like("Name", query, MatchMode.Anywhere));
+                    queryConditions.Add(Expression.Like("Name", query, NHibernate.Criterion.MatchMode.Anywhere));
                     break;
                 case "desc":
                     queryType.Text = "课程描述";
-                    queryConditions.Add(Expression.Like("Description", query, MatchMode.Anywhere));
+                    queryConditions.Add(Expression.Like("Description", query, NHibernate.Criterion.MatchMode.Anywhere));
                     break;
                 case "id":
                     queryType.Text = "ID";
@@ -62,7 +62,7 @@ namespace WebUI.Areas.Admin.Controllers
                     break;
                 default:
                     queryType.Text = "课程名";
-                    queryConditions.Add(Expression.Like("Name", query, MatchMode.Anywhere));
+                    queryConditions.Add(Expression.Like("Name", query, NHibernate.Criterion.MatchMode.Anywhere));
                     break;
             }
             ViewBag.Query = query;
@@ -354,59 +354,160 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpPost]
         public JsonResult UploadVideo(int id)
         {
+            #region 原本地上传
+            //try
+            //{
+            //    if (Container.Instance.Resolve<CourseBoxService>().Exist(id))
+            //    {
+            //        int courseBoxCreatorId = Container.Instance.Resolve<CourseBoxService>().GetEntity(id).Creator.ID;
+
+            //        // 保存到课程创建者的文件夹
+            //        string basePath = "~/Upload/videos/" + courseBoxCreatorId + "/";
+
+            //        // 如果路径含有~，即需要服务器映射为绝对路径，则进行映射
+            //        basePath = (basePath.IndexOf("~") > -1) ? System.Web.HttpContext.Current.Server.MapPath(basePath) : basePath;
+            //        HttpPostedFile file = System.Web.HttpContext.Current.Request.Files[0];
+            //        // 如果目录不存在，则创建目录
+            //        if (!Directory.Exists(basePath))
+            //        {
+            //            Directory.CreateDirectory(basePath);
+            //        }
+
+            //        string fileName = System.Web.HttpContext.Current.Request["name"];
+            //        if (string.IsNullOrEmpty(fileName))
+            //        {
+            //            fileName = file.FileName;
+            //        }
+            //        // 文件保存
+            //        string saveFileName = Guid.NewGuid().ToString() + "." + file.FileName.Split('.')[1];
+            //        string fullPath = basePath + saveFileName;
+            //        file.SaveAs(fullPath);
+
+            //        // TODO: 临时
+            //        return Json(new
+            //        {
+            //            result = "ok",
+            //            message = "上传视频成功",
+            //            url = (":WebUISite:/Upload/videos/" + courseBoxCreatorId + "/" + saveFileName)
+            //        });
+            //    }
+            //    else
+            //    {
+            //        return Json(new
+            //        {
+            //            result = "failed",
+            //            message = "上传失败，该课程不存在"
+            //        });
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return Json(new
+            //    {
+            //        result = "failed",
+            //        message = "上传失败"
+            //    });
+            //} 
+            #endregion
+
+            #region + 变量
+            //文件大小（字节数）
+            long fileSize = 0;
+            //重命名的文件名称
+            string tempName = "";
+            //物理路径+重命名的文件名称
+            string fileName = "";
+            //文件扩展名
+            string extname = "";
+            //虚拟路径
+            string virtualPath = "/Upload/temp/videos/";
+            //上传固定路径
+            string path = Server.MapPath(virtualPath);
+            //上传文件夹名称
+            string dir = "";
+            //获取提交的文件
+            var file = Request.Files[0];
+            //反馈对象        
+            ZuiFileUploadResult _response = new ZuiFileUploadResult();
+            #endregion
+
+            #region + 服务器本地文件上传处理
+
             try
             {
-                if (Container.Instance.Resolve<CourseBoxService>().Exist(id))
+                if (file != null && !string.IsNullOrEmpty(file.FileName))
                 {
-                    int courseBoxCreatorId = Container.Instance.Resolve<CourseBoxService>().GetEntity(id).Creator.ID;
-
-                    // 保存到课程创建者的文件夹
-                    string basePath = "~/Upload/videos/" + courseBoxCreatorId + "/";
-
-                    // 如果路径含有~，即需要服务器映射为绝对路径，则进行映射
-                    basePath = (basePath.IndexOf("~") > -1) ? System.Web.HttpContext.Current.Server.MapPath(basePath) : basePath;
-                    HttpPostedFile file = System.Web.HttpContext.Current.Request.Files[0];
-                    // 如果目录不存在，则创建目录
-                    if (!Directory.Exists(basePath))
+                    dir = DateTime.Now.ToString("yyyy-MM-dd");
+                    if (!Directory.Exists(path + dir))
                     {
-                        Directory.CreateDirectory(basePath);
+                        Directory.CreateDirectory(path + dir);
                     }
-
-                    string fileName = System.Web.HttpContext.Current.Request["name"];
-                    if (string.IsNullOrEmpty(fileName))
+                    extname = file.FileName.Substring(file.FileName.LastIndexOf('.'), (file.FileName.Length - file.FileName.LastIndexOf('.')));
+                    tempName = Guid.NewGuid().ToString().Substring(0, 6) + extname;
+                    fileName = path + dir + "/" + tempName;
+                    fileSize += file.ContentLength;
+                    using (FileStream fs = System.IO.File.Create(fileName))
                     {
-                        fileName = file.FileName;
+                        file.InputStream.CopyTo(fs);
+                        fs.Flush();
                     }
-                    // 文件保存
-                    string saveFileName = Guid.NewGuid().ToString() + "." + file.FileName.Split('.')[1];
-                    string fullPath = basePath + saveFileName;
-                    file.SaveAs(fullPath);
-
-                    // TODO: 临时
-                    return Json(new
-                    {
-                        result = "ok",
-                        message = "上传视频成功",
-                        url = (":WebUISite:/Upload/videos/" + courseBoxCreatorId + "/" + saveFileName)
-                    });
-                }
-                else
-                {
-                    return Json(new
-                    {
-                        result = "failed",
-                        message = "上传失败，该课程不存在"
-                    });
+                    _response.result = "ok";
+                    _response.url = virtualPath + dir + "/" + tempName;
+                    _response.message = "服务器本地上传成功";
                 }
             }
             catch (Exception ex)
             {
-                return Json(new
-                {
-                    result = "failed",
-                    message = "上传失败"
-                });
+                _response.result = "failed";
+                _response.message = "服务器本地上传失败/n" + "错误信息：" + ex.Message;
             }
+
+            #endregion
+
+            #region + OSS对象云存储上传
+            try
+            {
+                FileStream fstream = new FileStream(Server.MapPath(virtualPath + dir + "/" + tempName), FileMode.Open);
+                int nBytes = (int)fstream.Length;//计算流的长度
+                byte[] byteArray = new byte[nBytes];//初始化用于MemoryStream的Buffer
+                int nBytesRead = fstream.Read(byteArray, 0, nBytes);//将File里的内容一次性的全部读到byteArray中去
+                                                                    //上传到阿里云  
+                using (Stream fileStream = new MemoryStream(byteArray))//转成Stream流  
+                {
+                    string md5 = OssUtils.ComputeContentMd5(fileStream, nBytes);
+                    string today = DateTime.Now.ToString("yyyyMMdd");
+                    string FileName = tempName;//文件名=文件名+当前上传时间  
+                    string FilePath = "adv/index/" + today + "/" + FileName;//云文件保存路径  
+                    OSSConfig config = new OSSConfig();
+                    //这边的AccessKey 等等信息可以从配置文件获取 也可以直接写死
+                    //初始化阿里云配置--外网Endpoint、访问ID、访问password  
+                    OssClient aliyun = new OssClient(config.OSSEndPoint, config.OSSAccessKey, config.OSSAccessSecret);
+
+                    //将文件md5值赋值给meat头信息，服务器验证文件MD5  
+                    var objectMeta = new ObjectMetadata
+                    {
+                        ContentMd5 = md5,
+                    };
+                    //文件上传--空间名、文件保存路径、文件流、meta头信息(文件md5) //返回meta头信息(文件md5)  
+                    aliyun.PutObject(config.Bucket, FilePath, fileStream, objectMeta);
+
+                    _response.result = "ok";
+                    _response.url = config.OSSBindDomain + FilePath;
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.result = "failed";
+                _response.message = "OSS对象云存储上传失败/n" + "错误信息：" + ex.Message;
+                //删除本地上传的图片
+                System.IO.File.Delete(fileName);
+            }
+            #endregion
+            return Json(_response);
+
+
+
+
         }
         #endregion
 
@@ -653,19 +754,41 @@ namespace WebUI.Areas.Admin.Controllers
         #region OSS配置类
         public sealed class OSSConfig
         {
-            public string OSSAccessKey { get; set; } = "";
+            public string OSSAccessKey { get; set; } = "LTAI4FiVhJMiebk8v83GFrUq";
 
-            public string OSSAccessSecret { get; set; } = "";
+            public string OSSAccessSecret { get; set; } = "W0GfXXxij1PVWKUrnhlrQebfoDOyok";
 
             public string OSSEndPoint { get; set; } = "oss-cn-beijing.aliyuncs.com";
 
             public string Bucket { get; set; } = "remstatic";
 
-            public string OSSBindDomain { get; set; } = "remstatic.oss-cn-beijing.aliyuncs.com";
+            /// <summary>
+            /// 注意：如果用于返回完整URL，要加 http:// ，最后也要加 /
+            /// </summary>
+            public string OSSBindDomain { get; set; } = "http://remstatic.oss-cn-beijing.aliyuncs.com/";
         }
         #endregion
 
 
+
+
+
+
+
+
+
+        public sealed class ZuiFileUploadResult
+        {
+            /// <summary>
+            /// ok
+            /// failed
+            /// </summary>
+            public string result { get; set; }
+
+            public string message { get; set; }
+
+            public string url { get; set; }
+        }
 
 
 
