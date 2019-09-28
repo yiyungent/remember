@@ -232,6 +232,7 @@
     <Content Include="assets\images\notify\failure.svg" />
     <Content Include="assets\images\notify\success.svg" />
     <Content Include="assets\js\app.js" />
+    <Content Include="assets\js\log.js" />
     <Content Include="assets\js\tools.js" />
     <Content Include="assets\libs\AdminLTE\bower_components\bootstrap-colorpicker\dist\css\bootstrap-colorpicker.css" />
     <Content Include="assets\libs\AdminLTE\bower_components\bootstrap-colorpicker\dist\css\bootstrap-colorpicker.min.css" />
@@ -7287,6 +7288,9 @@
     <Content Include="assets\libs\typeahead.js\typeahead.bundle.min.js" />
     <Content Include="assets\libs\typeahead.js\typeahead.jquery.js" />
     <Content Include="assets\libs\typeahead.js\typeahead.jquery.min.js" />
+    <Content Include="assets\libs\ua-parser-js\dist\ua-parser.html" />
+    <Content Include="assets\libs\ua-parser-js\dist\ua-parser.min.js" />
+    <Content Include="assets\libs\ua-parser-js\dist\ua-parser.pack.js" />
     <Content Include="assets\libs\viewerjs\dist\viewer.common.js" />
     <Content Include="assets\libs\viewerjs\dist\viewer.css" />
     <Content Include="assets\libs\viewerjs\dist\viewer.esm.js" />

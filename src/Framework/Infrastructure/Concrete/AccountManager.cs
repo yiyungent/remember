@@ -108,11 +108,6 @@ namespace Framework.Infrastructure.Concrete
                             }
                         }
                     }
-                    else
-                    {
-                        // 找不到 token
-                        rtnUserInfo = UserInfo_Guest.Instance;
-                    }
                     #endregion
                 }
             }
@@ -188,55 +183,62 @@ namespace Framework.Infrastructure.Concrete
             else
             {
                 #region 验证口令
-                if (request.Cookies.AllKeys.Contains(_jwtName))
+                bool cookieExistJwt = request.Cookies.AllKeys.Contains(_jwtName) && request.Cookies[_jwtName] != null && string.IsNullOrEmpty(request.Cookies[_jwtName].Value) == false;
+                string authHeader = null;
+                string token = null;
+                try
                 {
-                    if (request.Cookies[_jwtName] != null && string.IsNullOrEmpty(request.Cookies[_jwtName].Value) == false)
-                    {
-                        UserInfo user = null;
-                        string token = request.Cookies[_jwtName].Value;
-                        var tokenModel = JwtHelper.Decode<JWTokenViewModel>(token, out bool verifyPass);
-                        if (verifyPass)
-                        {
-                            // token有效 -> 检测是否已经过期
-                            bool isExpired = DateTimeHelper.NowTimeStamp10() >= tokenModel.Expire;
-                            if (!isExpired)
-                            {
-                                // token未过期
-                                // 经过效验的用户信息
-                                user = _dBAccessProvider.GetUserInfoById(tokenModel.ID);
-                                if (user != null)
-                                {
-                                    loginStatus = LoginStatus.IsLogin;
-                                }
-                                else
-                                {
-                                    // 不存在此用户 -> 未登录
-                                    loginStatus = LoginStatus.WithoutLogin;
-                                }
-                            }
-                            else
-                            {
-                                // 登录 已过期
-                                // 最多 "记住我" 保存7天的 登录状态
-                                loginStatus = LoginStatus.LoginTimeOut;
-                            }
-                        }
-                        else
-                        {
-                            // token 无效 -> 未登录
-                            loginStatus = LoginStatus.WithoutLogin;
-                        }
-                    }
-                    else
-                    {
-                        // 无 token -> 未登录
-                        loginStatus = LoginStatus.WithoutLogin;
-                    }
+                    authHeader = request.Headers["Authorization"];
+                }
+                catch (Exception ex)
+                { }
+                if (cookieExistJwt)
+                {
+                    token = request.Cookies[_jwtName].Value;
+                }
+                else if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer"))
+                {
+                    token = authHeader.Substring("Bearer ".Length).Trim();
                 }
                 else
                 {
                     // 无 token -> 未登录
                     loginStatus = LoginStatus.WithoutLogin;
+                }
+                if (!string.IsNullOrEmpty(token))
+                {
+                    var tokenModel = JwtHelper.Decode<JWTokenViewModel>(token, out bool verifyPass);
+                    if (verifyPass)
+                    {
+                        // token有效 -> 检测是否已经过期
+                        bool isExpired = DateTimeHelper.NowTimeStamp10() >= tokenModel.Expire;
+                        if (!isExpired)
+                        {
+                            // token未过期
+                            // 经过效验的用户信息
+                            UserInfo user = _dBAccessProvider.GetUserInfoById(tokenModel.ID);
+                            if (user != null)
+                            {
+                                loginStatus = LoginStatus.IsLogin;
+                            }
+                            else
+                            {
+                                // 不存在此用户 -> 未登录
+                                loginStatus = LoginStatus.WithoutLogin;
+                            }
+                        }
+                        else
+                        {
+                            // 登录 已过期
+                            // 最多 "记住我" 保存7天的 登录状态
+                            loginStatus = LoginStatus.LoginTimeOut;
+                        }
+                    }
+                    else
+                    {
+                        // token 无效 -> 未登录
+                        loginStatus = LoginStatus.WithoutLogin;
+                    }
                 }
                 #endregion
 
