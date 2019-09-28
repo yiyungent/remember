@@ -132,6 +132,9 @@ namespace WebUI.Areas.Admin.Controllers
         public ViewResult Edit(int id)
         {
             CourseBox viewModel = Container.Instance.Resolve<CourseBoxService>().GetEntity(id);
+            // 如果为本站上的图片，则会有标记，去除标记
+            viewModel.PicUrl = viewModel.PicUrl.Replace(":WebUISite:", "");
+
             string picUrl = viewModel.PicUrl.ToHttpAbsoluteUrl();
             FileHelper.GetRemoteImageInfo(picUrl, out long size, out string widthxHeight);
             ViewBag.PicUrl = picUrl;
@@ -158,7 +161,17 @@ namespace WebUI.Areas.Admin.Controllers
                 }
                 else
                 {
-                    dbModel.PicUrl = inputModel.PicUrl;
+                    // 判断是否包含 http
+                    // 包含 http，则为其它网络资源（可能为上传到阿里云oss的），否则为上传到本服务器的资源，可直接使用相对地址
+                    if (dbModel.PicUrl.ToLower().Contains("http://") || dbModel.PicUrl.ToLower().Contains("https://"))
+                    {
+                        dbModel.PicUrl = inputModel.PicUrl;
+                    }
+                    else
+                    {
+                        // 打上文件在本服务器的标记
+                        dbModel.PicUrl = ":WebUISite:" + inputModel.PicUrl;
+                    }
                 }
 
                 Container.Instance.Resolve<CourseBoxService>().Edit(dbModel);
@@ -203,7 +216,6 @@ namespace WebUI.Areas.Admin.Controllers
         {
             CourseBox viewModel = Container.Instance.Resolve<CourseBoxService>().GetEntity(courseBoxId);
 
-
             #region 七牛云上传 token 生成
 
             //Qiniu.Util.Mac mac = new Qiniu.Util.Mac("-qcYpNjgUPskDq5-0LlBsKrWERYhKVZIjx4EL3uY", "bapt2y5mwQIjtMhA1FqeCKSvZVEIuzGfIU5Sk4RA");
@@ -226,6 +238,22 @@ namespace WebUI.Areas.Admin.Controllers
         {
             try
             {
+                #region 输入数据处理
+
+                // 判断是否包含 http
+                // 包含 http，则为其它网络资源（可能为上传到阿里云oss的），否则为上传到本服务器的资源，可直接使用相对地址
+                if (inputModel.PlayUrl.ToLower().Contains("http://") || inputModel.PlayUrl.ToLower().Contains("https://"))
+                {
+                    inputModel.PlayUrl = inputModel.PlayUrl;
+                }
+                else
+                {
+                    // 打上文件在本服务器的标记
+                    inputModel.PlayUrl = ":WebUISite:" + inputModel.PlayUrl;
+                }
+
+                #endregion
+
                 Container.Instance.Resolve<VideoInfoService>().Create(new VideoInfo
                 {
                     CourseBox = new CourseBox { ID = courseBoxId }, // 注意！！！
@@ -310,6 +338,8 @@ namespace WebUI.Areas.Admin.Controllers
         public ViewResult EditVideo(int id)
         {
             VideoInfo viewModel = Container.Instance.Resolve<VideoInfoService>().GetEntity(id);
+            // 如果为本站上的文件，则会有标记，去除标记,转化为相对地址
+            viewModel.PlayUrl = viewModel.PlayUrl.Replace(":WebUISite:", "");
 
             return View(viewModel);
         }
@@ -319,6 +349,22 @@ namespace WebUI.Areas.Admin.Controllers
         {
             try
             {
+                #region 输入数据处理
+
+                // 判断是否包含 http
+                // 包含 http，则为其它网络资源（可能为上传到阿里云oss的），否则为上传到本服务器的资源，可直接使用相对地址
+                if (inputModel.PlayUrl.ToLower().Contains("http://") || inputModel.PlayUrl.ToLower().Contains("https://"))
+                {
+                    inputModel.PlayUrl = inputModel.PlayUrl;
+                }
+                else
+                {
+                    // 打上文件在本服务器的标记
+                    inputModel.PlayUrl = ":WebUISite:" + inputModel.PlayUrl;
+                }
+
+                #endregion
+
                 VideoInfo dbModel = Container.Instance.Resolve<VideoInfoService>().GetEntity(inputModel.ID);
                 dbModel.Title = inputModel.Title;
                 dbModel.PlayUrl = inputModel.PlayUrl;
@@ -340,10 +386,9 @@ namespace WebUI.Areas.Admin.Controllers
 
 
 
-
-
-
-
+        // TODO: 服务端限制 文件类型：扩展名
+        // TODO: 支持分片上传
+        // TODO：支持站点设置-文件上传-上传方式：1.本地上传，2.阿里云OSS上传，3.FTP
 
         #region 上传视频-为某课程上传视频
         /// <summary>
@@ -354,180 +399,15 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpPost]
         public JsonResult UploadVideo(int id)
         {
-            #region 原本地上传
-            //try
-            //{
-            //    if (Container.Instance.Resolve<CourseBoxService>().Exist(id))
-            //    {
-            //        int courseBoxCreatorId = Container.Instance.Resolve<CourseBoxService>().GetEntity(id).Creator.ID;
-
-            //        // 保存到课程创建者的文件夹
-            //        string basePath = "~/Upload/videos/" + courseBoxCreatorId + "/";
-
-            //        // 如果路径含有~，即需要服务器映射为绝对路径，则进行映射
-            //        basePath = (basePath.IndexOf("~") > -1) ? System.Web.HttpContext.Current.Server.MapPath(basePath) : basePath;
-            //        HttpPostedFile file = System.Web.HttpContext.Current.Request.Files[0];
-            //        // 如果目录不存在，则创建目录
-            //        if (!Directory.Exists(basePath))
-            //        {
-            //            Directory.CreateDirectory(basePath);
-            //        }
-
-            //        string fileName = System.Web.HttpContext.Current.Request["name"];
-            //        if (string.IsNullOrEmpty(fileName))
-            //        {
-            //            fileName = file.FileName;
-            //        }
-            //        // 文件保存
-            //        string saveFileName = Guid.NewGuid().ToString() + "." + file.FileName.Split('.')[1];
-            //        string fullPath = basePath + saveFileName;
-            //        file.SaveAs(fullPath);
-
-            //        // TODO: 临时
-            //        return Json(new
-            //        {
-            //            result = "ok",
-            //            message = "上传视频成功",
-            //            url = (":WebUISite:/Upload/videos/" + courseBoxCreatorId + "/" + saveFileName)
-            //        });
-            //    }
-            //    else
-            //    {
-            //        return Json(new
-            //        {
-            //            result = "failed",
-            //            message = "上传失败，该课程不存在"
-            //        });
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    return Json(new
-            //    {
-            //        result = "failed",
-            //        message = "上传失败"
-            //    });
-            //} 
-            #endregion
-
-            #region + 变量
-            //文件大小（字节数）
-            long fileSize = 0;
-            //重命名的文件名称
-            string tempName = "";
-            //物理路径+重命名的文件名称
-            string fileName = "";
-            //文件扩展名
-            string extname = "";
-            //虚拟路径
-            string virtualPath = "/Upload/temp/videos/";
-            //上传固定路径
-            string path = Server.MapPath(virtualPath);
-            //上传文件夹名称
-            string dir = "";
-            //获取提交的文件
-            var file = Request.Files[0];
-            //反馈对象        
-            ZuiFileUploadResult _response = new ZuiFileUploadResult();
-            #endregion
-
-            #region + 服务器本地文件上传处理
-
             try
             {
-                if (file != null && !string.IsNullOrEmpty(file.FileName))
-                {
-                    dir = DateTime.Now.ToString("yyyy-MM-dd");
-                    if (!Directory.Exists(path + dir))
-                    {
-                        Directory.CreateDirectory(path + dir);
-                    }
-                    extname = file.FileName.Substring(file.FileName.LastIndexOf('.'), (file.FileName.Length - file.FileName.LastIndexOf('.')));
-                    tempName = Guid.NewGuid().ToString().Substring(0, 6) + extname;
-                    fileName = path + dir + "/" + tempName;
-                    fileSize += file.ContentLength;
-                    using (FileStream fs = System.IO.File.Create(fileName))
-                    {
-                        file.InputStream.CopyTo(fs);
-                        fs.Flush();
-                    }
-                    _response.result = "ok";
-                    _response.url = virtualPath + dir + "/" + tempName;
-                    _response.message = "服务器本地上传成功";
-                }
-            }
-            catch (Exception ex)
-            {
-                _response.result = "failed";
-                _response.message = "服务器本地上传失败/n" + "错误信息：" + ex.Message;
-            }
-
-            #endregion
-
-            #region + OSS对象云存储上传
-            try
-            {
-                FileStream fstream = new FileStream(Server.MapPath(virtualPath + dir + "/" + tempName), FileMode.Open);
-                int nBytes = (int)fstream.Length;//计算流的长度
-                byte[] byteArray = new byte[nBytes];//初始化用于MemoryStream的Buffer
-                int nBytesRead = fstream.Read(byteArray, 0, nBytes);//将File里的内容一次性的全部读到byteArray中去
-                                                                    //上传到阿里云  
-                using (Stream fileStream = new MemoryStream(byteArray))//转成Stream流  
-                {
-                    string md5 = OssUtils.ComputeContentMd5(fileStream, nBytes);
-                    string today = DateTime.Now.ToString("yyyyMMdd");
-                    string FileName = tempName;//文件名=文件名+当前上传时间  
-                    string FilePath = "adv/index/" + today + "/" + FileName;//云文件保存路径  
-                    OSSConfig config = new OSSConfig();
-                    //这边的AccessKey 等等信息可以从配置文件获取 也可以直接写死
-                    //初始化阿里云配置--外网Endpoint、访问ID、访问password  
-                    OssClient aliyun = new OssClient(config.OSSEndPoint, config.OSSAccessKey, config.OSSAccessSecret);
-
-                    //将文件md5值赋值给meat头信息，服务器验证文件MD5  
-                    var objectMeta = new ObjectMetadata
-                    {
-                        ContentMd5 = md5,
-                    };
-                    //文件上传--空间名、文件保存路径、文件流、meta头信息(文件md5) //返回meta头信息(文件md5)  
-                    aliyun.PutObject(config.Bucket, FilePath, fileStream, objectMeta);
-
-                    _response.result = "ok";
-                    _response.url = config.OSSBindDomain + FilePath;
-                }
-            }
-            catch (Exception ex)
-            {
-                _response.result = "failed";
-                _response.message = "OSS对象云存储上传失败/n" + "错误信息：" + ex.Message;
-                //删除本地上传的图片
-                System.IO.File.Delete(fileName);
-            }
-            #endregion
-            return Json(_response);
-
-
-
-
-        }
-        #endregion
-
-        #region 上传视频-为某课程上传字幕
-        /// <summary>
-        /// 上传视频-为某课程上传视频
-        /// </summary>
-        /// <param name="id">课程ID</param>
-        /// <returns></returns>
-        [HttpPost]
-        public JsonResult UploadSubTitle(int id)
-        {
-            try
-            {
+                // 该课程存在吗？
                 if (Container.Instance.Resolve<CourseBoxService>().Exist(id))
                 {
                     int courseBoxCreatorId = Container.Instance.Resolve<CourseBoxService>().GetEntity(id).Creator.ID;
 
-                    // 保存到课程创建者的文件夹
-                    string basePath = "~/Upload/subtitles/" + courseBoxCreatorId + "/";
+                    // 保存到此课程的文件夹
+                    string basePath = $"~/Upload/videos/courseBox/{id}/";
 
                     // 如果路径含有~，即需要服务器映射为绝对路径，则进行映射
                     basePath = (basePath.IndexOf("~") > -1) ? System.Web.HttpContext.Current.Server.MapPath(basePath) : basePath;
@@ -549,16 +429,82 @@ namespace WebUI.Areas.Admin.Controllers
                     file.SaveAs(fullPath);
 
                     // TODO: 临时
-                    return Json(new
+                    return Json(new ZuiFileUploadResult
                     {
                         result = "ok",
-                        message = "上传成功",
-                        url = (":WebUISite:/Upload/subtitles/" + courseBoxCreatorId + "/" + saveFileName)
+                        message = "上传视频成功",
+                        // 返回相对路径，因为就是在这个服务器上传的，所以就返回相对路径，提交时，判断是否是相对路径，如果是，则说明是此服务器上传的，再加上此服务器上传的标记
+                        url = $"/Upload/videos/courseBox/{id}/" + saveFileName
                     });
                 }
                 else
                 {
-                    return Json(new
+                    return Json(new ZuiFileUploadResult
+                    {
+                        result = "failed",
+                        message = "上传失败，该课程不存在"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new ZuiFileUploadResult
+                {
+                    result = "failed",
+                    message = "上传失败"
+                });
+            }
+        }
+        #endregion
+
+        #region 上传字幕-为某课程上传字幕
+        /// <summary>
+        /// 上传视频-为某课程上传视频
+        /// </summary>
+        /// <param name="id">课程ID</param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult UploadSubTitle(int id)
+        {
+            try
+            {
+                if (Container.Instance.Resolve<CourseBoxService>().Exist(id))
+                {
+                    int courseBoxCreatorId = Container.Instance.Resolve<CourseBoxService>().GetEntity(id).Creator.ID;
+
+                    // 保存到此课程的文件夹
+                    string basePath = $"~/Upload/subtitles/courseBox/{id}/";
+
+                    // 如果路径含有~，即需要服务器映射为绝对路径，则进行映射
+                    basePath = (basePath.IndexOf("~") > -1) ? System.Web.HttpContext.Current.Server.MapPath(basePath) : basePath;
+                    HttpPostedFile file = System.Web.HttpContext.Current.Request.Files[0];
+                    // 如果目录不存在，则创建目录
+                    if (!Directory.Exists(basePath))
+                    {
+                        Directory.CreateDirectory(basePath);
+                    }
+
+                    string fileName = System.Web.HttpContext.Current.Request["name"];
+                    if (string.IsNullOrEmpty(fileName))
+                    {
+                        fileName = file.FileName;
+                    }
+                    // 文件保存
+                    string saveFileName = Guid.NewGuid().ToString() + "." + file.FileName.Split('.')[1];
+                    string fullPath = basePath + saveFileName;
+                    file.SaveAs(fullPath);
+
+                    // TODO: 临时
+                    return Json(new ZuiFileUploadResult
+                    {
+                        result = "ok",
+                        message = "上传成功",
+                        url = $"/Upload/subtitles/courseBox/{id}/" + saveFileName
+                    });
+                }
+                else
+                {
+                    return Json(new ZuiFileUploadResult
                     {
                         result = "failed",
                         message = "上传失败，该课程不存在",
@@ -567,7 +513,7 @@ namespace WebUI.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new
+                return Json(new ZuiFileUploadResult
                 {
                     result = "failed",
                     message = "上传失败"
@@ -584,8 +530,8 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 int currentUserId = AccountManager.GetCurrentUserInfo().ID;
 
-                // 保存到课程创建者的文件夹
-                string basePath = "~/Upload/images/" + currentUserId + "/";
+                // 保存到当前用户的文件夹
+                string basePath = $"~/Upload/images/{currentUserId}/{DateTime.Now.ToString("yyyy-MM-dd")}/";
 
                 // 如果路径含有~，即需要服务器映射为绝对路径，则进行映射
                 basePath = (basePath.IndexOf("~") > -1) ? System.Web.HttpContext.Current.Server.MapPath(basePath) : basePath;
@@ -602,21 +548,20 @@ namespace WebUI.Areas.Admin.Controllers
                     fileName = file.FileName;
                 }
                 // 文件保存
-                string saveFileName = Guid.NewGuid().ToString() + "." + file.FileName.Split('.')[1];
+                string saveFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                 string fullPath = basePath + saveFileName;
                 file.SaveAs(fullPath);
 
-                // TODO: 临时
-                return Json(new
+                return Json(new ZuiFileUploadResult
                 {
                     result = "ok",
                     message = "上传成功",
-                    url = (":WebUISite:/Upload/images/" + currentUserId + "/" + saveFileName)
+                    url = $"/Upload/images/{currentUserId}/{DateTime.Now.ToString("yyyy-MM-dd")}/" + saveFileName
                 });
             }
             catch (Exception ex)
             {
-                return Json(new
+                return Json(new ZuiFileUploadResult
                 {
                     result = "failed",
                     message = "上传失败"
@@ -625,158 +570,13 @@ namespace WebUI.Areas.Admin.Controllers
         }
         #endregion
 
-        // TODO: 当在 编辑课程基本信息 页，删除封面图时，发送请求到后端，删除物理文件
+        // TODO: 当在 编辑课程基本信息 页，删除封面图时，发送请求到后端，删除物理文件，同理，当删除视频文件时，也发送请求到后端
+        // 最好的做法时，服务端收到通知后，不立即删除，而是插入一条记录到队列表，并且为未开启状态，当管理员审阅后，才标记开启，这时就会被计划任务删除
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-        /// <summary>
-        /// 上传轮播图片
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost]
-        public ActionResult Upload()
-        {
-            #region + 变量
-            //文件大小（字节数）
-            long fileSize = 0;
-            //重命名的文件名称
-            string tempName = "";
-            //物理路径+重命名的文件名称
-            string fileName = "";
-            //文件扩展名
-            string extname = "";
-            //虚拟路径
-            string virtualPath = "/Uploads/temp/videos/";
-            //上传固定路径
-            string path = Server.MapPath(virtualPath);
-            //上传文件夹名称
-            string dir = "";
-            //获取提交的文件
-            var file = Request.Files[0];
-            //反馈对象        
-            ResponseData _response = new ResponseData();
-            #endregion
-
-            #region + 服务器本地文件上传处理
-
-            try
-            {
-                if (file != null && !string.IsNullOrEmpty(file.FileName))
-                {
-                    dir = DateTime.Now.ToString("yyyy-MM-dd");
-                    if (!Directory.Exists(path + dir))
-                    {
-                        Directory.CreateDirectory(path + dir);
-                    }
-                    extname = file.FileName.Substring(file.FileName.LastIndexOf('.'), (file.FileName.Length - file.FileName.LastIndexOf('.')));
-                    tempName = Guid.NewGuid().ToString().Substring(0, 6) + extname;
-                    fileName = path + dir + "/" + tempName;
-                    fileSize += file.ContentLength;
-                    using (FileStream fs = System.IO.File.Create(fileName))
-                    {
-                        file.InputStream.CopyTo(fs);
-                        fs.Flush();
-                    }
-                    _response.data = new
-                    {
-                        src = virtualPath + dir + "/" + tempName,
-                    };
-                    _response.message = "服务器本地上传成功";
-                }
-            }
-            catch (Exception ex)
-            {
-                _response.code = -1;
-                _response.message = "服务器本地上传失败/n" + "错误信息：" + ex.Message;
-            }
-
-            #endregion
-
-            #region + OSS对象云存储上传
-            try
-            {
-                FileStream fstream = new FileStream(Server.MapPath(virtualPath + dir + "/" + tempName), FileMode.Open);
-                int nBytes = (int)fstream.Length;//计算流的长度
-                byte[] byteArray = new byte[nBytes];//初始化用于MemoryStream的Buffer
-                int nBytesRead = fstream.Read(byteArray, 0, nBytes);//将File里的内容一次性的全部读到byteArray中去
-                                                                    //上传到阿里云  
-                using (Stream fileStream = new MemoryStream(byteArray))//转成Stream流  
-                {
-                    string md5 = OssUtils.ComputeContentMd5(fileStream, nBytes);
-                    string today = DateTime.Now.ToString("yyyyMMdd");
-                    string FileName = tempName;//文件名=文件名+当前上传时间  
-                    string FilePath = "adv/index/" + today + "/" + FileName;//云文件保存路径  
-                    OSSConfig config = new OSSConfig();
-                    //这边的AccessKey 等等信息可以从配置文件获取 也可以直接写死
-                    //初始化阿里云配置--外网Endpoint、访问ID、访问password  
-                    OssClient aliyun = new OssClient(config.OSSEndPoint, config.OSSAccessKey, config.OSSAccessSecret);
-
-                    //将文件md5值赋值给meat头信息，服务器验证文件MD5  
-                    var objectMeta = new ObjectMetadata
-                    {
-                        ContentMd5 = md5,
-                    };
-                    //文件上传--空间名、文件保存路径、文件流、meta头信息(文件md5) //返回meta头信息(文件md5)  
-                    aliyun.PutObject(config.Bucket, FilePath, fileStream, objectMeta);
-
-                    _response.data = new
-                    {
-                        src = config.OSSBindDomain + FilePath,
-                    };
-                }
-            }
-            catch (Exception ex)
-            {
-                _response.code = -2;
-                _response.message = "OSS对象云存储上传失败/n" + "错误信息：" + ex.Message;
-                //删除本地上传的图片
-                System.IO.File.Delete(fileName);
-            }
-            #endregion
-            return Json(_response);
-        }
-
-
-
-        #region OSS配置类
-        public sealed class OSSConfig
-        {
-            public string OSSAccessKey { get; set; } = "LTAI4FiVhJMiebk8v83GFrUq";
-
-            public string OSSAccessSecret { get; set; } = "W0GfXXxij1PVWKUrnhlrQebfoDOyok";
-
-            public string OSSEndPoint { get; set; } = "oss-cn-beijing.aliyuncs.com";
-
-            public string Bucket { get; set; } = "remstatic";
-
-            /// <summary>
-            /// 注意：如果用于返回完整URL，要加 http:// ，最后也要加 /
-            /// </summary>
-            public string OSSBindDomain { get; set; } = "http://remstatic.oss-cn-beijing.aliyuncs.com/";
-        }
-        #endregion
-
-
-
-
-
-
-
-
-
+        #region Zui文件上传结果类
         public sealed class ZuiFileUploadResult
         {
             /// <summary>
@@ -785,10 +585,17 @@ namespace WebUI.Areas.Admin.Controllers
             /// </summary>
             public string result { get; set; }
 
+            /// <summary>
+            /// 提示消息
+            /// </summary>
             public string message { get; set; }
 
+            /// <summary>
+            /// 如果开启显示下载链接，则此为文件下载链接
+            /// </summary>
             public string url { get; set; }
         }
+        #endregion
 
 
 

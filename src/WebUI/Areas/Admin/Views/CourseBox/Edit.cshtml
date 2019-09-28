@@ -6,44 +6,25 @@
 
 	string picUrl = ViewBag.PicUrl;
 	long picSize = ViewBag.PicSize;
+	string picFileName = "封面图" + System.IO.Path.GetExtension(Model.PicUrl);
 
 	Html.EnableClientValidation(false);
 }
 @section head {
-	<!-- date-range-picker -->
-	<link href="/assets/libs/AdminLTE/bower_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
 	<link href="/assets/libs/zui/dist/css/zui.min.css" rel="stylesheet" />
 	<link href="/assets/libs/zui/dist/lib/uploader/zui.uploader.css" rel="stylesheet" />
 }
 @section body {
-	<!-- date-range-picker -->
-	<script src="/assets/libs/AdminLTE/bower_components/moment/min/moment.min.js"></script>
-	<script src="/assets/libs/AdminLTE/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+	<script src="/assets/js/tools.js"></script>
 	<script src="/assets/libs/zui/dist/js/zui.min.js"></script>
 	<script src="/assets/libs/zui/dist/lib/uploader/zui.uploader.min.js"></script>
 	<script>
 
-		function showMessage(message, type) {
-			$("#js-message").fadeIn();
-			switch (type) {
-				case -1:
-					$("#js-message").attr("class", "alert alert-danger").find(".message").html(message);
-					break;
-				case 1:
-					$("#js-message").attr("class", "alert alert-success").find(".message").html(message);
-					break;
-			}
-			// 3s 后隐藏
-			setTimeout(function () {
-				$("#js-message").fadeOut("slow");
-			}, 3000);
-		}
-
 		function onSuccess(data) {
 			if (data.code <= 0) {
-				showMessage(data.message, -1);
+				sendTipMsg(data.message, -1);
 			} else {
-				showMessage(data.message, 1);
+				sendTipMsg(data.message, 1);
 			}
 			$("#js-btn-save").val("保存").removeAttr("disabled");
 		}
@@ -80,7 +61,7 @@
 				multi_selection: false,
 				limitFilesCount: 1,
 				staticFiles: [
-					  {name: '@picUrl', size: @picSize , url: '@picUrl', type: 'image/jpeg'},
+					  {name: '@picFileName', size: @picSize , url: '@picUrl', type: 'image/jpeg'},
 				],
 				deleteActionOnDone: function(file, doRemoveFile) {
 					doRemoveFile();
@@ -127,7 +108,7 @@
 						</div>
 						<div class="form-group">
 							<label for="InputEmail">课程描述</label>
-							@Html.TextBoxFor(m => m.Description, new { @class = "form-control", placeholder = "请输入课程描述", type = "email" })
+							@Html.TextAreaFor(m => m.Description, new { @class = "form-control", placeholder = "请输入课程描述", type = "email" })
 						</div>
 						<div class="form-group">
 							<label>开始时间</label>

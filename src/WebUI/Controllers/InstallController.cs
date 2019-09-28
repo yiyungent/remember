@@ -934,7 +934,8 @@ namespace WebUI.Controllers
                             CourseBox = new CourseBox { ID = i + 1 },
                             Page = j + 1,
                             PlayUrl = playUrls[playIndex],
-                            Title = Server.UrlDecode(playUrls[playIndex]).Substring(Server.UrlDecode(playUrls[playIndex]).LastIndexOf("/") + 1),
+                            // 获取文件名(无扩展名)作为标题
+                            Title = System.IO.Path.GetFileNameWithoutExtension(Server.UrlDecode(playUrls[playIndex])),
                             Size = 141344,
                         });
                         playIndex++;
