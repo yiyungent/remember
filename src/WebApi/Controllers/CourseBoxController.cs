@@ -83,28 +83,34 @@ namespace WebApi.Controllers
                 }
 
                 // 登录用户增加返回学习记录数据
-                if (User.Identity != null && User.Identity is UserIdentity)
+                UserInfo user = AccountManager.GetCurrentUserInfo();
+                if (user != null)
                 {
                     Learner_CourseBox learner_CourseBox = Container.Instance.Resolve<Learner_CourseBoxService>().Query(new List<ICriterion>
                     {
                         Expression.And(
-                         Expression.Eq("Learner.ID", ((UserIdentity)User.Identity).ID),
+                         Expression.Eq("Learner.ID", user.ID),
                          Expression.Eq("CourseBox.ID", id)
                          )
                     }).FirstOrDefault();
                     // 此用户有学习此课程
                     if (learner_CourseBox != null)
                     {
-                        Learner_VideoInfo learner_LastAccessVideoInfo = Container.Instance.Resolve<Learner_VideoInfoService>().GetEntity(learner_CourseBox.LastPlayVideoInfo.ID);
-                        viewModel.JoinTime = learner_CourseBox.JoinTime.ToTimeStamp13();
-                        viewModel.LastPlayVideoInfo = new CourseBoxViewModel.VideoInfoViewModel
+                        Learner_VideoInfo learner_LastAccessVideoInfo = null;
+                        if (learner_CourseBox.LastPlayVideoInfo != null)
                         {
-                            ID = learner_CourseBox.LastPlayVideoInfo.ID,
-                            Page = learner_CourseBox.LastPlayVideoInfo.Page,
-                            Title = learner_CourseBox.LastPlayVideoInfo.Title,
-                            LastPlayAt = learner_LastAccessVideoInfo.LastPlayAt,
-                            ProgressAt = learner_LastAccessVideoInfo.ProgressAt
-                        };
+                            learner_LastAccessVideoInfo = Container.Instance.Resolve<Learner_VideoInfoService>().GetEntity(learner_CourseBox.LastPlayVideoInfo.ID);
+                            viewModel.LastPlayVideoInfo = new CourseBoxViewModel.VideoInfoViewModel
+                            {
+                                ID = learner_CourseBox.LastPlayVideoInfo.ID,
+                                Page = learner_CourseBox.LastPlayVideoInfo.Page,
+                                Title = learner_CourseBox.LastPlayVideoInfo.Title,
+                                LastPlayAt = learner_LastAccessVideoInfo.LastPlayAt,
+                                ProgressAt = learner_LastAccessVideoInfo.ProgressAt
+                            };
+                        }
+
+                        viewModel.JoinTime = learner_CourseBox.JoinTime.ToTimeStamp13();
                         viewModel.SpendTime = learner_CourseBox.SpendTime;
 
                         for (int i = 0; i < viewModel.VideoInfos.Count; i++)
@@ -113,12 +119,12 @@ namespace WebApi.Controllers
                             Learner_VideoInfo learner_VideoInfo = Container.Instance.Resolve<Learner_VideoInfoService>().Query(new List<ICriterion>
                             {
                                 Expression.And(
-                                    Expression.Eq("Learner.ID", ((UserIdentity)User.Identity).ID ),
+                                    Expression.Eq("Learner.ID", user.ID ),
                                     Expression.Eq("VideoInfo.ID", videoInfoId)
                                 )
                             }).FirstOrDefault();
-                            viewModel.VideoInfos[i].LastPlayAt = learner_VideoInfo.LastPlayAt;
-                            viewModel.VideoInfos[i].ProgressAt = learner_VideoInfo.ProgressAt;
+                            viewModel.VideoInfos[i].LastPlayAt = learner_VideoInfo?.LastPlayAt ?? 0;
+                            viewModel.VideoInfos[i].ProgressAt = learner_VideoInfo?.ProgressAt ?? 0;
                         }
                     }
                 }
@@ -126,7 +132,7 @@ namespace WebApi.Controllers
                 responseData = new ResponseData
                 {
                     Code = 1,
-                    Message = "成功",
+                    Message = "获取课程信息成功",
                     Data = viewModel
                 };
             }
@@ -273,11 +279,15 @@ namespace WebApi.Controllers
                 bool isExist = Container.Instance.Resolve<CourseBoxService>().Exist(courseBoxId);
                 if (isExist)
                 {
-                    bool isLearned = Container.Instance.Resolve<Learner_CourseBoxService>().Count(Expression.And
-                    (
-                        Expression.Eq("CourseBox.ID", courseBoxId),
-                        Expression.Eq("Learner.ID", ((UserIdentity)User.Identity).ID)
-                    )) >= 1;
+                    bool isLearned = Container.Instance.Resolve<Learner_CourseBoxService>().Count(
+                        Expression.And
+                        (
+                            Expression.Eq("Status", Domain.Base.StatusEnum.Normal),
+                            Expression.And(
+                                Expression.Eq("Learner.ID", ((UserIdentity)User.Identity).ID),
+                                Expression.Eq("CourseBox.ID", courseBoxId)
+                            )
+                        )) >= 1;
                     if (isLearned)
                     {
                         try
@@ -317,9 +327,10 @@ namespace WebApi.Controllers
                         try
                         {
                             // 加入学习
+                            DateTime jointTime = DateTime.Now;
                             Container.Instance.Resolve<Learner_CourseBoxService>().Create(new Learner_CourseBox
                             {
-                                JoinTime = DateTime.Now,
+                                JoinTime = jointTime,
                                 CourseBox = Container.Instance.Resolve<CourseBoxService>().GetEntity(courseBoxId),
                                 Learner = new UserInfo { ID = ((UserIdentity)User.Identity).ID },
                             });
@@ -327,7 +338,11 @@ namespace WebApi.Controllers
                             responseData = new ResponseData
                             {
                                 Code = 1,
-                                Message = "加入学习此课程成功"
+                                Message = "加入学习此课程成功",
+                                Data = new
+                                {
+                                    joinTime = jointTime.ToTimeStamp13()
+                                }
                             };
                         }
                         catch (Exception ex)
