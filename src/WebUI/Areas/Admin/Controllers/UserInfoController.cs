@@ -28,12 +28,7 @@ namespace WebUI.Areas.Admin.Controllers
         #region Ctor
         public UserInfoController()
         {
-            ViewBag.PageHeader = "用户管理";
-            ViewBag.PageHeaderDescription = "用户管理";
-            ViewBag.BreadcrumbList = new List<BreadcrumbItem>
-            {
-                new BreadcrumbItem("业务管理"),
-            };
+           
         }
         #endregion
 

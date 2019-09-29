@@ -108,13 +108,13 @@ namespace WebUI.Controllers
                 {
                     { "DefaultTemplateName", "Blue" },
 
-                    { "WebApiSite", "http://api.tikotiko.fun/" },
+                    { "WebApiSite", "http://localhost:7784/" },
                     { "WebApiTitle","remember" },
                     { "WebApiDesc", "remember是xx推出的专业在线教育平台，聚合大量优质教育机构和名师，下设职业培训、公务员考试、托福雅思、考证考级、英语口语、中小学教育等众多在线学习精品课程，打造老师在线上课教学、学生及时互动学习的课堂。"},
                     { "WebApiKeywords", "" },
                     { "WebApiStat", "" },
 
-                    { "WebUISite", "http://www.tikotiko.fun/" },
+                    { "WebUISite", "http://localhost:21788/" },
                     { "WebUITitle", "remember - 在线学习" },
                     { "WebUIDesc", "remember是xx推出的专业在线教育平台，聚合大量优质教育机构和名师，下设职业培训、公务员考试、托福雅思、考证考级、英语口语、中小学教育等众多在线学习精品课程，打造老师在线上课教学、学生及时互动学习的课堂。"},
                     { "WebUIKeywords", "" },
@@ -307,6 +307,15 @@ namespace WebUI.Controllers
                     AreaName = "Admin",
                     ParentMenu = parentMenu,
                     SortCode = 10,
+                });
+                Container.Instance.Resolve<Sys_MenuService>().Create(new Sys_Menu()
+                {
+                    Name = "访问日志",
+                    ControllerName = "LogInfo",
+                    ActionName = "Index",
+                    AreaName = "Admin",
+                    ParentMenu = parentMenu,
+                    SortCode = 20,
                 });
                 #endregion
 
@@ -576,6 +585,22 @@ namespace WebUI.Controllers
                     AuthKey = "Admin.CourseBox.EditVideo",
                     Name = "视频课件-编辑",
                     Sys_Menu = courseBox_Sys_Menu
+                });
+                #endregion
+
+                #region 访问日志
+                Sys_Menu logInfo_Sys_Menu = Container.Instance.Resolve<Sys_MenuService>().Query(new List<ICriterion> { Expression.Eq("ControllerName", "LogInfo") }).FirstOrDefault();
+                Container.Instance.Resolve<FunctionInfoService>().Create(new FunctionInfo
+                {
+                    AuthKey = "Admin.LogInfo.Index",
+                    Name = "访问日志-列表",
+                    Sys_Menu = logInfo_Sys_Menu
+                });
+                Container.Instance.Resolve<FunctionInfoService>().Create(new FunctionInfo
+                {
+                    AuthKey = "Admin.LogInfo.Delete",
+                    Name = "访问日志-删除",
+                    Sys_Menu = logInfo_Sys_Menu
                 });
                 #endregion
 

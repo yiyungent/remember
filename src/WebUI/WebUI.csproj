@@ -8841,6 +8841,7 @@
     <Content Include="Areas\Admin\Views\CourseBox\EditVideo.cshtml" />
     <Content Include="Areas\Admin\Views\CourseBox\AddVideo.cshtml" />
     <Content Include="assets\libs\jquery\dist\jquery.min.map" />
+    <Content Include="Areas\Admin\Views\LogInfo\Index.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.12.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -8879,6 +8880,7 @@
     <Compile Include="Areas\Admin\Controllers\ControlController.cs" />
     <Compile Include="Areas\Admin\Controllers\CourseBoxController.cs" />
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Admin\Controllers\LogInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\PluginController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoleInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\SettingController.cs" />
