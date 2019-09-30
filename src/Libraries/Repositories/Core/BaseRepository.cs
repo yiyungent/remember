@@ -1,27 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Core;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Repositories.Core
 {
+    /// <summary>
+    /// TODO: 目前所有 SaveChanges()都在这里完成，
+    /// 而一个业务中经常涉及到对多张表操作，我们期望连接一次数据库，完成对多张表数据的操作，提高性能
+    /// 所以，可增加数据会话层，来统一 SaveChanges()
+    /// 数据会话层：就是一个工厂类，负责完成所有数据操作类实例的创建，然后业务层通过数据会话层来获取要操作数据类的实例,所以数据会话层将业务层与数据层解耦。
+    /// 在数据会话层中提供一个方法：完成所有数据的保存
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class BaseRepository<T> : IDependency, IRepository<T> where T : class, new()
     {
-        protected readonly DbContext Context;
+        protected readonly DbContext DbContext;
 
         public BaseRepository(DbContext context)
         {
-            Context = context;
+            DbContext = context;
         }
 
         /// <summary>
         /// Gets all objects from database
         /// </summary>
         /// <returns></returns>
-        public IQueryable<TEntity> All()
+        public IQueryable<T> All()
         {
-            return Context.Set<TEntity>().AsQueryable();
+            return DbContext.Set<T>().AsQueryable();
         }
 
         /// <summary>
@@ -29,9 +40,9 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="predicate">Specified a filter</param>
         /// <returns></returns>
-        public virtual IQueryable<TEntity> Filter(Expression<Func<TEntity, bool>> predicate)
+        public virtual IQueryable<T> Filter(Expression<Func<T, bool>> predicate)
         {
-            return Context.Set<TEntity>().Where<TEntity>(predicate).AsQueryable<TEntity>();
+            return DbContext.Set<T>().Where<T>(predicate).AsQueryable<T>();
         }
 
         /// <summary>
@@ -42,13 +53,13 @@ namespace Repositories.Core
         /// <param name="index">Specified the page index.</param>
         /// <param name="size">Specified the page size</param>
         /// <returns></returns>
-        public virtual IQueryable<TEntity> Filter(Expression<Func<TEntity, bool>> filter, out int total, int index = 0,
+        public virtual IQueryable<T> Filter(Expression<Func<T, bool>> filter, out int total, int index = 0,
             int size = 50)
         {
             var skipCount = index * size;
             var resetSet = filter != null
-                ? Context.Set<TEntity>().Where<TEntity>(filter).AsQueryable()
-                : Context.Set<TEntity>().AsQueryable();
+                ? DbContext.Set<T>().Where<T>(filter).AsQueryable()
+                : DbContext.Set<T>().AsQueryable();
             resetSet = skipCount == 0 ? resetSet.Take(size) : resetSet.Skip(skipCount).Take(size);
             total = resetSet.Count();
             return resetSet.AsQueryable();
@@ -59,9 +70,9 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="predicate">Specified the filter expression</param>
         /// <returns></returns>
-        public bool Contains(Expression<Func<TEntity, bool>> predicate)
+        public bool Contains(Expression<Func<T, bool>> predicate)
         {
-            return Context.Set<TEntity>().Any(predicate);
+            return DbContext.Set<T>().Any(predicate);
         }
 
         /// <summary>
@@ -69,9 +80,9 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="keys">Specified the search keys.</param>
         /// <returns></returns>
-        public virtual TEntity Find(params object[] keys)
+        public virtual T Find(params object[] keys)
         {
-            return Context.Set<TEntity>().Find(keys);
+            return DbContext.Set<T>().Find(keys);
         }
 
         /// <summary>
@@ -79,9 +90,9 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public virtual TEntity Find(Expression<Func<TEntity, bool>> predicate)
+        public virtual T Find(Expression<Func<T, bool>> predicate)
         {
-            return Context.Set<TEntity>().FirstOrDefault<TEntity>(predicate);
+            return DbContext.Set<T>().FirstOrDefault<T>(predicate);
         }
 
         /// <summary>
@@ -89,18 +100,22 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="t">Specified a new object to create.</param>
         /// <returns></returns>
-        public virtual void Create(TEntity t)
+        public virtual void Create(T t)
         {
-            Context.Set<TEntity>().Add(t);
+            DbContext.Set<T>().Add(t);
+
+            DbContext.SaveChanges();
         }
 
         /// <summary>
         /// Delete the object from database.
         /// </summary>
         /// <param name="t">Specified a existing object to delete.</param>
-        public virtual void Delete(TEntity t)
+        public virtual void Delete(T t)
         {
-            Context.Set<TEntity>().Remove(t);
+            DbContext.Set<T>().Remove(t);
+
+            DbContext.SaveChanges();
         }
 
         /// <summary>
@@ -108,12 +123,12 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public virtual int Delete(Expression<Func<TEntity, bool>> predicate)
+        public virtual int Delete(Expression<Func<T, bool>> predicate)
         {
             var objects = Filter(predicate);
             foreach (var obj in objects)
-                Context.Set<TEntity>().Remove(obj);
-            return Context.SaveChanges();
+                DbContext.Set<T>().Remove(obj);
+            return DbContext.SaveChanges();
         }
 
         /// <summary>
@@ -121,13 +136,15 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="t">Specified the object to save.</param>
         /// <returns></returns>
-        public virtual void Update(TEntity t)
+        public virtual void Update(T t)
         {
             try
             {
-                var entry = Context.Entry(t);
-                Context.Set<TEntity>().Attach(t);
+                var entry = DbContext.Entry(t);
+                DbContext.Set<T>().Attach(t);
                 entry.State = EntityState.Modified;
+
+                DbContext.SaveChanges();
             }
             catch (OptimisticConcurrencyException ex)
             {
@@ -140,7 +157,7 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> expression)
+        public T FirstOrDefault(Expression<Func<T, bool>> expression)
         {
             return All().FirstOrDefault(expression);
         }

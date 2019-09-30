@@ -41,7 +41,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\BaseService.cs" />
+    <Compile Include="Core\IService.cs" />
+    <Compile Include="Implement\ArticleService.cs" />
+    <Compile Include="Interface\IArticleService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj">
+      <Project>{5130CC63-704F-40E6-B0DE-3A92E1448FA3}</Project>
+      <Name>Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Repositories\Repositories.csproj">
+      <Project>{EFC4D84D-269D-4555-8E61-390E087BB603}</Project>
+      <Name>Repositories</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -52,18 +52,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\BaseRepository.cs" />
+    <Compile Include="Core\DbFactory.cs" />
     <Compile Include="Core\IDependency.cs" />
     <Compile Include="Core\IRepository.cs" />
-    <Compile Include="Core\IUnitOfWork.cs" />
-    <Compile Include="Core\UnitOfWork.cs" />
+    <Compile Include="Core\RemDbContext.cs" />
+    <Compile Include="Implement\ArticleRepository.cs" />
+    <Compile Include="Interface\IArticleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Interface\" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
+    <ProjectReference Include="..\Domain\Domain.csproj">
+      <Project>{5130cc63-704f-40e6-b0de-3a92e1448fa3}</Project>
+      <Name>Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

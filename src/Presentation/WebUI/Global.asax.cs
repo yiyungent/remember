@@ -1,7 +1,12 @@
 ﻿using Autofac;
 using Autofac.Features.ResolveAnything;
 using Autofac.Integration.Mvc;
+using AutoMapperConfig;
+using Domain;
 using Repositories.Core;
+using Services.Implement;
+using Services.Interface;
+using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
 using System.Web.Compilation;
@@ -18,52 +23,35 @@ namespace WebUI
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
             AutofacRegister();
+            AutoMapperRegister();
         }
 
-        #region AutofacReg
+        #region Autofac
         private void AutofacRegister()
         {
             var builder = new ContainerBuilder();
 
-            //注册MvcApplication程序集中所有的控制器
+            // 注册MvcApplication程序集中所有的控制器
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
 
-            //注册仓储层服务
-            //builder.RegisterType<PostRepository>().As<IPostRepository>();
+            // 注册仓储层服务
+            //builder.RegisterType<ArticleRepository>().As<IArticleRepository>();
 
-            #region 使用反射加载程序集修改前的写法
-            //注册基于接口约束的实体
-            //var assembly = AppDomain.CurrentDomain.GetAssemblies();
-            //builder.RegisterAssemblyTypes(assembly)
-            //    .Where(
-            //        t => t.GetInterfaces()
-            //            .Any(i => i.IsAssignableFrom(typeof(IDependency)))
-            //    )
-            //    .AsImplementedInterfaces()
-            //    .InstancePerDependency();
-            #endregion
+            // 注册服务层服务
+            //builder.RegisterType<ArticleService>().As<IArticleService>();
 
-            //注册仓储层服务
-            //builder.RegisterType<PostRepository>().As<IPostRepository>();
-            //注册基于接口约束的实体
-            //var assembly = AppDomain.CurrentDomain.GetAssemblies();
-
+            // 注册基于接口约束的实体
             var assemblies = BuildManager.GetReferencedAssemblies().Cast<Assembly>()
                 .Where(
                     assembly =>
                         assembly.GetTypes().FirstOrDefault(type => type.GetInterfaces().Contains(typeof(IDependency))) !=
                         null
                 );
-
             builder.RegisterAssemblyTypes(assemblies.ToArray())
                 .AsImplementedInterfaces()
                 .InstancePerDependency();
 
-
-            //注册服务层服务
-            //builder.RegisterType<PostService>().As<IPostService>();
-
-            //add the Entity Framework context to make sure only one context per request
+            // add the Entity Framework context to make sure only one context per request
             builder.RegisterType<RemDbContext>().InstancePerRequest();
             builder.Register(c => c.Resolve<RemDbContext>()).As<DbContext>().InstancePerRequest();
 
@@ -75,6 +63,16 @@ namespace WebUI
             //设置依赖注入解析器
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 
+        }
+        #endregion
+
+        #region AutoMapper
+        /// <summary>
+        /// AutoMapper的配置初始化
+        /// </summary>
+        private void AutoMapperRegister()
+        {
+            new AutoMapperStartupTask().Execute();
         } 
         #endregion
     }

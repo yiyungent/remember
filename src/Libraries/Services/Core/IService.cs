@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Repositories.Core
+namespace Services.Core
 {
     /// <summary>
-    /// 仓储通用接口类
+    /// 服务接口
     /// </summary>
-    /// <typeparam name="T">泛型实体类</typeparam>
-    public interface IRepository<T> where T : class, new()
+    /// <typeparam name="T"></typeparam>
+    public interface IService<T>
     {
         /// <summary>
         /// Gets all objects from database

@@ -37,9 +37,17 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.Data, Version=6.9.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MySql.Data.6.9.12\lib\net45\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.9.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MySql.Data.Entity.6.9.12\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,13 +56,43 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Article.cs" />
+    <Compile Include="Entities\Cardbox.cs" />
+    <Compile Include="Entities\Cardinfo.cs" />
+    <Compile Include="Entities\Comment.cs" />
+    <Compile Include="Entities\Comment_dislike.cs" />
+    <Compile Include="Entities\Comment_like.cs" />
+    <Compile Include="Entities\Coursebox.cs" />
+    <Compile Include="Entities\Coursebox_Comment.cs" />
+    <Compile Include="Entities\Coursebox_Dislike.cs" />
+    <Compile Include="Entities\Coursebox_Like.cs" />
+    <Compile Include="Entities\Coursebox_Participant.cs" />
+    <Compile Include="Entities\Favorite.cs" />
+    <Compile Include="Entities\Favorite_CardBox.cs" />
+    <Compile Include="Entities\Favorite_CourseBox.cs" />
+    <Compile Include="Entities\Follower_Followed.cs" />
+    <Compile Include="Entities\FunctionInfo.cs" />
+    <Compile Include="Entities\Learner_CourseBox.cs" />
+    <Compile Include="Entities\Learner_VideoInfo.cs" />
+    <Compile Include="Entities\LogInfo.cs" />
+    <Compile Include="Entities\ParticipantInfo.cs" />
+    <Compile Include="Entities\RoleInfo.cs" />
+    <Compile Include="Entities\Role_Function.cs" />
+    <Compile Include="Entities\Role_Menu.cs" />
+    <Compile Include="Entities\Role_User.cs" />
+    <Compile Include="Entities\SearchDetail.cs" />
+    <Compile Include="Entities\SearchTotal.cs" />
+    <Compile Include="Entities\Setting.cs" />
+    <Compile Include="Entities\Sys_Menu.cs" />
+    <Compile Include="Entities\ThemeTemplate.cs" />
+    <Compile Include="Entities\UserInfo.cs" />
+    <Compile Include="Entities\User_CardBox_Forread.cs" />
+    <Compile Include="Entities\VideoInfo.cs" />
+    <Compile Include="Entities\VideoInfo_Comment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Entities\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

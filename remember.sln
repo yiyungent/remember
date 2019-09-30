@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewModel", "src\Libraries\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "src\Libraries\Core\Core.csproj", "{2F10194D-D842-48BB-802F-3066D7DB20B6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapperConfig", "src\Libraries\AutoMapperConfig\AutoMapperConfig.csproj", "{03AC9D3C-2B2D-4246-8562-C844832F1962}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{2F10194D-D842-48BB-802F-3066D7DB20B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F10194D-D842-48BB-802F-3066D7DB20B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F10194D-D842-48BB-802F-3066D7DB20B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03AC9D3C-2B2D-4246-8562-C844832F1962}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03AC9D3C-2B2D-4246-8562-C844832F1962}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03AC9D3C-2B2D-4246-8562-C844832F1962}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03AC9D3C-2B2D-4246-8562-C844832F1962}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,6 +105,7 @@ Global
 		{AFAF3E39-7F01-4947-8816-168B8B5ECAD2} = {12FF63F2-D12B-4386-9520-1A3FD94DE6B5}
 		{2249E988-AB3D-46C6-9EFD-B0CA7914652D} = {12FF63F2-D12B-4386-9520-1A3FD94DE6B5}
 		{2F10194D-D842-48BB-802F-3066D7DB20B6} = {12FF63F2-D12B-4386-9520-1A3FD94DE6B5}
+		{03AC9D3C-2B2D-4246-8562-C844832F1962} = {12FF63F2-D12B-4386-9520-1A3FD94DE6B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D08ED581-D4C9-4587-AC63-F892EDCD361A}

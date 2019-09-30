@@ -1,0 +1,26 @@
+﻿@using Domain.Entities
+@model IQueryable<Article>
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Index</title>
+</head>
+<body>
+	<div>
+		<ul>
+			@foreach (var item in Model)
+			{
+				<li>@item.ID</li>
+				<li>@item.Title</li>
+				<li>@item.Content</li>
+			}
+		</ul>
+	</div>
+</body>
+</html>
