@@ -1,7 +1,0 @@
-﻿FriendlyName: 排行榜
-SystemName: RankingChart
-Version: 2.06
-SupportedVersions: 0.1.0
-Author: hha
-DisplayOrder: 2
-FileName: RankingChart.dll

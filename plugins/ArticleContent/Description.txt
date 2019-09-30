@@ -1,7 +1,0 @@
-﻿FriendlyName: 文章内容
-SystemName: ArticleContent
-Version: 5.16
-SupportedVersions: 0.1.0,1.23
-Author: hha
-DisplayOrder: 5
-FileName: ArticleContent.dll
