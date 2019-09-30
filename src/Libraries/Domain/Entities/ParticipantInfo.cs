@@ -6,12 +6,9 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("r_moeci_com.participantinfo")]
     public partial class ParticipantInfo : BaseEntity
     {
         public int ID { get; set; }
-
-        public int? Status { get; set; }
 
         [Column(TypeName = "text")]
         [StringLength(65535)]

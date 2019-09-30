@@ -6,12 +6,9 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("r_moeci_com.favorite")]
     public partial class Favorite : BaseEntity
     {
         public int ID { get; set; }
-
-        public int? Status { get; set; }
 
         [Column(TypeName = "text")]
         [StringLength(65535)]
@@ -25,6 +22,13 @@ namespace Domain.Entities
 
         public DateTime? CreateTime { get; set; }
 
+        #region Relationships
+
+        [ForeignKey("Creator")]
         public int? CreatorId { get; set; }
+        [ForeignKey("CreatorId")]
+        public UserInfo Creator { get; set; } 
+
+        #endregion
     }
 }

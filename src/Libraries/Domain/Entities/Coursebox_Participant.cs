@@ -6,12 +6,9 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("r_moeci_com.coursebox_participant")]
     public partial class CourseBox_Participant : BaseEntity
     {
         public int ID { get; set; }
-
-        public int? Status { get; set; }
 
         public bool? IsAgreed { get; set; }
 

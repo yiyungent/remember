@@ -6,12 +6,9 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("r_moeci_com.cardinfo")]
-    public partial class Cardinfo : BaseEntity
+    public partial class CardInfo : BaseEntity
     {
         public int ID { get; set; }
-
-        public int? Status { get; set; }
 
         [Column(TypeName = "text")]
         [Required]
@@ -23,7 +20,7 @@ namespace Domain.Entities
         [ForeignKey("CardBox")]
         public int? CardBoxId { get; set; }
         [ForeignKey("CardBoxId")]
-        public virtual Cardbox CardBox { get; set; }
+        public virtual CardBox CardBox { get; set; }
 
         #endregion
     }

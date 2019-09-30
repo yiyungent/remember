@@ -6,17 +6,20 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("r_moeci_com.favorite_cardbox")]
     public partial class Favorite_CardBox : BaseEntity
     {
-        [Key]
-        [Column(Order = 0)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int CardBoxId { get; set; }
+        public int ID { get; set; }
 
-        [Key]
-        [Column(Order = 1)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public DateTime? CreateTime { get; set; }
+
+        [ForeignKey("Cardbox")]
+        public int CardBoxId { get; set; }
+        [ForeignKey("CardBoxId")]
+        public virtual CardBox Cardbox { get; set; }
+
+        [ForeignKey("Favorite")]
         public int FavoriteId { get; set; }
+        [ForeignKey("FavoriteId")]
+        public virtual Favorite Favorite { get; set; }
     }
 }

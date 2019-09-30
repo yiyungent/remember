@@ -6,12 +6,9 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("r_moeci_com.roleinfo")]
     public partial class RoleInfo : BaseEntity
     {
         public int ID { get; set; }
-
-        public int? Status { get; set; }
 
         [Required]
         [StringLength(30)]

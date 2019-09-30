@@ -5,50 +5,60 @@ namespace Repositories.Core
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using Domain.Entities;
+    using System.Data.Entity.Migrations;
+    using System.Data.Entity.ModelConfiguration.Conventions;
 
     public partial class RemDbContext : DbContext
     {
         public RemDbContext()
             : base("name=RemDbContext")
         {
+            Database.SetInitializer(new DropCreateDatabaseAlways<RemDbContext>());
         }
 
-        public virtual DbSet<Article> Articles { get; set; }
-        public virtual DbSet<Cardbox> Cardboxes { get; set; }
-        public virtual DbSet<Cardinfo> Cardinfoes { get; set; }
-        public virtual DbSet<Comment> Comments { get; set; }
+        #region Tables
+
+        public virtual DbSet<Article> Article { get; set; }
+        public virtual DbSet<CardBox> CardBox { get; set; }
+        public virtual DbSet<CardInfo> CardInfo { get; set; }
+        public virtual DbSet<Comment> Comment { get; set; }
         public virtual DbSet<Comment_Dislike> Comment_Dislike { get; set; }
         public virtual DbSet<Comment_Like> Comment_Like { get; set; }
-        public virtual DbSet<CourseBox> CourseBoxes { get; set; }
+        public virtual DbSet<CourseBox> CourseBox { get; set; }
         public virtual DbSet<CourseBox_Comment> CourseBox_Comment { get; set; }
         public virtual DbSet<CourseBox_Dislike> CourseBox_Dislike { get; set; }
         public virtual DbSet<CourseBox_Like> CourseBox_Like { get; set; }
         public virtual DbSet<CourseBox_Participant> CourseBox_Participant { get; set; }
-        public virtual DbSet<Favorite> Favorites { get; set; }
+        public virtual DbSet<Favorite> Favorite { get; set; }
         public virtual DbSet<Favorite_CourseBox> Favorite_CourseBox { get; set; }
         public virtual DbSet<Follower_Followed> Follower_Followed { get; set; }
-        public virtual DbSet<FunctionInfo> FunctionInfoes { get; set; }
+        public virtual DbSet<FunctionInfo> FunctionInfo { get; set; }
         public virtual DbSet<Learner_CourseBox> Learner_CourseBox { get; set; }
         public virtual DbSet<Learner_VideoInfo> Learner_VideoInfo { get; set; }
-        public virtual DbSet<LogInfo> LogInfoes { get; set; }
-        public virtual DbSet<ParticipantInfo> ParticipantInfoes { get; set; }
-        public virtual DbSet<RoleInfo> RoleInfoes { get; set; }
-        public virtual DbSet<SearchDetail> SearchDetails { get; set; }
-        public virtual DbSet<SearchTotal> SearchTotals { get; set; }
+        public virtual DbSet<LogInfo> LogInfo { get; set; }
+        public virtual DbSet<ParticipantInfo> ParticipantInfo { get; set; }
+        public virtual DbSet<RoleInfo> RoleInfo { get; set; }
+        public virtual DbSet<SearchDetail> SearchDetail { get; set; }
+        public virtual DbSet<SearchTotal> SearchTotal { get; set; }
         public virtual DbSet<Setting> Settings { get; set; }
         public virtual DbSet<Sys_Menu> Sys_Menu { get; set; }
         public virtual DbSet<ThemeTemplate> ThemeTemplates { get; set; }
-        public virtual DbSet<UserInfo> UserInfoes { get; set; }
-        public virtual DbSet<VideoInfo> VideoInfoes { get; set; }
+        public virtual DbSet<UserInfo> UserInfo { get; set; }
+        public virtual DbSet<VideoInfo> VideoInfo { get; set; }
         public virtual DbSet<VideoInfo_Comment> VideoInfo_Comment { get; set; }
         public virtual DbSet<Favorite_CardBox> Favorite_CardBox { get; set; }
         public virtual DbSet<Role_Function> Role_Function { get; set; }
         public virtual DbSet<Role_Menu> Role_Menu { get; set; }
         public virtual DbSet<Role_User> Role_User { get; set; }
-        public virtual DbSet<User_CardBox_Forread> User_CardBox_Forread { get; set; }
 
+        #endregion
+
+        #region OnModelCreating
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            // 表名不会自动转换为复数
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+
             modelBuilder.Entity<Article>()
                 .Property(e => e.Title)
                 .IsUnicode(false);
@@ -61,19 +71,19 @@ namespace Repositories.Core
                 .Property(e => e.CustomUrl)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Cardbox>()
+            modelBuilder.Entity<CardBox>()
                 .Property(e => e.Name)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Cardbox>()
+            modelBuilder.Entity<CardBox>()
                 .Property(e => e.Description)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Cardbox>()
+            modelBuilder.Entity<CardBox>()
                 .Property(e => e.PicUrl)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Cardinfo>()
+            modelBuilder.Entity<CardInfo>()
                 .Property(e => e.Content)
                 .IsUnicode(false);
 
@@ -260,6 +270,8 @@ namespace Repositories.Core
             modelBuilder.Entity<VideoInfo>()
                 .Property(e => e.SubTitleUrl)
                 .IsUnicode(false);
-        }
+        } 
+        #endregion
+
     }
 }

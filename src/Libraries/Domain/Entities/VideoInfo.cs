@@ -6,12 +6,9 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("r_moeci_com.videoinfo")]
     public partial class VideoInfo : BaseEntity
     {
         public int ID { get; set; }
-
-        public int? Status { get; set; }
 
         [StringLength(200)]
         public string Title { get; set; }

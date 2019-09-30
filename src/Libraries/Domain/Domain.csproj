@@ -58,8 +58,8 @@
   <ItemGroup>
     <Compile Include="BaseEntity.cs" />
     <Compile Include="Entities\Article.cs" />
-    <Compile Include="Entities\Cardbox.cs" />
-    <Compile Include="Entities\Cardinfo.cs" />
+    <Compile Include="Entities\CardBox.cs" />
+    <Compile Include="Entities\CardInfo.cs" />
     <Compile Include="Entities\Comment.cs" />
     <Compile Include="Entities\Comment_Dislike.cs" />
     <Compile Include="Entities\Comment_Like.cs" />

@@ -6,21 +6,31 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("r_moeci_com.learner_coursebox")]
     public partial class Learner_CourseBox : BaseEntity
     {
         public int ID { get; set; }
-
-        public int? Status { get; set; }
 
         public DateTime? JoinTime { get; set; }
 
         public long? SpendTime { get; set; }
 
+        #region Relationships
+
+        [ForeignKey("LastPlayVideoInfo")]
         public int? LastPlayVideoInfoId { get; set; }
+        [ForeignKey("LastPlayVideoInfoId")]
+        public virtual VideoInfo LastPlayVideoInfo { get; set; }
 
+        [ForeignKey("Learner")]
         public int? LearnerId { get; set; }
+        [ForeignKey("Learner")]
+        public virtual UserInfo Learner { get; set; }
 
+        [ForeignKey("CourseBox")]
         public int? CourseBoxId { get; set; }
+        [ForeignKey("CourseBoxId")]
+        public virtual CourseBox CourseBox { get; set; }
+
+        #endregion
     }
 }

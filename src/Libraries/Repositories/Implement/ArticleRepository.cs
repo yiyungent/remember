@@ -21,7 +21,7 @@ namespace Repositories.Implement
 
         public IQueryable<Article> FindHomePageArticles(int limit = 20)
         {
-            return this._context.Articles.OrderByDescending(m => m.CreateTime).Take(limit);
+            return this._context.Article.OrderByDescending(m => m.CreateTime).Take(limit);
         }
     }
 }

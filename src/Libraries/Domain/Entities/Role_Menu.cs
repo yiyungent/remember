@@ -6,7 +6,6 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("r_moeci_com.role_menu")]
     public partial class Role_Menu : BaseEntity
     {
         [Key]

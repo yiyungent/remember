@@ -6,12 +6,9 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("r_moeci_com.functioninfo")]
     public partial class FunctionInfo : BaseEntity
     {
         public int ID { get; set; }
-
-        public int? Status { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -25,6 +22,13 @@ namespace Domain.Entities
         [StringLength(65535)]
         public string Remark { get; set; }
 
+        #region Relationships
+
+        [ForeignKey("Sys_Menu")]
         public int? MenuId { get; set; }
+        [ForeignKey("MenuId")]
+        public virtual Sys_Menu Sys_Menu { get; set; } 
+
+        #endregion
     }
 }

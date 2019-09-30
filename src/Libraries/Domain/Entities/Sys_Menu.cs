@@ -6,12 +6,9 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("r_moeci_com.sys_menu")]
     public partial class Sys_Menu : BaseEntity
     {
         public int ID { get; set; }
-
-        public int? Status { get; set; }
 
         [Required]
         [StringLength(100)]

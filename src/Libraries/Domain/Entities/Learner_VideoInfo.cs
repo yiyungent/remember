@@ -6,12 +6,9 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("r_moeci_com.learner_videoinfo")]
     public partial class Learner_VideoInfo : BaseEntity
     {
         public int ID { get; set; }
-
-        public int? Status { get; set; }
 
         [StringLength(100)]
         public string LastAccessIp { get; set; }
@@ -22,8 +19,18 @@ namespace Domain.Entities
 
         public long? LastPlayAt { get; set; }
 
-        public int? LearnerId { get; set; }
+        #region Relationships
 
-        public int? VideoInfoId { get; set; }
+        [ForeignKey("Learner")]
+        public int? LearnerId { get; set; }
+        [ForeignKey("LearnerId")]
+        public virtual UserInfo Learner { get; set; }
+
+        [ForeignKey("VideoInfo")]
+        public int? VideoInfoId { get; set; } 
+        [ForeignKey("VideoInfoId")]
+        public virtual VideoInfo VideoInfo { get; set; }
+
+        #endregion
     }
 }

@@ -6,7 +6,6 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("r_moeci_com.searchtotal")]
     public partial class SearchTotal : BaseEntity
     {
         public Guid ID { get; set; }

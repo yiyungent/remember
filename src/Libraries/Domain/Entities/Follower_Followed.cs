@@ -6,17 +6,24 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("r_moeci_com.follower_followed")]
     public partial class Follower_Followed : BaseEntity
     {
         public int ID { get; set; }
 
-        public int? Status { get; set; }
-
         public DateTime? CreateTime { get; set; }
 
-        public int? FollowerId { get; set; }
+        #region Relationships
 
-        public int? FollowedId { get; set; }
+        [ForeignKey("Follower")]
+        public int? FollowerId { get; set; }
+        [ForeignKey("FollowerId")]
+        public virtual UserInfo Follower { get; set; }
+
+        [ForeignKey("Followed")]
+        public int? FollowedId { get; set; } 
+        [ForeignKey("FollowedId")]
+        public virtual UserInfo Followed { get; set; }
+
+        #endregion
     }
 }

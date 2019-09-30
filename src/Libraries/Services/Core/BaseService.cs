@@ -11,13 +11,18 @@ namespace Services.Core
 {
     public abstract class BaseService<T> : IService<T>, IDependency where T : BaseEntity, new()
     {
-        private readonly IRepository<T> _repository;
+        #region Fields
+        private readonly IRepository<T> _repository; 
+        #endregion
 
+        #region Ctor
         protected BaseService(IRepository<T> repository)
         {
             _repository = repository;
         }
+        #endregion
 
+        #region Methods
         /// <summary>
         /// Gets all objects from database
         /// </summary>
@@ -129,7 +134,8 @@ namespace Services.Core
         public virtual T FirstOrDefault(Expression<Func<T, bool>> expression)
         {
             return All().FirstOrDefault(expression);
-        }
+        } 
+        #endregion
 
     }
 }
