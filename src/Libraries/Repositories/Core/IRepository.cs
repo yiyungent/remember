@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace Repositories
+namespace Repositories.Core
 {
     /// <summary>
     /// 仓储通用接口类
