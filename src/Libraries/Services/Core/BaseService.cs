@@ -1,4 +1,5 @@
-﻿using Repositories.Core;
+﻿using Domain;
+using Repositories.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Services.Core
 {
-    public abstract class BaseService<T> : IService<T>, IDependency where T : class, new()
+    public abstract class BaseService<T> : IService<T>, IDependency where T : BaseEntity, new()
     {
         private readonly IRepository<T> _repository;
 
@@ -21,7 +22,7 @@ namespace Services.Core
         /// Gets all objects from database
         /// </summary>
         /// <returns></returns>
-        public IQueryable<T> All()
+        public virtual IQueryable<T> All()
         {
             return _repository.All();
         }
@@ -39,15 +40,16 @@ namespace Services.Core
         /// <summary>
         /// Gets objects from database with filtering and paging.
         /// </summary>
-        /// <param name="filter">Specified a filter</param>
-        /// <param name="total">Returns the total records count of the filter.</param>
         /// <param name="index">Specified the page index.</param>
         /// <param name="size">Specified the page size</param>
+        /// <param name="total">Returns the total records count of the filter.</param>
+        /// <param name="filter">Specified a filter</param>
+        /// <param name="order">Specified a order</param>
+        /// <param name="isAsc">Specified ascending or descending</param>
         /// <returns></returns>
-        public virtual IQueryable<T> Filter(Expression<Func<T, bool>> filter, out int total, int index = 0,
-            int size = 50)
+        public virtual IQueryable<T> Filter<TOrder>(int index, int size, out int total, Expression<Func<T, bool>> filter, Expression<Func<T, TOrder>> order, bool isAsc = true)
         {
-            return _repository.Filter(filter, out total, index, size);
+            return _repository.Filter<TOrder>(index, size, out total, filter, order, isAsc);
         }
 
         /// <summary>
@@ -55,7 +57,7 @@ namespace Services.Core
         /// </summary>
         /// <param name="predicate">Specified the filter expression</param>
         /// <returns></returns>
-        public bool Contains(Expression<Func<T, bool>> predicate)
+        public virtual bool Contains(Expression<Func<T, bool>> predicate)
         {
             return _repository.Contains(predicate);
         }
@@ -124,7 +126,7 @@ namespace Services.Core
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public T FirstOrDefault(Expression<Func<T, bool>> expression)
+        public virtual T FirstOrDefault(Expression<Func<T, bool>> expression)
         {
             return All().FirstOrDefault(expression);
         }

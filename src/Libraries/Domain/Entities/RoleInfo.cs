@@ -7,7 +7,7 @@ namespace Domain.Entities
     using System.Data.Entity.Spatial;
 
     [Table("r_moeci_com.roleinfo")]
-    public partial class RoleInfo
+    public partial class RoleInfo : BaseEntity
     {
         public int ID { get; set; }
 

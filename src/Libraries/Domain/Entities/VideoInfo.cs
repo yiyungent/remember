@@ -7,7 +7,7 @@ namespace Domain.Entities
     using System.Data.Entity.Spatial;
 
     [Table("r_moeci_com.videoinfo")]
-    public partial class VideoInfo
+    public partial class VideoInfo : BaseEntity
     {
         public int ID { get; set; }
 
@@ -31,6 +31,13 @@ namespace Domain.Entities
 
         public int? Page { get; set; }
 
+        #region Relationships
+
+        [ForeignKey("CourseBox")]
         public int? CourseBoxId { get; set; }
+        [ForeignKey("CourseBoxId")]
+        public virtual CourseBox CourseBox { get; set; }
+
+        #endregion
     }
 }

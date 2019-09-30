@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,7 +10,7 @@ namespace Repositories.Core
     /// 仓储通用接口类
     /// </summary>
     /// <typeparam name="T">泛型实体类</typeparam>
-    public interface IRepository<T> where T : class, new()
+    public interface IRepository<T> where T : BaseEntity, new()
     {
         /// <summary>
         /// Gets all objects from database
@@ -27,12 +28,14 @@ namespace Repositories.Core
         /// <summary>
         /// Gets objects from database with filtering and paging.
         /// </summary>
-        /// <param name="filter">Specified a filter</param>
-        /// <param name="total">Returns the total records count of the filter.</param>
         /// <param name="index">Specified the page index.</param>
         /// <param name="size">Specified the page size</param>
+        /// <param name="total">Returns the total records count of the filter.</param>
+        /// <param name="filter">Specified a filter</param>
+        /// <param name="order">Specified a order</param>
+        /// <param name="isAsc">Specified ascending or descending</param>
         /// <returns></returns>
-        IQueryable<T> Filter(Expression<Func<T, bool>> filter, out int total, int index = 0, int size = 50);
+        IQueryable<T> Filter<TOrder>(int index, int size, out int total, Expression<Func<T, bool>> filter, Expression<Func<T, TOrder>> order, bool isAsc = true);
 
         /// <summary>
         /// Gets the object(s) is exists in database by specified filter.

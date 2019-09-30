@@ -7,7 +7,7 @@ namespace Domain.Entities
     using System.Data.Entity.Spatial;
 
     [Table("r_moeci_com.coursebox_participant")]
-    public partial class Coursebox_Participant
+    public partial class CourseBox_Participant : BaseEntity
     {
         public int ID { get; set; }
 
@@ -19,10 +19,23 @@ namespace Domain.Entities
 
         public DateTime? CreateTime { get; set; }
 
+        #region Relationships
+
+        [ForeignKey("CourseBox")]
         public int? CourseBoxId { get; set; }
+        [ForeignKey("CourseBoxId")]
+        public virtual CourseBox CourseBox { get; set; }
 
+        [ForeignKey("Participant")]
         public int? ParticipantId { get; set; }
+        [ForeignKey("ParticipantId")]
+        public virtual UserInfo Participant { get; set; }
 
+        [ForeignKey("ParticipantInfo")]
         public int? ParticipantInfoId { get; set; }
+        [ForeignKey("ParticipantInfoId")]
+        public virtual ParticipantInfo ParticipantInfo { get; set; }
+
+        #endregion
     }
 }

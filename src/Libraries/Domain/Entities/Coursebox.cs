@@ -7,7 +7,7 @@ namespace Domain.Entities
     using System.Data.Entity.Spatial;
 
     [Table("r_moeci_com.coursebox")]
-    public partial class Coursebox
+    public partial class CourseBox : BaseEntity
     {
         public int ID { get; set; }
 
@@ -44,6 +44,13 @@ namespace Domain.Entities
 
         public int? ShareNum { get; set; }
 
+        #region Relationships
+
+        [ForeignKey("Creator")]
         public int? CreatorId { get; set; }
+        [ForeignKey("CreatorId")]
+        public virtual UserInfo Creator { get; set; }
+
+        #endregion
     }
 }

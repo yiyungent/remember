@@ -7,7 +7,7 @@ namespace Domain.Entities
     using System.Data.Entity.Spatial;
 
     [Table("r_moeci_com.favorite_coursebox")]
-    public partial class Favorite_CourseBox
+    public partial class Favorite_CourseBox : BaseEntity
     {
         public int ID { get; set; }
 

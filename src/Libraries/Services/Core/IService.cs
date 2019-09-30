@@ -29,12 +29,14 @@ namespace Services.Core
         /// <summary>
         /// Gets objects from database with filtering and paging.
         /// </summary>
-        /// <param name="filter">Specified a filter</param>
-        /// <param name="total">Returns the total records count of the filter.</param>
         /// <param name="index">Specified the page index.</param>
         /// <param name="size">Specified the page size</param>
+        /// <param name="total">Returns the total records count of the filter.</param>
+        /// <param name="filter">Specified a filter</param>
+        /// <param name="order">Specified a order</param>
+        /// <param name="isAsc">Specified ascending or descending</param>
         /// <returns></returns>
-        IQueryable<T> Filter(Expression<Func<T, bool>> filter, out int total, int index = 0, int size = 50);
+        IQueryable<T> Filter<TOrder>(int index, int size, out int total, Expression<Func<T, bool>> filter, Expression<Func<T, TOrder>> order, bool isAsc = true);
 
         /// <summary>
         /// Gets the object(s) is exists in database by specified filter.

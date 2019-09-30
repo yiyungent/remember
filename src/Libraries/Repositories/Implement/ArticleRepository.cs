@@ -12,16 +12,16 @@ namespace Repositories.Implement
 {
     public class ArticleRepository : BaseRepository<Article>, IArticleRepository
     {
-        private readonly RemDbContext _dbContext;
+        private readonly RemDbContext _context;
 
         public ArticleRepository(RemDbContext context) : base(context)
         {
-            this._dbContext = context;
+            this._context = context;
         }
 
         public IQueryable<Article> FindHomePageArticles(int limit = 20)
         {
-            return this._dbContext.Articles.OrderByDescending(m => m.CreateTime).Take(limit);
+            return this._context.Articles.OrderByDescending(m => m.CreateTime).Take(limit);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core;
@@ -17,22 +18,50 @@ namespace Repositories.Core
     /// 在数据会话层中提供一个方法：完成所有数据的保存
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class BaseRepository<T> : IDependency, IRepository<T> where T : class, new()
+    public abstract class BaseRepository<T> : IDependency, IRepository<T> where T : BaseEntity, new()
     {
-        protected readonly DbContext DbContext;
+        #region Fields
+
+        private readonly DbContext _context;
+        private IDbSet<T> _entities;
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Entities
+        /// </summary>
+        protected virtual IDbSet<T> Entities
+        {
+            get
+            {
+                if (_entities == null)
+                    _entities = _context.Set<T>();
+                return _entities;
+            }
+        }
+
+        #endregion
+
+        #region Ctor
 
         public BaseRepository(DbContext context)
         {
-            DbContext = context;
+            this._context = context;
         }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Gets all objects from database
         /// </summary>
         /// <returns></returns>
-        public IQueryable<T> All()
+        public virtual IQueryable<T> All()
         {
-            return DbContext.Set<T>().AsQueryable();
+            return _context.Set<T>().AsQueryable();
         }
 
         /// <summary>
@@ -42,27 +71,27 @@ namespace Repositories.Core
         /// <returns></returns>
         public virtual IQueryable<T> Filter(Expression<Func<T, bool>> predicate)
         {
-            return DbContext.Set<T>().Where<T>(predicate).AsQueryable<T>();
+            return _context.Set<T>().Where<T>(predicate).AsQueryable<T>();
         }
 
         /// <summary>
         /// Gets objects from database with filtering and paging.
         /// </summary>
-        /// <param name="filter">Specified a filter</param>
-        /// <param name="total">Returns the total records count of the filter.</param>
         /// <param name="index">Specified the page index.</param>
         /// <param name="size">Specified the page size</param>
+        /// <param name="total">Returns the total records count of the filter.</param>
+        /// <param name="filter">Specified a filter</param>
+        /// <param name="order">Specified a order</param>
+        /// <param name="isAsc">Specified ascending or descending</param>
         /// <returns></returns>
-        public virtual IQueryable<T> Filter(Expression<Func<T, bool>> filter, out int total, int index = 0,
-            int size = 50)
+        public virtual IQueryable<T> Filter<TOrder>(int index, int size, out int total, Expression<Func<T, bool>> filter, Expression<Func<T, TOrder>> order, bool isAsc = true)
         {
-            var skipCount = index * size;
-            var resetSet = filter != null
-                ? DbContext.Set<T>().Where<T>(filter).AsQueryable()
-                : DbContext.Set<T>().AsQueryable();
-            resetSet = skipCount == 0 ? resetSet.Take(size) : resetSet.Skip(skipCount).Take(size);
-            total = resetSet.Count();
-            return resetSet.AsQueryable();
+            var skipCount = (index - 1) * size;
+            var resultSet = _context.Set<T>().Where(filter).AsQueryable();
+            total = resultSet.Count();
+            resultSet = isAsc ? resultSet.OrderBy(order) : resultSet.OrderByDescending(order);
+            resultSet = skipCount == 0 ? resultSet.Take(size) : resultSet.Skip(skipCount).Take(size);
+            return resultSet.AsQueryable();
         }
 
         /// <summary>
@@ -70,9 +99,9 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="predicate">Specified the filter expression</param>
         /// <returns></returns>
-        public bool Contains(Expression<Func<T, bool>> predicate)
+        public virtual bool Contains(Expression<Func<T, bool>> predicate)
         {
-            return DbContext.Set<T>().Any(predicate);
+            return _context.Set<T>().Any(predicate);
         }
 
         /// <summary>
@@ -82,7 +111,7 @@ namespace Repositories.Core
         /// <returns></returns>
         public virtual T Find(params object[] keys)
         {
-            return DbContext.Set<T>().Find(keys);
+            return _context.Set<T>().Find(keys);
         }
 
         /// <summary>
@@ -92,7 +121,7 @@ namespace Repositories.Core
         /// <returns></returns>
         public virtual T Find(Expression<Func<T, bool>> predicate)
         {
-            return DbContext.Set<T>().FirstOrDefault<T>(predicate);
+            return _context.Set<T>().FirstOrDefault<T>(predicate);
         }
 
         /// <summary>
@@ -102,9 +131,9 @@ namespace Repositories.Core
         /// <returns></returns>
         public virtual void Create(T t)
         {
-            DbContext.Set<T>().Add(t);
+            _context.Set<T>().Add(t);
 
-            DbContext.SaveChanges();
+            _context.SaveChanges();
         }
 
         /// <summary>
@@ -113,9 +142,9 @@ namespace Repositories.Core
         /// <param name="t">Specified a existing object to delete.</param>
         public virtual void Delete(T t)
         {
-            DbContext.Set<T>().Remove(t);
+            _context.Set<T>().Remove(t);
 
-            DbContext.SaveChanges();
+            _context.SaveChanges();
         }
 
         /// <summary>
@@ -127,8 +156,8 @@ namespace Repositories.Core
         {
             var objects = Filter(predicate);
             foreach (var obj in objects)
-                DbContext.Set<T>().Remove(obj);
-            return DbContext.SaveChanges();
+                _context.Set<T>().Remove(obj);
+            return _context.SaveChanges();
         }
 
         /// <summary>
@@ -140,11 +169,11 @@ namespace Repositories.Core
         {
             try
             {
-                var entry = DbContext.Entry(t);
-                DbContext.Set<T>().Attach(t);
+                var entry = _context.Entry(t);
+                _context.Set<T>().Attach(t);
                 entry.State = EntityState.Modified;
 
-                DbContext.SaveChanges();
+                _context.SaveChanges();
             }
             catch (OptimisticConcurrencyException ex)
             {
@@ -157,9 +186,11 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public T FirstOrDefault(Expression<Func<T, bool>> expression)
+        public virtual T FirstOrDefault(Expression<Func<T, bool>> expression)
         {
             return All().FirstOrDefault(expression);
         }
+
+        #endregion
     }
 }

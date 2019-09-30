@@ -7,7 +7,7 @@ namespace Domain.Entities
     using System.Data.Entity.Spatial;
 
     [Table("r_moeci_com.searchdetail")]
-    public partial class SearchDetail
+    public partial class SearchDetail : BaseEntity
     {
         public Guid ID { get; set; }
 

@@ -7,7 +7,7 @@ namespace Domain.Entities
     using System.Data.Entity.Spatial;
 
     [Table("r_moeci_com.article")]
-    public partial class Article
+    public partial class Article : BaseEntity
     {
         public int ID { get; set; }
 
@@ -27,6 +27,13 @@ namespace Domain.Entities
         [StringLength(30)]
         public string CustomUrl { get; set; }
 
+        #region Relationships
+
+        [ForeignKey("Author")]
         public int? AuthorId { get; set; }
+        [ForeignKey("AuthorId")]
+        public virtual UserInfo Author { get; set; } 
+
+        #endregion
     }
 }

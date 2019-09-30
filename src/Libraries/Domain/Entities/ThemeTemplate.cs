@@ -7,7 +7,7 @@ namespace Domain.Entities
     using System.Data.Entity.Spatial;
 
     [Table("r_moeci_com.themetemplate")]
-    public partial class ThemeTemplate
+    public partial class ThemeTemplate : BaseEntity
     {
         public int ID { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using AutoMapperConfig;
+using Domain.Entities;
 using Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,27 @@ namespace WebUI.Controllers
             var viewModel = _articleService.Find(id).ToModel();
 
             return View(viewModel);
+        }
+
+        public JsonResult Edit(string content)
+        {
+            var article = _articleService.Find(1);
+            article.Content = content;
+
+            _articleService.Update(article);
+
+            return Json("成功", JsonRequestBehavior.AllowGet);
+        }
+
+        public string TestFk()
+        {
+            UserInfo user = _articleService.Find(1).Author;
+            Article article = _articleService.Find(2);
+
+            var query  = _articleService.All();
+            var list = query.ToList();
+
+            return user.Avatar;
         }
     }
 }

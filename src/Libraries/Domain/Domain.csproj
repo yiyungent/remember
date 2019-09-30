@@ -56,17 +56,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseEntity.cs" />
     <Compile Include="Entities\Article.cs" />
     <Compile Include="Entities\Cardbox.cs" />
     <Compile Include="Entities\Cardinfo.cs" />
     <Compile Include="Entities\Comment.cs" />
-    <Compile Include="Entities\Comment_dislike.cs" />
-    <Compile Include="Entities\Comment_like.cs" />
-    <Compile Include="Entities\Coursebox.cs" />
-    <Compile Include="Entities\Coursebox_Comment.cs" />
-    <Compile Include="Entities\Coursebox_Dislike.cs" />
-    <Compile Include="Entities\Coursebox_Like.cs" />
-    <Compile Include="Entities\Coursebox_Participant.cs" />
+    <Compile Include="Entities\Comment_Dislike.cs" />
+    <Compile Include="Entities\Comment_Like.cs" />
+    <Compile Include="Entities\CourseBox.cs" />
+    <Compile Include="Entities\CourseBox_Comment.cs" />
+    <Compile Include="Entities\CourseBox_Dislike.cs" />
+    <Compile Include="Entities\CourseBox_Like.cs" />
+    <Compile Include="Entities\CourseBox_Participant.cs" />
     <Compile Include="Entities\Favorite.cs" />
     <Compile Include="Entities\Favorite_CardBox.cs" />
     <Compile Include="Entities\Favorite_CourseBox.cs" />
@@ -86,7 +87,6 @@
     <Compile Include="Entities\Sys_Menu.cs" />
     <Compile Include="Entities\ThemeTemplate.cs" />
     <Compile Include="Entities\UserInfo.cs" />
-    <Compile Include="Entities\User_CardBox_Forread.cs" />
     <Compile Include="Entities\VideoInfo.cs" />
     <Compile Include="Entities\VideoInfo_Comment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

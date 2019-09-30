@@ -7,7 +7,7 @@ namespace Domain.Entities
     using System.Data.Entity.Spatial;
 
     [Table("r_moeci_com.cardinfo")]
-    public partial class Cardinfo
+    public partial class Cardinfo : BaseEntity
     {
         public int ID { get; set; }
 
@@ -18,6 +18,13 @@ namespace Domain.Entities
         [StringLength(65535)]
         public string Content { get; set; }
 
+        #region Relationships
+
+        [ForeignKey("CardBox")]
         public int? CardBoxId { get; set; }
+        [ForeignKey("CardBoxId")]
+        public virtual Cardbox CardBox { get; set; }
+
+        #endregion
     }
 }

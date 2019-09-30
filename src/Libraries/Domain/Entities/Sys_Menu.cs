@@ -7,7 +7,7 @@ namespace Domain.Entities
     using System.Data.Entity.Spatial;
 
     [Table("r_moeci_com.sys_menu")]
-    public partial class Sys_Menu
+    public partial class Sys_Menu : BaseEntity
     {
         public int ID { get; set; }
 
@@ -28,6 +28,13 @@ namespace Domain.Entities
 
         public int? SortCode { get; set; }
 
+        #region Relationships
+
+        [ForeignKey("Parent")]
         public int? ParentId { get; set; }
+        [ForeignKey("ParentId")]
+        public virtual Sys_Menu Parent { get; set; } 
+
+        #endregion
     }
 }

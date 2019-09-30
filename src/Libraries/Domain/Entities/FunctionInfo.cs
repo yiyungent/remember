@@ -7,7 +7,7 @@ namespace Domain.Entities
     using System.Data.Entity.Spatial;
 
     [Table("r_moeci_com.functioninfo")]
-    public partial class FunctionInfo
+    public partial class FunctionInfo : BaseEntity
     {
         public int ID { get; set; }
 

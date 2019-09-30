@@ -7,7 +7,7 @@ namespace Domain.Entities
     using System.Data.Entity.Spatial;
 
     [Table("r_moeci_com.setting")]
-    public partial class Setting
+    public partial class Setting : BaseEntity
     {
         public int ID { get; set; }
 

@@ -7,7 +7,7 @@ namespace Domain.Entities
     using System.Data.Entity.Spatial;
 
     [Table("r_moeci_com.comment_like")]
-    public partial class Comment_like
+    public partial class Comment_Like : BaseEntity
     {
         public int ID { get; set; }
 
@@ -15,8 +15,18 @@ namespace Domain.Entities
 
         public DateTime? CreateTime { get; set; }
 
-        public int? CommentId { get; set; }
+        #region Relationships
 
+        [ForeignKey("Comment")]
+        public int? CommentId { get; set; }
+        [ForeignKey("CommentId")]
+        public virtual Comment Comment { get; set; }
+
+        [ForeignKey("UserInfo")]
         public int? UserInfoId { get; set; }
+        [ForeignKey("UserInfoId")]
+        public virtual UserInfo UserInfo { get; set; }
+
+        #endregion
     }
 }

@@ -7,7 +7,7 @@ namespace Domain.Entities
     using System.Data.Entity.Spatial;
 
     [Table("r_moeci_com.cardbox")]
-    public partial class Cardbox
+    public partial class Cardbox : BaseEntity
     {
         public int ID { get; set; }
 
@@ -30,6 +30,13 @@ namespace Domain.Entities
 
         public bool? IsOpen { get; set; }
 
+        #region Relationships
+
+        [ForeignKey("Creator")]
         public int? CreatorId { get; set; }
+        [ForeignKey("CreatorId")]
+        public virtual UserInfo Creator { get; set; }
+
+        #endregion
     }
 }

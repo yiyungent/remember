@@ -17,13 +17,13 @@ namespace Repositories.Core
         public virtual DbSet<Cardbox> Cardboxes { get; set; }
         public virtual DbSet<Cardinfo> Cardinfoes { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
-        public virtual DbSet<Comment_dislike> Comment_Dislike { get; set; }
-        public virtual DbSet<Comment_like> Comment_Like { get; set; }
-        public virtual DbSet<Coursebox> CourseBoxes { get; set; }
-        public virtual DbSet<Coursebox_Comment> CourseBox_Comment { get; set; }
-        public virtual DbSet<Coursebox_Dislike> CourseBox_Dislike { get; set; }
-        public virtual DbSet<Coursebox_Like> CourseBox_Like { get; set; }
-        public virtual DbSet<Coursebox_Participant> CourseBox_Participant { get; set; }
+        public virtual DbSet<Comment_Dislike> Comment_Dislike { get; set; }
+        public virtual DbSet<Comment_Like> Comment_Like { get; set; }
+        public virtual DbSet<CourseBox> CourseBoxes { get; set; }
+        public virtual DbSet<CourseBox_Comment> CourseBox_Comment { get; set; }
+        public virtual DbSet<CourseBox_Dislike> CourseBox_Dislike { get; set; }
+        public virtual DbSet<CourseBox_Like> CourseBox_Like { get; set; }
+        public virtual DbSet<CourseBox_Participant> CourseBox_Participant { get; set; }
         public virtual DbSet<Favorite> Favorites { get; set; }
         public virtual DbSet<Favorite_CourseBox> Favorite_CourseBox { get; set; }
         public virtual DbSet<Follower_Followed> Follower_Followed { get; set; }
@@ -81,15 +81,15 @@ namespace Repositories.Core
                 .Property(e => e.Content)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Coursebox>()
+            modelBuilder.Entity<CourseBox>()
                 .Property(e => e.Name)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Coursebox>()
+            modelBuilder.Entity<CourseBox>()
                 .Property(e => e.Description)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Coursebox>()
+            modelBuilder.Entity<CourseBox>()
                 .Property(e => e.PicUrl)
                 .IsUnicode(false);
 
