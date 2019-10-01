@@ -13,8 +13,6 @@
 using Domain.Entities;
 using Repositories.Core;
 using Repositories.Interface;
-using System.Data.Entity;
-using System.Linq;
 <# manager.EndBlock(); #>
 <#
 	// 当前 Template.tt 所在的模板路径<br>　　// Host.Template 是当前文本模板 Template.tt 的路径

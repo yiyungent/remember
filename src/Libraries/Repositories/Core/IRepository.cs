@@ -44,6 +44,8 @@ namespace Repositories.Core
         /// <returns></returns>
         bool Contains(Expression<Func<T, bool>> predicate);
 
+        int Count(Expression<Func<T, bool>> predicate);
+
         /// <summary>
         /// Find object by keys.
         /// </summary>

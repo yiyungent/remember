@@ -108,10 +108,20 @@
     <Compile Include="Core\BaseService.cs" />
     <Compile Include="Core\IService.cs" />
     <Compile Include="Implement\ArticleService.cs" />
+    <Compile Include="Implement\SettingService.cs" />
+    <Compile Include="Implement\ThemeTemplateService.cs" />
+    <Compile Include="Implement\UserInfoService.cs" />
     <Compile Include="Interface\IArticleService.cs" />
+    <Compile Include="Interface\ISettingService.cs" />
+    <Compile Include="Interface\IThemeTemplateService.cs" />
+    <Compile Include="Interface\IUserInfoService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{2f10194d-d842-48bb-802f-3066d7db20b6}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Domain\Domain.csproj">
       <Project>{5130CC63-704F-40E6-B0DE-3A92E1448FA3}</Project>
       <Name>Domain</Name>

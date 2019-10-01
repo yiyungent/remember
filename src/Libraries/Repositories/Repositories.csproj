@@ -124,7 +124,9 @@
     <Compile Include="Core\IRepository.cs" />
     <Compile Include="Core\RemDbContext.cs" />
     <Compile Include="Implement\ArticleRepository.cs" />
+    <Compile Include="Implement\SearchTotalRepository.cs" />
     <Compile Include="Interface\IArticleRepository.cs" />
+    <Compile Include="Interface\ISearchTotalRepository.cs" />
     <Compile Include="Migrations\201909301714313_update.cs" />
     <Compile Include="Migrations\201909301714313_update.Designer.cs">
       <DependentUpon>201909301714313_update.cs</DependentUpon>

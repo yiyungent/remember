@@ -12,7 +12,7 @@ namespace Services.Core
     public abstract class BaseService<T> : IService<T>, IDependency where T : BaseEntity, new()
     {
         #region Fields
-        private readonly IRepository<T> _repository; 
+        private readonly IRepository<T> _repository;
         #endregion
 
         #region Ctor
@@ -65,6 +65,11 @@ namespace Services.Core
         public virtual bool Contains(Expression<Func<T, bool>> predicate)
         {
             return _repository.Contains(predicate);
+        }
+
+        public virtual int Count(Expression<Func<T, bool>> predicate)
+        {
+            return _repository.Count(predicate);
         }
 
         /// <summary>
@@ -134,7 +139,7 @@ namespace Services.Core
         public virtual T FirstOrDefault(Expression<Func<T, bool>> expression)
         {
             return All().FirstOrDefault(expression);
-        } 
+        }
         #endregion
 
     }

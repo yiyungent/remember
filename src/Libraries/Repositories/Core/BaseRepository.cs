@@ -104,6 +104,11 @@ namespace Repositories.Core
             return _context.Set<T>().Any(predicate);
         }
 
+        public virtual int Count(Expression<Func<T, bool>> predicate)
+        {
+            return _context.Set<T>().Count(predicate);
+        }
+
         /// <summary>
         /// Find object by keys.
         /// </summary>
