@@ -1,14 +1,10 @@
 ﻿using Domain.Entities;
 using Services.Core;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.Interface
 {
-    public interface IArticleService : IService<Article>
+    public partial interface IArticleService : IService<Article>
     {
         /// <summary>
         /// 查询首页文章列表

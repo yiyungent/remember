@@ -41,6 +41,70 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auto\Implement\ArticleService.cs" />
+    <Compile Include="Auto\Implement\CardBoxService.cs" />
+    <Compile Include="Auto\Implement\CardInfoService.cs" />
+    <Compile Include="Auto\Implement\CommentService.cs" />
+    <Compile Include="Auto\Implement\Comment_DislikeService.cs" />
+    <Compile Include="Auto\Implement\Comment_LikeService.cs" />
+    <Compile Include="Auto\Implement\CourseBoxService.cs" />
+    <Compile Include="Auto\Implement\CourseBox_CommentService.cs" />
+    <Compile Include="Auto\Implement\CourseBox_DislikeService.cs" />
+    <Compile Include="Auto\Implement\CourseBox_LikeService.cs" />
+    <Compile Include="Auto\Implement\CourseBox_ParticipantService.cs" />
+    <Compile Include="Auto\Implement\FavoriteService.cs" />
+    <Compile Include="Auto\Implement\Favorite_CardBoxService.cs" />
+    <Compile Include="Auto\Implement\Favorite_CourseBoxService.cs" />
+    <Compile Include="Auto\Implement\Follower_FollowedService.cs" />
+    <Compile Include="Auto\Implement\FunctionInfoService.cs" />
+    <Compile Include="Auto\Implement\Learner_CourseBoxService.cs" />
+    <Compile Include="Auto\Implement\Learner_VideoInfoService.cs" />
+    <Compile Include="Auto\Implement\LogInfoService.cs" />
+    <Compile Include="Auto\Implement\ParticipantInfoService.cs" />
+    <Compile Include="Auto\Implement\RoleInfoService.cs" />
+    <Compile Include="Auto\Implement\Role_FunctionService.cs" />
+    <Compile Include="Auto\Implement\Role_MenuService.cs" />
+    <Compile Include="Auto\Implement\Role_UserService.cs" />
+    <Compile Include="Auto\Implement\SearchDetailService.cs" />
+    <Compile Include="Auto\Implement\SearchTotalService.cs" />
+    <Compile Include="Auto\Implement\SettingService.cs" />
+    <Compile Include="Auto\Implement\Sys_MenuService.cs" />
+    <Compile Include="Auto\Implement\ThemeTemplateService.cs" />
+    <Compile Include="Auto\Implement\UserInfoService.cs" />
+    <Compile Include="Auto\Implement\VideoInfoService.cs" />
+    <Compile Include="Auto\Implement\VideoInfo_CommentService.cs" />
+    <Compile Include="Auto\Interface\IArticleService.cs" />
+    <Compile Include="Auto\Interface\ICardBoxService.cs" />
+    <Compile Include="Auto\Interface\ICardInfoService.cs" />
+    <Compile Include="Auto\Interface\ICommentService.cs" />
+    <Compile Include="Auto\Interface\IComment_DislikeService.cs" />
+    <Compile Include="Auto\Interface\IComment_LikeService.cs" />
+    <Compile Include="Auto\Interface\ICourseBoxService.cs" />
+    <Compile Include="Auto\Interface\ICourseBox_CommentService.cs" />
+    <Compile Include="Auto\Interface\ICourseBox_DislikeService.cs" />
+    <Compile Include="Auto\Interface\ICourseBox_LikeService.cs" />
+    <Compile Include="Auto\Interface\ICourseBox_ParticipantService.cs" />
+    <Compile Include="Auto\Interface\IFavoriteService.cs" />
+    <Compile Include="Auto\Interface\IFavorite_CardBoxService.cs" />
+    <Compile Include="Auto\Interface\IFavorite_CourseBoxService.cs" />
+    <Compile Include="Auto\Interface\IFollower_FollowedService.cs" />
+    <Compile Include="Auto\Interface\IFunctionInfoService.cs" />
+    <Compile Include="Auto\Interface\ILearner_CourseBoxService.cs" />
+    <Compile Include="Auto\Interface\ILearner_VideoInfoService.cs" />
+    <Compile Include="Auto\Interface\ILogInfoService.cs" />
+    <Compile Include="Auto\Interface\IParticipantInfoService.cs" />
+    <Compile Include="Auto\Interface\IRoleInfoService.cs" />
+    <Compile Include="Auto\Interface\IRole_FunctionService.cs" />
+    <Compile Include="Auto\Interface\IRole_MenuService.cs" />
+    <Compile Include="Auto\Interface\IRole_UserService.cs" />
+    <Compile Include="Auto\Interface\ISearchDetailService.cs" />
+    <Compile Include="Auto\Interface\ISearchTotalService.cs" />
+    <Compile Include="Auto\Interface\ISettingService.cs" />
+    <Compile Include="Auto\Interface\ISys_MenuService.cs" />
+    <Compile Include="Auto\Interface\IThemeTemplateService.cs" />
+    <Compile Include="Auto\Interface\IUserInfoService.cs" />
+    <Compile Include="Auto\Interface\IVideoInfoService.cs" />
+    <Compile Include="Auto\Interface\IVideoInfo_CommentService.cs" />
     <Compile Include="Core\BaseService.cs" />
     <Compile Include="Core\IService.cs" />
     <Compile Include="Implement\ArticleService.cs" />
@@ -58,5 +122,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <None Include="Auto\Implement\MultipleOutputHelper.ttinclude" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

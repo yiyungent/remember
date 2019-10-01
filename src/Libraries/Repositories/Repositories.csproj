@@ -54,6 +54,70 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auto\Implement\ArticleRepository.cs" />
+    <Compile Include="Auto\Implement\CardBoxRepository.cs" />
+    <Compile Include="Auto\Implement\CardInfoRepository.cs" />
+    <Compile Include="Auto\Implement\CommentRepository.cs" />
+    <Compile Include="Auto\Implement\Comment_DislikeRepository.cs" />
+    <Compile Include="Auto\Implement\Comment_LikeRepository.cs" />
+    <Compile Include="Auto\Implement\CourseBoxRepository.cs" />
+    <Compile Include="Auto\Implement\CourseBox_CommentRepository.cs" />
+    <Compile Include="Auto\Implement\CourseBox_DislikeRepository.cs" />
+    <Compile Include="Auto\Implement\CourseBox_LikeRepository.cs" />
+    <Compile Include="Auto\Implement\CourseBox_ParticipantRepository.cs" />
+    <Compile Include="Auto\Implement\FavoriteRepository.cs" />
+    <Compile Include="Auto\Implement\Favorite_CardBoxRepository.cs" />
+    <Compile Include="Auto\Implement\Favorite_CourseBoxRepository.cs" />
+    <Compile Include="Auto\Implement\Follower_FollowedRepository.cs" />
+    <Compile Include="Auto\Implement\FunctionInfoRepository.cs" />
+    <Compile Include="Auto\Implement\Learner_CourseBoxRepository.cs" />
+    <Compile Include="Auto\Implement\Learner_VideoInfoRepository.cs" />
+    <Compile Include="Auto\Implement\LogInfoRepository.cs" />
+    <Compile Include="Auto\Implement\ParticipantInfoRepository.cs" />
+    <Compile Include="Auto\Implement\RoleInfoRepository.cs" />
+    <Compile Include="Auto\Implement\Role_FunctionRepository.cs" />
+    <Compile Include="Auto\Implement\Role_MenuRepository.cs" />
+    <Compile Include="Auto\Implement\Role_UserRepository.cs" />
+    <Compile Include="Auto\Implement\SearchDetailRepository.cs" />
+    <Compile Include="Auto\Implement\SearchTotalRepository.cs" />
+    <Compile Include="Auto\Implement\SettingRepository.cs" />
+    <Compile Include="Auto\Implement\Sys_MenuRepository.cs" />
+    <Compile Include="Auto\Implement\ThemeTemplateRepository.cs" />
+    <Compile Include="Auto\Implement\UserInfoRepository.cs" />
+    <Compile Include="Auto\Implement\VideoInfoRepository.cs" />
+    <Compile Include="Auto\Implement\VideoInfo_CommentRepository.cs" />
+    <Compile Include="Auto\Interface\IArticleRepository.cs" />
+    <Compile Include="Auto\Interface\ICardBoxRepository.cs" />
+    <Compile Include="Auto\Interface\ICardInfoRepository.cs" />
+    <Compile Include="Auto\Interface\ICommentRepository.cs" />
+    <Compile Include="Auto\Interface\IComment_DislikeRepository.cs" />
+    <Compile Include="Auto\Interface\IComment_LikeRepository.cs" />
+    <Compile Include="Auto\Interface\ICourseBoxRepository.cs" />
+    <Compile Include="Auto\Interface\ICourseBox_CommentRepository.cs" />
+    <Compile Include="Auto\Interface\ICourseBox_DislikeRepository.cs" />
+    <Compile Include="Auto\Interface\ICourseBox_LikeRepository.cs" />
+    <Compile Include="Auto\Interface\ICourseBox_ParticipantRepository.cs" />
+    <Compile Include="Auto\Interface\IFavoriteRepository.cs" />
+    <Compile Include="Auto\Interface\IFavorite_CardBoxRepository.cs" />
+    <Compile Include="Auto\Interface\IFavorite_CourseBoxRepository.cs" />
+    <Compile Include="Auto\Interface\IFollower_FollowedRepository.cs" />
+    <Compile Include="Auto\Interface\IFunctionInfoRepository.cs" />
+    <Compile Include="Auto\Interface\ILearner_CourseBoxRepository.cs" />
+    <Compile Include="Auto\Interface\ILearner_VideoInfoRepository.cs" />
+    <Compile Include="Auto\Interface\ILogInfoRepository.cs" />
+    <Compile Include="Auto\Interface\IParticipantInfoRepository.cs" />
+    <Compile Include="Auto\Interface\IRoleInfoRepository.cs" />
+    <Compile Include="Auto\Interface\IRole_FunctionRepository.cs" />
+    <Compile Include="Auto\Interface\IRole_MenuRepository.cs" />
+    <Compile Include="Auto\Interface\IRole_UserRepository.cs" />
+    <Compile Include="Auto\Interface\ISearchDetailRepository.cs" />
+    <Compile Include="Auto\Interface\ISearchTotalRepository.cs" />
+    <Compile Include="Auto\Interface\ISettingRepository.cs" />
+    <Compile Include="Auto\Interface\ISys_MenuRepository.cs" />
+    <Compile Include="Auto\Interface\IThemeTemplateRepository.cs" />
+    <Compile Include="Auto\Interface\IUserInfoRepository.cs" />
+    <Compile Include="Auto\Interface\IVideoInfoRepository.cs" />
+    <Compile Include="Auto\Interface\IVideoInfo_CommentRepository.cs" />
     <Compile Include="Core\BaseRepository.cs" />
     <Compile Include="Core\DbFactory.cs" />
     <Compile Include="Core\IDependency.cs" />
@@ -71,6 +135,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Templates\MultipleOutputHelper.ttinclude" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj">
@@ -83,5 +148,27 @@
       <DependentUpon>201909301714313_update.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Templates\T4_InterfaceRepository.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>T4_InterfaceRepository.cs</LastGenOutput>
+    </Content>
+    <Content Include="Templates\T4_ImplementRepository.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>T4_ImplementRepository.cs</LastGenOutput>
+    </Content>
+    <Content Include="Templates\T4_ImplementService.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>T4_ImplementService.cs</LastGenOutput>
+    </Content>
+    <Content Include="Templates\T4_InterfaceService.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>T4_InterfaceService.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

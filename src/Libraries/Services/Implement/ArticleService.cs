@@ -1,24 +1,13 @@
 ﻿using Domain.Entities;
-using Repositories.Core;
 using Repositories.Interface;
 using Services.Core;
 using Services.Interface;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.Implement
 {
-    public class ArticleService : BaseService<Article>, IArticleService
+    public partial class ArticleService : BaseService<Article>, IArticleService
     {
-        private readonly IArticleRepository _repository;
-        public ArticleService(IArticleRepository repository) : base(repository)
-        {
-            _repository = repository;
-        }
-
         /// <summary>
         /// 查询首页文章列表
         /// </summary>
