@@ -32,6 +32,8 @@ namespace Domain.Entities
         [ForeignKey("ParentId")]
         public virtual Sys_Menu Parent { get; set; } 
 
+        public virtual ICollection<RoleInfo> RoleInfos { get; set; }
+
         #endregion
     }
 }

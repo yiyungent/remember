@@ -59,218 +59,51 @@ namespace Repositories.Core
             // 表名不会自动转换为复数
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
-            modelBuilder.Entity<Article>()
-                .Property(e => e.Title)
-                .IsUnicode(false);
+            //设置多对多的关系 .Map()配置用于存储关系的外键列和表。
+            /*
+             Employees  HasMany此实体类型配置一对多关系。对应Orders实体               
+            WithMany   将关系配置为 many:many，且在关系的另一端有导航属性。
+             * MapLeftKey 配置左外键的列名。左外键指向在 HasMany 调用中指定的导航属性的父实体。
+             * MapRightKey 配置右外键的列名。右外键指向在 WithMany 调用中指定的导航属性的父实体。
+             */
+            // https://www.cnblogs.com/wer-ltm/p/4944745.html
+            //this.HasMany(x => x.Orders).
+            //    WithMany(x => x.InvolvedEmployees).
+            //    Map(m => m.ToTable("EmployeeOrder").
+            //        MapLeftKey("EmployeeId").
+            //        MapRightKey("OrderId"));
 
-            modelBuilder.Entity<Article>()
-                .Property(e => e.Content)
-                .IsUnicode(false);
 
-            modelBuilder.Entity<Article>()
-                .Property(e => e.CustomUrl)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<CardBox>()
-                .Property(e => e.Name)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<CardBox>()
-                .Property(e => e.Description)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<CardBox>()
-                .Property(e => e.PicUrl)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<CardInfo>()
-                .Property(e => e.Content)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Comment>()
-                .Property(e => e.Content)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<CourseBox>()
-                .Property(e => e.Name)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<CourseBox>()
-                .Property(e => e.Description)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<CourseBox>()
-                .Property(e => e.PicUrl)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Favorite>()
-                .Property(e => e.Name)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Favorite>()
-                .Property(e => e.Description)
-                .IsUnicode(false);
-
+            // 角色 和 操作，菜单，用户 均为 多对多关系
+            #region 角色与操作，菜单，用户 多对多
             modelBuilder.Entity<FunctionInfo>()
-                .Property(e => e.AuthKey)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<FunctionInfo>()
-                .Property(e => e.Name)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<FunctionInfo>()
-                .Property(e => e.Remark)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Learner_VideoInfo>()
-                .Property(e => e.LastAccessIp)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<LogInfo>()
-                .Property(e => e.AccessIp)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<LogInfo>()
-                .Property(e => e.Browser)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<LogInfo>()
-                .Property(e => e.BrowserEngine)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<LogInfo>()
-                .Property(e => e.OS)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<LogInfo>()
-                .Property(e => e.Device)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<LogInfo>()
-                .Property(e => e.Cpu)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<LogInfo>()
-                .Property(e => e.AccessUrl)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<LogInfo>()
-                .Property(e => e.RefererUrl)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<ParticipantInfo>()
-                .Property(e => e.RoleNames)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<ParticipantInfo>()
-                .Property(e => e.Description)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<RoleInfo>()
-                .Property(e => e.Name)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<RoleInfo>()
-                .Property(e => e.Remark)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<SearchDetail>()
-                .Property(e => e.KeyWord)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<SearchTotal>()
-                .Property(e => e.KeyWord)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Setting>()
-                .Property(e => e.SetKey)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Setting>()
-                .Property(e => e.SetValue)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Setting>()
-                .Property(e => e.Name)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Setting>()
-                .Property(e => e.Remark)
-                .IsUnicode(false);
+                   .HasMany(m => m.RoleInfos)
+                   .WithMany(m => m.FunctionInfos)
+                   .Map(m => m.ToTable("Role_Function")
+                   .MapLeftKey("RoleId")
+                   .MapRightKey("FunctionId"));
 
             modelBuilder.Entity<Sys_Menu>()
-                .Property(e => e.Name)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Sys_Menu>()
-                .Property(e => e.ControllerName)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Sys_Menu>()
-                .Property(e => e.ActionName)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Sys_Menu>()
-                .Property(e => e.AreaName)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<ThemeTemplate>()
-                .Property(e => e.TemplateName)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<ThemeTemplate>()
-                .Property(e => e.Title)
-                .IsUnicode(false);
+                .HasMany(m => m.RoleInfos)
+                .WithMany(m => m.Sys_Menus)
+                .Map(m => m.ToTable("Role_Menu")
+                .MapLeftKey("RoleId")
+                .MapRightKey("MenuId"));
 
             modelBuilder.Entity<UserInfo>()
-                .Property(e => e.UserName)
-                .IsUnicode(false);
+                .HasMany(m => m.RoleInfos)
+                .WithMany(m => m.UserInfos)
+                .Map(m => m.ToTable("Role_User")
+                .MapLeftKey("RoleId")
+                .MapRightKey("UserId")); 
+            #endregion
 
-            modelBuilder.Entity<UserInfo>()
-                .Property(e => e.Password)
-                .IsUnicode(false);
 
-            modelBuilder.Entity<UserInfo>()
-                .Property(e => e.RefreshToken)
-                .IsUnicode(false);
 
-            modelBuilder.Entity<UserInfo>()
-                .Property(e => e.TemplateName)
-                .IsUnicode(false);
 
-            modelBuilder.Entity<UserInfo>()
-                .Property(e => e.Avatar)
-                .IsUnicode(false);
 
-            modelBuilder.Entity<UserInfo>()
-                .Property(e => e.Email)
-                .IsUnicode(false);
 
-            modelBuilder.Entity<UserInfo>()
-                .Property(e => e.Phone)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<UserInfo>()
-                .Property(e => e.Description)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<UserInfo>()
-                .Property(e => e.Remark)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<VideoInfo>()
-                .Property(e => e.Title)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<VideoInfo>()
-                .Property(e => e.PlayUrl)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<VideoInfo>()
-                .Property(e => e.SubTitleUrl)
-                .IsUnicode(false);
-        } 
+        }
         #endregion
 
     }

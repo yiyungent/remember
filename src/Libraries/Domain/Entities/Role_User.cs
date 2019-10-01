@@ -6,6 +6,7 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
+    [Table("Role_User")]
     public partial class Role_User : BaseEntity
     {
         [Key]

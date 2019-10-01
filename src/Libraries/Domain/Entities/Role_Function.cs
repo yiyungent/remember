@@ -6,6 +6,7 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
+    [Table("Role_Function")]
     public partial class Role_Function : BaseEntity
     {
         #region Relationships

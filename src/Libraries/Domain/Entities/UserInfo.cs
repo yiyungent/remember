@@ -46,5 +46,15 @@ namespace Domain.Entities
         [Column(TypeName = "text")]
         [StringLength(65535)]
         public string Remark { get; set; }
+
+        #region Relationships
+
+        /// <summary>
+        /// 角色列表
+        ///     多对多
+        /// </summary>
+        public virtual ICollection<RoleInfo> RoleInfos { get; set; }
+
+        #endregion
     }
 }
