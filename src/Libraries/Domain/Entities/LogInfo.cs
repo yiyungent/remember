@@ -53,7 +53,7 @@ namespace Domain.Entities
         //} }
         /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(30)]
+        [StringLength(500)]
         public string UserAgent { get; set; }
 
         [StringLength(30)]

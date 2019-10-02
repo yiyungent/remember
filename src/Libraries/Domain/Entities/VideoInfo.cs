@@ -17,7 +17,7 @@ namespace Domain.Entities
         /// <summary>
         /// ±êÌâ
         /// </summary>
-        [StringLength(30)]
+        [StringLength(100)]
         [Column(TypeName = "text")]
         public string Title { get; set; }
 
@@ -26,14 +26,14 @@ namespace Domain.Entities
         /// </summary>
         [Column(TypeName = "text")]
         [Required]
-        [StringLength(30)]
+        [StringLength(100)]
         public string PlayUrl { get; set; }
 
         /// <summary>
         /// ÊÓÆµ£º×ÖÄ»url
         /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(30)]
+        [StringLength(100)]
         public string SubTitleUrl { get; set; }
 
         /// <summary>

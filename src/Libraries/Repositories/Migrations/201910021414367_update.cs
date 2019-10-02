@@ -506,9 +506,7 @@ namespace Repositories.Migrations
                 "dbo.SearchDetail",
                 c => new
                     {
-                        ID = c.Guid(nullable: false),
-                        KeyWord = c.String(maxLength: 30, storeType: "nvarchar"),
-                        SearchTime = c.DateTime(precision: 0),
+                        ID = c.Int(nullable: false, identity: true),
                         DeletedAt = c.DateTime(precision: 0),
                         IsDeleted = c.Boolean(nullable: false),
                     })
@@ -518,9 +516,7 @@ namespace Repositories.Migrations
                 "dbo.SearchTotal",
                 c => new
                     {
-                        ID = c.Guid(nullable: false),
-                        KeyWord = c.String(maxLength: 30, storeType: "nvarchar"),
-                        SearchCount = c.Int(nullable: false),
+                        ID = c.Int(nullable: false, identity: true),
                         DeletedAt = c.DateTime(precision: 0),
                         IsDeleted = c.Boolean(nullable: false),
                     })

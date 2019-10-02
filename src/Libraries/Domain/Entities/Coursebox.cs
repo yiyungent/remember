@@ -17,20 +17,20 @@ namespace Domain.Entities
         /// </summary>
         [Required]
         [Column(TypeName = "text")]
-        [StringLength(30)]
+        [StringLength(100)]
         public string Name { get; set; }
 
         /// <summary>
         /// √Ë ˆ
         /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(30)]
+        [StringLength(2000)]
         public string Description { get; set; }
 
         /// <summary>
         /// ∑‚√ÊÕº
         /// </summary>
-        [StringLength(30)]
+        [StringLength(100)]
         [Column(TypeName = "text")]
         public string PicUrl { get; set; }
 

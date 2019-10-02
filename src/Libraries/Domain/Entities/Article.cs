@@ -37,7 +37,8 @@ namespace Domain.Entities
         /// <summary>
         /// 自定义Url
         /// </summary>
-        [StringLength(30)]
+        [StringLength(500)]
+        [Column(TypeName = "text")]
         public string CustomUrl { get; set; }
 
         #region Relationships
@@ -51,7 +52,7 @@ namespace Domain.Entities
         /// 作者
         /// </summary>
         [ForeignKey("AuthorId")]
-        public virtual UserInfo Author { get; set; } 
+        public virtual UserInfo Author { get; set; }
 
         #endregion
     }

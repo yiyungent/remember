@@ -15,21 +15,21 @@ namespace Domain.Entities
         /// 权限键（唯一标识）
         /// </summary>
         [Required]
-        [StringLength(30)]
+        [StringLength(50)]
         public string AuthKey { get; set; }
 
         /// <summary>
         /// 操作名称
         /// </summary>
         [Required]
-        [StringLength(30)]
+        [StringLength(50)]
         public string Name { get; set; }
 
         /// <summary>
         /// 备注
         /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(30)]
+        [StringLength(50)]
         public string Remark { get; set; }
 
         #region Relationships

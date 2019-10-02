@@ -15,7 +15,7 @@ namespace Domain.Entities
         /// 模板名
         /// </summary>
         [Required]
-        [StringLength(30)]
+        [StringLength(100)]
         [Column(TypeName = "text")]
         public string TemplateName { get; set; }
 
@@ -23,7 +23,7 @@ namespace Domain.Entities
         /// 模板标题
         /// </summary>
         [Required]
-        [StringLength(30)]
+        [StringLength(100)]
         [Column(TypeName = "text")]
         public string Title { get; set; }
 

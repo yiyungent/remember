@@ -22,14 +22,14 @@ namespace Domain.Entities
         /// 密码
         /// </summary>
         [Required]
-        [StringLength(30)]
+        [StringLength(60)]
         public string Password { get; set; }
 
         /// <summary>
         /// 刷新Toke
         /// </summary>
         // TODO: 实际已经无用,等以后实现 OAuth2.0
-        [StringLength(30)]
+        [StringLength(100)]
         [Column(TypeName = "text")]
         public string RefreshToken { get; set; }
 
@@ -41,13 +41,15 @@ namespace Domain.Entities
         /// <summary>
         /// 选择的主体模板
         /// </summary>
-        [StringLength(20)]
+        [StringLength(100)]
+        [Column(TypeName = "text")]
         public string TemplateName { get; set; }
 
         /// <summary>
         /// 用户头像Url地址
         /// </summary>
-        [StringLength(30)]
+        [StringLength(100)]
+        [Column(TypeName = "text")]
         public string Avatar { get; set; }
 
         /// <summary>
@@ -66,7 +68,7 @@ namespace Domain.Entities
         /// 描述
         /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(30)]
+        [StringLength(100)]
         public string Description { get; set; }
 
         /// <summary>

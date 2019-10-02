@@ -25,14 +25,14 @@ namespace Domain.Entities
         /// √Ë ˆ
         /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(30)]
+        [StringLength(500)]
         public string Description { get; set; }
 
         /// <summary>
         /// ∑‚√ÊÕº
         /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(30)]
+        [StringLength(500)]
         public string PicUrl { get; set; }
 
         /// <summary>

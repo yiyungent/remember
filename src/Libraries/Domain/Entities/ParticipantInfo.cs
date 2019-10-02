@@ -19,7 +19,7 @@ namespace Domain.Entities
         /// eg: ["作词", "作曲", "后期"]
         /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(30)]
+        [StringLength(100)]
         public string RoleNames { get; set; }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Domain.Entities
         /// <para>在此创作中做了什么</para>
         /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(30)]
+        [StringLength(1000)]
         public string Description { get; set; }
     }
 }

@@ -18,11 +18,11 @@ namespace Domain.Entities
         /// ½ÇÉ«Ãû
         /// </summary>
         [Required]
-        [StringLength(30)]
+        [StringLength(60)]
         public string Name { get; set; }
 
         [Column(TypeName = "text")]
-        [StringLength(30)]
+        [StringLength(500)]
         public string Remark { get; set; }
 
 

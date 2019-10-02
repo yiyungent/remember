@@ -17,7 +17,7 @@ namespace Domain.Entities
         /// <summary>
         /// ×îºó·ÃÎÊIP
         /// </summary>
-        [StringLength(30)]
+        [StringLength(20)]
         public string LastAccessIp { get; set; }
 
         /// <summary>

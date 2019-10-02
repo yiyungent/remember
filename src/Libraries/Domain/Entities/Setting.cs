@@ -15,7 +15,7 @@ namespace Domain.Entities
         /// 键
         /// </summary>
         [Required]
-        [StringLength(30)]
+        [StringLength(100)]
         [Column(TypeName = "text")]
         public string SetKey { get; set; }
 
@@ -23,20 +23,21 @@ namespace Domain.Entities
         /// 值
         /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(30)]
+        [StringLength(500)]
         public string SetValue { get; set; }
 
         /// <summary>
         /// 中文名
         /// </summary>
-        [StringLength(30)]
+        [StringLength(100)]
+        [Column(TypeName = "text")]
         public string Name { get; set; }
 
         /// <summary>
         /// 备注
         /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(30)]
+        [StringLength(1000)]
         public string Remark { get; set; }
     }
 }

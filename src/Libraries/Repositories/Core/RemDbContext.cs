@@ -13,7 +13,16 @@ namespace Repositories.Core
         public RemDbContext()
             : base("name=RemDbContext")
         {
-            Database.SetInitializer(new DropCreateDatabaseAlways<RemDbContext>());
+            // 让Entity Framework启动不再效验 __MigrationHistory 表
+            // 发现每次效验/查询，都要去创建 __MigrationHistory 表，而 此表 的 ContextKey字段varchar(300) 超过限制导致
+            // 解决：Specified key was too long; max key length is 767 bytes
+            Database.SetInitializer<RemDbContext>(null);
+
+            // 记录 EF 生成的 SQL
+            Database.Log = (str) =>
+            {
+                System.Diagnostics.Debug.WriteLine(str);
+            };
         }
 
         #region Tables

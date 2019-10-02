@@ -11,7 +11,8 @@ namespace Domain.Entities
         [Key]
         public Guid ID { get; set; }
 
-        [StringLength(30)]
+        [StringLength(100)]
+        [Column(TypeName = "text")]
         public string KeyWord { get; set; }
 
         public DateTime? SearchTime { get; set; }

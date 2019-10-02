@@ -15,7 +15,7 @@ namespace Domain.Entities
         /// ÄÚÈİ
         /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(30)]
+        [StringLength(5000)]
         public string Content { get; set; }
 
         /// <summary>

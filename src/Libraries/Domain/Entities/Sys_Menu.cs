@@ -15,28 +15,28 @@ namespace Domain.Entities
         /// 菜单名
         /// </summary>
         [Required]
-        [StringLength(30)]
+        [StringLength(500)]
         [Column(TypeName = "text")]
         public string Name { get; set; }
 
         /// <summary>
         /// 控制器名
         /// </summary>
-        [StringLength(30)]
+        [StringLength(500)]
         [Column(TypeName = "text")]
         public string ControllerName { get; set; }
 
         /// <summary>
         /// 动作名
         /// </summary>
-        [StringLength(30)]
+        [StringLength(500)]
         [Column(TypeName = "text")]
         public string ActionName { get; set; }
 
         /// <summary>
         /// 区域名
         /// </summary>
-        [StringLength(30)]
+        [StringLength(500)]
         [Column(TypeName = "text")]
         public string AreaName { get; set; }
 

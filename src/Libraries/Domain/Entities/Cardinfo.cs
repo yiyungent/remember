@@ -19,7 +19,7 @@ namespace Domain.Entities
         /// </summary>
         [Column(TypeName = "text")]
         [Required]
-        [StringLength(30)]
+        [StringLength(5000)]
         public string Content { get; set; }
 
         #region Relationships
