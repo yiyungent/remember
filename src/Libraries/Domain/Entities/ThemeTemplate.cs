@@ -8,16 +8,30 @@ namespace Domain.Entities
 
     public partial class ThemeTemplate : BaseEntity
     {
+        [Key]
         public int ID { get; set; }
 
+        /// <summary>
+        /// 模板名
+        /// </summary>
         [Required]
-        [StringLength(100)]
+        [StringLength(30)]
+        [Column(TypeName = "text")]
         public string TemplateName { get; set; }
 
+        /// <summary>
+        /// 模板标题
+        /// </summary>
         [Required]
-        [StringLength(100)]
+        [StringLength(30)]
+        [Column(TypeName = "text")]
         public string Title { get; set; }
 
+        /// <summary>
+        /// 状态
+        ///     0: 禁用
+        ///     1: 开启
+        /// </summary>
         public int? IsOpen { get; set; }
     }
 }

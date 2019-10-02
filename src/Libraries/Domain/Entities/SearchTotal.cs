@@ -8,9 +8,10 @@ namespace Domain.Entities
 
     public partial class SearchTotal : BaseEntity
     {
+        [Key]
         public Guid ID { get; set; }
 
-        [StringLength(50)]
+        [StringLength(30)]
         public string KeyWord { get; set; }
 
         public int SearchCount { get; set; }

@@ -8,9 +8,10 @@ namespace Domain.Entities
 
     public partial class SearchDetail : BaseEntity
     {
+        [Key]
         public Guid ID { get; set; }
 
-        [StringLength(50)]
+        [StringLength(30)]
         public string KeyWord { get; set; }
 
         public DateTime? SearchTime { get; set; }

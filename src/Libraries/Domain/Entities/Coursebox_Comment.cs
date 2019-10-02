@@ -6,8 +6,12 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
+    /// <summary>
+    /// 实体类：课程-评论
+    /// </summary>
     public partial class CourseBox_Comment : BaseEntity
     {
+        [Key]
         public int ID { get; set; }
 
         #region Relationships

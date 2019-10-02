@@ -8,21 +8,35 @@ namespace Domain.Entities
 
     public partial class Setting : BaseEntity
     {
+        [Key]
         public int ID { get; set; }
 
+        /// <summary>
+        /// 键
+        /// </summary>
         [Required]
-        [StringLength(100)]
+        [StringLength(30)]
+        [Column(TypeName = "text")]
         public string SetKey { get; set; }
 
+        /// <summary>
+        /// 值
+        /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(65535)]
+        [StringLength(30)]
         public string SetValue { get; set; }
 
-        [StringLength(255)]
+        /// <summary>
+        /// 中文名
+        /// </summary>
+        [StringLength(30)]
         public string Name { get; set; }
 
+        /// <summary>
+        /// 备注
+        /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(65535)]
+        [StringLength(30)]
         public string Remark { get; set; }
     }
 }

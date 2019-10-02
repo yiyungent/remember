@@ -4,6 +4,8 @@ using Autofac.Integration.Mvc;
 using AutoMapperConfig;
 using Domain;
 using Repositories.Core;
+using Repositories.Implement;
+using Repositories.Interface;
 using Services.Implement;
 using Services.Interface;
 using System.Data.Entity;
@@ -35,21 +37,23 @@ namespace WebUI
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
 
             // 注册仓储层服务
-            //builder.RegisterType<ArticleRepository>().As<IArticleRepository>();
+            builder.RegisterType<ArticleRepository>().As<IArticleRepository>();
+            builder.RegisterType<UserInfoRepository>().As<IUserInfoRepository>();
 
             // 注册服务层服务
-            //builder.RegisterType<ArticleService>().As<IArticleService>();
+            builder.RegisterType<ArticleService>().As<IArticleService>();
+            builder.RegisterType<UserInfoService>().As<IUserInfoService>();
 
             // 注册基于接口约束的实体
-            var assemblies = BuildManager.GetReferencedAssemblies().Cast<Assembly>()
-                .Where(
-                    assembly =>
-                        assembly.GetTypes().FirstOrDefault(type => type.GetInterfaces().Contains(typeof(IDependency))) !=
-                        null
-                );
-            builder.RegisterAssemblyTypes(assemblies.ToArray())
-                .AsImplementedInterfaces()
-                .InstancePerDependency();
+            //var assemblies = BuildManager.GetReferencedAssemblies().Cast<Assembly>()
+            //    .Where(
+            //        assembly =>
+            //            assembly.GetTypes().FirstOrDefault(type => type.GetInterfaces().Contains(typeof(IDependency))) !=
+            //            null
+            //    );
+            //builder.RegisterAssemblyTypes(assemblies.ToArray())
+            //    .AsImplementedInterfaces()
+            //    .InstancePerDependency();
 
             // add the Entity Framework context to make sure only one context per request
             builder.RegisterType<RemDbContext>().InstancePerRequest();

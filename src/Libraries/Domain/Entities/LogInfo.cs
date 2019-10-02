@@ -6,44 +6,104 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
+    /// <summary>
+    /// 实体类：日志信息
+    /// </summary>
     public partial class LogInfo : BaseEntity
     {
+        [Key]
         public int ID { get; set; }
 
+        /// <summary>
+        /// 访问者的用户ID
+        /// 如果未登录，则为 0
+        /// </summary>
         public int? AccessUserId { get; set; }
 
-        [StringLength(50)]
+        /// <summary>
+        /// 访问者的IP
+        /// </summary>
+        [StringLength(30)]
         public string AccessIp { get; set; }
 
-        [StringLength(100)]
+        /// <summary>
+        /// 解析 UserAgent json字符串
+        /// {
+        ///      ua: "",
+        ///      browser: {
+        ///          name: "",
+        ///          version: ""
+        ///      },
+        ///      engine: {
+        ///          name: "",
+        ///          version: ""
+        ///      },
+        ///      os: {
+        ///          name: "",
+        ///          version: ""
+        ///      },
+        ///      device: {
+        ///          model: "",
+        ///          type: "",
+        ///          vendor: ""
+        ///      },
+        ///      cpu: {
+        ///          architecture: ""
+        ///      }
+        //} }
+        /// </summary>
+        [Column(TypeName = "text")]
+        [StringLength(30)]
+        public string UserAgent { get; set; }
+
+        [StringLength(30)]
         public string Browser { get; set; }
 
-        [StringLength(100)]
+        [StringLength(30)]
         public string BrowserEngine { get; set; }
 
-        [StringLength(100)]
+        [StringLength(30)]
         public string OS { get; set; }
 
-        [StringLength(100)]
+        [StringLength(30)]
         public string Device { get; set; }
 
-        [StringLength(100)]
+        [StringLength(30)]
         public string Cpu { get; set; }
 
+        /// <summary>
+        /// 访问时间：进入网页，加载完的时间
+        /// </summary>
         public DateTime? AccessTime { get; set; }
 
+        /// <summary>
+        /// 跳出网页时间
+        /// </summary>
         public DateTime? JumpTime { get; set; }
 
+        /// <summary>
+        /// 在页面的持续时间 = JumpTime - AccessTime
+        /// 总秒数
+        /// </summary>
         public long? Duration { get; set; }
 
+        /// <summary>
+        /// 访问地址
+        /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(65535)]
+        [StringLength(30)]
         public string AccessUrl { get; set; }
 
+        /// <summary>
+        /// 来源URL
+        /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(65535)]
+        [StringLength(30)]
         public string RefererUrl { get; set; }
 
+        /// <summary>
+        /// 创建时间
+        /// </summary>
         public DateTime? CreateTime { get; set; }
     }
 }

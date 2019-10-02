@@ -6,8 +6,12 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
+    /// <summary>
+    /// 实体类: 角色
+    /// </summary>
     public partial class RoleInfo : BaseEntity
     {
+        [Key]
         public int ID { get; set; }
 
         /// <summary>
@@ -17,31 +21,27 @@ namespace Domain.Entities
         [StringLength(30)]
         public string Name { get; set; }
 
-        public bool? IsLog { get; set; }
-
-        [StringLength(255)]
+        [Column(TypeName = "text")]
+        [StringLength(30)]
         public string Remark { get; set; }
 
 
         #region Relationships
 
         /// <summary>
-        /// 用户列表
-        ///     多对多关系
+        /// 角色-用户
         /// </summary>
-        public virtual ICollection<UserInfo> UserInfos { get; set; }
+        public virtual ICollection<Role_User> Role_Users { get; set; }
 
         /// <summary>
-        /// 角色菜单权限
-        ///     多对多关系
+        /// 角色-菜单
         /// </summary>
-        public virtual ICollection<Sys_Menu> Sys_Menus { get; set; }
+        public virtual ICollection<Role_Menu> Role_Menus { get; set; }
 
         /// <summary>
-        /// 角色操作权限
-        ///     多对多关系
+        /// 角色-权限
         /// </summary>
-        public virtual ICollection<FunctionInfo> FunctionInfos { get; set; }
+        public virtual ICollection<Role_Function> Role_Functions { get; set; }
 
         #endregion
     }

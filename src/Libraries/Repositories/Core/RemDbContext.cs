@@ -74,31 +74,44 @@ namespace Repositories.Core
             //        MapRightKey("OrderId"));
 
 
-            // 角色 和 操作，菜单，用户 均为 多对多关系
-            #region 角色与操作，菜单，用户 多对多
+            // 两组一对多，形成多对多，并在第三张关系表中附加字段
+            modelBuilder.Entity<RoleInfo>()
+                .HasMany(m => m.Role_Users)
+                .WithRequired(m => m.RoleInfo)
+                .HasForeignKey(m => m.RoleId);
+            modelBuilder.Entity<UserInfo>()
+                .HasMany(m => m.Role_Users)
+                .WithRequired(m => m.UserInfo)
+                .HasForeignKey(m => m.UserId);
+
+            modelBuilder.Entity<RoleInfo>()
+                .HasMany(m => m.Role_Functions)
+                .WithRequired(m => m.RoleInfo)
+                .HasForeignKey(m => m.RoleId);
             modelBuilder.Entity<FunctionInfo>()
-                   .HasMany(m => m.RoleInfos)
-                   .WithMany(m => m.FunctionInfos)
-                   .Map(m => m.ToTable("Role_Function")
-                   .MapLeftKey("RoleId")
-                   .MapRightKey("FunctionId"));
+                .HasMany(m => m.Role_Functions)
+                .WithRequired(m => m.FunctionInfo)
+                .HasForeignKey(m => m.FunctionId);
+
+            modelBuilder.Entity<RoleInfo>()
+                .HasMany(m => m.Role_Menus)
+                .WithRequired(m => m.RoleInfo)
+                .HasForeignKey(m => m.RoleId);
+            modelBuilder.Entity<Sys_Menu>()
+                .HasMany(m => m.Role_Menus)
+                .WithRequired(m => m.Sys_Menu)
+                .HasForeignKey(m => m.MenuId);
+
 
             modelBuilder.Entity<Sys_Menu>()
-                .HasMany(m => m.RoleInfos)
-                .WithMany(m => m.Sys_Menus)
-                .Map(m => m.ToTable("Role_Menu")
-                .MapLeftKey("RoleId")
-                .MapRightKey("MenuId"));
+                .HasMany(m => m.Children)
+                .WithRequired(m => m.Parent)
+                .HasForeignKey(m => m.ParentId);
 
-            modelBuilder.Entity<UserInfo>()
-                .HasMany(m => m.RoleInfos)
-                .WithMany(m => m.UserInfos)
-                .Map(m => m.ToTable("Role_User")
-                .MapLeftKey("RoleId")
-                .MapRightKey("UserId")); 
-            #endregion
-
-
+            modelBuilder.Entity<Comment>()
+                .HasMany(m => m.Children)
+                .WithRequired(m => m.Parent)
+                .HasForeignKey(m => m.ParentId);
 
 
 

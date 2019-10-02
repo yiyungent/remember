@@ -6,21 +6,38 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("Role_User")]
     public partial class Role_User : BaseEntity
     {
         [Key]
-        [Column(Order = 0)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int ID { get; set; }
+
+        /// <summary>
+        /// 授权时间
+        /// </summary>
+        public DateTime? CreateTime { get; set; }
+
+        #region Relationships
+
+        /// <summary>
+        /// 授权人/操作人
+        /// </summary>
+        [ForeignKey("Operator")]
+        public int OperatorId { get; set; }
+        [ForeignKey("OperatorId")]
+        public virtual UserInfo Operator { get; set; }
+
         public int UserId { get; set; }
         [ForeignKey("UserId")]
         public virtual UserInfo UserInfo { get; set; }
 
-        [Key]
-        [Column(Order = 1)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int RoleId { get; set; }
         [ForeignKey("RoleId")]
         public virtual RoleInfo RoleInfo { get; set; }
+
+        #endregion
+
+
+
+
     }
 }

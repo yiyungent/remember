@@ -8,13 +8,14 @@ namespace Domain.Entities
 
     public partial class FunctionInfo : BaseEntity
     {
+        [Key]
         public int ID { get; set; }
 
         /// <summary>
         /// 权限键（唯一标识）
         /// </summary>
         [Required]
-        [StringLength(50)]
+        [StringLength(30)]
         public string AuthKey { get; set; }
 
         /// <summary>
@@ -28,7 +29,7 @@ namespace Domain.Entities
         /// 备注
         /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(65535)]
+        [StringLength(30)]
         public string Remark { get; set; }
 
         #region Relationships
@@ -42,7 +43,10 @@ namespace Domain.Entities
         [ForeignKey("MenuId")]
         public virtual Sys_Menu Sys_Menu { get; set; }
 
-        public virtual ICollection<RoleInfo> RoleInfos { get; set; }
+        /// <summary>
+        /// 角色-权限
+        /// </summary>
+        public virtual ICollection<Role_Function> Role_Functions { get; set; }
 
         #endregion
 

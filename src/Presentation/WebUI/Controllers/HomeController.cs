@@ -16,9 +16,12 @@ namespace WebUI.Controllers
         /// </summary>
         private readonly IArticleService _articleService;
 
-        public HomeController(IArticleService articleService)
+        private readonly IUserInfoService _userInfoService;
+
+        public HomeController(IArticleService articleService, IUserInfoService userInfoService)
         {
             _articleService = articleService;
+            _userInfoService = userInfoService;
         }
 
         public ActionResult Index()
@@ -50,10 +53,29 @@ namespace WebUI.Controllers
             UserInfo user = _articleService.Find(1).Author;
             Article article = _articleService.Find(2);
 
-            var query  = _articleService.All();
+            var query = _articleService.All();
             var list = query.ToList();
 
             return user.Avatar;
+        }
+
+        public void TestTwoAndTwo()
+        {
+            try
+            {
+                UserInfo userInfo = this._userInfoService.All().FirstOrDefault();
+                IList<Role_User> role_Users = userInfo.Role_Users.ToList();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            
+
+
+            int i = 0;
+            
         }
     }
 }

@@ -8,9 +8,12 @@ namespace Domain.Entities
 
     public partial class Favorite_CardBox : BaseEntity
     {
+        [Key]
         public int ID { get; set; }
 
         public DateTime? CreateTime { get; set; }
+
+        #region Relationships
 
         [ForeignKey("Cardbox")]
         public int CardBoxId { get; set; }
@@ -20,6 +23,8 @@ namespace Domain.Entities
         [ForeignKey("Favorite")]
         public int FavoriteId { get; set; }
         [ForeignKey("FavoriteId")]
-        public virtual Favorite Favorite { get; set; }
+        public virtual Favorite Favorite { get; set; } 
+
+        #endregion
     }
 }
