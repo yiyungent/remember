@@ -5,6 +5,7 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+    using System.Linq;
 
     public partial class UserInfo : BaseEntity
     {
@@ -94,6 +95,24 @@ namespace Domain.Entities
         /// ½ÇÉ«-ÓÃ»§
         /// </summary>
         public virtual ICollection<Role_User> Role_Users { get; set; }
+
+        #endregion
+
+        #region Helpers
+
+        public ICollection<RoleInfo> RoleInfos
+        {
+            get
+            {
+                ICollection<RoleInfo> roleInfos = new List<RoleInfo>();
+                if (this.Role_Users != null && this.Role_Users.Count >= 1)
+                {
+                    roleInfos = this.Role_Users.Select(m => m.RoleInfo).ToList();
+                }
+
+                return roleInfos;
+            }
+        }
 
         #endregion
     }

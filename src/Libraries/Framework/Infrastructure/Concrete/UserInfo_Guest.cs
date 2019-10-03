@@ -29,12 +29,17 @@ namespace Framework.Infrastructure.Concrete
                     {
                         UserName = "游客(未登录)",
                         Avatar = ":WebUISite:/assets/images/guest-avatar.jpg",
-                        RoleInfos = new List<RoleInfo>
-                        {
-                            //Container.Instance.Resolve<RoleInfoService>().GetEntity(2)
-                            _dBAccessProvider.GetGuestRoleInfo()
-                        }
+                        //RoleInfos = new List<RoleInfo>
+                        //{
+                        //    //Container.Instance.Resolve<RoleInfoService>().GetEntity(2)
+                        //    _dBAccessProvider.GetGuestRoleInfo()
+                        //}
+                        Role_Users = new List<Role_User>()
                     };
+                    guest.Role_Users.Add(new Role_User
+                    {
+                        RoleInfo = _dBAccessProvider.GetGuestRoleInfo()
+                    });
 
                     _instance = guest;
                 }

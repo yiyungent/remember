@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace Framework.Factories
 {
@@ -18,7 +19,14 @@ namespace Framework.Factories
             object instance = CallContext.GetData("Resolve:" + type.ToString());
             if (instance == null)
             {
+                // 先试图从框架本身提供的DI中拿
                 instance = DependencyResolverProvider.Get(type);
+                if (instance == null)
+                {
+                    // 再试图从 框架外部设置的DI中拿
+                    instance = DependencyResolver.Current.GetService(type);
+                }
+
                 CallContext.SetData("Resolve:" + type.ToString(), instance);
             }
 

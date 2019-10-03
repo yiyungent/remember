@@ -1,5 +1,6 @@
 ﻿using AutoMapperConfig;
 using Domain.Entities;
+using Framework.Infrastructure.Concrete;
 using Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,7 @@ namespace WebUI.Controllers
         public ActionResult Index()
         {
             var viewModel = _articleService.FindHomePageArticles(4);
+            UserInfo userInfo = AccountManager.GetCurrentUserInfo();
 
             return View(viewModel);
         }
@@ -71,11 +73,11 @@ namespace WebUI.Controllers
 
                 throw;
             }
-            
+
 
 
             int i = 0;
-            
+
         }
     }
 }

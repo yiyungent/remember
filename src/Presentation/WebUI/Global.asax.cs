@@ -3,6 +3,8 @@ using Autofac.Features.ResolveAnything;
 using Autofac.Integration.Mvc;
 using AutoMapperConfig;
 using Domain;
+using Framework.Infrastructure.Abstract;
+using Framework.Infrastructure.Concrete;
 using Repositories.Core;
 using Repositories.Implement;
 using Repositories.Interface;
@@ -36,14 +38,26 @@ namespace WebUI
             // 注册MvcApplication程序集中所有的控制器
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
 
+            // 注意 Framework 所需数据库访问者
+            builder.RegisterType<DBAccessProvider>().As<IDBAccessProvider>();
+
             // 注册仓储层服务
             builder.RegisterType<ArticleRepository>().As<IArticleRepository>();
             builder.RegisterType<UserInfoRepository>().As<IUserInfoRepository>();
+            builder.RegisterType<Sys_MenuRepository>().As<ISys_MenuRepository>();
+            builder.RegisterType<RoleInfoRepository>().As<IRoleInfoRepository>();
+            builder.RegisterType<FunctionInfoRepository>().As<IFunctionInfoRepository>();
+            builder.RegisterType<SettingRepository>().As<ISettingRepository>();
 
             // 注册服务层服务
             builder.RegisterType<ArticleService>().As<IArticleService>();
             builder.RegisterType<UserInfoService>().As<IUserInfoService>();
+            builder.RegisterType<Sys_MenuService>().As<ISys_MenuService>();
+            builder.RegisterType<RoleInfoService>().As<IRoleInfoService>();
+            builder.RegisterType<FunctionInfoService>().As<IFunctionInfoService>();
+            builder.RegisterType<SettingService>().As<ISettingService>();
 
+            // TODO: 注册基于接口约束的实体，不知道为什么，改为部分类后就失败了，以前还测试成功
             // 注册基于接口约束的实体
             //var assemblies = BuildManager.GetReferencedAssemblies().Cast<Assembly>()
             //    .Where(
@@ -77,7 +91,7 @@ namespace WebUI
         private void AutoMapperRegister()
         {
             new AutoMapperStartupTask().Execute();
-        } 
+        }
         #endregion
     }
 }

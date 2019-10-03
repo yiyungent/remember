@@ -1,6 +1,8 @@
 ﻿using Core;
 using Domain;
 using Domain.Entities;
+using Framework.Factories;
+using Framework.Infrastructure.Abstract;
 using Services;
 using System;
 using System.Collections.Generic;
@@ -14,19 +16,21 @@ namespace Framework.Extensions
     {
         public static string Get(string key)
         {
+            #region 废弃
             //string value = Container.Instance.Resolve<SettingService>().Query(new List<ICriterion>
             //{
             //    Expression.Eq("SetKey", key)
-            //}).FirstOrDefault()?.SetValue ?? "";
-            // TODO: Ioc
-            string value = null;
+            //}).FirstOrDefault()?.SetValue ?? ""; 
+            #endregion
+            IDBAccessProvider dBAccessProvider = HttpOneRequestFactory.Get<IDBAccessProvider>();
+            string value = dBAccessProvider.GetSet(key);
 
             return value;
         }
 
         public static void Set(string key, string value)
         {
-            // TODO: Ioc
+            #region 废弃
             //Setting setting = Container.Instance.Resolve<SettingService>().Query(new List<ICriterion>
             //{
             //    Expression.Eq("SetKey", key)
@@ -35,7 +39,11 @@ namespace Framework.Extensions
             //{
             //    setting.SetValue = value;
             //    Container.Instance.Resolve<SettingService>().Edit(setting);
-            //}
+            //} 
+            #endregion
+            IDBAccessProvider dBAccessProvider = HttpOneRequestFactory.Get<IDBAccessProvider>();
+            dBAccessProvider.Set(key, value);
+
         }
     }
 }

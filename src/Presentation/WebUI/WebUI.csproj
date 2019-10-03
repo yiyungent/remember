@@ -138,9 +138,17 @@
       <Project>{03AC9D3C-2B2D-4246-8562-C844832F1962}</Project>
       <Name>AutoMapperConfig</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Core\Core.csproj">
+      <Project>{2f10194d-d842-48bb-802f-3066d7db20b6}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Domain\Domain.csproj">
       <Project>{5130cc63-704f-40e6-b0de-3a92e1448fa3}</Project>
       <Name>Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Framework\Framework.csproj">
+      <Project>{73faa94c-d233-4894-a0e8-90a4436345e6}</Project>
+      <Name>Framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Repositories\Repositories.csproj">
       <Project>{efc4d84d-269d-4555-8e61-390e087bb603}</Project>

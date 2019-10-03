@@ -86,8 +86,6 @@
     <Compile Include="Core\FrameworkException.cs" />
     <Compile Include="Extensions\DomainExt.cs" />
     <Compile Include="Extensions\WebSetting.cs" />
-    <Compile Include="Factories\AuthManagerFactory.cs" />
-    <Compile Include="Factories\DBAccessProviderFactory.cs" />
     <Compile Include="Factories\HttpOneRequestFactory.cs" />
     <Compile Include="HtmlHelpers\AuthTagHelper.cs" />
     <Compile Include="HtmlHelpers\PageHelper.cs" />
@@ -101,7 +99,6 @@
     <Compile Include="Infrastructure\Concrete\CommonEqualityComparer.cs" />
     <Compile Include="Infrastructure\Concrete\CurrentAccountModelBinder.cs" />
     <Compile Include="Infrastructure\Concrete\DBAccessProvider.cs" />
-    <Compile Include="Infrastructure\Concrete\DomainExt.cs" />
     <Compile Include="Infrastructure\Concrete\UserInfo_Guest.cs" />
     <Compile Include="Infrastructure\DependencyResolverProvider.cs" />
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />

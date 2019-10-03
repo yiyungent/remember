@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Domain;
 using Domain.Entities;
 
 namespace Framework.Infrastructure.Concrete
@@ -291,8 +290,25 @@ namespace Framework.Infrastructure.Concrete
             RoleInfo roleInfo = _dBAccessProvider.GetRoleInfoById(roleId);
             IList<Sys_Menu> sys_Menus = _dBAccessProvider.GetSys_MenuListByIds(menuIdList.ToArray());
             IList<FunctionInfo> functionInfos = _dBAccessProvider.GetFunctionInfoListByIds(funcIdList.ToArray());
-            roleInfo.Sys_Menus = sys_Menus;
-            roleInfo.FunctionInfos = functionInfos;
+            // TODO: 易错点
+            //roleInfo.Sys_Menus = sys_Menus;
+            roleInfo.Role_Menus = new List<Role_Menu>();
+            foreach (var item in sys_Menus)
+            {
+                roleInfo.Role_Menus.Add(new Role_Menu
+                {
+                    Sys_Menu = item
+                });
+            }
+            //roleInfo.FunctionInfos = functionInfos;
+            roleInfo.Role_Functions = new List<Role_Function>();
+            foreach (var item in functionInfos)
+            {
+                roleInfo.Role_Functions.Add(new Role_Function
+                {
+                    FunctionInfo = item
+                });
+            }
             isSuccess = _dBAccessProvider.EditRoleInfo(roleInfo);
 
             return isSuccess;

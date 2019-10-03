@@ -32,7 +32,7 @@ namespace Framework.Extensions
         public static string ToHttpAbsoluteUrl(this string dbRelativeUrl)
         {
             string rtnStr = "";
-            // TODO: 数据库操作
+            #region 废弃
             //if (!string.IsNullOrEmpty(dbRelativeUrl))
             //{
             //    SettingService settingService = Container.Instance.Resolve<SettingService>();
@@ -46,7 +46,16 @@ namespace Framework.Extensions
             //}).FirstOrDefault()?.SetValue;
 
             //    rtnStr = dbRelativeUrl.Replace(":WebApiSite:", webApiSite).Replace(":WebUISite:", webUISite);
-            //}
+            //} 
+            #endregion
+            IDBAccessProvider dBAccessProvider = HttpOneRequestFactory.Get<IDBAccessProvider>();
+            if (!string.IsNullOrEmpty(dbRelativeUrl))
+            {
+                string webApiSite = dBAccessProvider.GetSet("WebApiSite");
+                string webUISite = dBAccessProvider.GetSet("WebUISite");
+
+                rtnStr = dbRelativeUrl.Replace(":WebApiSite:", webApiSite).Replace(":WebUISite:", webUISite);
+            }
 
             return rtnStr;
         }

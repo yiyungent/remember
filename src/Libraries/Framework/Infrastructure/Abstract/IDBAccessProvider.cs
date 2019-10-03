@@ -42,6 +42,8 @@ namespace Framework.Infrastructure.Abstract
 
         string GetSet(string key);
 
+        void Set(string key, string value);
+
         void SaveUserTemplateName(string templateName);
     }
 }

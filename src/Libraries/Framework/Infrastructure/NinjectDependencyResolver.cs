@@ -48,7 +48,8 @@ namespace Framework.Infrastructure
             //_kernel.Bind<IAuthProvider>().To<FormsAuthProvider>();
 
             _kernel.Bind<IAuthManager>().To<AuthManager>();
-            _kernel.Bind<IDBAccessProvider>().To<DBAccessProvider>();
+            // 框架无法再 new DBAccessProvider()，因为需要外界提供具体的访问数据库的实例
+            //_kernel.Bind<IDBAccessProvider>().To<DBAccessProvider>();
             _kernel.Bind<IWorkContext>().To<WorkContext>();
             _kernel.Bind<ITemplateContext>().To<TemplateContext>();
             _kernel.Bind<ITemplateProvider>().To<TemplateProvider>();
