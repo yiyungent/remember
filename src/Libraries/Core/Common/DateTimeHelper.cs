@@ -24,6 +24,19 @@ namespace Core.Common
         }
 
         /// <summary>
+        /// C# DateTime转换为Unix时间戳
+        /// </summary>
+        public static long ToTimeStamp10(this DateTime? dateTime)
+        {
+            if (dateTime == null)
+            {
+                return 0;
+            }
+
+            return ToTimeStamp10(dateTime ?? DateTime.MinValue);
+        }
+
+        /// <summary>
         /// Unix时间戳转换为C# DateTime 
         /// </summary>
         public static DateTime ToDateTime10(this long timeStamp10)
@@ -45,6 +58,19 @@ namespace Core.Common
             long timeStamp = (long)(dateTime.ToLocalTime() - DateTime1970).TotalMilliseconds;
 
             return timeStamp;
+        }
+
+        /// <summary>
+        /// C# DateTime转换为JavaScript时间戳
+        /// </summary>
+        public static long ToTimeStamp13(this DateTime? dateTime)
+        {
+            if (dateTime == null)
+            {
+                return 0;
+            }
+
+            return ToTimeStamp13(dateTime ?? DateTime.MinValue);
         }
 
         /// <summary>

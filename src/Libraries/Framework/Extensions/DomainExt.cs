@@ -48,9 +48,9 @@ namespace Framework.Extensions
             //    rtnStr = dbRelativeUrl.Replace(":WebApiSite:", webApiSite).Replace(":WebUISite:", webUISite);
             //} 
             #endregion
-            IDBAccessProvider dBAccessProvider = HttpOneRequestFactory.Get<IDBAccessProvider>();
             if (!string.IsNullOrEmpty(dbRelativeUrl))
             {
+                IDBAccessProvider dBAccessProvider = HttpOneRequestFactory.Get<IDBAccessProvider>();
                 string webApiSite = dBAccessProvider.GetSet("WebApiSite");
                 string webUISite = dBAccessProvider.GetSet("WebUISite");
 

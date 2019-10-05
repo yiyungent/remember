@@ -32,6 +32,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\WebApi.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,7 +44,28 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.9.3.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Autofac.4.9.3\lib\net45\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.WebApi, Version=4.3.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Autofac.WebApi2.4.3.1\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="JWT, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\JWT.3.0.1\lib\net35\JWT.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -61,6 +83,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -80,14 +105,55 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\images\default-avatar-background.png" />
+    <Content Include="assets\images\default-avatar.jpg" />
+    <Content Include="assets\images\default-favorite-pic.jpg" />
+    <Content Include="assets\images\default-notify.jpg" />
+    <Content Include="assets\images\guest-avatar.jpg" />
+    <Content Include="assets\images\notexist-avatar.jpg" />
+    <Content Include="assets\images\scripts\detect-c.png" />
+    <Content Include="assets\images\scripts\input-error.png" />
+    <Content Include="assets\images\scripts\login.png" />
+    <Content Include="assets\images\scripts\register-title-icon.svg" />
+    <Content Include="assets\images\scripts\truev.png" />
+    <Content Include="assets\images\top_banner.png" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Attributes\NeedAuthAttribute.cs" />
+    <Compile Include="Controllers\CourseBoxController.cs" />
+    <Compile Include="Controllers\FavoriteController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LogController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\VideoInfoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\UserIdentity.cs" />
+    <Compile Include="Infrastructure\UserPrincipal.cs" />
+    <Compile Include="Models\Common\ResponseData.cs" />
+    <Compile Include="Models\CourseBoxVM\CommentViewModel.cs" />
+    <Compile Include="Models\CourseBoxVM\CourseBoxViewModel.cs" />
+    <Compile Include="Models\CourseBoxVM\LearnCourseBoxInputModel.cs" />
+    <Compile Include="Models\FavoriteVM\CreateInputModel.cs" />
+    <Compile Include="Models\FavoriteVM\FavCourseBoxInputModel.cs" />
+    <Compile Include="Models\FavoriteVM\FavoriteViewModel.cs" />
+    <Compile Include="Models\FavoriteVM\FavStatInCourseBoxViewModel.cs" />
+    <Compile Include="Models\FavoriteVM\MyFavListViewModel.cs" />
+    <Compile Include="Models\HomeVM\LastCourseBoxViewMOdel.cs" />
+    <Compile Include="Models\HomeVM\RankingCourseBoxViewModel.cs" />
+    <Compile Include="Models\LogVM\AccessLogInputModel.cs" />
+    <Compile Include="Models\LogVM\UserAgentModel.cs" />
+    <Compile Include="Models\UserInfoVM\LoginInputModel.cs" />
+    <Compile Include="Models\UserInfoVM\MyFansViewModel.cs" />
+    <Compile Include="Models\UserInfoVM\MyFollowViewModel.cs" />
+    <Compile Include="Models\UserInfoVM\RegisterInputModel.cs" />
+    <Compile Include="Models\UserInfoVM\UserInfoViewModel.cs" />
+    <Compile Include="Models\VideoInfoVM\VideoInfoViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -101,8 +167,40 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Models\" />
+    <Folder Include="DomainExt\" />
+    <Folder Include="Upload\avatars\" />
+    <Folder Include="Upload\images\" />
+    <Folder Include="Upload\videos\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\AutoMapperConfig\AutoMapperConfig.csproj">
+      <Project>{03ac9d3c-2b2d-4246-8562-c844832f1962}</Project>
+      <Name>AutoMapperConfig</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Core\Core.csproj">
+      <Project>{2f10194d-d842-48bb-802f-3066d7db20b6}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Domain\Domain.csproj">
+      <Project>{5130cc63-704f-40e6-b0de-3a92e1448fa3}</Project>
+      <Name>Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Framework\Framework.csproj">
+      <Project>{73faa94c-d233-4894-a0e8-90a4436345e6}</Project>
+      <Name>Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Repositories\Repositories.csproj">
+      <Project>{efc4d84d-269d-4555-8e61-390e087bb603}</Project>
+      <Name>Repositories</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Services\Services.csproj">
+      <Project>{afaf3e39-7f01-4947-8816-168b8b5ecad2}</Project>
+      <Name>Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\ViewModel\ViewModel.csproj">
+      <Project>{2249e988-ab3d-46c6-9efd-b0ca7914652d}</Project>
+      <Name>ViewModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

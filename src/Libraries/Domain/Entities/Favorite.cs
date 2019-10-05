@@ -5,6 +5,7 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+    using System.Linq;
 
     /// <summary>
     /// 收藏夹
@@ -56,6 +57,24 @@ namespace Domain.Entities
         /// 收藏的卡片盒列表
         /// </summary>
         public virtual ICollection<Favorite_CardBox> Favorite_CardBoxes { get; set; }
+
+        #endregion
+
+        #region Helpers
+
+        public IList<CourseBox> CourseBoxes
+        {
+            get
+            {
+                IList<CourseBox> courseBoxes = new List<CourseBox>();
+                if (this.Favorite_CourseBoxes != null && this.Favorite_CourseBoxes.Count >= 1)
+                {
+                    courseBoxes = this.Favorite_CourseBoxes.Select(m => m.CourseBox)?.ToList();
+                }
+
+                return courseBoxes;
+            }
+        }
 
         #endregion
     }

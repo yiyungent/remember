@@ -110,6 +110,20 @@ namespace Domain.Entities
             }
         }
 
+        public IList<Favorite> Favorites
+        {
+            get
+            {
+                IList<Favorite> favorites = new List<Favorite>();
+                if (this.Favorite_CourseBoxes != null && this.Favorite_CourseBoxes.Count >= 1)
+                {
+                    favorites = this.Favorite_CourseBoxes.Select(m => m.Favorite).ToList();
+                }
+
+                return favorites;
+            }
+        }
+
         #endregion
     }
 }

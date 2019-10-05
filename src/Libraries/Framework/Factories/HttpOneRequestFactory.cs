@@ -1,4 +1,5 @@
-﻿using Framework.Infrastructure;
+﻿using Core;
+using Framework.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +24,13 @@ namespace Framework.Factories
                 instance = DependencyResolverProvider.Get(type);
                 if (instance == null)
                 {
-                    // 再试图从 框架外部设置的DI中拿
+                    // 再试图从 框架外部设置的DI中拿（仅在 ASP.NET MVC中才有这个）
                     instance = DependencyResolver.Current.GetService(type);
+                }
+                if (instance == null)
+                {
+                    // 再试图从 外部自定义Ioc中拿
+                    instance = ContainerManager.Resolve(type);
                 }
 
                 CallContext.SetData("Resolve:" + type.ToString(), instance);
