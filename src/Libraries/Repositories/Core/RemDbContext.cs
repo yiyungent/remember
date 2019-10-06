@@ -18,6 +18,8 @@ namespace Repositories.Core
             // 解决：Specified key was too long; max key length is 767 bytes
             Database.SetInitializer<RemDbContext>(null);
 
+            this.Configuration.AutoDetectChangesEnabled = true;//对多对多，一对多进行curd操作时需要为true
+
             // 记录 EF 生成的 SQL
             Database.Log = (str) =>
             {
@@ -87,43 +89,45 @@ namespace Repositories.Core
             modelBuilder.Entity<RoleInfo>()
                 .HasMany(m => m.Role_Users)
                 .WithRequired(m => m.RoleInfo)
-                .HasForeignKey(m => m.RoleId);
+                .HasForeignKey(m => m.RoleInfoId);
             modelBuilder.Entity<UserInfo>()
                 .HasMany(m => m.Role_Users)
                 .WithRequired(m => m.UserInfo)
-                .HasForeignKey(m => m.UserId);
+                .HasForeignKey(m => m.UserInfoId);
 
             modelBuilder.Entity<RoleInfo>()
                 .HasMany(m => m.Role_Functions)
                 .WithRequired(m => m.RoleInfo)
-                .HasForeignKey(m => m.RoleId);
+                .HasForeignKey(m => m.RoleInfoId);
             modelBuilder.Entity<FunctionInfo>()
                 .HasMany(m => m.Role_Functions)
                 .WithRequired(m => m.FunctionInfo)
-                .HasForeignKey(m => m.FunctionId);
+                .HasForeignKey(m => m.FunctionInfoId);
 
             modelBuilder.Entity<RoleInfo>()
                 .HasMany(m => m.Role_Menus)
                 .WithRequired(m => m.RoleInfo)
-                .HasForeignKey(m => m.RoleId);
+                .HasForeignKey(m => m.RoleInfoId);
             modelBuilder.Entity<Sys_Menu>()
                 .HasMany(m => m.Role_Menus)
                 .WithRequired(m => m.Sys_Menu)
-                .HasForeignKey(m => m.MenuId);
+                .HasForeignKey(m => m.Sys_MenuId);
 
 
             modelBuilder.Entity<Sys_Menu>()
                 .HasMany(m => m.Children)
-                .WithRequired(m => m.Parent)
+                .WithOptional(m => m.Parent)
                 .HasForeignKey(m => m.ParentId);
 
             modelBuilder.Entity<Comment>()
                 .HasMany(m => m.Children)
-                .WithRequired(m => m.Parent)
+                .WithOptional(m => m.Parent)
                 .HasForeignKey(m => m.ParentId);
 
 
 
+            // 其它普通设置
+           
 
         }
         #endregion

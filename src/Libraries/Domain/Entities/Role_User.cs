@@ -22,16 +22,16 @@ namespace Domain.Entities
         /// 授权人/操作人
         /// </summary>
         [ForeignKey("Operator")]
-        public int OperatorId { get; set; }
+        public int? OperatorId { get; set; }
         [ForeignKey("OperatorId")]
         public virtual UserInfo Operator { get; set; }
 
-        public int UserId { get; set; }
-        [ForeignKey("UserId")]
+        public int UserInfoId { get; set; }
+        [ForeignKey("UserInfoId")]
         public virtual UserInfo UserInfo { get; set; }
 
-        public int RoleId { get; set; }
-        [ForeignKey("RoleId")]
+        public int RoleInfoId { get; set; }
+        [ForeignKey("RoleInfoId")]
         public virtual RoleInfo RoleInfo { get; set; }
 
         #endregion

@@ -66,6 +66,7 @@ namespace Domain.Entities
         /// <summary>
         /// ½ÇÉ«-²Ëµ¥
         /// </summary>
+        [InverseProperty("Sys_Menu")]
         public virtual ICollection<Role_Menu> Role_Menus { get; set; }
 
         #endregion

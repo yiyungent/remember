@@ -254,7 +254,7 @@ namespace Framework.Infrastructure.Concrete
             //    Expression.Eq("Sys_Menu.ID", sys_menuId)
             //}); 
             #endregion
-            rtn = this._functionInfoService.Filter(m => m.MenuId == sys_menuId).ToList();
+            rtn = this._functionInfoService.Filter(m => m.Sys_MenuId == sys_menuId).ToList();
 
             return rtn;
         }

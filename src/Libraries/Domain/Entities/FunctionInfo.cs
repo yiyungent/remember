@@ -39,8 +39,8 @@ namespace Domain.Entities
         ///     多对一关系
         /// </summary>
         [ForeignKey("Sys_Menu")]
-        public int? MenuId { get; set; }
-        [ForeignKey("MenuId")]
+        public int? Sys_MenuId { get; set; }
+        [ForeignKey("Sys_MenuId")]
         public virtual Sys_Menu Sys_Menu { get; set; }
 
         /// <summary>
@@ -55,6 +55,7 @@ namespace Domain.Entities
         /// <summary>
         /// 根据 AuthKey 获取 AreaName, ControllerName, ActionName
         /// </summary>
+        [NotMapped]
         public AreaCAItem AreaCAItem
         {
             get

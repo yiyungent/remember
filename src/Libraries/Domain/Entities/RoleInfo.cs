@@ -32,22 +32,26 @@ namespace Domain.Entities
         /// <summary>
         /// 角色-用户
         /// </summary>
+        [InverseProperty("RoleInfo")]
         public virtual ICollection<Role_User> Role_Users { get; set; }
 
         /// <summary>
         /// 角色-菜单
         /// </summary>
+        [InverseProperty("RoleInfo")]
         public virtual ICollection<Role_Menu> Role_Menus { get; set; }
 
         /// <summary>
         /// 角色-权限
         /// </summary>
+        [InverseProperty("RoleInfo")]
         public virtual ICollection<Role_Function> Role_Functions { get; set; }
 
         #endregion
 
         #region Helpers
 
+        [NotMapped]
         public ICollection<UserInfo> UserInfos
         {
             get
@@ -62,6 +66,7 @@ namespace Domain.Entities
             }
         }
 
+        [NotMapped]
         public ICollection<Sys_Menu> Sys_Menus
         {
             get
@@ -76,6 +81,7 @@ namespace Domain.Entities
             }
         }
 
+        [NotMapped]
         public ICollection<FunctionInfo> FunctionInfos
         {
             get

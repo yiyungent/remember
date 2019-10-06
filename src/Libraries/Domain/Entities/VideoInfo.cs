@@ -26,7 +26,7 @@ namespace Domain.Entities
         /// </summary>
         [Column(TypeName = "text")]
         [Required]
-        [StringLength(100)]
+        [StringLength(2000)]
         public string PlayUrl { get; set; }
 
         /// <summary>

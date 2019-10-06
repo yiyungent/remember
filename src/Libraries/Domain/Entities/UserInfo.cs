@@ -100,6 +100,7 @@ namespace Domain.Entities
 
         #region Helpers
 
+        [NotMapped]
         public ICollection<RoleInfo> RoleInfos
         {
             get
