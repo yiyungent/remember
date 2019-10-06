@@ -378,7 +378,7 @@ namespace WebApi.Controllers
                 //    };
                 //} 
                 #endregion
-
+                // TODO: 不安全未效验
 
                 try
                 {
@@ -404,7 +404,8 @@ namespace WebApi.Controllers
                     //        Expression.In("Favorite.ID", myAllFavList.Select(m=>m.ID).ToArray())
                     //    )
                     //});
-                    IList<Favorite_CourseBox> favorite_CourseBoxes = this._favorite_CourseBoxService.Filter(m => m.CourseBoxId == inputModel.CourseBoxId && myAllFavList.Select(t => t.ID).Contains(m.FavoriteId ?? 0)).ToList();
+                    List<int> tempIds = myAllFavList.Select(t => t.ID).ToList();
+                    IList<Favorite_CourseBox> favorite_CourseBoxes = this._favorite_CourseBoxService.Filter(m => m.CourseBoxId == inputModel.CourseBoxId && tempIds.Contains(m.FavoriteId ?? 0) && !m.IsDeleted).ToList();
                     foreach (var item in favorite_CourseBoxes)
                     {
                         //Container.Instance.Resolve<Favorite_CourseBoxService>().Delete(item.ID);
@@ -425,8 +426,8 @@ namespace WebApi.Controllers
                             //});
                             this._favorite_CourseBoxService.Create(new Favorite_CourseBox
                             {
-                                CourseBox = new CourseBox { ID = inputModel.CourseBoxId },
-                                Favorite = new Favorite { ID = favId },
+                                CourseBoxId = inputModel.CourseBoxId,
+                                FavoriteId = favId,
                                 CreateTime = DateTime.Now
                             });
                         }
