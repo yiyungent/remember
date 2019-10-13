@@ -1,0 +1,147 @@
+﻿@using Domain
+@using Framework.Extensions
+@model CourseBox
+@{
+	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
+
+	string picUrl = ViewBag.PicUrl;
+	long picSize = ViewBag.PicSize;
+	string picFileName = "封面图" + System.IO.Path.GetExtension(Model.PicUrl);
+
+	Html.EnableClientValidation(false);
+}
+@section head {
+	<link href="/assets/libs/zui/dist/css/zui.min.css" rel="stylesheet" />
+	<link href="/assets/libs/zui/dist/lib/uploader/zui.uploader.css" rel="stylesheet" />
+}
+@section body {
+	<script src="/assets/js/tools.js"></script>
+	<script src="/assets/libs/zui/dist/js/zui.min.js"></script>
+	<script src="/assets/libs/zui/dist/lib/uploader/zui.uploader.min.js"></script>
+	<script>
+
+		function onSuccess(data) {
+			if (data.code <= 0) {
+				sendTipMsg(data.message, -1);
+			} else {
+				sendTipMsg(data.message, 1);
+			}
+			$("#js-btn-save").val("保存").removeAttr("disabled");
+		}
+
+		function saveData() {
+			$("#js-btn-save").val("保存中").attr("disabled", "disabled");
+			$.ajax({
+				url: "/Admin/CourseBox/Edit",
+				type: "post",
+				dataType: "json",
+				data: $("#js-form").serialize(),
+				success: onSuccess
+			});
+			return false;
+		}
+
+		$(function () {
+
+
+			$('#pic-uploader-area').uploader({
+				autoUpload: true,            // 当选择文件后立即自动进行上传操作
+				url: '/Admin/CourseBox/UploadPic',  // 文件上传提交地址
+				filters: {
+					// 只允许上传图片
+					mime_types: [
+						{ title: '图片', extensions: 'jpg,gif,png' }
+					],
+					// 最大上传文件为 10MB
+					max_file_size: '10mb',
+					// 不允许上传重复文件
+					prevent_duplicates: false,
+				},
+				chunk_size: 0, // 关闭分片上传
+				multi_selection: false,
+				limitFilesCount: 1,
+				staticFiles: [
+					  {name: '@picFileName', size: @picSize , url: '@picUrl', type: 'image/jpeg'},
+				],
+				deleteActionOnDone: function(file, doRemoveFile) {
+					doRemoveFile();
+					$("#PicUrl").val("");
+				},
+				responseHandler: function (responseObject, file) {
+					var res = JSON.parse(responseObject.response);
+					if (res.result == "ok") {
+						$("#PicUrl").val(res.url);
+					}
+				}
+			});
+		});
+
+	</script>
+}
+
+<!-- start 提示框 -->
+@Html.Partial("_MessagePartial")
+<!-- end 提示框 -->
+<!-- general form elements -->
+<div class="box box-primary">
+	<div class="box-header with-border">
+		<h3 class="box-title">@Model.Name</h3>
+	</div>
+	<!-- /.box-header -->
+	<!-- form start -->
+
+	<div class="box-body">
+
+		<div class="nav-tabs-custom">
+			<ul class="nav nav-tabs">
+				<li class="active"><a>课程基本信息</a></li>
+				<li><a href="@Url.Action("Videos", "CourseBox", new { area = "Admin" , id = Model.ID })">课程课件</a></li>
+				<li><a href="@Url.Action("AddVideo", "CourseBox", new { area = "Admin", courseBoxId = Model.ID })">添加课件</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active">
+					<form id="js-form">
+						@Html.HiddenFor(m => m.ID)
+						<div class="form-group">
+							<label>课程名</label>
+							@Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+						</div>
+						<div class="form-group">
+							<label for="InputEmail">课程描述</label>
+							@Html.TextAreaFor(m => m.Description, new { @class = "form-control", placeholder = "请输入课程描述", type = "email" })
+						</div>
+						<div class="form-group">
+							<label>开始时间</label>
+							@Html.TextBox("StartTime", Model.StartTime.ToString("yyyy-MM-dd"), new { @class = "form-control", type = "date" })
+						</div>
+						<div class="form-group">
+							<label>结束时间</label>
+							@Html.TextBox("EndTime", Model.EndTime.ToString("yyyy-MM-dd"), new { @class = "form-control", type = "date" })
+						</div>
+						<div class="form-group" style="display: none;">
+							@Html.HiddenFor(m => m.PicUrl)
+						</div>
+						<div class="form-group">
+							<label>课程封面图</label>
+							<div id="pic-uploader-area" class="uploader">
+								<div class="file-list" data-drag-placeholder="请拖拽文件到此处"></div>
+								<button type="button" class="btn btn-primary uploader-btn-browse"><i class="icon icon-cloud-upload"></i> 选择文件</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<!-- /.box-body -->
+
+	<div class="box-footer">
+		<div class="btn-group">
+			<a class="btn btn-default" href="@Url.Action("Index", "CourseBox", new { area = "Admin" })">返回</a>
+			<input id="js-btn-save" class="btn btn-primary" type="submit" value="保存" onclick="return saveData();" />
+		</div>
+	</div>
+
+</div>
+<!-- /.box -->

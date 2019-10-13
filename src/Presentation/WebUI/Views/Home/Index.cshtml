@@ -1,26 +1,55 @@
-﻿@using Domain.Entities
-@model IQueryable<Article>
+﻿@using Domain
+@using Framework.Models
+@using Framework.Extensions
 @{
-	Layout = null;
+	Layout = "~/Views/Shared/_TopNav.cshtml";
+	ViewBag.Title = WebSetting.Get("WebUITitle") + " - " + WebSetting.Get("WebUITitle");
+	ViewBag.Desc = WebSetting.Get("WebUIDesc");
+
+
+	IList<CourseBox> courseBoxes = ViewBag.CourseBoxes;
+	courseBoxes = courseBoxes.OrderByDescending(m => m.LastUpdateTime).Take(5).ToList();
+}
+@section head {
+	<style>
+		.picItem {
+			padding-bottom: 6px;
+		}
+
+		.picItem a {
+			display: inline-block;
+		}
+
+		.picItem .thumbnail {
+			display: inline-block;
+			padding: 0;
+			border: none;
+		}
+
+		.picItem .caption {
+			height: 48px;
+		}
+	</style>
+}
+@section body {
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-	<meta name="viewport" content="width=device-width" />
-	<title>Index</title>
-</head>
-<body>
-	<div>
-		<ul>
-			@foreach (var item in Model)
-			{
-				<li>@item.ID</li>
-				<li>@item.Title</li>
-				<li>@item.Content</li>
-			}
-		</ul>
+<!-- Main content -->
+<section class="content">
+	<div class="row">
+		@foreach (var item in courseBoxes)
+		{
+			<div class="col-md-2 picItem">
+				<a href="@Url.Action("Index", "CourseBox", new { id= item.ID })">
+					<div class="thumbnail" style="margin:0;">
+						<img style="width:160px;height:100px;" src="@item.PicUrl.ToHttpAbsoluteUrl()" alt="@item.Name">
+						<div class="caption">
+							<span style="margin-top:0;">@(item.Name.Length > 7 ? item.Name.Substring(0, 8) + "..." : item.Name)</span>
+						</div>
+					</div>
+				</a>
+			</div>
+		}
 	</div>
-</body>
-</html>
+</section>
+<!-- /.content -->

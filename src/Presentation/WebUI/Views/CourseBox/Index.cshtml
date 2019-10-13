@@ -1,0 +1,428 @@
+﻿@using Domain
+@using Framework.Models
+@using Framework.Extensions
+@model CourseBox
+@{
+	Layout = "~/Views/Shared/_TopNav.cshtml";
+	ViewBag.Title = Model.Name;
+	ViewBag.Desc = Model.Description;
+
+	IList<VideoInfo> videoInfos = Model.VideoInfos.OrderBy(m => m.Page).ToList();
+	IList<Comment> comments = ViewBag.Comments;
+	IList<CourseBox> recomCourseBoxes = ViewBag.RecomCourseBoxes;
+	UserInfo currentUser = ViewBag.CurrentUser;
+}
+@section head {
+	<link href="/assets/libs/dplayer/dist/DPlayer.min.css" rel="stylesheet" />
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css" rel="stylesheet" />
+	<style>
+		.video-area .btn:hover {
+			color: #3c8dbc;
+		}
+
+		.video-area .btn-default {
+			background-color: #fff;
+			border-color: #fff;
+		}
+
+			.video-area .btn-default:hover {
+				border-color: #fff;
+			}
+
+			.video-area .btn-default:active:focus {
+				background-color: #fff;
+				border-color: #fff;
+				outline: none;
+			}
+
+		.social-share {
+			display: none;
+			z-index: 6;
+			position: absolute;
+			top: 38px;
+			left: 100px;
+			background-color: #fff;
+			border-radius: 3px;
+		}
+
+		.picItem {
+			padding-bottom: 6px;
+		}
+
+			.picItem a {
+				display: inline-block;
+			}
+
+			.picItem .thumbnail {
+				display: inline-block;
+				padding: 0;
+				border: none;
+			}
+
+			.picItem .caption {
+				height: 48px;
+			}
+	</style>
+}
+@section body {
+	<script src="/assets/libs/dplayer/dist/DPlayer.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+	<script src="/assets/libs/jquery.mousewheel/jquery.mousewheel-3.0.6.min.js"></script>
+	<script src="/assets/libs/jquery.mCustomScrollbar/dist/jquery.mCustomScrollbar.min.js"></script>
+	<script src="/assets/libs/jquery.emoji/dist/jquery.emoji.js"></script>
+	<script>
+		var player;
+		var isInitedEmoji = false;
+		$(function () {
+			player = new DPlayer({
+				container: document.getElementById('player'),
+				screenshot: true,
+				video: {
+					url: 'https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/2%E3%80%81%E6%B3%9B%E5%9E%8B%E5%A7%94%E6%89%98.mp4',
+				},
+				//subtitle: {
+				//	url: 'webvtt.vtt',
+				//},
+				//danmaku: {
+				//	id: 'demo',
+				//	api: 'https://api.prprpr.me/dplayer/',
+				//},
+			});
+
+			$("#js-btn-share").on("click", showShare);
+
+
+			//setTimeout(initEmoji, 1000);
+		});
+
+		function showShare() {
+			$(".social-share").toggle();
+		}
+
+		function initEmoji() {
+			// 初始化emoji
+			$("#js-comment textarea").emoji({
+				showTab: true,
+				animation: 'fade',
+				position: 'bottomLeft',
+				icons: [{
+					name: "贴吧表情",
+					path: "/assets/images/emoji/tieba/",
+					maxNum: 50,
+					file: ".jpg",
+					placeholder: ":{alias}:",
+					alias: {
+						1: "hehe",
+						2: "haha",
+						3: "tushe",
+						4: "a",
+						5: "ku",
+						6: "lu",
+						7: "kaixin",
+						8: "han",
+						9: "lei",
+						10: "heixian",
+						11: "bishi",
+						12: "bugaoxing",
+						13: "zhenbang",
+						14: "qian",
+						15: "yiwen",
+						16: "yinxian",
+						17: "tu",
+						18: "yi",
+						19: "weiqu",
+						20: "huaxin",
+						21: "hu",
+						22: "xiaonian",
+						23: "neng",
+						24: "taikaixin",
+						25: "huaji",
+						26: "mianqiang",
+						27: "kuanghan",
+						28: "guai",
+						29: "shuijiao",
+						30: "jinku",
+						31: "shengqi",
+						32: "jinya",
+						33: "pen",
+						34: "aixin",
+						35: "xinsui",
+						36: "meigui",
+						37: "liwu",
+						38: "caihong",
+						39: "xxyl",
+						40: "taiyang",
+						41: "qianbi",
+						42: "dnegpao",
+						43: "chabei",
+						44: "dangao",
+						45: "yinyue",
+						46: "haha2",
+						47: "shenli",
+						48: "damuzhi",
+						49: "ruo",
+						50: "OK"
+					},
+					title: {
+						1: "呵呵",
+						2: "哈哈",
+						3: "吐舌",
+						4: "啊",
+						5: "酷",
+						6: "怒",
+						7: "开心",
+						8: "汗",
+						9: "泪",
+						10: "黑线",
+						11: "鄙视",
+						12: "不高兴",
+						13: "真棒",
+						14: "钱",
+						15: "疑问",
+						16: "阴脸",
+						17: "吐",
+						18: "咦",
+						19: "委屈",
+						20: "花心",
+						21: "呼~",
+						22: "笑脸",
+						23: "冷",
+						24: "太开心",
+						25: "滑稽",
+						26: "勉强",
+						27: "狂汗",
+						28: "乖",
+						29: "睡觉",
+						30: "惊哭",
+						31: "生气",
+						32: "惊讶",
+						33: "喷",
+						34: "爱心",
+						35: "心碎",
+						36: "玫瑰",
+						37: "礼物",
+						38: "彩虹",
+						39: "星星月亮",
+						40: "太阳",
+						41: "钱币",
+						42: "灯泡",
+						43: "茶杯",
+						44: "蛋糕",
+						45: "音乐",
+						46: "haha",
+						47: "胜利",
+						48: "大拇指",
+						49: "弱",
+						50: "OK"
+					}
+				}, {
+					name: "QQ高清",
+					path: "/assets/images/emoji/qq/",
+					maxNum: 91,
+					excludeNums: [41, 45, 54],
+					file: ".gif",
+					placeholder: "#qq_{alias}#"
+				}, {
+					name: "emoji高清",
+					path: "/assets/images/emoji/emoji/",
+					maxNum: 84,
+					file: ".png",
+					placeholder: "#emoji_{alias}#"
+				}]
+			});
+			txtToEmoji();
+		}
+
+		/**
+		* 解析emoji
+		*/
+		function txtToEmoji() {
+			// 解析emoji
+			$(".comment-content").emojiParse({
+				icons: [{
+					path: "/assets/images/emoji/tieba/",
+					file: ".jpg",
+					placeholder: ":{alias}:",
+					alias: {
+						1: "hehe",
+						2: "haha",
+						3: "tushe",
+						4: "a",
+						5: "ku",
+						6: "lu",
+						7: "kaixin",
+						8: "han",
+						9: "lei",
+						10: "heixian",
+						11: "bishi",
+						12: "bugaoxing",
+						13: "zhenbang",
+						14: "qian",
+						15: "yiwen",
+						16: "yinxian",
+						17: "tu",
+						18: "yi",
+						19: "weiqu",
+						20: "huaxin",
+						21: "hu",
+						22: "xiaonian",
+						23: "neng",
+						24: "taikaixin",
+						25: "huaji",
+						26: "mianqiang",
+						27: "kuanghan",
+						28: "guai",
+						29: "shuijiao",
+						30: "jinku",
+						31: "shengqi",
+						32: "jinya",
+						33: "pen",
+						34: "aixin",
+						35: "xinsui",
+						36: "meigui",
+						37: "liwu",
+						38: "caihong",
+						39: "xxyl",
+						40: "taiyang",
+						41: "qianbi",
+						42: "dnegpao",
+						43: "chabei",
+						44: "dangao",
+						45: "yinyue",
+						46: "haha2",
+						47: "shenli",
+						48: "damuzhi",
+						49: "ruo",
+						50: "OK"
+					}
+				}, {
+					path: "/assets/images/emoji/qq/",
+					file: ".gif",
+					placeholder: "#qq_{alias}#"
+				}]
+			});
+		}
+
+		function switchVideo(playUrl, subTitleUrl) {
+
+		}
+	</script>
+}
+
+<!-- Main content -->
+<section class="content">
+	<div class="row">
+		<div class="col-md-9">
+			<h4>@Model.Name</h4>
+			<div>@Model.CreateTime.ToString()</div>
+		</div>
+		<div class="col-md-3">
+			<div class="user-block">
+				<img class="img-circle" src="@Model.Creator.Avatar.ToHttpAbsoluteUrl()" alt="User Image">
+				<span class="username"><a href="#">@Model.Creator.UserName</a></span>
+				<span class="description">@(Model.Creator.Description.Length > 7 ? Model.Creator.Description.Substring(0, 8) + "..." : Model.Creator.Description)</span>
+				<span class="description">
+					<button class="btn btn-primary" style="height:32px;">
+						<i class="glyphicon glyphicon-plus"></i> 关注
+					</button>
+				</span>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-9 video-area">
+			<div id="player"></div>
+			<div style="margin: 8px 0; position:relative;">
+				<div class="btn-group" role="group">
+					<button type="button" class="btn btn-default"><i class="glyphicon glyphicon-hand-right"></i> 1023</button>
+					<button type="button" class="btn btn-default"><i class="glyphicon glyphicon-thumbs-down"></i></button>
+					<button type="button" class="btn btn-default"><i class="glyphicon glyphicon-star"></i> 1023</button>
+					<button id="js-btn-share" type="button" class="btn btn-default"><i class="glyphicon glyphicon-share-alt"></i> 1023</button>
+					<div class="social-share"></div>
+				</div>
+			</div>
+			<div class="box">
+				<div class="box-header with-border">
+					<h3 class="box-title">简介</h3>
+					<div class="box-tools pull-right">
+					</div>
+				</div>
+				<div class="box-body">
+					<p>@Model.Description</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="box">
+				<div class="box-header with-border">
+					<h3 class="box-title">选集</h3>
+					<div class="box-tools pull-right">
+						2/3
+					</div>
+				</div>
+				<div class="box-body">
+					<div class="list-group">
+						@for (int i = 0; i < videoInfos.Count; i++)
+						{
+							var item = videoInfos[i];
+							<button onclick="switchVideo(@item.PlayUrl, @item.SubTitleUrl)" class="list-group-item"><i class="glyphicon glyphicon-play"></i> P@(i + 1) @item.Title</button>
+						}
+					</div>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer">
+				</div>
+				<!-- /.box-footer-->
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-9">
+			<div><h4>最新评论</h4></div>
+			<div id="js-comment">
+				<div class="form-group clearfix">
+					<img class="img-circle pull-left" style="width:40px;height:40px;margin-right:10px;" src="@currentUser.Avatar.ToHttpAbsoluteUrl()" alt="@currentUser.UserName" />
+					<textarea class="form-control pull-left" placeholder="请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论。" style="width: 680px;height:70px;"></textarea>
+					<button class="btn btn-primary pull-right">发表评论</button>
+				</div>
+			</div>
+			<!-- start 评论列表 -->
+			<ul class="media-list">
+				@foreach (var item in comments)
+				{
+					<li class="media">
+						<div class="media-left">
+							<a target="_blank" href="@Url.Action("Index", "Profile", new { area = "Account", userName = item.Author.UserName })">
+								<img class="media-object img-circle" style="width:40px;height:40px;" src="@item.Author.Avatar.ToHttpAbsoluteUrl()" alt="@item.Author.UserName">
+							</a>
+						</div>
+						<div class="media-body">
+							<div class="media-heading clearfix">
+								<h5 class="pull-left">@item.Author.UserName</h5>
+								<span class="pull-right">@item.CreateTime.ToString()</span>
+							</div>
+							<p class="comment-content">@item.Content</p>
+						</div>
+					</li>
+				}
+			</ul>
+			<!-- start 评论列表 -->
+		</div>
+		<div class="col-md-3">
+			@foreach (var item in recomCourseBoxes)
+			{
+				<div class="col-md-12 picItem">
+					<a href="@Url.Action("Index", "CourseBox", new { id= item.ID })">
+						<div class="thumbnail" style="margin:0;">
+							<img style="width:160px;height:100px;" src="@item.PicUrl.ToHttpAbsoluteUrl()" alt="@item.Name">
+							<div class="caption">
+								<span style="margin-top:0;">@(item.Name.Length > 7 ? item.Name.Substring(0, 8) + "..." : item.Name)</span>
+							</div>
+						</div>
+					</a>
+				</div>
+			}
+		</div>
+	</div>
+</section>
+<!-- /.content -->

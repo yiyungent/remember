@@ -1,0 +1,79 @@
+﻿@using WebUI.Areas.Account.Models
+@model EditUserInfoViewModel
+@{
+	Layout = null;
+	string[] labelArrCssArr = { "label-danger", "label-success", "label-info", "label-warning", "label-primary" };
+}
+
+<form id="js-settings-form" class="form-horizontal">
+	<div class="form-group">
+		<label for="inputAccount" class="col-sm-2 control-label">用户名</label>
+
+		<div class="col-sm-10">
+			@*<input type="text" class="form-control" id="inputAccount" placeholder="账号">*@
+			@Html.TextBoxFor(m => m.InputUserName, new { @class = "form-control disabled", placeholder = "用户名", @readonly = "readonly" })
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="inputEmail" class="col-sm-2 control-label">邮箱</label>
+
+		<div class="col-sm-10">
+			@*<input type="email" class="form-control" id="inputEmail" placeholder="Email">*@
+			@Html.TextBoxFor(m => m.InputEmail, new { type = "email", @class = "form-control", placeholder = "邮箱" })
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="inputDescription" class="col-sm-2 control-label">描述</label>
+
+		<div class="col-sm-10">
+			@*<textarea class="form-control" id="inputDescription" placeholder="描述"></textarea>*@
+			@Html.TextAreaFor(m => m.InputDescription, new { @class = "form-control", placeholder = "描述" })
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-10">
+			<div class="checkbox">
+				<label>
+					<input type="checkbox"> 我同意 <a href="#">使用协议</a>
+				</label>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-10">
+			<button type="submit" class="btn btn-danger">保存</button>
+		</div>
+	</div>
+</form>
+<script>
+	function submitSettings(event) {
+		var event = event || window.event;
+		event.preventDefault();
+		$.ajax({
+			url: "@Url.Action("Settings", "Profile", new { area = "Account" })",
+			type: "post",
+			data: $("#js-settings-form").serialize(),
+			dataType: "json",
+			success: function (data) {
+				$("#js-message").fadeIn();
+				if (data.code <= 0) {
+					$("#js-message").attr("class", "alert alert-danger").find(".message").html(data.message);
+				} else {
+					$("#js-message").attr("class", "alert alert-success").find(".message").html(data.message);
+					loadProfileBox("@Model.InputUserName");
+				}
+				// 3s 后隐藏
+				setTimeout(function () {
+					$("#js-message").fadeOut("slow");
+				}, 3000);
+			}
+		});
+	}
+
+	window.onload = function () {
+		$("#js-settings-form button[type='submit']").on("click", function () {
+			submitSettings();
+		});
+	}
+
+</script>

@@ -1,0 +1,247 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Test</title>
+	<link href="/assets/libs/mdui/dist/css/mdui.min.css" rel="stylesheet" />
+	<link type="text/css" href="/assets/libs/WebUploader/webuploader.css" />
+	<style>
+		.dialog-content {
+			padding: 30px;
+		}
+
+		#content-main {
+			/*padding: 20px;*/
+			width: 100%;
+			/*height: 700px;*/
+			font-size: 50px;
+		}
+	</style>
+</head>
+<body class="mdui-appbar-with-toolbar mdui-theme-primary-teal mdui-bottom-nav-fixed">
+	<!-- 头部 -->
+	<header class="mdui-appbar mdui-appbar-fixed" id="content-header">
+		<div class="mdui-toolbar mdui-color-white mdui-text-color-theme">
+			<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">navigate_before</i></a>
+			<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">event</i></a>(8/20)
+			<div class="mdui-toolbar-spacer"></div>
+			<div style="width: 30%;">
+				<div class="mdui-textfield mdui-textfield-expandable mdui-float-right">
+					<button class="mdui-textfield-icon mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></button>
+					<input class="mdui-textfield-input" type="text" placeholder="Search" />
+					<button class="mdui-textfield-close mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">close</i></button>
+				</div>
+			</div>
+			<a id="js-refresh" href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>
+			<a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-menu="{target: '#js-more-menu'}"><i class="mdui-icon material-icons">more_vert</i></a>
+			<ul id="js-more-menu" class="mdui-menu">
+				<li class="mdui-menu-item">
+					<a href="javascript:;" class="mdui-ripple">
+						<i class="mdui-menu-item-icon mdui-icon material-icons">remove_red_eye</i>Preview
+					</a>
+				</li>
+				<li class="mdui-menu-item">
+					<a href="javascript:;" class="mdui-ripple">
+						<i class="mdui-menu-item-icon mdui-icon material-icons">file_download</i>Download
+					</a>
+				</li>
+				<li class="mdui-divider"></li>
+				<li class="mdui-menu-item">
+					<a href="javascript:;" class="mdui-ripple">
+						<i class="mdui-menu-item-icon mdui-icon material-icons">delete</i>Remove
+					</a>
+				</li>
+				<li class="mdui-menu-item">
+					<a href="javascript:;" class="mdui-ripple">
+						<i class="mdui-menu-item-icon"></i>Empty
+					</a>
+				</li>
+			</ul>
+		</div>
+	</header>
+	<!-- 内容 -->
+	<div class="mdui-container" id="content-main">
+		<div class="mdui-row">
+			<div class="mdui-col-xs-12">
+				<div id="js-uploader">
+					<!-- 用来存放文件信息 -->
+					<div id="js-thelist"></div>
+					<div class="mdui-btn-group">
+						<div id="js-picker" style="display: none;">选择文件</div>
+						<button class="mdui-btn mdui-btn-raised mdui-color-theme mdui-ripple" onclick="pickerFile()"><i class="mdui-icon material-icons">cloud_upload</i> 选择文件</button>
+						<button id="js-upload-btn" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme">开始上传</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 底部导航栏 -->
+	<div class="mdui-bottom-nav mdui-color-white mdui-text-color-theme">
+		<a href="javascript:;" class="mdui-ripple mdui-bottom-nav-active">
+			<i class="mdui-icon material-icons">favorite</i>
+		</a>
+		<a href="javascript:;" class="mdui-ripple">
+			<i class="mdui-icon material-icons">edit</i>
+		</a>
+		<a href="javascript:;" class="mdui-ripple">
+			<i class="mdui-icon material-icons">arrow_back</i>
+		</a>
+		<a href="javascript:;" class="mdui-ripple">
+			<i class="mdui-icon material-icons">arrow_forward</i>
+		</a>
+	</div>
+	<script src="/assets/libs/mdui/dist/js/mdui.min.js"></script>
+	<script src="/assets/libs/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="/assets/libs/WebUploader/webuploader.js"></script>
+	<script type="text/javascript">
+
+		var $$ = mdui.JQ;
+
+		$$(function () {
+
+			$$("#js-refresh").on("click", function () {
+				window.location.href = window.location.href;
+			});
+
+		});
+
+		function pickerFile() {
+			$("#js-picker input[type='file']")[0].click();
+		}
+
+		function tipMessage(msg) {
+			mdui.snackbar({
+				message: msg
+			});
+		}
+
+		// 文件上传
+		$(function () {
+			var $ = jQuery,
+				$list = $('#js-thelist'),
+				$btn = $('#js-upload-btn'),
+				state = 'pending',
+				uploader;
+
+			uploader = WebUploader.create({
+				// 不压缩image
+				resize: false,
+				// swf文件路径
+				swf: '/assets/libs/WebUploader/Uploader.swf',
+				// 文件接收服务端。
+				server: '/Tools/IToday/Upload',
+				// 选择文件的按钮。可选。
+				// 内部根据当前运行是创建，可能是input元素，也可能是flash.
+				pick: '#js-picker',
+				// 只允许选择 .xls 文件
+				accept: {
+					title: 'Excel',
+					extensions: 'xls,xlsx',
+					mimeTypes: 'application/vnd.ms-excel'
+						+ ',application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+				},
+				//单个文件大小限制
+				fileSingleSizeLimit: 104857600,
+				//上传文件数量限制
+				fileNumLimit: 10,
+				//上传前不压缩
+				compress: false,
+				// 允许多次重复上传
+				duplicate: true
+			});
+
+			// 当有文件添加进来的时候
+			uploader.on('fileQueued', function (file) {
+				$list.append('<div id="' + file.id + '" class="item">' +
+					'<h4 class="info">' + file.name + '</h4>' +
+					'<p class="state">等待上传...</p>' +
+					'</div>');
+			});
+
+			// 文件上传过程中创建进度条实时显示。
+			uploader.on('uploadProgress', function (file, percentage) {
+				var $li = $('#' + file.id),
+					$percent = $li.find('.mdui-progress .mdui-progress-determinate');
+
+				// 避免重复创建
+				if (!$percent.length) {
+					$percent = $('<div class="mdui-progress">' +
+						'<div class="mdui-progress-determinate" style="width: 0%">' +
+						'</div>' +
+						'</div>').appendTo($li).find('.mdui-progress-determinate');
+				}
+
+				$li.find('p.state').text('上传中');
+
+				$percent.css('width', percentage * 100 + '%');
+				if (percentage >= 1) {
+					$fileItem.find('h4').html(file.name + '上传成功，正在导入数据库，请稍等...');
+				}
+			});
+
+			uploader.on('uploadSuccess', function (file) {
+				$('#' + file.id).find('p.state').text('已上传');
+			});
+
+			uploader.on('uploadError', function (file) {
+				$('#' + file.id).find('p.state').text('上传出错');
+			});
+
+			uploader.on('uploadComplete', function (file) {
+				$('#' + file.id).find('.mdui-progress').fadeOut();
+				// 清空队列
+				uploader.reset();
+			});
+
+			/**
+			* 验证文件格式以及文件大小
+			*/
+			uploader.on("error", function (type) {
+				//$("#js-message").fadeIn();
+				//$("#js-message").attr("class", "alert alert-danger");
+				//$message = $("#js-message").find(".message");
+				if (type == "Q_TYPE_DENIED") {
+					//$message.html("请上传xls格式文件");
+					tipMessage("请上传xls格式文件");
+				} else if (type == "F_EXCEED_SIZE") {
+					//$message.html("单个文件大小不能超过2M");
+					tipMessage("单个文件大小不能超过2M");
+				} else {
+					//$message.html("上传出错！请检查后重新上传！错误代码" + type);
+					tipMessage("上传出错！请检查后重新上传！错误代码" + type);
+				}
+				//// 3s 后隐藏
+				//setTimeout(function () {
+				//	$("#js-message").fadeOut("slow");
+				//}, 3000);
+			});
+
+			uploader.on('all', function (type) {
+				if (type === 'startUpload') {
+					state = 'uploading';
+				} else if (type === 'stopUpload') {
+					state = 'paused';
+				} else if (type === 'uploadFinished') {
+					state = 'done';
+				}
+
+				if (state === 'uploading') {
+					$btn.text('暂停上传');
+				} else {
+					$btn.text('开始上传');
+				}
+			});
+
+			$btn.on('click', function () {
+				if (state === 'uploading') {
+					uploader.stop();
+				} else {
+					uploader.upload();
+				}
+			});
+		});
+
+	</script>
+</body>
+</html>

@@ -101,11 +101,11 @@ namespace Domain.Entities
         #region Helpers
 
         [NotMapped]
-        public ICollection<RoleInfo> RoleInfos
+        public IList<RoleInfo> RoleInfos
         {
             get
             {
-                ICollection<RoleInfo> roleInfos = new List<RoleInfo>();
+                IList<RoleInfo> roleInfos = new List<RoleInfo>();
                 if (this.Role_Users != null && this.Role_Users.Count >= 1)
                 {
                     roleInfos = this.Role_Users.Select(m => m.RoleInfo).ToList();

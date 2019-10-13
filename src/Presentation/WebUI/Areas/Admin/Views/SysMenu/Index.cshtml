@@ -1,0 +1,35 @@
+﻿@using WebUI.HtmlHelpers
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
+}
+@section head {
+	<link href="/assets/libs/layui/css/layui.css" rel="stylesheet" />
+}
+@section body {
+	<script src="/assets/libs/layui/layui.all.js"></script>
+	<script>
+		var layer;
+		layui.use(['layer'], function () {
+            layer = layui.layer;
+        });
+
+		function onEdit(id) {
+			layer.open({
+                type: 2,
+                closeBtn: 1,
+                anim: 4,
+                title: "修改",
+                shade: 0.4,
+                shadeClose: false,
+                area: ['800px', '420px'],
+                content: ['/Admin/SysMenu/Edit?id=' + id, 'yes'],
+                end: function () {
+                    location.href = location.href; // 刷新页面
+                }
+            });
+		}
+	</script>
+}
+<div>
+	@Html.GenerateCollapseMenu()
+</div>

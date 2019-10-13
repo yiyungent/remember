@@ -1,0 +1,80 @@
+﻿@using Domain
+@model Sys_Menu
+@{
+	Layout = null;
+}
+
+<link href="/assets/libs/layui/css/layui.css" rel="stylesheet" />
+<div>
+	<form class="layui-form">
+		@Html.HiddenFor(m => m.ID)
+		<div class="layui-form-item">
+			<label class="layui-form-label">Area</label>
+			<div class="layui-input-block">
+				<input type="text" class="layui-input" name="AreaName" disabled value="@Model.AreaName">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">Controller</label>
+			<div class="layui-input-block">
+				<input type="text" class="layui-input" name="ControllerName" disabled value="@Model.ControllerName">
+			</div>
+		</div>
+		<div class="layui-form">
+			<div class="layui-form-item">
+				<label class="layui-form-label">菜单名</label>
+				<div class="layui-input-block">
+					<input type="text" name="Name" required lay-verify="required" placeholder="请输入菜单名" autocomplete="off" class="layui-input" value="@Model.Name">
+				</div>
+			</div>
+		</div>
+		<div class="layui-form">
+			<div class="layui-form-item">
+				<label class="layui-form-label">排序码</label>
+				<div class="layui-input-block">
+					<input type="text" name="SortCode" required lay-verify="required" placeholder="请输入排序码" autocomplete="off" class="layui-input" value="@Model.SortCode">
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">上级菜单</label>
+			<div class="layui-input-block">
+				@Html.DropDownListFor(model => model.ParentMenu.ID, (IList<SelectListItem>)ViewBag.DDLParent)
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn" onclick="return saveData();">保存</button>
+			</div>
+		</div>
+	</form>
+</div>
+<script src="/Scripts/jquery-1.12.0.min.js"></script>
+<script src="/assets/libs/layui/layui.js"></script>
+<script>
+	var form, layer;
+	layui.use(['form', 'layer'], function () {
+		form = layui.form,
+			layer = layui.layer;
+	});
+
+	function saveData() {
+		$.ajax({
+			type: "post",
+			url: "/Admin/SysMenu/Edit",
+			data: $("form").serialize(),
+			dataType: "json",
+			success: function (data) {
+				if (data.code > 0) {
+					console.log("保存成功");
+					// 3.关闭弹窗
+					parent.layer.close(parent.layer.index);
+				} else if (data.code < 0) {
+					// 失败
+					layer.msg(data.message);
+				}
+			}
+		});
+		return false;
+	}
+</script>

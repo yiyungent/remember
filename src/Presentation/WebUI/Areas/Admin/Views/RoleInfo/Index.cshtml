@@ -1,0 +1,93 @@
+﻿@using Framework.HtmlHelpers
+@using WebUI.Areas.Admin.Models.Common
+@using Domain
+@model ListViewModel<RoleInfo>
+@{
+	Layout = "~/Areas/Admin/Views/Shared/_SimpleTableList.cshtml";
+
+	ViewBag.Title = "角色列表 - 后台管理";
+	ViewBag.Box_Title = "角色列表";
+}
+@section head {
+	<style>
+		table tr td {
+			vertical-align: middle !important;
+		}
+	</style>
+}
+@section body {
+	<script>
+		// start 删除
+		function deleteOp(id) {
+			$("#js-id").val(id);
+			$('#deleteModal').modal();
+		}
+
+		function deleteSubmit() {
+			var id = $("#js-id").val();
+			$.ajax({
+				type: 'POST',
+				url: '/Admin/RoleInfo/Delete',
+				data: { id: id },
+				dataType: 'json',
+				success: function (data) {
+					if (data.code <= 0) {
+						// 删除失败
+						$("#js-message").attr("class", "alert alert-danger").find(".message").html(data.message);
+					} else {
+						// 删除成功
+						$("#js-message").attr("class", "alert alert-success").find(".message").html(data.message);
+						//$(".table").find("tr:contains('" + id + "')").remove();
+						$(".table").find("tr[data-tr-id='" + id + "']").remove();
+						// 检查当前当前页面是否已经全部删除完，若是，则点击当前页码，重新加载
+						var trNum = $(".table").find("tr").length - 1;
+						if (trNum == 0) {
+							$("#js-page").find("li[class*='active']>a")[0].click();
+						}
+					}
+					// 3s 后隐藏
+					setTimeout(function () {
+						$("#js-message").fadeOut("slow");
+					}, 3000);
+				}
+			});
+		}
+		// end 删除
+
+	</script>
+}
+
+@section table {
+	<tr>
+		<th>ID</th>
+		<th>角色名</th>
+		<th>操作</th>
+	</tr>
+	@foreach (var item in Model.List)
+	{
+		<tr data-tr-id="@item.ID">
+			<td>@item.ID</td>
+			<td>@item.Name</td>
+			<td>
+				<div class="btn-group" role="group" data-pjax>
+					@if (Html.HasAuth("Admin", "RoleInfo", "Detail"))
+					{
+						<a class="btn btn-success" href="@Url.Action("Detail")?id=@item.ID">查看</a>
+					}
+					@if (Html.HasAuth("Admin", "RoleInfo", "Delete"))
+					{
+						<button class="btn btn-danger" type="button" onclick="deleteOp(@item.ID)">删除</button>
+					}
+					@if (Html.HasAuth("Admin", "RoleInfo", "Edit"))
+					{
+						<a class="btn btn-warning" href="@Url.Action("Edit")?id=@item.ID">修改</a>
+					}
+					@if (Html.HasAuth("Admin", "RoleInfo", "AssignPower"))
+					{
+						<a class="btn btn-primary" href="@Url.Action("AssignPower")?id=@item.ID">授权</a>
+					}
+				</div>
+			</td>
+		</tr>
+	}
+}
