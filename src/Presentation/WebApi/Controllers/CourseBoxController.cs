@@ -17,6 +17,7 @@ using WebApi.Models.CourseBoxVM;
 using Services.Interface;
 using Domain.Entities;
 using Framework.Extensions;
+using System.Web;
 
 namespace WebApi.Controllers
 {
@@ -30,16 +31,32 @@ namespace WebApi.Controllers
         private readonly ILearner_CourseBoxService _learner_CourseBoxService;
         private readonly ILearner_VideoInfoService _learner_VideoInfoService;
         private readonly ICourseBox_CommentService _courseBox_CommentService;
+        private readonly ICommentService _commentService;
+        private readonly IComment_LikeService _comment_LikeService;
+        private readonly IComment_DislikeService _comment_DislikeService;
+        private readonly IVideoInfoService _videoInfoService;
         #endregion
 
         #region Ctor
-        public CourseBoxController(ICourseBoxService courseBoxService, IFollower_FollowedService follower_FollowedService, ILearner_CourseBoxService learner_CourseBoxService, ILearner_VideoInfoService learner_VideoInfoService, ICourseBox_CommentService courseBox_CommentService)
+        public CourseBoxController(ICourseBoxService courseBoxService,
+            IFollower_FollowedService follower_FollowedService,
+            ILearner_CourseBoxService learner_CourseBoxService,
+            ILearner_VideoInfoService learner_VideoInfoService,
+            ICourseBox_CommentService courseBox_CommentService,
+            ICommentService commentService,
+            IComment_LikeService comment_LikeService,
+            IComment_DislikeService comment_DislikeService,
+            IVideoInfoService videoInfoService)
         {
             this._courseBoxService = courseBoxService;
             this._follower_FollowedService = follower_FollowedService;
             this._learner_CourseBoxService = learner_CourseBoxService;
             this._learner_VideoInfoService = learner_VideoInfoService;
             this._courseBox_CommentService = courseBox_CommentService;
+            this._commentService = commentService;
+            this._comment_LikeService = comment_LikeService;
+            this._comment_DislikeService = comment_DislikeService;
+            this._videoInfoService = videoInfoService;
         }
         #endregion
 
@@ -596,55 +613,120 @@ namespace WebApi.Controllers
         }
         #endregion
 
-        #region 评论课程
-        [HttpPost]
-        [NeedAuth]
-        [Route("Comment")]
-        public ResponseData Comment(int id, [FromBody]string content)
+        #region 简单按时间倒序排序的评论列表
+        [HttpGet]
+        [Route("SimpleComments")]
+        public ResponseData SimpleComments(int courseBoxId)
         {
             ResponseData responseData = null;
             try
             {
-                if (this._courseBoxService.Contains(m => m.ID == id && !m.IsDeleted))
+                SimpleCommentsViewModel viewModel = new SimpleCommentsViewModel();
+                viewModel.CourseBoxId = courseBoxId;
+
+                // TODO: 未做课程是否存在等有效性效验
+
+                //IList<Comment> comments = Container.Instance.Resolve<CourseBox_CommentService>().Query(new List<ICriterion>
+                //{
+                //    Expression.Eq("CourseBox.ID", courseBoxId)
+                //}).Select(m => m.Comment).OrderByDescending(m => m.CreateTime).ToList();
+                IList<Comment> comments = this._courseBox_CommentService.Filter(
+                    m => m.CourseBoxId == courseBoxId
+                    && !m.IsDeleted
+                ).Select(m => m.Comment).OrderByDescending(m => m.CreateTime).ToList();
+
+                foreach (var item in comments)
+                {
+                    viewModel.Comments.Add(new SimpleCommentsViewModel.CommentModel
+                    {
+                        ID = item.ID,
+                        Author = new SimpleCommentsViewModel.AuthorModel
+                        {
+                            ID = item.Author.ID,
+                            UserName = item.Author.UserName,
+                            Avatar = item.Author.Avatar.ToHttpAbsoluteUrl()
+                        },
+                        Content = item.Content,
+                        CreateTime = item.CreateTime.ToTimeStamp13(),
+                        LikeNum = item.LikeNum ?? 0
+                    });
+                }
+
+
+                responseData = new ResponseData
+                {
+                    Code = 1,
+                    Message = "加载评论成功",
+                    Data = viewModel
+                };
+            }
+            catch (Exception ex)
+            {
+                responseData = new ResponseData
+                {
+                    Code = -1,
+                    Message = "加载评论失败"
+                };
+            }
+
+            return responseData;
+        }
+        #endregion
+
+        #region 评论课程
+        [HttpPost]
+        [NeedAuth]
+        [Route("Comment")]
+        public ResponseData Comment(CommentInputModel inputModel)
+        {
+            ResponseData responseData = null;
+            try
+            {
+                //if (Container.Instance.Resolve<CourseBoxService>().Exist(inputModel.CourseBoxId))
+                if (this._courseBoxService.Contains(m => m.ID == inputModel.CourseBoxId))
                 {
                     // 评论课程  
                     // 1. CourseBox.CommentNum + 1  当前课程 评论数 + 1 
-                    //CourseBox courseBox = Container.Instance.Resolve<CourseBoxService>().GetEntity(id);
-                    CourseBox courseBox = this._courseBoxService.Find(id);
+                    //CourseBox courseBox = Container.Instance.Resolve<CourseBoxService>().GetEntity(inputModel.CourseBoxId);
+                    CourseBox courseBox = this._courseBoxService.Find(inputModel.CourseBoxId);
                     courseBox.CommentNum = courseBox.CommentNum + 1;
 
                     //Container.Instance.Resolve<CourseBoxService>().Edit(courseBox);
                     this._courseBoxService.Update(courseBox);
+                    int currentUserId = ((UserIdentity)User.Identity).ID;
 
                     // 2. CourseBox_Comment 插入一条记录
                     UserInfo userInfo = new UserInfo
                     {
-                        ID = ((UserIdentity)User.Identity).ID
+                        ID = currentUserId
                     };
-                    #region 废弃
+
+                    Comment comment = new Comment
+                    {
+                        Author = userInfo,
+                        Content = inputModel.Content,
+                        CreateTime = DateTime.Now,
+                        LastUpdateTime = DateTime.Now
+                    };
+                    //Container.Instance.Resolve<CommentService>().Create(comment);
+                    this._commentService.Create(comment);
+
                     //Container.Instance.Resolve<CourseBox_CommentService>().Create(new CourseBox_Comment
                     //{
-                    //    Comment = new Comment
-                    //    {
-                    //        Author = userInfo,
-                    //        Content = content,
-                    //        CreateTime = DateTime.Now,
-                    //        LastUpdateTime = DateTime.Now
-                    //    },
-                    //    CourseBox = new CourseBox { ID = id }
-                    //}); 
-                    #endregion
+                    //    Comment = comment,
+                    //    CourseBox = new CourseBox { ID = inputModel.CourseBoxId }
+                    //});
                     this._courseBox_CommentService.Create(new CourseBox_Comment
                     {
-                        Comment = new Comment
-                        {
-                            Author = userInfo,
-                            Content = content,
-                            CreateTime = DateTime.Now,
-                            LastUpdateTime = DateTime.Now
-                        },
-                        CourseBox = new CourseBox { ID = id }
+                        Comment = comment,
+                        CourseBoxId = inputModel.CourseBoxId
                     });
+
+                    responseData = new ResponseData
+                    {
+                        Code = 1,
+                        Message = "评论成功"
+                    };
                 }
                 else
                 {
@@ -661,7 +743,190 @@ namespace WebApi.Controllers
                 responseData = new ResponseData
                 {
                     Code = -1,
-                    Message = "评论失败"
+                    Message = "评论失败:" + ex.Message
+                };
+            }
+
+            return responseData;
+        }
+        #endregion
+
+        #region 评论点赞或踩
+        [Route("CommentLike")]
+        [HttpPost]
+        [NeedAuth]
+        public ResponseData CommentLike(CommentLikeInputModel inputModel)
+        {
+            ResponseData responseData = null;
+            string msg = "";
+            try
+            {
+                int currentUserId = ((UserIdentity)User.Identity).ID;
+
+                //var comment = Container.Instance.Resolve<CommentService>().GetEntity(inputModel.CommentId);
+                var comment = this._commentService.Find(inputModel.CommentId);
+                switch (inputModel.DoType)
+                {
+                    case 1:
+                        msg = "点赞";
+                        comment.LikeNum = comment.LikeNum + 1;
+                        //Container.Instance.Resolve<CommentService>().Edit(comment);
+                        this._commentService.Update(comment);
+
+                        //Container.Instance.Resolve<Comment_LikeService>().Create(new Comment_Like
+                        //{
+                        //    Comment = new Comment { ID = inputModel.CommentId },
+                        //    UserInfo = new UserInfo { ID = currentUserId },
+                        //    CreateTime = DateTime.Now
+                        //});
+                        this._comment_LikeService.Create(new Comment_Like
+                        {
+                            CommentId = inputModel.CommentId,
+                            UserInfoId = currentUserId,
+                            CreateTime = DateTime.Now
+                        });
+
+                        break;
+                    case 2:
+                        msg = "踩";
+                        comment.DislikeNum = comment.DislikeNum + 1;
+                        //Container.Instance.Resolve<CommentService>().Edit(comment);
+                        this._commentService.Update(comment);
+
+                        //Container.Instance.Resolve<Comment_DislikeService>().Create(new Comment_Dislike
+                        //{
+                        //    Comment = new Comment { ID = inputModel.CommentId },
+                        //    UserInfo = new UserInfo { ID = currentUserId },
+                        //    CreateTime = DateTime.Now
+                        //});
+                        this._comment_DislikeService.Create(new Comment_Dislike
+                        {
+                            CommentId = inputModel.CommentId,
+                            UserInfoId = currentUserId,
+                            CreateTime = DateTime.Now
+                        });
+
+                        break;
+                }
+
+                responseData = new ResponseData
+                {
+                    Code = 1,
+                    Message = msg + "成功"
+                };
+            }
+            catch (Exception ex)
+            {
+                responseData = new ResponseData
+                {
+                    Code = -1,
+                    Message = msg + "失败: " + ex.Message + ex.InnerException?.Message
+                };
+            }
+
+            return responseData;
+        }
+        #endregion
+
+        #region 播放历史推送
+        [Route("PlayHistoryPush")]
+        [HttpPost]
+        [NeedAuth]
+        public ResponseData PlayHistoryPush(PlayHistoryPushInputModel inputModel)
+        {
+            ResponseData responseData = null;
+            try
+            {
+                int currentUserId = ((UserIdentity)User.Identity).ID;
+
+                // 更新此用户与此门课程的最新播放视频
+                // 1.先查出此视频所在课程
+                //VideoInfo videoInfo = Container.Instance.Resolve<VideoInfoService>().GetEntity(inputModel.ID);
+                VideoInfo videoInfo = this._videoInfoService.Find(inputModel.ID);
+                // 2.更新此用户与此门课程的关系，最新播放视频为此视频
+                //Learner_CourseBox learner_CourseBox = Container.Instance.Resolve<Learner_CourseBoxService>().Query(new List<ICriterion>
+                //{
+                //    Expression.And(
+                //        Expression.Eq("CourseBox.ID", videoInfo.CourseBox.ID),
+                //        Expression.Eq("Learner.ID", currentUserId)
+                //    )
+                //}).FirstOrDefault();
+                Learner_CourseBox learner_CourseBox = this._learner_CourseBoxService.Find(m =>
+                    m.CourseBoxId == videoInfo.CourseBox.ID
+                    && m.LearnerId == currentUserId
+                    && !m.IsDeleted
+                );
+                if (learner_CourseBox == null)
+                {
+                    // 没有此课程的学习/播放记录
+                    // 只要一播放就自动算作将此课程加入学习
+                    learner_CourseBox = new Learner_CourseBox();
+                    learner_CourseBox.LastPlayVideoInfo = videoInfo;
+
+                    learner_CourseBox.LearnerId = currentUserId;
+                    learner_CourseBox.CourseBox = videoInfo.CourseBox;
+                    learner_CourseBox.JoinTime = DateTime.Now;
+                    //Container.Instance.Resolve<Learner_CourseBoxService>().Create(learner_CourseBox);
+                    this._learner_CourseBoxService.Create(learner_CourseBox);
+                }
+                else
+                {
+                    // 已有此课程的学习/播放记录
+                    learner_CourseBox.LastPlayVideoInfo = videoInfo;
+                    //Container.Instance.Resolve<Learner_CourseBoxService>().Edit(learner_CourseBox);
+                    this._learner_CourseBoxService.Update(learner_CourseBox);
+                }
+
+                // 更新此用户与此视频最新播放位置等
+                //Learner_VideoInfo learner_VideoInfo = Container.Instance.Resolve<Learner_VideoInfoService>().Query(new List<ICriterion>
+                //{
+                //    Expression.And(
+                //        Expression.Eq("VideoInfo.ID", videoInfo.ID),
+                //        Expression.Eq("Learner.ID", currentUserId)
+                //    )
+                //}).FirstOrDefault();
+                Learner_VideoInfo learner_VideoInfo = this._learner_VideoInfoService.Find(m =>
+                    m.VideoInfoId == videoInfo.ID
+                    && m.LearnerId == currentUserId
+                    && !m.IsDeleted
+                );
+                if (learner_VideoInfo == null)
+                {
+                    // 没有此视频的播放记录
+                    learner_VideoInfo = new Learner_VideoInfo();
+                    learner_VideoInfo.LastAccessIp = HttpContext.Current.Request.UserHostName;
+                    learner_VideoInfo.LastPlayAt = (long)inputModel.LastPlayAt;
+                    learner_VideoInfo.LastPlayTime = DateTime.Now;
+
+                    learner_VideoInfo.LearnerId = currentUserId;
+                    learner_VideoInfo.VideoInfo = videoInfo;
+                    //Container.Instance.Resolve<Learner_VideoInfoService>().Create(learner_VideoInfo);
+                    this._learner_VideoInfoService.Create(learner_VideoInfo);
+                }
+                else
+                {
+                    // 已有此视频的播放记录
+                    learner_VideoInfo.LastAccessIp = HttpContext.Current.Request.UserHostName;
+                    learner_VideoInfo.LastPlayAt = (long)inputModel.LastPlayAt;
+                    learner_VideoInfo.LastPlayTime = DateTime.Now;
+                    //Container.Instance.Resolve<Learner_VideoInfoService>().Edit(learner_VideoInfo);
+                    this._learner_VideoInfoService.Update(learner_VideoInfo);
+                }
+
+                responseData = new ResponseData
+                {
+                    Code = 1,
+                    Message = "成功",
+                    Data = inputModel
+                };
+            }
+            catch (Exception ex)
+            {
+                responseData = new ResponseData
+                {
+                    Code = -1,
+                    Message = "失败: " + ex.Message + ex.InnerException?.Message,
+                    Data = inputModel
                 };
             }
 

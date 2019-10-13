@@ -136,9 +136,13 @@
     <Compile Include="Infrastructure\UserIdentity.cs" />
     <Compile Include="Infrastructure\UserPrincipal.cs" />
     <Compile Include="Models\Common\ResponseData.cs" />
+    <Compile Include="Models\CourseBoxVM\CommentInputModel.cs" />
+    <Compile Include="Models\CourseBoxVM\CommentLikeInputModel.cs" />
     <Compile Include="Models\CourseBoxVM\CommentViewModel.cs" />
     <Compile Include="Models\CourseBoxVM\CourseBoxViewModel.cs" />
     <Compile Include="Models\CourseBoxVM\LearnCourseBoxInputModel.cs" />
+    <Compile Include="Models\CourseBoxVM\PlayHistoryPushInputModel.cs" />
+    <Compile Include="Models\CourseBoxVM\SimpleCommentsViewModel.cs" />
     <Compile Include="Models\FavoriteVM\CreateInputModel.cs" />
     <Compile Include="Models\FavoriteVM\FavCourseBoxInputModel.cs" />
     <Compile Include="Models\FavoriteVM\FavoriteViewModel.cs" />

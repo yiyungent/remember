@@ -560,12 +560,13 @@ namespace WebApi.Controllers
                 //    Description = inputModel.Desc,
                 //    Creator = new UserInfo { ID = ((UserIdentity)User.Identity).ID }
                 //});
+                int currentUserId = ((UserIdentity)User.Identity).ID;
                 this._favoriteService.Create(new Favorite
                 {
                     IsOpen = inputModel.IsOpen,
                     Name = inputModel.Name,
                     Description = inputModel.Desc,
-                    Creator = new UserInfo { ID = ((UserIdentity)User.Identity).ID }
+                    CreatorId = currentUserId
                 });
 
                 responseData = new ResponseData

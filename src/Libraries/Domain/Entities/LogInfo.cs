@@ -27,6 +27,13 @@ namespace Domain.Entities
         public string AccessIp { get; set; }
 
         /// <summary>
+        /// 访问者所在城市
+        /// </summary>
+        [StringLength(500)]
+        [Column(TypeName = "text")]
+        public string AccessCity { get; set; }
+
+        /// <summary>
         /// 解析 UserAgent json字符串
         /// {
         ///      ua: "",

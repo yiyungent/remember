@@ -31,28 +31,35 @@ namespace WebApi.Controllers
             {
                 UserAgentModel userAgent = JsonConvert.DeserializeObject<UserAgentModel>(inputModel.UserAgent);
                 int accessUserId = 0;
-                var user = AccountManager.GetCurrentUserInfo();
-                if (user != null)
+                try
                 {
-                    accessUserId = user.ID;
+                    var user = AccountManager.GetCurrentUserInfo();
+                    if (user != null)
+                    {
+                        accessUserId = user.ID;
+                    }
+                }
+                catch (Exception ex)
+                {
                 }
 
                 this._logInfoService.Create(new LogInfo
                 {
                     AccessIp = inputModel.Ip,
+                    AccessCity = inputModel.City,
                     AccessTime = inputModel.AccessTime.ToDateTime13(),
                     JumpTime = inputModel.JumpTime.ToDateTime13(),
                     CreateTime = DateTime.Now,
-                    UserAgent = inputModel.UserAgent,
-                    AccessUrl = inputModel.AccessUrl,
-                    RefererUrl = inputModel.RefererUrl,
+                    UserAgent = inputModel?.UserAgent,
+                    AccessUrl = inputModel?.AccessUrl,
+                    RefererUrl = inputModel?.RefererUrl,
                     AccessUserId = accessUserId,
-                    Browser = userAgent.Browser.Name + " " + userAgent.Browser.Version,
-                    BrowserEngine = userAgent.Engine.Name,
-                    Device = userAgent.Device.Model,
-                    Cpu = userAgent.Cpu.Architecture,
-                    OS = userAgent.OS.Name + " " + userAgent.OS.Version,
-                    Duration = inputModel.JumpTime / 1000 - inputModel.AccessTime / 1000
+                    Browser = userAgent?.Browser?.Name + " " + userAgent?.Browser?.Version,
+                    BrowserEngine = userAgent?.Engine?.Name,
+                    Device = userAgent?.Device?.Model,
+                    Cpu = userAgent?.Cpu?.Architecture,
+                    OS = userAgent?.OS?.Name + " " + userAgent?.OS?.Version,
+                    Duration = (int)(inputModel.JumpTime - inputModel.AccessTime) / 1000
                 });
 
                 responseData = new ResponseData
