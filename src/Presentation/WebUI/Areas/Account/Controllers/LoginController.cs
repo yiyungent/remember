@@ -178,7 +178,8 @@ namespace WebUI.Areas.Account.Controllers
 
             // 更新用户--最后登录时间等
             dbUser.LastLoginTime = DateTime.UtcNow;
-            dbUser.RefreshToken = token;
+            // TODO: 去除 RefreshToken
+            //dbUser.RefreshToken = token;
 
             //Container.Instance.Resolve<UserInfoService>().Edit(dbUser);
             this._userInfoService.Update(dbUser);

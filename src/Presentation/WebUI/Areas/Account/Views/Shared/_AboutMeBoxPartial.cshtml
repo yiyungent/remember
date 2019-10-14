@@ -1,4 +1,4 @@
-﻿@using Domain
+﻿@using Domain.Entities
 @model UserInfo
 @{
 	Layout = null;
@@ -28,9 +28,9 @@
 		<strong><i class="fa fa-pencil margin-r-5"></i> 角色</strong>
 
 		<p>
-			@for (int i = 0; i < Model.RoleInfoList.Count; i++)
+			@for (int i = 0; i < Model.RoleInfos.Count; i++)
 			{
-				<span class="label @labelArrCssArr[i % labelArrCssArr.Length]">@Model.RoleInfoList[i].Name</span>
+				<span class="label @labelArrCssArr[i % labelArrCssArr.Length]">@Model.RoleInfos[i].Name</span>
 			}
 		</p>
 

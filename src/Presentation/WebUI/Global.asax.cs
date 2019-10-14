@@ -29,6 +29,7 @@ using System.Threading;
 using WebUI.Infrastructure;
 using WebUI.Controllers;
 using System.Web;
+using Framework.Mvc.ViewEngines.Templates;
 
 namespace WebUI
 {
@@ -42,7 +43,7 @@ namespace WebUI
             RegisterRoutes(RouteTable.Routes);
 
             //initialize engine context
-            EngineContext.Initialize(false);
+            //EngineContext.Initialize(false);
 
             FrameworkConfig.Register();
 
@@ -106,6 +107,12 @@ namespace WebUI
 
             // 注意 Framework 所需数据库访问者
             builder.RegisterType<DBAccessProvider>().As<IDBAccessProvider>();
+            builder.RegisterType<AuthManager>().As<IAuthManager>();
+            builder.RegisterType<WorkContext>().As<IWorkContext>();
+            builder.RegisterType<TemplateContext>().As<ITemplateContext>();
+            builder.RegisterType<TemplateProvider>().As<ITemplateProvider>();
+            builder.RegisterType<WebHelper>().As<IWebHelper>().WithParameter("httpContext", HttpContext.Current);
+            builder.RegisterType<WebHelper>().As<WebHelper>().WithParameter("httpContext", HttpContext.Current);
 
             // 注册仓储层服务
             builder.RegisterType<ArticleRepository>().As<IArticleRepository>();
@@ -225,8 +232,8 @@ namespace WebUI
             );
 
             // register custom routes (plugins, etc)
-            var routePublisher = EngineContext.Current.Resolve<IRoutePublisher>();
-            routePublisher.RegisterRoutes(routes);
+            //var routePublisher = EngineContext.Current.Resolve<IRoutePublisher>();
+            //routePublisher.RegisterRoutes(routes);
 
             // 注册文章页的自定义路由
             var route = routes.MapRoute(

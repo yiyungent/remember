@@ -4,7 +4,7 @@
 @model UserInfo
 @{
 	Layout = null;
-	string roleName = Model.RoleInfoList.FirstOrDefault() == null ? "" : Model.RoleInfos.FirstOrDefault().Name;
+	string roleName = Model.RoleInfos.FirstOrDefault() == null ? "" : Model.RoleInfos.FirstOrDefault().Name;
 }
 
 

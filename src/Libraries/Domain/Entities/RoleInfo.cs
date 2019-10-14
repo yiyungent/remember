@@ -10,6 +10,7 @@ namespace Domain.Entities
     /// <summary>
     /// 实体类: 角色
     /// </summary>
+    [Serializable]
     public partial class RoleInfo : BaseEntity
     {
         [Key]

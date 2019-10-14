@@ -62,6 +62,7 @@ namespace Domain.Entities
 
         #region Helpers
 
+        [NotMapped]
         public IList<CourseBox> CourseBoxes
         {
             get

@@ -96,6 +96,7 @@ namespace Domain.Entities
         /// <summary>
         /// 学习此课程总需时间
         /// </summary>
+        [NotMapped]
         public long Duration
         {
             get
@@ -110,6 +111,7 @@ namespace Domain.Entities
             }
         }
 
+        [NotMapped]
         public IList<Favorite> Favorites
         {
             get

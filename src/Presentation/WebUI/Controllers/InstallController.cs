@@ -24,6 +24,8 @@ namespace WebUI.Controllers
         private readonly IFavoriteService _favoriteService;
         private readonly ICourseBoxService _courseBoxService;
         private readonly IVideoInfoService _videoInfoService;
+        private readonly IRole_MenuService _role_MenuService;
+        private readonly IRole_FunctionService _role_FunctionService;
         #endregion
 
         #region Ctor
@@ -36,7 +38,9 @@ namespace WebUI.Controllers
                                  IArticleService articleService,
                                  IFavoriteService favoriteService,
                                  ICourseBoxService courseBoxService,
-                                 IVideoInfoService videoInfoService)
+                                 IVideoInfoService videoInfoService,
+                                 IRole_MenuService role_MenuService,
+                                 IRole_FunctionService role_FunctionService)
         {
             this._userInfoService = userInfoService;
             this._settingService = settingService;
@@ -48,6 +52,8 @@ namespace WebUI.Controllers
             this._favoriteService = favoriteService;
             this._courseBoxService = courseBoxService;
             this._videoInfoService = videoInfoService;
+            this._role_MenuService = role_MenuService;
+            this._role_FunctionService = role_FunctionService;
         }
         #endregion
 
@@ -142,13 +148,13 @@ namespace WebUI.Controllers
                 {
                     { "DefaultTemplateName", "Blue" },
 
-                    { "WebApiSite", "http://localhost:7784/" },
+                    { "WebApiSite", "http://localhost:4530/" },
                     { "WebApiTitle","remember" },
                     { "WebApiDesc", "remember是xx推出的专业在线教育平台，聚合大量优质教育机构和名师，下设职业培训、公务员考试、托福雅思、考证考级、英语口语、中小学教育等众多在线学习精品课程，打造老师在线上课教学、学生及时互动学习的课堂。"},
                     { "WebApiKeywords", "" },
                     { "WebApiStat", "" },
 
-                    { "WebUISite", "http://localhost:21788/" },
+                    { "WebUISite", "http://localhost:4483/" },
                     { "WebUITitle", "remember - 在线学习" },
                     { "WebUIDesc", "remember是xx推出的专业在线教育平台，聚合大量优质教育机构和名师，下设职业培训、公务员考试、托福雅思、考证考级、英语口语、中小学教育等众多在线学习精品课程，打造老师在线上课教学、学生及时互动学习的课堂。"},
                     { "WebUIKeywords", "" },
@@ -659,6 +665,14 @@ namespace WebUI.Controllers
                     {
                         Sys_MenuId = menu.ID,
                         CreateTime = DateTime.Now,
+                    });
+                }
+                foreach (var func in allFunction)
+                {
+                    admin_roleInfo.Role_Functions.Add(new Role_Function
+                    {
+                        FunctionInfoId = func.ID,
+                        CreateTime = DateTime.Now
                     });
                 }
                 // 1

@@ -40,7 +40,10 @@ namespace Framework.Infrastructure.Concrete
         private static string _loginAccountSessionKey = AppConfig.LoginAccountSessionKey;
         private static string _jwtName = AppConfig.JwtName;
 
-        private static IDBAccessProvider _dBAccessProvider = HttpOneRequestFactory.Get<IDBAccessProvider>();
+        /// <summary>
+        /// TODO: 不能这么做，因为静态会导致全局唯一，而 DBAccessProvider 中的Service中存有DbContext，这样会导致使用旧的已经释放的DbContext
+        /// </summary>
+        //private static IDBAccessProvider _dBAccessProvider = HttpOneRequestFactory.Get<IDBAccessProvider>();
 
         #region 获取当前UserInfo
         /// <summary>
@@ -105,7 +108,8 @@ namespace Framework.Infrastructure.Concrete
                             {
                                 // token未过期
                                 // 经过效验的用户信息
-                                rtnUserInfo = _dBAccessProvider.GetUserInfoById(tokenModel.ID);
+                                //rtnUserInfo = _dBAccessProvider.GetUserInfoById(tokenModel.ID);
+                                rtnUserInfo = HttpOneRequestFactory.Get<IDBAccessProvider>().GetUserInfoById(tokenModel.ID);
                             }
                         }
                     }
@@ -153,7 +157,7 @@ namespace Framework.Infrastructure.Concrete
         public static UserInfo GetUserInfoByUserName(string userName)
         {
             UserInfo rtn = null;
-            rtn = _dBAccessProvider.GetUserInfoByUserName(userName);
+            rtn = HttpOneRequestFactory.Get<IDBAccessProvider>().GetUserInfoByUserName(userName);
 
             return rtn;
         }
@@ -217,7 +221,7 @@ namespace Framework.Infrastructure.Concrete
                         {
                             // token未过期
                             // 经过效验的用户信息
-                            UserInfo user = _dBAccessProvider.GetUserInfoById(tokenModel.ID);
+                            UserInfo user = HttpOneRequestFactory.Get<IDBAccessProvider>().GetUserInfoById(tokenModel.ID);
                             if (user != null)
                             {
                                 loginStatus = LoginStatus.IsLogin;
@@ -260,7 +264,7 @@ namespace Framework.Infrastructure.Concrete
             else
             {
                 int userInfoId = userInfo.ID;
-                Tools.SetSession(AppConfig.LoginAccountSessionKey, _dBAccessProvider.GetUserInfoById(userInfoId));
+                Tools.SetSession(AppConfig.LoginAccountSessionKey, HttpOneRequestFactory.Get<IDBAccessProvider>().GetUserInfoById(userInfoId));
             }
         }
         #endregion
@@ -283,7 +287,7 @@ namespace Framework.Infrastructure.Concrete
             // 数据库删除 token，并过期
             UserInfo userInfo = GetCurrentUserInfo();
             userInfo.RefreshToken = null;
-            _dBAccessProvider.EditUserInfo(userInfo);
+            HttpOneRequestFactory.Get<IDBAccessProvider>().EditUserInfo(userInfo);
         }
         #endregion
     }

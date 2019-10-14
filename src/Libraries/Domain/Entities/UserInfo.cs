@@ -7,6 +7,7 @@ namespace Domain.Entities
     using System.Data.Entity.Spatial;
     using System.Linq;
 
+    [Serializable]
     public partial class UserInfo : BaseEntity
     {
         [Key]
