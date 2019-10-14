@@ -21,7 +21,6 @@ using PluginHub.Web.Mvc.Routes;
 using Framework.Config;
 using Framework.Common;
 using log4net;
-using WebUI.Infrastructure.Search;
 using System.Configuration;
 using Framework.Extensions;
 using WebUI.Attributes;
@@ -48,7 +47,7 @@ namespace WebUI
             FrameworkConfig.Register();
 
             // 开启线程扫描队列将数据取出来写到Lucene.NET中。
-            SearchIndexManager.GetInstance().StartThread();
+            //SearchIndexManager.GetInstance().StartThread();
 
             #region log4net
 

@@ -8220,7 +8220,6 @@
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
-    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\WidgetController.cs" />
     <Compile Include="DependencyRegistrar.cs" />
     <Compile Include="Extensions\DateTimeExt.cs" />
@@ -8237,10 +8236,6 @@
     <Compile Include="Imples\CustomSettingImply.cs" />
     <Compile Include="Infrastructure\AutoMapperStartupTask.cs" />
     <Compile Include="Infrastructure\CmsUrlConstraint.cs" />
-    <Compile Include="Infrastructure\Search\LuceneHelper.cs" />
-    <Compile Include="Infrastructure\Search\SearchIndexManager.cs" />
-    <Compile Include="MessageHubs\NotificationHub.cs" />
-    <Compile Include="MessageHubs\NotificationManager.cs" />
     <Compile Include="Models\CardBoxVM\SearchResultViewModel.cs" />
     <Compile Include="Models\Cms\RenderWidgetModel.cs" />
     <Compile Include="Models\Cms\WidgetModel.cs" />

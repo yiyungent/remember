@@ -1,6 +1,5 @@
 ﻿using Core;
-using NHibernate.Criterion;
-using Service;
+using Services.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,15 +19,13 @@ namespace WebUI.Extensions
             string rtnStr = "";
             if (!string.IsNullOrEmpty(dbRelativeUrl))
             {
-                SettingService settingService = Container.Instance.Resolve<SettingService>();
-                string webApiSite = settingService.Query(new List<ICriterion>
-            {
-                Expression.Eq("SetKey", "WebApiSite")
-            }).FirstOrDefault()?.SetValue;
-                string webUISite = settingService.Query(new List<ICriterion>
-            {
-                Expression.Eq("SetKey", "WebUISite")
-            }).FirstOrDefault()?.SetValue;
+                //SettingService settingService = Container.Instance.Resolve<SettingService>();
+                //string webApiSite = settingService.Query(new List<ICriterion>
+                //{
+                //    Expression.Eq("SetKey", "WebApiSite")
+                //}).FirstOrDefault()?.SetValue;
+                string webApiSite = ContainerManager.Resolve<ISettingService>().GetSet("WebApiSite");
+                string webUISite = ContainerManager.Resolve<ISettingService>().GetSet("WebUISite");
 
                 rtnStr = dbRelativeUrl.Replace(":WebApiSite:", webApiSite).Replace(":WebUISite:", webUISite);
             }

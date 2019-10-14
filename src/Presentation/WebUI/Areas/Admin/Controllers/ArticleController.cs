@@ -12,7 +12,6 @@ using System.Web;
 using System.Web.Mvc;
 using WebUI.Areas.Admin.Models.Common;
 using WebUI.Extensions;
-using WebUI.Infrastructure.Search;
 using WebUI.Models.SearchVM;
 
 namespace WebUI.Areas.Admin.Controllers

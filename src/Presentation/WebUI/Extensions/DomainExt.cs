@@ -1,7 +1,7 @@
 ﻿using Core;
 using Domain;
-using NHibernate.Criterion;
-using Service;
+using Domain.Entities;
+using Services.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,20 +16,31 @@ namespace WebUI.Extensions
         public static Sys_Menu GetSysMenuByRoute(string areaName, string controllerName, string actionName)
         {
             Sys_Menu rtn = null;
-            rtn = Container.Instance.Resolve<Sys_MenuService>().Query(new List<ICriterion>
-            {
-                Expression.Like("AreaName", areaName, MatchMode.Anywhere),
-                Expression.Like("ControllerName", controllerName, MatchMode.Anywhere),
-                Expression.Like("ActionName", actionName, MatchMode.Anywhere)
-            }).FirstOrDefault();
+            //rtn = Container.Instance.Resolve<Sys_MenuService>().Query(new List<ICriterion>
+            //{
+            //    Expression.Like("AreaName", areaName, MatchMode.Anywhere),
+            //    Expression.Like("ControllerName", controllerName, MatchMode.Anywhere),
+            //    Expression.Like("ActionName", actionName, MatchMode.Anywhere)
+            //}).FirstOrDefault();
+            rtn = ContainerManager.Resolve<ISys_MenuService>().Find(m =>
+                m.AreaName.Contains(areaName)
+                && m.ControllerName.Contains(controllerName)
+                && m.ActionName.Contains(actionName)
+                && !m.IsDeleted
+            );
             if (rtn == null)
             {
                 // 如果没有 此 ActionName 对应的系统菜单，则忽视 ActionName 重查
-                rtn = Container.Instance.Resolve<Sys_MenuService>().Query(new List<ICriterion>
-                {
-                    Expression.Like("AreaName", areaName, MatchMode.Anywhere),
-                    Expression.Like("ControllerName", controllerName, MatchMode.Anywhere),
-                }).FirstOrDefault();
+                //rtn = Container.Instance.Resolve<Sys_MenuService>().Query(new List<ICriterion>
+                //{
+                //    Expression.Like("AreaName", areaName, MatchMode.Anywhere),
+                //    Expression.Like("ControllerName", controllerName, MatchMode.Anywhere),
+                //}).FirstOrDefault();
+                rtn= ContainerManager.Resolve<ISys_MenuService>().Find(m =>
+                     m.AreaName.Contains(areaName)
+                     && m.ControllerName.Contains(controllerName)
+                     && !m.IsDeleted
+                );
             }
 
             return rtn;

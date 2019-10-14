@@ -1,12 +1,13 @@
-﻿using Common;
-using Core;
+﻿using Core;
+using Core.Common;
 using Domain;
+using Domain.Entities;
 using Framework.Infrastructure.Concrete;
 using Framework.Models;
 using Framework.Mvc;
 using Framework.Mvc.ViewEngines.Templates;
 using Newtonsoft.Json;
-using Service;
+using Services.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,17 +20,24 @@ namespace WebUI.Controllers
 {
     public class HomeController : Controller
     {
-        #region Ctor
-        public HomeController()
-        {
+        #region Fields
+        private readonly ICourseBoxService _courseBoxService;
+        private readonly ILogInfoService _logInfoService;
+        #endregion
 
+        #region Ctor
+        public HomeController(ICourseBoxService courseBoxService, ILogInfoService logInfoService)
+        {
+            this._courseBoxService = courseBoxService;
+            this._logInfoService = logInfoService;
         }
         #endregion
 
         #region 首页
         public ActionResult Index()
         {
-            IList<CourseBox> courseBoxes = Container.Instance.Resolve<CourseBoxService>().GetAll();
+            //IList<CourseBox> courseBoxes = Container.Instance.Resolve<CourseBoxService>().GetAll();
+            IList<CourseBox> courseBoxes = this._courseBoxService.All().ToList();
             ViewBag.CourseBoxes = courseBoxes;
 
             return View();
@@ -57,7 +65,7 @@ namespace WebUI.Controllers
                 {
                 }
 
-                Container.Instance.Resolve<LogInfoService>().Create(new LogInfo
+                this._logInfoService.Create(new LogInfo
                 {
                     AccessIp = inputModel.Ip,
                     AccessCity = inputModel.City,

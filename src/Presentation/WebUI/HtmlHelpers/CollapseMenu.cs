@@ -1,6 +1,7 @@
 ﻿using Core;
 using Domain;
-using Service;
+using Domain.Entities;
+using Services.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,10 +20,11 @@ namespace WebUI.HtmlHelpers
         #region 产生菜单列表首页
         public static MvcHtmlString GenerateCollapseMenu(this HtmlHelper value)
         {
-            IList<Sys_Menu> allMenuList = Container.Instance.Resolve<Sys_MenuService>().GetAll();
+            //IList<Sys_Menu> allMenuList = Container.Instance.Resolve<Sys_MenuService>().GetAll();
+            IList<Sys_Menu> allMenuList = ContainerManager.Resolve<ISys_MenuService>().All().ToList();
             _allMenuList = allMenuList;
             IList<Sys_Menu> firstMenuList = (from m in allMenuList
-                                             where m.ParentMenu == null
+                                             where m.ParentId == null || m.ParentId == 0
                                              orderby m.SortCode ascending
                                              select m).ToList();
 
@@ -68,7 +70,7 @@ namespace WebUI.HtmlHelpers
         private static void SubMenuList(ref StringBuilder sbMenuHtml, Sys_Menu currentMenu)
         {
             IList<Sys_Menu> subMenuList = (from m in _allMenuList
-                                           where m.ParentMenu != null && m.ParentMenu.ID == currentMenu.ID
+                                           where m.ParentId != null && m.ParentId == currentMenu.ID
                                            orderby m.SortCode ascending
                                            select m).ToList();
             // 此菜单项下又嵌套一个折叠菜单

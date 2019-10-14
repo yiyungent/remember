@@ -1,30 +1,30 @@
-﻿@using Domain
+﻿@using Domain.Entities
 @using WebUI.Areas.Admin.Models
 @using WebUI.Extensions
 @using PluginHub.Mvc5
+@using Services.Interface;
 @using Framework.Models
 @using Framework.Extensions
 @using Framework.Infrastructure.Concrete
 @using Core;
-@using Service;
-@using NHibernate.Criterion;
 @{
 	Layout = null;
 
 	// 当前登录账号
 	CurrentAccountModel currentAccount = AccountManager.GetCurrentAccount();
 	UserInfo currentUserInfo = currentAccount.UserInfo;
-	string roleName = currentUserInfo.RoleInfoList.FirstOrDefault() == null ? "" : currentUserInfo.RoleInfoList.FirstOrDefault().Name;
+	string roleName = currentUserInfo.RoleInfos.FirstOrDefault() == null ? "" : currentUserInfo.RoleInfos.FirstOrDefault().Name;
 
 	ViewBag.CurrentAccount = currentAccount;
 	ViewBag.RoleName = roleName;
 
 
 	IDictionary<int, string> themeTemplateDic = new Dictionary<int, string>();
-	IList<ThemeTemplate> themeTemplates = Container.Instance.Resolve<ThemeTemplateService>().Query(new List<ICriterion>
-{
-Expression.Eq("IsOpen", 1)
-});
+	//	IList<ThemeTemplate> themeTemplates = Container.Instance.Resolve<ThemeTemplateService>().Query(new List<ICriterion>
+	//{
+	//Expression.Eq("IsOpen", 1)
+	//});
+	IList<ThemeTemplate> themeTemplates = ContainerManager.Resolve<IThemeTemplateService>().Filter(m => m.IsOpen == 1 && !m.IsDeleted).ToList();
 	themeTemplateDic = new Dictionary<int, string>();
 	foreach (var item in themeTemplates)
 	{
@@ -167,7 +167,7 @@ Expression.Eq("IsOpen", 1)
 	</div>
 	<!-- ./wrapper -->
 	<!-- jQuery -->
-	<script src="/Scripts/jquery-1.12.0.min.js"></script>
+	<script src="/assets/libs/AdminLTE/bower_components/jquery/dist/jquery.min.js"></script>
 	<!-- Bootstrap 3.3.7 -->
 	<script src="/assets/libs/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<!-- AdminLTE App -->
