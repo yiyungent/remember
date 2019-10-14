@@ -9,11 +9,16 @@ namespace Framework.HtmlHelpers
 {
     public static class AuthTagHelper
     {
-        public static IAuthManager AuthManager { get; set; }
+        public static IAuthManager AuthManager
+        {
+            get
+            {
+                return HttpOneRequestFactory.Get<IAuthManager>();
+            }
+        }
 
         static AuthTagHelper()
         {
-            AuthManager = HttpOneRequestFactory.Get<IAuthManager>();
         }
 
         #region 权限标签-不支持标签内容为另一标签（即标签嵌套）

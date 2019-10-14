@@ -485,6 +485,7 @@ namespace Repositories.Migrations
                         ID = c.Int(nullable: false, identity: true),
                         AccessUserId = c.Int(),
                         AccessIp = c.String(maxLength: 30, storeType: "nvarchar"),
+                        AccessCity = c.String(unicode: false, storeType: "text"),
                         UserAgent = c.String(unicode: false, storeType: "text"),
                         Browser = c.String(maxLength: 30, storeType: "nvarchar"),
                         BrowserEngine = c.String(maxLength: 30, storeType: "nvarchar"),
@@ -569,19 +570,6 @@ namespace Repositories.Migrations
                 .Index(t => t.VideoInfoId)
                 .Index(t => t.CommentId);
             
-            CreateTable(
-                "dbo.FavoriteCourseBox",
-                c => new
-                    {
-                        Favorite_ID = c.Int(nullable: false),
-                        CourseBox_ID = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => new { t.Favorite_ID, t.CourseBox_ID })
-                .ForeignKey("dbo.Favorite", t => t.Favorite_ID, cascadeDelete: true)
-                .ForeignKey("dbo.CourseBox", t => t.CourseBox_ID, cascadeDelete: true)
-                .Index(t => t.Favorite_ID)
-                .Index(t => t.CourseBox_ID);
-            
         }
         
         public override void Down()
@@ -609,8 +597,6 @@ namespace Repositories.Migrations
             DropForeignKey("dbo.Favorite_CardBox", "FavoriteId", "dbo.Favorite");
             DropForeignKey("dbo.Favorite_CardBox", "CardBoxId", "dbo.CardBox");
             DropForeignKey("dbo.Favorite", "CreatorId", "dbo.UserInfo");
-            DropForeignKey("dbo.FavoriteCourseBox", "CourseBox_ID", "dbo.CourseBox");
-            DropForeignKey("dbo.FavoriteCourseBox", "Favorite_ID", "dbo.Favorite");
             DropForeignKey("dbo.Favorite_CourseBox", "CourseBoxId", "dbo.CourseBox");
             DropForeignKey("dbo.CourseBox", "CreatorId", "dbo.UserInfo");
             DropForeignKey("dbo.Comment_Like", "UserInfoId", "dbo.UserInfo");
@@ -633,8 +619,6 @@ namespace Repositories.Migrations
             DropForeignKey("dbo.Sys_Menu", "ParentId", "dbo.Sys_Menu");
             DropForeignKey("dbo.Role_Function", "FunctionInfoId", "dbo.FunctionInfo");
             DropForeignKey("dbo.Role_User", "OperatorId", "dbo.UserInfo");
-            DropIndex("dbo.FavoriteCourseBox", new[] { "CourseBox_ID" });
-            DropIndex("dbo.FavoriteCourseBox", new[] { "Favorite_ID" });
             DropIndex("dbo.VideoInfo_Comment", new[] { "CommentId" });
             DropIndex("dbo.VideoInfo_Comment", new[] { "VideoInfoId" });
             DropIndex("dbo.Learner_VideoInfo", new[] { "VideoInfoId" });
@@ -680,7 +664,6 @@ namespace Repositories.Migrations
             DropIndex("dbo.Role_User", new[] { "UserInfoId" });
             DropIndex("dbo.Role_User", new[] { "OperatorId" });
             DropIndex("dbo.Article", new[] { "AuthorId" });
-            DropTable("dbo.FavoriteCourseBox");
             DropTable("dbo.VideoInfo_Comment");
             DropTable("dbo.ThemeTemplate");
             DropTable("dbo.Setting");

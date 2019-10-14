@@ -2,13 +2,23 @@
 @using Framework.Models
 @using Framework.Extensions
 @{
+	System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+	stopwatch.Start();
+
 	Layout = "~/Views/Shared/_TopNav.cshtml";
 	ViewBag.Title = WebSetting.Get("WebUITitle") + " - " + WebSetting.Get("WebUITitle");
 	ViewBag.Desc = WebSetting.Get("WebUIDesc");
+	stopwatch.Stop();
 
+	stopwatch.Reset();
+	stopwatch.Start();
 
 	IList<CourseBox> courseBoxes = ViewBag.CourseBoxes;
 	courseBoxes = courseBoxes.OrderByDescending(m => m.LastUpdateTime).Take(5).ToList();
+
+	stopwatch.Stop();
+
+	long t = stopwatch.ElapsedMilliseconds;
 }
 @section head {
 	<style>
@@ -16,19 +26,19 @@
 			padding-bottom: 6px;
 		}
 
-		.picItem a {
-			display: inline-block;
-		}
+			.picItem a {
+				display: inline-block;
+			}
 
-		.picItem .thumbnail {
-			display: inline-block;
-			padding: 0;
-			border: none;
-		}
+			.picItem .thumbnail {
+				display: inline-block;
+				padding: 0;
+				border: none;
+			}
 
-		.picItem .caption {
-			height: 48px;
-		}
+			.picItem .caption {
+				height: 48px;
+			}
 	</style>
 }
 @section body {

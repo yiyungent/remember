@@ -8287,7 +8287,7 @@
     <Content Include="Areas\Admin\Views\Plugin\Configure.cshtml" />
     <Content Include="Areas\Admin\Views\Plugin\Index.cshtml" />
     <Content Include="Areas\Admin\Views\RoleInfo\AssignPower.cshtml" />
-    <Content Include="Areas\Admin\Views\RoleInfo\Detail.cshtml" />
+    <Content Include="Areas\Admin\Views\RoleInfo\Details.cshtml" />
     <Content Include="Areas\Admin\Views\RoleInfo\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\RoleInfo\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Setting\Advanced.cshtml" />
@@ -8305,7 +8305,7 @@
     <Content Include="Areas\Admin\Views\ThemeTemplate\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ThemeTemplate\UploadTemplate.cshtml" />
     <Content Include="Areas\Admin\Views\UserInfo\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\UserInfo\Detail.cshtml" />
+    <Content Include="Areas\Admin\Views\UserInfo\Details.cshtml" />
     <Content Include="Areas\Admin\Views\UserInfo\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\UserInfo\Index.cshtml" />
     <Content Include="Areas\Admin\Views\web.config" />
@@ -8924,7 +8924,6 @@
     <Content Include="assets\libs\zui\dist\lib\uploader\Moxie.xap" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\Details.cshtml" />
     <Content Include="Views\Install\Index.cshtml" />
     <Content Include="Upload\subtitles\1\2a3c8f2c-0e50-4943-9014-82bb0991f775.vtt" />
     <Content Include="Upload\subtitles\1\63525ac7-f7ec-428b-b208-6a2c5b45a68d.vtt" />

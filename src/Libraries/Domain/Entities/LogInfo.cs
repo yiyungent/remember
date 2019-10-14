@@ -98,14 +98,14 @@ namespace Domain.Entities
         /// 访问地址
         /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(30)]
+        [StringLength(1000)]
         public string AccessUrl { get; set; }
 
         /// <summary>
         /// 来源URL
         /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(30)]
+        [StringLength(1000)]
         public string RefererUrl { get; set; }
 
         /// <summary>

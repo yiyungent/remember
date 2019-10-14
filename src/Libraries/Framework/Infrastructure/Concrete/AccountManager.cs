@@ -59,7 +59,8 @@ namespace Framework.Infrastructure.Concrete
                 // 获取当前登录用户
                 try
                 {
-                    rtnUserInfo = Tools.GetSession<UserInfo>(AppConfig.LoginAccountSessionKey);
+                    int userInfoId = Tools.GetSession<int>(AppConfig.LoginAccountSessionKey);
+                    rtnUserInfo = GetUserInfoById(userInfoId);
                 }
                 catch (Exception ex)
                 { }
@@ -163,6 +164,16 @@ namespace Framework.Infrastructure.Concrete
         }
         #endregion
 
+        #region 根据UserInfo.ID获取UserInfo
+        public static UserInfo GetUserInfoById(int id)
+        {
+            UserInfo rtn = null;
+            rtn = HttpOneRequestFactory.Get<IDBAccessProvider>().GetUserInfoById(id);
+
+            return rtn;
+        }
+        #endregion
+
         #region 检查登录状态-已登录/未登录(登录超时)
         /// <summary>
         /// 检查登录状态
@@ -179,7 +190,8 @@ namespace Framework.Infrastructure.Concrete
             HttpRequest request = HttpContext.Current.Request;
             HttpSessionState session = HttpContext.Current.Session;
 
-            UserInfo userInfo = Tools.GetSession<UserInfo>(AppConfig.LoginAccountSessionKey);
+            int userInfoId = Tools.GetSession<int>(AppConfig.LoginAccountSessionKey);
+            UserInfo userInfo = GetUserInfoById(userInfoId);
             if (userInfo != null)
             {
                 // Session内存中存在 -> 已登录
@@ -254,6 +266,10 @@ namespace Framework.Infrastructure.Concrete
         #endregion
 
         #region 更新 当前 Session 内的 UserInfo
+        /// <summary>
+        /// 
+        /// </summary>
+        [Obsolete(message: "现在已经改为Session只保存用户的ID，每次都利用此ID重新查询用户信息，此方法不再需要")]
         public static void UpdateSessionAccount()
         {
             UserInfo userInfo = GetCurrentUserInfo();
@@ -264,7 +280,7 @@ namespace Framework.Infrastructure.Concrete
             else
             {
                 int userInfoId = userInfo.ID;
-                Tools.SetSession(AppConfig.LoginAccountSessionKey, HttpOneRequestFactory.Get<IDBAccessProvider>().GetUserInfoById(userInfoId));
+                Tools.SetSession(AppConfig.LoginAccountSessionKey, userInfoId);
             }
         }
         #endregion
@@ -282,12 +298,12 @@ namespace Framework.Infrastructure.Concrete
             // 浏览器 删除 cookie token
             if (request.Cookies.AllKeys.Contains(_jwtName))
             {
-                response.Cookies[_jwtName].Expires = DateTime.UtcNow.AddDays(-1);
+                response.Cookies[_jwtName].Expires = DateTime.Now.AddDays(-1);
             }
             // 数据库删除 token，并过期
-            UserInfo userInfo = GetCurrentUserInfo();
-            userInfo.RefreshToken = null;
-            HttpOneRequestFactory.Get<IDBAccessProvider>().EditUserInfo(userInfo);
+            //UserInfo userInfo = GetCurrentUserInfo();
+            //userInfo.RefreshToken = null;
+            //HttpOneRequestFactory.Get<IDBAccessProvider>().EditUserInfo(userInfo);
         }
         #endregion
     }

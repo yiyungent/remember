@@ -75,7 +75,7 @@ namespace WebUI.Areas.Admin.Controllers
         #endregion
 
         #region 查看
-        public ViewResult Detail(int id)
+        public ViewResult Details(int id)
         {
             //RoleInfo model = Container.Instance.Resolve<RoleInfoService>().GetEntity(id);
             RoleInfo viewModel = this._roleInfoService.Find(m => m.ID == id && !m.IsDeleted);

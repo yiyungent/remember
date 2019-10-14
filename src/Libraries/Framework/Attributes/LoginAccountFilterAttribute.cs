@@ -11,6 +11,7 @@ namespace Framework.Attributes
     using Framework.Models;
     using Domain.Entities;
     using global::Core.Common;
+    using Framework.Infrastructure.Concrete;
 
     /// <summary>
     /// 登录用户Session 维护器
@@ -21,7 +22,7 @@ namespace Framework.Attributes
         private static string _loginAccountSessionKey = AppConfig.LoginAccountSessionKey;
         private static string _tokenCookieKey = AppConfig.JwtName;
 
-        private static IDBAccessProvider _dBAccessProvider = HttpOneRequestFactory.Get<IDBAccessProvider>();
+        //private static IDBAccessProvider _dBAccessProvider = HttpOneRequestFactory.Get<IDBAccessProvider>();
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -49,7 +50,8 @@ namespace Framework.Attributes
             var response = filterContext.HttpContext.Response;
             var session = filterContext.HttpContext.Session;
             // 如果 Session 中已经有 登录用户，则不需要再根据 "记住我" Token 保存登录用户到 Session
-            UserInfo userInfo = Tools.GetSession<UserInfo>(AppConfig.LoginAccountSessionKey);
+            //UserInfo userInfo = Tools.GetSession<UserInfo>(AppConfig.LoginAccountSessionKey);
+            UserInfo userInfo = AccountManager.GetCurrentUserInfo();
             if (userInfo != null)
             {
                 return;
@@ -70,28 +72,28 @@ namespace Framework.Attributes
                         {
                             // token未过期
                             // 经过效验的用户信息
-                            UserInfo user = _dBAccessProvider.GetUserInfoById(tokenModel.ID);
+                            UserInfo user = HttpOneRequestFactory.Get<IDBAccessProvider>().GetUserInfoById(tokenModel.ID);
                             if (user != null)
                             {
                                 // 保存到 Session
-                                session[_loginAccountSessionKey] = user;
+                                session[_loginAccountSessionKey] = user.ID;
                             }
                             else
                             {
                                 // 用户不存在 -> 移除装有 token 的 cookie
-                                response.Cookies[_tokenCookieKey].Expires = DateTime.UtcNow.AddDays(-1);
+                                response.Cookies[_tokenCookieKey].Expires = DateTime.Now.AddDays(-1);
                             }
                         }
                         else
                         {
                             // token 过期
-                            response.Cookies[_tokenCookieKey].Expires = DateTime.UtcNow.AddDays(-1);
+                            response.Cookies[_tokenCookieKey].Expires = DateTime.Now.AddDays(-1);
                         }
                     }
                     else
                     {
                         // token 无效
-                        response.Cookies[_tokenCookieKey].Expires = DateTime.UtcNow.AddDays(-1);
+                        response.Cookies[_tokenCookieKey].Expires = DateTime.Now.AddDays(-1);
                     }
                 }
             }

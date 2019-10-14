@@ -38,7 +38,7 @@ namespace Framework.Config
         public static void RegisterViewEngine(ViewEngineCollection viewEngines)
         {
             viewEngines.Clear();
-            viewEngines.Add(new DbDriveTemplateViewEngine());
+            //viewEngines.Add(new DbDriveTemplateViewEngine());
             viewEngines.Add(new RazorViewEngine());
         }
     }

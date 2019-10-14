@@ -93,7 +93,7 @@ namespace WebUI.Areas.Admin.Controllers
         #endregion
 
         #region 查看
-        public ViewResult Detail(int id)
+        public ViewResult Details(int id)
         {
             //UserInfo viewModel = Container.Instance.Resolve<UserInfoService>().GetEntity(id);
             UserInfo viewModel = this._userInfoService.Find(m => m.ID == id && !m.IsDeleted);

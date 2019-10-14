@@ -70,9 +70,9 @@
 			<td>@item.Name</td>
 			<td>
 				<div class="btn-group" role="group" data-pjax>
-					@if (Html.HasAuth("Admin", "RoleInfo", "Detail"))
+					@if (Html.HasAuth("Admin", "RoleInfo", "Details"))
 					{
-						<a class="btn btn-success" href="@Url.Action("Detail")?id=@item.ID">查看</a>
+						<a class="btn btn-success" href="@Url.Action("Details")?id=@item.ID">查看</a>
 					}
 					@if (Html.HasAuth("Admin", "RoleInfo", "Delete"))
 					{

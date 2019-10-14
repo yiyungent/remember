@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 /// <summary>
 /// JavaScript时间戳：是指格林威治时间1970年01月01日00时00分00秒(北京时间1970年01月01日08时00分00秒)起至现在的总毫秒数。（13 位数字）
@@ -24,25 +28,11 @@ namespace Core.Common
         }
 
         /// <summary>
-        /// C# DateTime转换为Unix时间戳
-        /// </summary>
-        public static long ToTimeStamp10(this DateTime? dateTime)
-        {
-            if (dateTime == null)
-            {
-                return 0;
-            }
-
-            return ToTimeStamp10(dateTime ?? DateTime.MinValue);
-        }
-
-        /// <summary>
         /// Unix时间戳转换为C# DateTime 
         /// </summary>
         public static DateTime ToDateTime10(this long timeStamp10)
         {
-            long unixTimeStamp = 1478162177;
-            DateTime dateTime = DateTime1970.AddSeconds(unixTimeStamp);
+            DateTime dateTime = DateTime1970.AddSeconds(timeStamp10).ToLocalTime();
 
             return dateTime;
         }
@@ -61,25 +51,11 @@ namespace Core.Common
         }
 
         /// <summary>
-        /// C# DateTime转换为JavaScript时间戳
-        /// </summary>
-        public static long ToTimeStamp13(this DateTime? dateTime)
-        {
-            if (dateTime == null)
-            {
-                return 0;
-            }
-
-            return ToTimeStamp13(dateTime ?? DateTime.MinValue);
-        }
-
-        /// <summary>
         /// JavaScript时间戳转换为C# DateTime
         /// </summary>
         public static DateTime ToDateTime13(this long timeStamp13)
         {
-            long jsTimeStamp = 1478169023479;
-            DateTime dateTime = DateTime1970.AddMilliseconds(jsTimeStamp);
+            DateTime dateTime = DateTime1970.AddMilliseconds(timeStamp13).ToLocalTime();
 
             return dateTime;
         }

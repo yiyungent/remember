@@ -76,7 +76,7 @@ namespace WebUI.Areas.Account.Controllers
                     else if (user.LastLoginTime.AddDays(_rememberMeDayCount) > DateTime.UtcNow)
                     {
                         // 最多 "记住我" 保存7天的 登录状态
-                        Session[_sessionKeyLoginAccount] = user;
+                        Session[_sessionKeyLoginAccount] = user.ID;
                         return LoginSuccessRedirectResult(returnUrl);
                     }
                     else
@@ -133,11 +133,13 @@ namespace WebUI.Areas.Account.Controllers
             //}
 
             // 登录成功
-            Session[_sessionKeyLoginAccount] = dbUser;
+            // TODO: 注意，由于EF的懒加载，而 UserInfo.RoleInfos是Get{},而在其中的一个RoleInfo.FunctionInfos也是get,而get是必须调用的，他是方法，不代表具体的数据，所以 Session 中的用户信息的角色没有FunctionInfos，而导致没有权限
+            // TODO: 这样将用户信息的全部都存于 Session 果然还是不太好，更新自己的用户信息，还必须手动更新 Session 才会使之有效，因为其他地方获取用户信息都是从Session内，决定改为 Session 内只保存用户的ID，每次获取用户信息都重新用保存在Session内的UserInfo.ID查询数据库
+            Session[_sessionKeyLoginAccount] = dbUser.ID;
             // 浏览器移除 Token
             if (Request.Cookies.AllKeys.Contains(_cookieKeyToken))
             {
-                Response.Cookies[_cookieKeyToken].Expires = DateTime.UtcNow.AddDays(-1);
+                Response.Cookies[_cookieKeyToken].Expires = DateTime.Now.AddDays(-1);
             }
 
             // 无论是否 "记住我"，都下发口令
@@ -160,7 +162,7 @@ namespace WebUI.Areas.Account.Controllers
                 // token 存入 浏览器
                 cookieToken = new HttpCookie(_cookieKeyToken, token)
                 {
-                    Expires = DateTime.UtcNow.AddDays(_rememberMeDayCount),
+                    Expires = DateTime.Now.AddDays(_rememberMeDayCount),
                     HttpOnly = true
                 };
             }
@@ -177,7 +179,7 @@ namespace WebUI.Areas.Account.Controllers
             Response.Cookies.Add(cookieToken);
 
             // 更新用户--最后登录时间等
-            dbUser.LastLoginTime = DateTime.UtcNow;
+            dbUser.LastLoginTime = DateTime.Now;
             // TODO: 去除 RefreshToken
             //dbUser.RefreshToken = token;
 

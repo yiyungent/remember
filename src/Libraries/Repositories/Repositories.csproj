@@ -127,9 +127,9 @@
     <Compile Include="Implement\SearchTotalRepository.cs" />
     <Compile Include="Interface\IArticleRepository.cs" />
     <Compile Include="Interface\ISearchTotalRepository.cs" />
-    <Compile Include="Migrations\201910061516231_update.cs" />
-    <Compile Include="Migrations\201910061516231_update.Designer.cs">
-      <DependentUpon>201910061516231_update.cs</DependentUpon>
+    <Compile Include="Migrations\201910140833108_update.cs" />
+    <Compile Include="Migrations\201910140833108_update.Designer.cs">
+      <DependentUpon>201910140833108_update.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -167,8 +167,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201910061516231_update.resx">
-      <DependentUpon>201910061516231_update.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201910140833108_update.resx">
+      <DependentUpon>201910140833108_update.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

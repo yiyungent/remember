@@ -26,13 +26,26 @@ namespace Framework.Infrastructure.Concrete
         private string _rememberMeTokenCookieKey = AppConfig.JwtName;
         private int _rememberMeDayCount = AppConfig.RememberMeDayCount;
 
-        private IDBAccessProvider _dBAccessProvider = HttpOneRequestFactory.Get<IDBAccessProvider>();
+        private IDBAccessProvider _dBAccessProvider
+        {
+            get
+            {
+                return HttpOneRequestFactory.Get<IDBAccessProvider>();
+            }
+        }
 
         public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
             CurrentAccountModel rtnAccount = null;
             // 1. 检查 Session
-            var user = controllerContext.HttpContext.Session?[_loginAccountSessionKey] as UserInfo;
+            UserInfo user = null;
+            try
+            {
+                // TODO: Exception: Object cannot be stored in an array of this type.
+                user = controllerContext.HttpContext.Session?[_loginAccountSessionKey] as UserInfo;
+            }
+            catch (Exception ex)
+            { }
             if (user == null)
             {
                 // 1-a-A 若 Session 无登录用户，则检查 是否有 token: RememberMeTokenCookieKey

@@ -114,10 +114,10 @@
 	border-radius: 50%;
 }
 .verify-box-detect {
-	background: url(/images/scripts/detect-c.png) no-repeat left bottom;
+	background: url(/assets/images/scripts/detect-c.png) no-repeat left bottom;
 }
 .verify-box-success {
-	background: url(/images/scripts/truev.png) no-repeat left bottom;
+	background: url(/assets/images/scripts/truev.png) no-repeat left bottom;
 }
 /* end 滑动验证码 */
 .remember {

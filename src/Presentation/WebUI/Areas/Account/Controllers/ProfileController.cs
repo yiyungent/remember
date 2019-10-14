@@ -88,7 +88,7 @@ namespace WebUI.Areas.Account.Controllers
                 //Container.Instance.Resolve<UserInfoService>().Edit(dbUserInfo);
                 this._userInfoService.Update(dbUserInfo);
                 // 更新 Session 中登录用户信息
-                AccountManager.UpdateSessionAccount();
+                //AccountManager.UpdateSessionAccount();
 
                 return Json(new { code = 1, message = "保存成功" });
             }

@@ -40,9 +40,6 @@
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -93,7 +90,6 @@
     <Compile Include="HtmlHelpers\AuthTagHelper.cs" />
     <Compile Include="HtmlHelpers\PageHelper.cs" />
     <Compile Include="HtmlHelpers\PageInfo.cs" />
-    <Compile Include="HtmlHelpers\PViewPageHelper.cs" />
     <Compile Include="Infrastructure\Abstract\IAuthManager.cs" />
     <Compile Include="Infrastructure\Abstract\ICacheManager.cs" />
     <Compile Include="Infrastructure\Abstract\IDBAccessProvider.cs" />
@@ -103,8 +99,6 @@
     <Compile Include="Infrastructure\Concrete\CurrentAccountModelBinder.cs" />
     <Compile Include="Infrastructure\Concrete\DBAccessProvider.cs" />
     <Compile Include="Infrastructure\Concrete\UserInfo_Guest.cs" />
-    <Compile Include="Infrastructure\DependencyResolverProvider.cs" />
-    <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
     <Compile Include="Models\CurrentAccountModel.cs" />
     <Compile Include="Models\ErrorRedirectViewModel.cs" />
     <Compile Include="Models\JWTokenViewModel.cs" />

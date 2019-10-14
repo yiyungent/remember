@@ -15,16 +15,12 @@ namespace Framework.Infrastructure.Concrete
     {
         private static UserInfo _instance;
 
-        private static IDBAccessProvider _dBAccessProvider;
-
         public static UserInfo Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _dBAccessProvider = HttpOneRequestFactory.Get<IDBAccessProvider>();
-
                     UserInfo guest = new UserInfo
                     {
                         UserName = "游客(未登录)",
@@ -38,7 +34,7 @@ namespace Framework.Infrastructure.Concrete
                     };
                     guest.Role_Users.Add(new Role_User
                     {
-                        RoleInfo = _dBAccessProvider.GetGuestRoleInfo()
+                        RoleInfo = HttpOneRequestFactory.Get<IDBAccessProvider>().GetGuestRoleInfo()
                     });
 
                     _instance = guest;
