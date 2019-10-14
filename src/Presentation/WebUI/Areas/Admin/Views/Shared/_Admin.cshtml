@@ -1,4 +1,4 @@
-﻿@using Domain
+﻿@using Domain.Entities
 @using WebUI.Areas.Admin.Models.Common
 @using WebUI.Extensions
 @using PluginHub.Mvc5
@@ -90,9 +90,9 @@
 								<li class="user-header">
 									<img src="@CurrentUserInfo.Avatar.ToHttpAbsoluteUrl()" class="img-circle" alt="User Image">
 									<p>
-										@CurrentUserInfo.UserName - @CurrentUserInfo.RoleInfoList.FirstOrDefault().Name
+										@CurrentUserInfo.UserName - @CurrentUserInfo.RoleInfos.FirstOrDefault().Name
 										@*<small>Member since Nov. 2012</small>*@
-										<small>加入自 @CurrentUserInfo.RegTime.ToRegTime()</small>
+										<small>加入自 @CurrentUserInfo.CreateTime.ToRegTime()</small>
 									</p>
 								</li>
 								<!-- Menu Body -->

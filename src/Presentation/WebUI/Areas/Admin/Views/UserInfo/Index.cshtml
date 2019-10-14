@@ -1,7 +1,7 @@
 ﻿@using Framework.HtmlHelpers
 @using WebUI.Areas.Admin.Models.Common
 @using WebUI.Extensions
-@using Domain
+@using Domain.Entities
 @model ListViewModel<UserInfo>
 @{
 	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
@@ -126,7 +126,6 @@
 					</button>
 					<ul id="js-search-type-list" class="dropdown-menu">
 						<li search-type="username"><a href="javascript:;">用户名</a></li>
-						<li search-type="name"><a href="javascript:;">展示名</a></li>
 						<li search-type="id"><a href="javascript:;">ID</a></li>
 					</ul>
 				</div>
@@ -157,19 +156,19 @@
 					<td><img class="img-rounded img-responsive" style="width:30px;" src="@item.Avatar.ToHttpAbsoluteUrl()" alt="@item.UserName" /></td>
 					<td>
 						@{ string[] colors = { "warning", "primary", "danger", "default" }; }
-						@for (int i = 0; i < item.RoleInfoList.Count; i++)
+						@for (int i = 0; i < item.RoleInfos.Count; i++)
 						{
-							if (item.RoleInfoList[i].Name == "教师")
+							if (item.RoleInfos[i].Name == "教师")
 							{
-								<span class="label label-success">@item.RoleInfoList[i].Name</span>
+								<span class="label label-success">@item.RoleInfos[i].Name</span>
 							}
-							else if (item.RoleInfoList[i].Name == "学生")
+							else if (item.RoleInfos[i].Name == "学生")
 							{
-								<span class="label label-info">@item.RoleInfoList[i].Name</span>
+								<span class="label label-info">@item.RoleInfos[i].Name</span>
 							}
 							else
 							{
-								<span class="label label-@colors[i % colors.Length]">@item.RoleInfoList[i].Name</span>
+								<span class="label label-@colors[i % colors.Length]">@item.RoleInfos[i].Name</span>
 							}
 						}
 					</td>

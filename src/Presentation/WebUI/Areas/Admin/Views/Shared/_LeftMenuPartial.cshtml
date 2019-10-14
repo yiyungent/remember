@@ -1,4 +1,4 @@
-﻿@using Domain
+﻿@using Domain.Entities
 @{
 	Layout = null;
 	ViewBag.MenuIcon = "fa fa-circle-o";
@@ -8,7 +8,7 @@
 @helper GenerateMenu(IList<Sys_Menu> allMenuList)
 {
 	IList<Sys_Menu> firstMenuList = (from m in allMenuList
-									 where m.ParentMenu == null
+									 where m.Parent == null
 									 orderby m.SortCode ascending
 									 select m).ToList();
 	<ul class="sidebar-menu" data-widget="tree">
@@ -40,7 +40,7 @@
 @helper SubMenuList(Sys_Menu currentMenu, IList<Sys_Menu> allMenuList)
 {
 	IList<Sys_Menu> subMenuList = (from m in allMenuList
-								   where m.ParentMenu != null && m.ParentMenu.ID == currentMenu.ID
+								   where m.ParentId != null && m.ParentId == currentMenu.ID
 								   orderby m.SortCode ascending
 								   select m).ToList();
 	<ul class="treeview-menu" data-pjax>

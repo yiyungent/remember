@@ -1,9 +1,9 @@
 ﻿@using Framework.HtmlHelpers
 @using WebUI.Areas.Admin.Models.Common
 @using WebUI.Extensions
-@using Domain
+@using Domain.Entities
+@using Services.Interface;
 @using Core
-@using Service
 @model ListViewModel<LogInfo>
 @{
 	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
@@ -23,7 +23,8 @@
 	}
 	else
 	{
-		string userName = Container.Instance.Resolve<UserInfoService>().GetEntity(id).UserName;
+		//string userName = Container.Instance.Resolve<UserInfoService>().GetEntity(id).UserName;
+		string userName = ContainerManager.Resolve<IUserInfoService>().Find(m => m.ID == id && !m.IsDeleted).UserName;
 		@Html.Raw(userName);
 	}
 }
@@ -42,7 +43,7 @@
 	else
 	{
 		// 秒
-		@Html.Raw(second+ "秒");
+		@Html.Raw(second + "秒");
 	}
 }
 @section body {

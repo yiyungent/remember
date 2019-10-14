@@ -1,7 +1,7 @@
 ﻿@using WebUI.Areas.Admin.Models.Common
 @using WebUI.Extensions
 @using Core
-@using Domain
+@using Domain.Entities
 @{
 	Layout = null;
 	Sys_Menu currentSysMenu = null;
@@ -25,7 +25,7 @@
 		{
 			breadcrumbList.Insert(0, new BreadcrumbItem(menu.Name));
 			// 循环(递归)查找父级菜单
-			menu = menu.ParentMenu;
+			menu = menu.Parent;
 		}
 		ViewBag.BreadcrumbList = breadcrumbList;
 	}

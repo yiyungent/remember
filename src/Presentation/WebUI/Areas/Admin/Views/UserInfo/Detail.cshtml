@@ -1,4 +1,4 @@
-﻿@using Domain
+﻿@using Domain.Entities
 @using WebUI.Extensions
 @model UserInfo
 @{
@@ -32,21 +32,21 @@
 				@Html.TextBoxFor(m => m.Description, new { @class = "form-control", disabled = "disabled" })
 			</div>
 			<div class="form-group">
-				@Html.LabelFor(m => m.RoleInfoList)
+				@Html.LabelFor(m => m.RoleInfos)
 				@{ string[] colors = { "warning", "primary", "danger", "default" }; }
-				@for (int i = 0; i < Model.RoleInfoList.Count; i++)
+				@for (int i = 0; i < Model.RoleInfos.Count; i++)
 				{
-					if (Model.RoleInfoList[i].Name == "教师")
+					if (Model.RoleInfos[i].Name == "教师")
 					{
-						<span class="label label-success">@Model.RoleInfoList[i].Name</span>
+						<span class="label label-success">@Model.RoleInfos[i].Name</span>
 					}
-					else if (Model.RoleInfoList[i].Name == "学生")
+					else if (Model.RoleInfos[i].Name == "学生")
 					{
-						<span class="label label-info">@Model.RoleInfoList[i].Name</span>
+						<span class="label label-info">@Model.RoleInfos[i].Name</span>
 					}
 					else
 					{
-						<span class="label label-@colors[i % colors.Length]">@Model.RoleInfoList[i].Name</span>
+						<span class="label label-@colors[i % colors.Length]">@Model.RoleInfos[i].Name</span>
 					}
 				}
 			</div>
