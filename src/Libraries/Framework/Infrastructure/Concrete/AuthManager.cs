@@ -283,33 +283,114 @@ namespace Framework.Infrastructure.Concrete
         }
         #endregion
 
-        #region 分配菜单
+        #region 分配系统菜单以及权限
         public bool AssignPower(int roleId, IList<int> menuIdList, IList<int> funcIdList)
         {
             bool isSuccess = false;
             RoleInfo roleInfo = _dBAccessProvider.GetRoleInfoById(roleId);
-            IList<Sys_Menu> sys_Menus = _dBAccessProvider.GetSys_MenuListByIds(menuIdList.ToArray());
-            IList<FunctionInfo> functionInfos = _dBAccessProvider.GetFunctionInfoListByIds(funcIdList.ToArray());
             // TODO: 易错点
-            //roleInfo.Sys_Menus = sys_Menus;
+            // 1. 先判断当前角色有哪些菜单，权限，再算出与新设置之间的差异
+            // 2. 减少的标记删除，新增的则新增
+            IList<Sys_Menu> oldSys_Menus = roleInfo.Role_Menus.Select(m => m.Sys_Menu).ToList();
+            IList<int> oldSys_Menus_Id = oldSys_Menus.Select(m => m.ID).ToList();
+            IList<FunctionInfo> oldFunctionInfos = roleInfo.Role_Functions.Select(m => m.FunctionInfo).ToList();
+            IList<int> oldFunctionInfos_Id = oldFunctionInfos.Select(m => m.ID).ToList();
+
+            IList<Sys_Menu> newSys_Menus = _dBAccessProvider.GetSys_MenuListByIds(menuIdList.ToArray());
+            IList<int> newSys_Menus_Id = newSys_Menus.Select(m => m.ID).ToList();
+            IList<FunctionInfo> newFunctionInfos = _dBAccessProvider.GetFunctionInfoListByIds(funcIdList.ToArray());
+            IList<int> newFunctionInfos_Id = newFunctionInfos.Select(m => m.ID).ToList();
+
+            // 计算减少了哪些，新增了哪些
+            // 需要标记删除这些
+            // old有的，new的没有的ID
+            IList<Sys_Menu> deletedSys_Menus = new List<Sys_Menu>();
+            IList<Sys_Menu> addeddSys_Menus = new List<Sys_Menu>();
+            IList<FunctionInfo> deletedFunction = new List<FunctionInfo>();
+            IList<FunctionInfo> addeddFunction = new List<FunctionInfo>();
+            #region 菜单
+            foreach (var item in oldSys_Menus)
+            {
+                if (newSys_Menus_Id.Contains(item.ID))
+                {
+                    // 新的也有，不变
+                }
+                else
+                {
+                    // 新的中没有的则删除
+                    deletedSys_Menus.Add(item);
+                }
+            }
+            foreach (var item in newSys_Menus)
+            {
+                if (oldSys_Menus_Id.Contains(item.ID))
+                {
+                    // 旧的没有，则新增
+                    addeddSys_Menus.Add(item);
+                }
+                else
+                {
+                    // 旧的也有，不做操作
+                }
+            }
+            #endregion
+
+            #region 权限
+            foreach (var item in oldFunctionInfos)
+            {
+                if (newFunctionInfos_Id.Contains(item.ID))
+                {
+                    // 新的也有，不变
+                }
+                else
+                {
+                    // 新的中没有的则删除
+                    deletedFunction.Add(item);
+                }
+            }
+            foreach (var item in newFunctionInfos)
+            {
+                if (oldFunctionInfos_Id.Contains(item.ID))
+                {
+                    // 旧的没有，则新增
+                    addeddFunction.Add(item);
+                }
+                else
+                {
+                    // 旧的也有，不做操作
+                }
+            }
+            #endregion
+
+
+            #region 删除
+
+            #endregion
+            // TODO:
+            #region 新增
             roleInfo.Role_Menus = new List<Role_Menu>();
-            foreach (var item in sys_Menus)
+            foreach (var item in newSys_Menus)
             {
                 roleInfo.Role_Menus.Add(new Role_Menu
                 {
-                    Sys_Menu = item
+                    Sys_Menu = item,
+                    CreateTime = DateTime.Now,
+                    OperatorId = AccountManager.GetCurrentUserInfo().ID,
                 });
             }
             //roleInfo.FunctionInfos = functionInfos;
             roleInfo.Role_Functions = new List<Role_Function>();
-            foreach (var item in functionInfos)
+            foreach (var item in newFunctionInfos)
             {
                 roleInfo.Role_Functions.Add(new Role_Function
                 {
-                    FunctionInfo = item
+                    FunctionInfo = item,
+                    CreateTime = DateTime.Now,
+                    OperatorId = AccountManager.GetCurrentUserInfo().ID,
                 });
             }
             isSuccess = _dBAccessProvider.EditRoleInfo(roleInfo);
+            #endregion
 
             return isSuccess;
         }

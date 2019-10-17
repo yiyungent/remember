@@ -28,17 +28,23 @@ namespace Framework.Infrastructure.Concrete
 
         private readonly ISettingService _settingService;
 
+        private readonly IRole_MenuService _role_MenuService;
+
+        private readonly IRole_FunctionService _role_FunctionService;
+
         #endregion
 
         #region Ctor
 
-        public DBAccessProvider(IFunctionInfoService functionInfoService, IRoleInfoService roleInfoService, IUserInfoService userInfoService, ISys_MenuService sys_MenuService, ISettingService settingService)
+        public DBAccessProvider(IFunctionInfoService functionInfoService, IRoleInfoService roleInfoService, IUserInfoService userInfoService, ISys_MenuService sys_MenuService, ISettingService settingService, IRole_MenuService role_MenuService, IRole_FunctionService role_FunctionService)
         {
             this._functionInfoService = functionInfoService;
             this._roleInfoService = roleInfoService;
             this._userInfoService = userInfoService;
             this._sys_MenuService = sys_MenuService;
             this._settingService = settingService;
+            this._role_MenuService = role_MenuService;
+            this._role_FunctionService = role_FunctionService;
         }
 
         #endregion
@@ -285,6 +291,29 @@ namespace Framework.Infrastructure.Concrete
                 //Container.Instance.Resolve<UserInfoService>().Edit(currentAccount.UserInfo); 
                 #endregion
                 this._userInfoService.Update(currentAccount.UserInfo);
+            }
+        }
+
+        /// <summary>
+        /// 清空此角色的所有系统菜单以及权限
+        /// </summary>
+        /// <param name="roleId"></param>
+        public void ClearPower(int roleId)
+        {
+            RoleInfo roleInfo = this._roleInfoService.Find(m => m.ID == roleId && !m.IsDeleted);
+            IList<Role_Menu> role_Menus = roleInfo.Role_Menus.ToList();
+            foreach (var item in role_Menus)
+            {
+                item.IsDeleted = true;
+                item.DeletedAt = DateTime.Now;
+                this._role_MenuService.Update(item);
+            }
+            IList<Role_Function> role_Functions = roleInfo.Role_Functions.ToList();
+            foreach (var item in role_Functions)
+            {
+                item.IsDeleted = true;
+                item.DeletedAt = DateTime.Now;
+                this._role_FunctionService.Update(item);
             }
         }
 

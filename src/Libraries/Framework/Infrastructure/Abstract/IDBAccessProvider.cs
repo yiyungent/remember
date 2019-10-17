@@ -24,6 +24,8 @@ namespace Framework.Infrastructure.Abstract
 
         bool EditRoleInfo(RoleInfo roleInfo);
 
+        void ClearPower(int roleId);
+
         bool EditUserInfo(UserInfo userInfo);
 
         RoleInfo GetRoleInfoById(int id);
