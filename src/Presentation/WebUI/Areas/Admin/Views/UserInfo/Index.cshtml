@@ -1,4 +1,4 @@
-﻿@using Framework.HtmlHelpers
+﻿@using WebUI.HtmlHelpers
 @using WebUI.Areas.Admin.Models.Common
 @using WebUI.Extensions
 @using Domain.Entities
@@ -158,31 +158,32 @@
 						@{ string[] colors = { "warning", "primary", "danger", "default" }; }
 						@for (int i = 0; i < item.RoleInfos.Count; i++)
 						{
-							if (item.RoleInfos[i].Name == "教师")
+							var roleInfos = item.Role_Users.Select(m => m.RoleInfo).ToList();
+							if (roleInfos[i].Name == "教师")
 							{
-								<span class="label label-success">@item.RoleInfos[i].Name</span>
+								<span class="label label-success">@roleInfos[i].Name</span>
 							}
-							else if (item.RoleInfos[i].Name == "学生")
+							else if (roleInfos[i].Name == "学生")
 							{
-								<span class="label label-info">@item.RoleInfos[i].Name</span>
+								<span class="label label-info">@roleInfos[i].Name</span>
 							}
 							else
 							{
-								<span class="label label-@colors[i % colors.Length]">@item.RoleInfos[i].Name</span>
+								<span class="label label-@colors[i % colors.Length]">@roleInfos[i].Name</span>
 							}
 						}
 					</td>
 					<td>
 						<div class="btn-group" role="group" data-pjax>
-							@if (Html.HasAuth("Admin", "UserInfo", "Details"))
+							@if (Html.HasAuth("Admin.UserInfo.Details"))
 							{
 								<a class="btn btn-success" href="@Url.Action("Details")?id=@item.ID">查看</a>
 							}
-							@if (Html.HasAuth("Admin", "UserInfo", "Delete"))
+							@if (Html.HasAuth("Admin.UserInfo.Delete"))
 							{
 								<button class="btn btn-danger" type="button" onclick="deleteOp(@item.ID)">删除</button>
 							}
-							@if (Html.HasAuth("Admin", "UserInfo", "Edit"))
+							@if (Html.HasAuth("Admin.UserInfo.Edit"))
 							{
 								<a class="btn btn-warning" href="@Url.Action("Edit")?id=@item.ID">修改</a>
 							}

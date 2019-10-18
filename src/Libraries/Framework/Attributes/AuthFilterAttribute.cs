@@ -9,9 +9,7 @@ namespace Framework.Attributes
     using Domain.Entities;
     using Framework.Common;
     using Framework.Config;
-    using Framework.Factories;
     using Framework.Infrastructure;
-    using Framework.Infrastructure.Abstract;
     using Framework.Infrastructure.Concrete;
     using Framework.Models;
     using Framework.RequestResult;
@@ -19,7 +17,7 @@ namespace Framework.Attributes
 
     public class AuthFilterAttribute : ActionFilterAttribute
     {
-        private IAuthManager _authManger = HttpOneRequestFactory.Get<IAuthManager>();
+        private string _authKey;
 
         public AuthFilterAttribute()
         {
@@ -36,11 +34,8 @@ namespace Framework.Attributes
                 base.OnActionExecuting(filterContext);
                 return;
             }
-            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
-            stopwatch.Start();
+            this._authKey = GetCurrentAuthKey(filterContext);
             this.CheckLoginAccount(filterContext);
-            stopwatch.Stop();
-            TimeSpan t1 = stopwatch.Elapsed;// TotalSeconds	0.08653849999999999	double
 
             base.OnActionExecuting(filterContext);
         }
@@ -48,29 +43,11 @@ namespace Framework.Attributes
         #region 检查登录用户--并作出处理
         private void CheckLoginAccount(ActionExecutingContext filterContext)
         {
+            CurrentAccountModel currentAccountModel = AccountManager.GetCurrentAccount();
             //  检查当前请求会话是否需要权限认证
             if (CheckRequestNeedAuth(filterContext))
             {
-                CurrentAccountModel currentAccount = new CurrentAccountModel();
-
-                #region 废弃
-                //if (CheckLoginStatus(filterContext))
-                //{
-                //    // 已登录--则查询当前登录用户-角色 是否拥有此请求会话权限
-                //    currentAccount.UserInfo = Tools.GetSession<UserInfo>(AppConfig.LoginAccountSessionKey);
-                //    currentAccount.IsGuest = false;
-                //}
-                //else
-                //{
-                //    // 未登录--则为默认游客角色--查询游客角色是否拥有此会话权限
-                //    currentAccount.UserInfo = UserInfo_Guest.Instance;
-                //    currentAccount.IsGuest = true;
-                //} 
-                #endregion
-
-                currentAccount = AccountManager.GetCurrentAccount();
-
-                CheckAuthSufficientAndProcess(currentAccount, filterContext);
+                CheckAuthSufficientAndProcess(currentAccountModel, filterContext);
             }
         }
         #endregion
@@ -81,12 +58,9 @@ namespace Framework.Attributes
             bool needAuth = false;
 
             // 获取当前请求会话 对应的 AuthKey
-            string areaName, controllerName, actionName;
-            GetAreaControllerActionName(filterContext, out areaName, out controllerName, out actionName);
-
-            string currentAuthKey = this._authManger.GetAuthKey(areaName, controllerName, actionName);
-
-            if (this._authManger.NeedAuth(currentAuthKey))
+            string currentAuthKey = this._authKey;
+            AuthManager authManager = new AuthManager();
+            if (authManager.NeedAuth(currentAuthKey))
             {
                 needAuth = true;
             }
@@ -96,29 +70,25 @@ namespace Framework.Attributes
         #endregion
 
         #region 检查此用户是否拥有当前会话请求(操作)权限
-        private bool CheckAuthSufficient(UserInfo userInfo, ActionExecutingContext filterContext)
+        private bool CheckAuthSufficient(int userId, ActionExecutingContext filterContext)
         {
-            // 根据当前会话请求，拼接 AuthKey
-            string areaName, controllerName, actionName;
-            GetAreaControllerActionName(filterContext, out areaName, out controllerName, out actionName);
+            AuthManager authManager = new AuthManager();
+            string authKey = this._authKey;
 
-            string authKey = this._authManger.GetAuthKey(areaName, controllerName, actionName);
-
-            return this._authManger.HasAuth(userInfo, authKey);
+            return authManager.HasAuth(userId, authKey);
         }
         #endregion
 
         #region 检查此账号(含游客)是否拥有当前会话请求(操作)权限--并作出提示处理
-        private void CheckAuthSufficientAndProcess(CurrentAccountModel currentAccount, ActionExecutingContext filterContext)
+        private void CheckAuthSufficientAndProcess(CurrentAccountModel currentAccountModel, ActionExecutingContext filterContext)
         {
-            string returnUrl = filterContext.HttpContext.Request.Url.AbsoluteUri;
-            if (!CheckAuthSufficient(currentAccount.UserInfo, filterContext))
+            if (!CheckAuthSufficient(currentAccountModel.UserId, filterContext))
             {
                 // 无权限
-                if (currentAccount.IsGuest)
+                if (currentAccountModel.IsGuest)
                 {
                     // 游客--游客无权限，则让其登录
-                    if (AccountManager.CheckLoginStatus() == LoginStatus.LoginTimeOut)
+                    if (currentAccountModel.LoginStatus == LoginStatus.LoginTimeOut)
                     {
                         filterContext.Result = LoginTimeOutResultProvider.Get(filterContext.HttpContext.Request);
                     }
@@ -136,26 +106,34 @@ namespace Framework.Attributes
         }
         #endregion
 
-        #region 废弃
-        //#region 检查登录状态-已登录/未登录(登录超时)
-        //private bool CheckLoginStatus(ActionExecutingContext filterContext)
-        //{
-        //    bool isLogin = true;
-        //    UserInfo userInfo = Tools.GetSession<UserInfo>(AppConfig.LoginAccountSessionKey);
-        //    if (userInfo == null)
-        //    {
-        //        isLogin = false;
-        //    }
 
-        //    return isLogin;
-        //}
-        //#endregion 
-        #endregion
 
-        #region 处理需要登录（默认游客角色权限不足）的情况---转向登录处理
-        private void RedirectToLogin(ActionExecutingContext filterContext)
+
+
+
+
+
+
+        #region 根据会话获取AuthKey
+        private string GetCurrentAuthKey(ActionExecutingContext filterContext)
         {
-            filterContext.Result = NeedLoginResultProvider.Get(filterContext.HttpContext.Request);
+            string authKey = string.Empty;
+            // 1.首先尝试从 Attribute 中获取 AuthKey
+            object authKeyAttrObj = filterContext.ActionDescriptor.GetCustomAttributes(typeof(AuthKeyAttribute), true).FirstOrDefault();
+            if (authKeyAttrObj != null && authKeyAttrObj is AuthKeyAttribute)
+            {
+                AuthKeyAttribute authKeyAttr = authKeyAttrObj as AuthKeyAttribute;
+                authKey = authKeyAttr.AuthKey;
+            }
+            else
+            {
+                // 2.如果没有使用 AuthkeyAttribute 指定 AuthKey 则使用 out areaName, out controllerName, out actionName 生成AuthKey
+                string areaName, controllerName, actionName;
+                GetAreaControllerActionName(filterContext, out areaName, out controllerName, out actionName);
+                authKey = areaName + "." + controllerName + "." + actionName;
+            }
+
+            return authKey;
         }
         #endregion
 

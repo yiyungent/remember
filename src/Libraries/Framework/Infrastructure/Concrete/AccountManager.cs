@@ -1,76 +1,87 @@
-﻿using Core.Common;
-using Domain;
+﻿using Core;
+using Core.Common;
 using Domain.Entities;
-using Framework.Common;
 using Framework.Config;
-using Framework.Factories;
-using Framework.Infrastructure.Abstract;
 using Framework.Models;
+using Services.Interface;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
-using System.Web.SessionState;
 
 namespace Framework.Infrastructure.Concrete
 {
-    public enum LoginStatus
-    {
-        /// <summary>
-        /// 已登录
-        /// </summary>
-        IsLogin,
 
-        /// <summary>
-        /// 未登录
-        /// </summary>
-        WithoutLogin,
-
-        /// <summary>
-        /// 登录超时
-        /// <para>使用"记住我", 但 已经过期</para>
-        /// </summary>
-        LoginTimeOut
-    }
 
     public class AccountManager
     {
-        private static string _loginAccountSessionKey = AppConfig.LoginAccountSessionKey;
         private static string _jwtName = AppConfig.JwtName;
-
-        /// <summary>
-        /// TODO: 不能这么做，因为静态会导致全局唯一，而 DBAccessProvider 中的Service中存有DbContext，这样会导致使用旧的已经释放的DbContext
-        /// </summary>
-        //private static IDBAccessProvider _dBAccessProvider = HttpOneRequestFactory.Get<IDBAccessProvider>();
 
         #region 获取当前UserInfo
         /// <summary>
         /// 获取当前 <see cref="UserInfo"/>, 若未登录，则为 <see cref="UserInfo_Guest.Instance"/>
+        /// 线程内单例
         /// </summary>
         /// <returns></returns>
         public static UserInfo GetCurrentUserInfo(bool withoutLoginReturnGuest = false)
         {
-            HttpRequest request = HttpContext.Current.Request;
-            UserInfo rtnUserInfo = null;
-            try
+            UserInfo rtnUserInfo = HttpSingleRequestStore.GetData("CurrentUserInfo") as UserInfo;
+            if (rtnUserInfo == null)
             {
-                // 获取当前登录用户
+                HttpRequest request = HttpContext.Current.Request;
                 try
                 {
-                    int userInfoId = Tools.GetSession<int>(AppConfig.LoginAccountSessionKey);
-                    rtnUserInfo = GetUserInfoById(userInfoId);
+                    // 获取当前登录用户
+                    int currentUserId = GetCurrentAccount().UserId;
+                    try
+                    {
+                        rtnUserInfo = GetUserInfoById(currentUserId);
+                    }
+                    catch (Exception ex)
+                    { }
+                    if (rtnUserInfo == null)
+                    {
+                        if (withoutLoginReturnGuest)
+                        {
+                            rtnUserInfo = UserInfo_Guest.Instance;
+                        }
+                        else
+                        {
+                            rtnUserInfo = null;
+                        }
+                    }
+
                 }
                 catch (Exception ex)
-                { }
-
-                if (rtnUserInfo == null)
                 {
                     if (withoutLoginReturnGuest)
                     {
                         rtnUserInfo = UserInfo_Guest.Instance;
                     }
+                }
+
+                HttpSingleRequestStore.SetData("CurrentUserInfo", rtnUserInfo);
+            }
+
+            return rtnUserInfo;
+        }
+        #endregion
+
+        #region 获取当前账号
+        /// <summary>
+        /// 获取当前账号
+        /// 线程内单例
+        /// </summary>
+        /// <returns></returns>
+        public static CurrentAccountModel GetCurrentAccount()
+        {
+            CurrentAccountModel currentAccount = HttpSingleRequestStore.GetData("CurrentAccountModel") as CurrentAccountModel;
+            if (currentAccount == null)
+            {
+                currentAccount = new CurrentAccountModel();
+                HttpRequest request = HttpContext.Current.Request;
+                currentAccount.LoginStatus = LoginStatus.WithoutLogin;
+                try
+                {
                     #region 验证口令
                     string token = null;
                     // header -> cookie
@@ -98,6 +109,7 @@ namespace Framework.Infrastructure.Concrete
                             }
                         }
                     }
+
                     if (!string.IsNullOrEmpty(token))
                     {
                         var tokenModel = JwtHelper.Decode<JWTokenViewModel>(token, out bool verifyPass);
@@ -109,45 +121,42 @@ namespace Framework.Infrastructure.Concrete
                             {
                                 // token未过期
                                 // 经过效验的用户信息
-                                //rtnUserInfo = _dBAccessProvider.GetUserInfoById(tokenModel.ID);
-                                rtnUserInfo = HttpOneRequestFactory.Get<IDBAccessProvider>().GetUserInfoById(tokenModel.ID);
+                                currentAccount.LoginStatus = LoginStatus.IsLogin;
+                                // 用户是否存在: 可能在过期之前被删除了
+                                bool isExist = ContainerManager.Resolve<IUserInfoService>().Contains(m => m.ID == tokenModel.ID && !m.IsDeleted);
+                                if (isExist)
+                                {
+                                    currentAccount.UserId = tokenModel.ID;
+                                    currentAccount.LoginStatus = LoginStatus.IsLogin;
+                                }
+                                else
+                                {
+                                    currentAccount.LoginStatus = LoginStatus.WithoutLogin;
+                                }
+                            }
+                            else
+                            {
+                                currentAccount.LoginStatus = LoginStatus.LoginTimeOut;
                             }
                         }
+                        else
+                        {
+                            currentAccount.LoginStatus = LoginStatus.WithoutLogin;
+                        }
+                    }
+                    else
+                    {
+                        currentAccount.LoginStatus = LoginStatus.WithoutLogin;
                     }
                     #endregion
+
                 }
-            }
-            catch (Exception ex)
-            {
-                if (withoutLoginReturnGuest)
+                catch (Exception ex)
                 {
-                    rtnUserInfo = UserInfo_Guest.Instance;
+                    currentAccount.LoginStatus = LoginStatus.WithoutLogin;
                 }
-            }
 
-            return rtnUserInfo;
-        }
-        #endregion
-
-        #region 获取当前账号
-        public static CurrentAccountModel GetCurrentAccount()
-        {
-            CurrentAccountModel currentAccount = new CurrentAccountModel();
-            currentAccount.UserInfo = GetCurrentUserInfo(withoutLoginReturnGuest: true);
-            switch (CheckLoginStatus())
-            {
-                case LoginStatus.IsLogin:
-                    currentAccount.IsGuest = false;
-                    break;
-                case LoginStatus.WithoutLogin:
-                    currentAccount.IsGuest = true;
-                    break;
-                case LoginStatus.LoginTimeOut:
-                    currentAccount.IsGuest = true;
-                    break;
-                default:
-                    currentAccount.IsGuest = true;
-                    break;
+                HttpSingleRequestStore.SetData("CurrentAccountModel", currentAccount);
             }
 
             return currentAccount;
@@ -158,7 +167,12 @@ namespace Framework.Infrastructure.Concrete
         public static UserInfo GetUserInfoByUserName(string userName)
         {
             UserInfo rtn = null;
-            rtn = HttpOneRequestFactory.Get<IDBAccessProvider>().GetUserInfoByUserName(userName);
+            try
+            {
+                rtn = ContainerManager.Resolve<IUserInfoService>().Find(m => m.UserName == userName && !m.IsDeleted);
+            }
+            catch (Exception ex)
+            { }
 
             return rtn;
         }
@@ -168,120 +182,14 @@ namespace Framework.Infrastructure.Concrete
         public static UserInfo GetUserInfoById(int id)
         {
             UserInfo rtn = null;
-            rtn = HttpOneRequestFactory.Get<IDBAccessProvider>().GetUserInfoById(id);
+            try
+            {
+                rtn = ContainerManager.Resolve<IUserInfoService>().Find(m => m.ID == id && !m.IsDeleted);
+            }
+            catch (Exception ex)
+            { }
 
             return rtn;
-        }
-        #endregion
-
-        #region 检查登录状态-已登录/未登录(登录超时)
-        /// <summary>
-        /// 检查登录状态
-        /// <para>已登录:1.Session有UserInfo 2.Cookie 有 有效Token(记住我)</para>
-        /// <para>未登录: 无Session 且 Cookie无Token</para>
-        /// <para>登录超时: Cookie 有 Token ,Token存在但已过期</para>
-        /// </summary>
-        /// <returns></returns>
-        public static LoginStatus CheckLoginStatus()
-        {
-            // TODO:未进行检测 Headers JWT
-            LoginStatus loginStatus = LoginStatus.WithoutLogin;
-
-            HttpRequest request = HttpContext.Current.Request;
-            HttpSessionState session = HttpContext.Current.Session;
-
-            int userInfoId = Tools.GetSession<int>(AppConfig.LoginAccountSessionKey);
-            UserInfo userInfo = GetUserInfoById(userInfoId);
-            if (userInfo != null)
-            {
-                // Session内存中存在 -> 已登录
-                loginStatus = LoginStatus.IsLogin;
-            }
-            else
-            {
-                #region 验证口令
-                bool cookieExistJwt = request.Cookies.AllKeys.Contains(_jwtName) && request.Cookies[_jwtName] != null && string.IsNullOrEmpty(request.Cookies[_jwtName].Value) == false;
-                string authHeader = null;
-                string token = null;
-                try
-                {
-                    authHeader = request.Headers["Authorization"];
-                }
-                catch (Exception ex)
-                { }
-                if (cookieExistJwt)
-                {
-                    token = request.Cookies[_jwtName].Value;
-                }
-                else if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer"))
-                {
-                    token = authHeader.Substring("Bearer ".Length).Trim();
-                }
-                else
-                {
-                    // 无 token -> 未登录
-                    loginStatus = LoginStatus.WithoutLogin;
-                }
-                if (!string.IsNullOrEmpty(token))
-                {
-                    var tokenModel = JwtHelper.Decode<JWTokenViewModel>(token, out bool verifyPass);
-                    if (verifyPass)
-                    {
-                        // token有效 -> 检测是否已经过期
-                        bool isExpired = DateTimeHelper.NowTimeStamp10() >= tokenModel.Expire;
-                        if (!isExpired)
-                        {
-                            // token未过期
-                            // 经过效验的用户信息
-                            UserInfo user = HttpOneRequestFactory.Get<IDBAccessProvider>().GetUserInfoById(tokenModel.ID);
-                            if (user != null)
-                            {
-                                loginStatus = LoginStatus.IsLogin;
-                            }
-                            else
-                            {
-                                // 不存在此用户 -> 未登录
-                                loginStatus = LoginStatus.WithoutLogin;
-                            }
-                        }
-                        else
-                        {
-                            // 登录 已过期
-                            // 最多 "记住我" 保存7天的 登录状态
-                            loginStatus = LoginStatus.LoginTimeOut;
-                        }
-                    }
-                    else
-                    {
-                        // token 无效 -> 未登录
-                        loginStatus = LoginStatus.WithoutLogin;
-                    }
-                }
-                #endregion
-
-            }
-
-            return loginStatus;
-        }
-        #endregion
-
-        #region 更新 当前 Session 内的 UserInfo
-        /// <summary>
-        /// 
-        /// </summary>
-        [Obsolete(message: "现在已经改为Session只保存用户的ID，每次都利用此ID重新查询用户信息，此方法不再需要")]
-        public static void UpdateSessionAccount()
-        {
-            UserInfo userInfo = GetCurrentUserInfo();
-            if (userInfo == null)
-            {
-                // 游客(未登录)
-            }
-            else
-            {
-                int userInfoId = userInfo.ID;
-                Tools.SetSession(AppConfig.LoginAccountSessionKey, userInfoId);
-            }
         }
         #endregion
 
@@ -291,8 +199,6 @@ namespace Framework.Infrastructure.Concrete
         /// </summary>
         public static void Exit()
         {
-            // 浏览器删除 session 用户信息
-            Tools.SetSession(_loginAccountSessionKey, null);
             HttpRequest request = HttpContext.Current.Request;
             HttpResponse response = HttpContext.Current.Response;
             // 浏览器 删除 cookie token
@@ -300,10 +206,6 @@ namespace Framework.Infrastructure.Concrete
             {
                 response.Cookies[_jwtName].Expires = DateTime.Now.AddDays(-1);
             }
-            // 数据库删除 token，并过期
-            //UserInfo userInfo = GetCurrentUserInfo();
-            //userInfo.RefreshToken = null;
-            //HttpOneRequestFactory.Get<IDBAccessProvider>().EditUserInfo(userInfo);
         }
         #endregion
     }

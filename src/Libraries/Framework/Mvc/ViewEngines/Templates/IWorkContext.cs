@@ -4,7 +4,7 @@ namespace Framework.Mvc.ViewEngines.Templates
 {
     public interface IWorkContext
     {
-        UserInfo CurrentUser { get; }
+        int CurrentUserId { get; }
 
         bool AllowSelectTemplate { get; }
 

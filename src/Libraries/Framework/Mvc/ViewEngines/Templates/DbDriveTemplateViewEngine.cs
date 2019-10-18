@@ -1,4 +1,4 @@
-﻿using Framework.Factories;
+﻿using Core;
 using System;
 using System.Web.Mvc;
 
@@ -11,7 +11,7 @@ namespace Framework.Mvc.ViewEngines.Templates
             string templateName = null;
             try
             {
-                ITemplateContext templateContext = HttpOneRequestFactory.Get<ITemplateContext>();
+                ITemplateContext templateContext = ContainerManager.Resolve<ITemplateContext>();
                 templateName = templateContext.WorkingTemplateName;
             }
             catch (Exception ex)

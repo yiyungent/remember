@@ -3,7 +3,6 @@ using Autofac.Features.ResolveAnything;
 using Autofac.Integration.Mvc;
 using AutoMapperConfig;
 using Domain;
-using Framework.Infrastructure.Abstract;
 using Framework.Infrastructure.Concrete;
 using Repositories.Core;
 using Repositories.Implement;
@@ -45,55 +44,55 @@ namespace WebUI
             //initialize engine context
             //EngineContext.Initialize(false);
 
-            FrameworkConfig.Register();
+            //FrameworkConfig.Register();
 
             // 开启线程扫描队列将数据取出来写到Lucene.NET中。
             //SearchIndexManager.GetInstance().StartThread();
 
             #region log4net
 
-            bool enableLog4Net = true;
-            // 先尝试查询数据库
-            try
-            {
-                enableLog4Net = Convert.ToInt32(WebSetting.Get("EnableLog")) == 1;
-            }
-            catch (Exception ex)
-            { }
-            // 再以配置文件
-            // 启用 = 数据库配置启用 且 配置文件启用
-            if (enableLog4Net)
-            {
-                enableLog4Net = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableLog"]);
-            }
-            if (enableLog4Net)
-            {
-                log4net.Config.XmlConfigurator.Configure();
-                GlobalFilters.Filters.Add(new LogErrorAttribute());
-                ThreadPool.QueueUserWorkItem(o =>
-                {
-                    while (true)
-                    {
-                        if (LogErrorAttribute.ExceptionQueue.Count > 0)
-                        {
-                            Exception ex = LogErrorAttribute.ExceptionQueue.Dequeue();
-                            if (ex != null)
-                            {
-                                ILog logger = LogManager.GetLogger("testError");
-                                logger.Error(ex.ToString()); //将异常信息写入Log4Net中  
-                            }
-                            else
-                            {
-                                Thread.Sleep(50);
-                            }
-                        }
-                        else
-                        {
-                            Thread.Sleep(50);
-                        }
-                    }
-                });
-            }
+            //bool enableLog4Net = true;
+            //// 先尝试查询数据库
+            //try
+            //{
+            //    enableLog4Net = Convert.ToInt32(WebSetting.Get("EnableLog")) == 1;
+            //}
+            //catch (Exception ex)
+            //{ }
+            //// 再以配置文件
+            //// 启用 = 数据库配置启用 且 配置文件启用
+            //if (enableLog4Net)
+            //{
+            //    enableLog4Net = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableLog"]);
+            //}
+            //if (enableLog4Net)
+            //{
+            //    log4net.Config.XmlConfigurator.Configure();
+            //    GlobalFilters.Filters.Add(new LogErrorAttribute());
+            //    ThreadPool.QueueUserWorkItem(o =>
+            //    {
+            //        while (true)
+            //        {
+            //            if (LogErrorAttribute.ExceptionQueue.Count > 0)
+            //            {
+            //                Exception ex = LogErrorAttribute.ExceptionQueue.Dequeue();
+            //                if (ex != null)
+            //                {
+            //                    ILog logger = LogManager.GetLogger("testError");
+            //                    logger.Error(ex.ToString()); //将异常信息写入Log4Net中  
+            //                }
+            //                else
+            //                {
+            //                    Thread.Sleep(50);
+            //                }
+            //            }
+            //            else
+            //            {
+            //                Thread.Sleep(50);
+            //            }
+            //        }
+            //    });
+            //}
             #endregion
         }
 
@@ -106,8 +105,8 @@ namespace WebUI
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
 
             // 注意 Framework 所需数据库访问者
-            builder.RegisterType<DBAccessProvider>().As<IDBAccessProvider>();
-            builder.RegisterType<AuthManager>().As<IAuthManager>();
+            //builder.RegisterType<DBAccessProvider>().As<IDBAccessProvider>();
+            //builder.RegisterType<AuthManager>().As<IAuthManager>();
             builder.RegisterType<WorkContext>().As<IWorkContext>();
             builder.RegisterType<TemplateContext>().As<ITemplateContext>();
             builder.RegisterType<TemplateProvider>().As<ITemplateProvider>();

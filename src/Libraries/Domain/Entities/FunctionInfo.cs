@@ -50,49 +50,5 @@ namespace Domain.Entities
         public virtual ICollection<Role_Function> Role_Functions { get; set; }
 
         #endregion
-
-        #region Helper
-
-        /// <summary>
-        /// 根据 AuthKey 获取 AreaName, ControllerName, ActionName
-        /// </summary>
-        [NotMapped]
-        public AreaCAItem AreaCAItem
-        {
-            get
-            {
-                string[] arr = this.AuthKey.Trim().Split(new char[] { '.' }, 3);
-                string areaName = "", controllerName = "", actionName = "";
-                if (this.AuthKey.Trim().StartsWith("."))
-                {
-                    areaName = "";
-                    if (arr.Length == 3)
-                    {
-                        controllerName = arr[1];
-                        actionName = arr[2];
-                    }
-                    else
-                    {
-                        controllerName = arr[0];
-                        actionName = arr[1];
-                    }
-                }
-                else
-                {
-                    areaName = arr[0];
-                    controllerName = arr[1];
-                    actionName = arr[2];
-                }
-
-                return new AreaCAItem
-                {
-                    AreaName = areaName.Trim(),
-                    ControllerName = controllerName.Trim(),
-                    ActionName = actionName.Trim()
-                };
-            }
-        }
-
-        #endregion
     }
 }

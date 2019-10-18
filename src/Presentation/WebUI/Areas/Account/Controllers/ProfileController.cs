@@ -66,7 +66,7 @@ namespace WebUI.Areas.Account.Controllers
             try
             {
                 CurrentAccountModel currentLoginAccount = AccountManager.GetCurrentAccount();
-                UserInfo currentLoginUserInfo = currentLoginAccount.UserInfo;
+                UserInfo currentLoginUserInfo = AccountManager.GetCurrentUserInfo();
                 if (currentLoginAccount.IsGuest)
                 {
                     return Json(new { code = -2, message = "保存失败, 当前未登录" });

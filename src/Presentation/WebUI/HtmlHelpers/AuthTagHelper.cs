@@ -1,24 +1,17 @@
 ﻿using Framework.Common;
-using Framework.Factories;
 using Framework.Infrastructure;
-using Framework.Infrastructure.Abstract;
 using Framework.Infrastructure.Concrete;
 using System.Web.Mvc;
 
-namespace Framework.HtmlHelpers
+namespace WebUI.HtmlHelpers
 {
     public static class AuthTagHelper
     {
-        public static IAuthManager AuthManager
-        {
-            get
-            {
-                return HttpOneRequestFactory.Get<IAuthManager>();
-            }
-        }
+        public static AuthManager AuthManager { get; set; }
 
         static AuthTagHelper()
         {
+            AuthManager = new AuthManager();
         }
 
         #region 权限标签-不支持标签内容为另一标签（即标签嵌套）
@@ -45,7 +38,7 @@ namespace Framework.HtmlHelpers
 
         public static MvcHtmlString AuthTag(this HtmlHelper html, string areaName, string controllerName, string actionName, string tagName, string innerHtml, object htmlAttributes = null, TagRenderMode tagRenderMode = TagRenderMode.Normal)
         {
-            string authKey = AuthManager.GetAuthKey(areaName, controllerName, actionName);
+            string authKey = areaName + "." + controllerName + "." + actionName;
 
             return AuthTag(html, authKey, tagName, innerHtml, htmlAttributes, tagRenderMode);
         }
@@ -91,16 +84,6 @@ namespace Framework.HtmlHelpers
         public static bool HasAuth(this HtmlHelper html, string authKey)
         {
             return AuthManager.HasAuth(authKey);
-        }
-
-        public static bool HasAuth(this HtmlHelper html, string areaName, string controllerName, string actionName)
-        {
-            return AuthManager.HasAuth(areaName, controllerName, actionName);
-        }
-
-        public static bool HasAuth(this HtmlHelper html, string controllerName, string actionName)
-        {
-            return AuthManager.HasAuth(controllerName, actionName);
         }
         #endregion
     }

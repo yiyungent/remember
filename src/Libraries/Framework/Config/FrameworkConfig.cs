@@ -21,7 +21,6 @@ namespace Framework.Config
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new LoginAccountFilterAttribute());
             filters.Add(new AuthFilterAttribute());
         }
 
@@ -32,13 +31,12 @@ namespace Framework.Config
 
         public static void RegisterModelBinder(ModelBinderDictionary binders)
         {
-            binders.Add(typeof(CurrentAccountModel), new CurrentAccountModelBinder());
         }
 
         public static void RegisterViewEngine(ViewEngineCollection viewEngines)
         {
             viewEngines.Clear();
-            //viewEngines.Add(new DbDriveTemplateViewEngine());
+            viewEngines.Add(new DbDriveTemplateViewEngine());
             viewEngines.Add(new RazorViewEngine());
         }
     }

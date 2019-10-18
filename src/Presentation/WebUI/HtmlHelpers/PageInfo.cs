@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Framework.HtmlHelpers
+namespace WebUI.HtmlHelpers
 {
     public class PageInfo
     {

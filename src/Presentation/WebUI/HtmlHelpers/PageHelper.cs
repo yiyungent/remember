@@ -5,7 +5,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Framework.HtmlHelpers
+namespace WebUI.HtmlHelpers
 {
     public static class PageHelper
     {

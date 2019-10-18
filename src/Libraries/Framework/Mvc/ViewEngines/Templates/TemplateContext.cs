@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Domain.Entities;
+using Framework.Infrastructure.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -59,9 +61,11 @@ namespace Framework.Mvc.ViewEngines.Templates
                 // 若允许用户选择模板，则获取当前用户选择的模板
                 if (_workContext.AllowSelectTemplate)
                 {
-                    if (_workContext.CurrentUser != null)
+                    if (_workContext.CurrentUserId != 0)
                     {
-                        templateName = _workContext.CurrentUser.TemplateName;
+                        // TODO: 不太好
+                        UserInfo userInfo = AccountManager.GetCurrentUserInfo();
+                        templateName = userInfo.TemplateName;
                     }
                 }
                 #region MyRegion
@@ -110,7 +114,7 @@ namespace Framework.Mvc.ViewEngines.Templates
                 #endregion
 
                 // 不允许未登录用户选择模板
-                if (_workContext.CurrentUser == null)
+                if (_workContext.CurrentUserId == 0)
                 {
                     return;
                 }

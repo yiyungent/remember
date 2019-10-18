@@ -3,30 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core;
 using Domain;
 using Domain.Entities;
-using Framework.Factories;
-using Framework.Infrastructure.Abstract;
 using Framework.Infrastructure.Concrete;
+using Services.Interface;
 
 namespace Framework.Mvc.ViewEngines.Templates
 {
     public class WorkContext : IWorkContext
     {
-        private IAuthManager _authManager;
-        private IDBAccessProvider _dBAccessProvider;
+        private AuthManager _authManager;
 
-        public WorkContext(IAuthManager authManager, IDBAccessProvider dBAccessProvider)
+        private int _currentUserId;
+
+        public WorkContext()
         {
-            this._authManager = authManager;
-            this._dBAccessProvider = dBAccessProvider;
+            this._authManager = new AuthManager();
+            this._currentUserId = AccountManager.GetCurrentAccount().UserId;
         }
 
-        public UserInfo CurrentUser
+        public int CurrentUserId
         {
             get
             {
-                return AccountManager.GetCurrentUserInfo();
+                return _currentUserId;
             }
         }
 
@@ -35,7 +36,7 @@ namespace Framework.Mvc.ViewEngines.Templates
             get
             {
                 bool isAllow = true;
-                isAllow = _authManager.HasAuth("Admin", "ThemeTemplate", "SelectTemplate");
+                isAllow = _authManager.HasAuth("Admin.ThemeTemplate.SelectTemplate");
 
                 return isAllow;
             }
@@ -45,13 +46,19 @@ namespace Framework.Mvc.ViewEngines.Templates
         {
             get
             {
-                return _dBAccessProvider.GetSet("DefaultTemplateName");
+                return ContainerManager.Resolve<ISettingService>().GetSet("DefaultTemplateName");
             }
         }
 
         public void SaveSelectedTemplate(string templateName)
         {
-            _dBAccessProvider.SaveUserTemplateName(templateName);
+            IUserInfoService userInfoService = ContainerManager.Resolve<IUserInfoService>();
+            UserInfo userInfo = userInfoService.Find(m => m.ID == _currentUserId && !m.IsDeleted);
+            if (userInfo != null)
+            {
+                userInfo.TemplateName = templateName;
+                userInfoService.Update(userInfo);
+            }
         }
     }
 }

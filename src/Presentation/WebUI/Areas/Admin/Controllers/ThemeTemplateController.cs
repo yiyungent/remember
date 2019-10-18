@@ -267,9 +267,10 @@ namespace WebUI.Areas.Admin.Controllers
                     return Json(new { code = -4, message = "切换模板失败，此模板被禁用" });
                 }
 
-                currentAccount.UserInfo.TemplateName = dbModel.TemplateName;
+                UserInfo userInfo = AccountManager.GetCurrentUserInfo();
+                userInfo.TemplateName = dbModel.TemplateName;
                 //Container.Instance.Resolve<UserInfoService>().Edit(currentAccount.UserInfo);
-                this._userInfoService.Update(currentAccount.UserInfo);
+                this._userInfoService.Update(userInfo);
 
                 return Json(new { code = 1, message = "切换模板成功" });
             }

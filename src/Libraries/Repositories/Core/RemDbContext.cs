@@ -20,6 +20,8 @@ namespace Repositories.Core
 
             this.Configuration.AutoDetectChangesEnabled = true;//对多对多，一对多进行curd操作时需要为true
 
+            //this.Configuration.LazyLoadingEnabled = false;
+
             // 记录 EF 生成的 SQL
             Database.Log = (str) =>
             {

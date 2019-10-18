@@ -1,9 +1,8 @@
 ﻿using Core;
 using Domain;
 using Domain.Entities;
-using Framework.Factories;
-using Framework.Infrastructure.Abstract;
 using Services;
+using Services.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,16 +24,11 @@ namespace Framework.Infrastructure.Concrete
                     {
                         UserName = "游客(未登录)",
                         Avatar = ":WebUISite:/assets/images/guest-avatar.jpg",
-                        //RoleInfos = new List<RoleInfo>
-                        //{
-                        //    //Container.Instance.Resolve<RoleInfoService>().GetEntity(2)
-                        //    _dBAccessProvider.GetGuestRoleInfo()
-                        //}
                         Role_Users = new List<Role_User>()
                     };
                     guest.Role_Users.Add(new Role_User
                     {
-                        RoleInfo = HttpOneRequestFactory.Get<IDBAccessProvider>().GetGuestRoleInfo()
+                        RoleInfo = ContainerManager.Resolve<IRoleInfoService>().Find(2)
                     });
 
                     _instance = guest;

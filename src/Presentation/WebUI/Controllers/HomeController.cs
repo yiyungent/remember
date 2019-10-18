@@ -55,11 +55,7 @@ namespace WebUI.Controllers
                 int accessUserId = 0;
                 try
                 {
-                    var user = AccountManager.GetCurrentUserInfo();
-                    if (user != null)
-                    {
-                        accessUserId = user.ID;
-                    }
+                    accessUserId = AccountManager.GetCurrentAccount().UserId;
                 }
                 catch (Exception ex)
                 {

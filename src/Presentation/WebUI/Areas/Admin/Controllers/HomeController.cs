@@ -5,25 +5,24 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Core;
-using Framework.Infrastructure.Abstract;
 using Framework.Infrastructure.Concrete;
 using Framework.Models;
-using Framework.Factories;
 using Framework.Mvc;
 using WebUI.Areas.Admin.Models;
 using WebUI.Areas.Admin.Models.Common;
 using Framework.Extensions;
 using Domain.Entities;
+using Services.Interface;
 
 namespace WebUI.Areas.Admin.Controllers
 {
     public class HomeController : Controller
     {
-        private IAuthManager _authManager;
+        private AuthManager _authManager;
 
         public HomeController()
         {
-            this._authManager = HttpOneRequestFactory.Get<IAuthManager>();
+            this._authManager = new AuthManager();
             string title = WebSetting.Get("WebUITitle").Split(new string[] { "-", " " }, StringSplitOptions.RemoveEmptyEntries)[0];
             ViewBag.PageHeader = title.Split(new string[] { "-", " " }, StringSplitOptions.RemoveEmptyEntries)[0];
             ViewBag.PageHeaderDescription = title;
@@ -31,7 +30,8 @@ namespace WebUI.Areas.Admin.Controllers
 
             UserInfo currentUserInfo = AccountManager.GetCurrentUserInfo(true);
             ViewBag.CurrentUserInfo = currentUserInfo;
-            ViewBag.MenuList = this._authManager.GetMenuListByUserInfo(currentUserInfo);
+            // TODO: 后台菜单加载
+            ViewBag.MenuList = null;
         }
 
         #region 后台框架
@@ -50,7 +50,7 @@ namespace WebUI.Areas.Admin.Controllers
 
         public PartialViewResult LeftMenuPartial()
         {
-            ViewBag.AllMenuList = this._authManager.GetMenuListByUserInfo(AccountManager.GetCurrentUserInfo());
+            ViewBag.AllMenuList = null;// this._authManager.GetMenuListByUserInfo(AccountManager.GetCurrentUserInfo());
 
             return PartialView("_LeftMenuPartial");
         }

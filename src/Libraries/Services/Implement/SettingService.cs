@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Core.Common;
 using System.Linq;
+using Core.Common.Cache;
 
 namespace Services.Implement
 {
@@ -17,10 +18,15 @@ namespace Services.Implement
         /// <returns></returns>
         public string GetSet(string key)
         {
-            string value = null;
+            string value = CacheHelper.Get<string>("Settings." + key);
             try
             {
-                value = this._repository.Find(m => m.SetKey == key && !m.IsDeleted).SetValue;
+                if (value == null)
+                {
+                    value = this._repository.Find(m => m.SetKey == key && !m.IsDeleted).SetValue;
+
+                    CacheHelper.Insert<string>("Settings." + key, value, DateTime.Now.AddDays(1));
+                }
             }
             catch (Exception ex)
             { }
@@ -57,6 +63,9 @@ namespace Services.Implement
                 dbModel.SetValue = value;
                 this._repository.Update(dbModel);
             }
+
+            // 更新缓存
+            CacheHelper.Insert<string>("Settings." + key, value, DateTime.Now.AddDays(1));
         }
 
         #region 发送邮箱验证码-为 找回/重置密码

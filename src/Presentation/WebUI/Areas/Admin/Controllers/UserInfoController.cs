@@ -2,9 +2,6 @@
 using Domain;
 using Domain.Entities;
 using Framework.Common;
-using Framework.Factories;
-using Framework.HtmlHelpers;
-using Framework.Infrastructure.Abstract;
 using Framework.Infrastructure.Concrete;
 using Framework.Models;
 using Framework.Mvc;
@@ -12,6 +9,7 @@ using Jdenticon;
 using Services.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;

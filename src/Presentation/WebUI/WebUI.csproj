@@ -8231,8 +8231,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="HtmlHelpers\AuthTagHelper.cs" />
     <Compile Include="HtmlHelpers\CheckBoxListHelper.cs" />
     <Compile Include="HtmlHelpers\CollapseMenu.cs" />
+    <Compile Include="HtmlHelpers\PageHelper.cs" />
+    <Compile Include="HtmlHelpers\PageInfo.cs" />
     <Compile Include="Imples\CustomSettingImply.cs" />
     <Compile Include="Infrastructure\AutoMapperStartupTask.cs" />
     <Compile Include="Infrastructure\CmsUrlConstraint.cs" />
