@@ -19,7 +19,7 @@ using PluginHub.Infrastructure;
 using PluginHub.Web.Mvc.Routes;
 using Framework.Config;
 using Framework.Common;
-using log4net;
+//using log4net;
 using System.Configuration;
 using Framework.Extensions;
 using WebUI.Attributes;
@@ -44,7 +44,7 @@ namespace WebUI
             //initialize engine context
             //EngineContext.Initialize(false);
 
-            //FrameworkConfig.Register();
+            FrameworkConfig.Register();
 
             // 开启线程扫描队列将数据取出来写到Lucene.NET中。
             //SearchIndexManager.GetInstance().StartThread();
@@ -194,6 +194,7 @@ namespace WebUI
             //    .InstancePerDependency();
 
             // add the Entity Framework context to make sure only one context per request
+            //builder.RegisterType<RemDbContext>().InstancePerRequest();
             builder.RegisterType<RemDbContext>().InstancePerRequest();
             builder.Register(c => c.Resolve<RemDbContext>()).As<DbContext>().InstancePerRequest();
 

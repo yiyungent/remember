@@ -47,7 +47,7 @@ namespace WebApi
             builder.RegisterWebApiFilterProvider(config);
 
             // 注意 Framework 所需数据库访问者
-            builder.RegisterType<DBAccessProvider>().As<IDBAccessProvider>();
+            //builder.RegisterType<DBAccessProvider>().As<IDBAccessProvider>();
 
             // 注册仓储层服务
             builder.RegisterType<ArticleRepository>().As<IArticleRepository>();
