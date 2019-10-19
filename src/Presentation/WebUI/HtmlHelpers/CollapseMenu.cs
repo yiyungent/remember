@@ -15,7 +15,7 @@ namespace WebUI.HtmlHelpers
     {
         private static IList<Sys_Menu> _allMenuList;
 
-        private const string _btnGroupFormat = "<div class='layui-btn-group' style='float: right;'><button class='layui-btn layui-btn-sm' onclick='onEdit({1})'>修改</button></div>";
+        private const string _btnGroupFormat = "<div class='layui-btn-group' style='float: right;'><button class='layui-btn layui-btn-sm' onclick='onEdit({1})'>编辑</button></div>";
 
         #region 产生菜单列表首页
         public static MvcHtmlString GenerateCollapseMenu(this HtmlHelper value)

@@ -18,13 +18,13 @@
                 type: 2,
                 closeBtn: 1,
                 anim: 4,
-                title: "修改",
+                title: "编辑",
                 shade: 0.4,
                 shadeClose: false,
                 area: ['800px', '420px'],
                 content: ['/Admin/SysMenu/Edit?id=' + id, 'yes'],
                 end: function () {
-                    location.href = location.href; // 刷新页面
+                    window.location.href = window.location.href; // 刷新页面
                 }
             });
 		}

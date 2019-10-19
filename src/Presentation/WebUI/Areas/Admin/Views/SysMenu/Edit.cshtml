@@ -8,18 +8,6 @@
 <div>
 	<form class="layui-form">
 		@Html.HiddenFor(m => m.ID)
-		<div class="layui-form-item">
-			<label class="layui-form-label">Area</label>
-			<div class="layui-input-block">
-				<input type="text" class="layui-input" name="AreaName" disabled value="@Model.AreaName">
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<label class="layui-form-label">Controller</label>
-			<div class="layui-input-block">
-				<input type="text" class="layui-input" name="ControllerName" disabled value="@Model.ControllerName">
-			</div>
-		</div>
 		<div class="layui-form">
 			<div class="layui-form-item">
 				<label class="layui-form-label">菜单名</label>
@@ -39,17 +27,17 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">上级菜单</label>
 			<div class="layui-input-block">
-				@Html.DropDownListFor(model => model.ParentMenu.ID, (IList<SelectListItem>)ViewBag.DDLParent)
+				@Html.DropDownListFor(model => model.ParentId, (IList<SelectListItem>)ViewBag.DDLParent)
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<div class="layui-input-block">
-				<button class="layui-btn" onclick="return saveData();">保存</button>
+				<button class="layui-btn" onclick="saveData()">保存</button>
 			</div>
 		</div>
 	</form>
 </div>
-<script src="/Scripts/jquery-1.12.0.min.js"></script>
+<script src="/assets/libs/jquery/dist/jquery.min.js"></script>
 <script src="/assets/libs/layui/layui.js"></script>
 <script>
 	var form, layer;

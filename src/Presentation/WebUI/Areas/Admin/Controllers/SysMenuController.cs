@@ -38,7 +38,7 @@ namespace WebUI.Areas.Admin.Controllers
         }
         #endregion
 
-        #region 修改
+        #region 编辑
         [HttpGet]
         public ViewResult Edit(int id)
         {
