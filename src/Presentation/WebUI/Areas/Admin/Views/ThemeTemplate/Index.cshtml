@@ -1,5 +1,5 @@
 ﻿@using WebUI.Areas.Admin.Models.ThemeTemplateVM
-@using Framework.HtmlHelpers
+@using WebUI.HtmlHelpers
 @using WebUI.Areas.Admin.Models.Common
 @using WebUI.Extensions
 @using Domain
@@ -15,22 +15,6 @@
 @section body {
 	<script src="/assets/libs/pview/pview.js"></script>
 	<script>
-
-		function showMessage(message, type) {
-			$("#js-message").fadeIn();
-			switch (type) {
-				case -1:
-					$("#js-message").attr("class", "alert alert-danger").find(".message").html(message);
-					break;
-				case 1:
-					$("#js-message").attr("class", "alert alert-success").find(".message").html(message);
-					break;
-			}
-			// 3s 后隐藏
-			setTimeout(function () {
-				$("#js-message").fadeOut("slow");
-			}, 3000);
-		}
 
 		function setDefault(id) {
 			$('#js-btn-default-' + id).attr('disabled', 'disabled').html('设置中');
@@ -174,8 +158,8 @@
 			foreach (OpenCloseItem item in Model.List)
 			{
 				<div class="col-sm-6 col-md-3">
-					<div class="thumbnail">
-						<img src="/@item.PreviewImageUrl" alt="@item.Title">
+					<div class="thumbnail" style="height:406px;">
+						<img style="width:240px;height:200px;" src="/@item.PreviewImageUrl" alt="@item.Title">
 						<div class="caption">
 							<h3>@item.Title</h3>
 							<p><span>模板名: </span><span>@item.TemplateName</span></p>

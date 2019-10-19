@@ -1,22 +1,11 @@
-﻿using Core;
-using Domain;
-using Domain.Entities;
-using Framework.Common;
+﻿using Domain.Entities;
 using Framework.Infrastructure.Concrete;
 using Framework.Models;
-using Framework.Mvc.ViewEngines.Templates;
 using Services.Interface;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using WebUI.Areas.Admin.Models;
-using WebUI.Areas.Admin.Models.Common;
 using WebUI.Areas.Admin.Models.ThemeTemplateVM;
 
 namespace WebUI.Areas.Admin.Controllers
@@ -32,13 +21,6 @@ namespace WebUI.Areas.Admin.Controllers
         #region Ctor
         public ThemeTemplateController(IThemeTemplateService themeTemplateService, ISettingService settingService, IUserInfoService userInfoService)
         {
-            //ViewBag.PageHeader = "主题模板";
-            //ViewBag.PageHeaderDescription = "主题模板";
-            //ViewBag.BreadcrumbList = new List<BreadcrumbItem>
-            //{
-            //    new BreadcrumbItem("系统管理"),
-            //};
-
             this._themeTemplateService = themeTemplateService;
             this._settingService = settingService;
             this._userInfoService = userInfoService;
@@ -48,10 +30,7 @@ namespace WebUI.Areas.Admin.Controllers
         #region 主题模板列表
         public ActionResult Index(int pageIndex = 1, int pageSize = 6, string cat = "open")
         {
-            //IList<ICriterion> queryConditions = new List<ICriterion>();
-            //ThemeTemplateListViewModel viewModel = new ThemeTemplateListViewModel(queryConditions, pageIndex, pageSize, HttpContext, cat);
-            IList<ThemeTemplate> list = this._themeTemplateService.Filter<int>(pageIndex, pageSize, out int totalCount, m => !m.IsDeleted, m => m.ID, false).ToList();
-            ListViewModel<ThemeTemplate> viewModel = new ListViewModel<ThemeTemplate>(list, pageIndex: pageIndex, pageSize: pageSize, totalCount: totalCount);
+            ThemeTemplateListViewModel viewModel = new ThemeTemplateListViewModel(m => !m.IsDeleted, pageIndex, pageSize, HttpContext, cat);
 
             ViewBag.Cat = cat;
             TempData["RedirectUrl"] = Request.RawUrl;
