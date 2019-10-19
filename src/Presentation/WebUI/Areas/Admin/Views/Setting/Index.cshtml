@@ -1,4 +1,4 @@
-﻿@using Framework.HtmlHelpers
+﻿@using WebUI.HtmlHelpers
 @using WebUI.Areas.Admin.Models.Common
 @using WebUI.Extensions
 @using Domain
@@ -12,31 +12,24 @@
 @section body {
 	<script>
 
-	function saveData(event) {
-		var event = event || window.event;
-		event.preventDefault();
+	function saveDataSuccess(data) {
+		if (data.code <= 0) {
+			showMessage(data.message, -1);
+		} else {
+			showMessage(data.message, 1);
+		}
+		$("#js-btn-save").html("保存").removeAttr("disabled");
+	}
+
+	function saveData() {
+		$("#js-btn-save").html("保存中").attr("disabled", "disabled");
 		$.ajax({
 			url: "@Url.Action("Index", "Setting", new { area = "Admin" })",
 			type: "post",
-			data: $("#js-settings-form").serialize(),
+			data: $("#js-form").serialize(),
 			dataType: "json",
-			success: function (data) {
-				$("#js-message").fadeIn();
-				if (data.code <= 0) {
-					$("#js-message").attr("class", "alert alert-danger").find(".message").html(data.message);
-				} else {
-					$("#js-message").attr("class", "alert alert-success").find(".message").html(data.message);
-				}
-				// 3s 后隐藏
-				setTimeout(function () {
-					$("#js-message").fadeOut("slow");
-				}, 3000);
-			}
+			success: saveDataSuccess
 		});
-	}
-
-	window.onload = function () {
-
 	}
 
 	</script>
@@ -62,14 +55,22 @@
 		<div class="nav-tabs-custom">
 			<ul class="nav nav-tabs">
 				<li class="active"><a>常规</a></li>
-				<li><a href="@Url.Action("WebApi", "Setting", new { area = "Admin" })">WebAPI & Mobile</a></li>
+				@if(Html.HasAuth("Admin.Setting.WebApi")){
+				<li><a href="@Url.Action("WebApi", "Setting", new { are = "Admin" })">WebAPI & Mobile</a></li>
+				}
+				@if(Html.HasAuth("Admin.Setting.FindPwd")){
 				<li><a href="@Url.Action("FindPwd", "Setting", new { area = "Admin" })">找回密码</a></li>
+				}
+				@if(Html.HasAuth("Admin.Setting.SysEmail")){
 				<li><a href="@Url.Action("SysEmail", "Setting", new { area = "Admin" })">系统邮箱</a></li>
+				}
+				@if(Html.HasAuth("Admin.Setting.Advanced")){
 				<li><a href="@Url.Action("Advanced", "Setting", new { area = "Admin" })">高级</a></li>
+				}
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active">
-					<form id="js-settings-form" class="form-horizontal">
+					<form id="js-form" class="form-horizontal">
 						<div class="form-group">
 							<label for="inputAccount" class="col-sm-2 control-label">PC</label>
 							<div class="col-sm-10">
