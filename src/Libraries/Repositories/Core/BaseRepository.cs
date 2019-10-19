@@ -59,7 +59,7 @@ namespace Repositories.Core
         /// Gets all objects from database
         /// </summary>
         /// <returns></returns>
-        public virtual IQueryable<T> All()
+        public IQueryable<T> All()
         {
             return _context.Set<T>().AsQueryable();
         }
@@ -99,7 +99,7 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="predicate">Specified the filter expression</param>
         /// <returns></returns>
-        public virtual bool Contains(Expression<Func<T, bool>> predicate)
+        public bool Contains(Expression<Func<T, bool>> predicate)
         {
             return _context.Set<T>().Any(predicate);
         }
@@ -138,7 +138,7 @@ namespace Repositories.Core
         {
             _context.Set<T>().Add(t);
 
-            _context.SaveChanges();
+            //_context.SaveChanges();
         }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace Repositories.Core
         {
             _context.Set<T>().Remove(t);
 
-            _context.SaveChanges();
+            //_context.SaveChanges();
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace Repositories.Core
                 _context.Set<T>().Attach(t);
                 entry.State = EntityState.Modified;
 
-                _context.SaveChanges();
+                //_context.SaveChanges();
             }
             catch (OptimisticConcurrencyException ex)
             {
@@ -191,9 +191,34 @@ namespace Repositories.Core
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public virtual T FirstOrDefault(Expression<Func<T, bool>> expression)
+        public T FirstOrDefault(Expression<Func<T, bool>> expression)
         {
             return All().FirstOrDefault(expression);
+        }
+
+        public virtual void ExecuteProcedure(string procedureCommand, params object[] sqlParams)
+        {
+            _context.Database.ExecuteSqlCommand(procedureCommand, sqlParams);
+        }
+
+        public virtual void ExecuteSql(string sql)
+        {
+            _context.Database.ExecuteSqlCommand(sql);
+        }
+
+        public virtual void SaveChanges()
+        {
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (!ex.Message.Contains("The changes to the database were committed successfully"))
+                {
+                    throw;
+                }
+            }
         }
 
         #endregion

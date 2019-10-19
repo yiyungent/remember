@@ -20,22 +20,18 @@ namespace WebUI.Areas.Admin.Controllers
     {
         #region Fields
         private AuthManager _authManager;
-
         private readonly IRoleInfoService _roleInfoService;
+        private readonly ISys_MenuService _sys_MenuService;
+        private readonly IFunctionInfoService _functionInfoService;
         #endregion
 
         #region Ctor
-        public RoleInfoController(IRoleInfoService roleInfoService)
+        public RoleInfoController(IRoleInfoService roleInfoService, ISys_MenuService sys_MenuService, IFunctionInfoService functionInfoService)
         {
             this._authManager = new AuthManager();
-
-            //ViewBag.PageHeader = "角色管理";
-            //ViewBag.PageHeaderDescription = "角色管理";
-            //ViewBag.BreadcrumbList = new List<BreadcrumbItem>
-            //{
-            //    new BreadcrumbItem("业务管理"),
-            //};
             this._roleInfoService = roleInfoService;
+            this._sys_MenuService = sys_MenuService;
+            this._functionInfoService = functionInfoService;
         }
         #endregion
 
@@ -44,7 +40,6 @@ namespace WebUI.Areas.Admin.Controllers
         {
             IList<RoleInfo> list = this._roleInfoService.Filter<int>(pageIndex, pageSize, out int totalCount, m => !m.IsDeleted, m => m.ID, false).ToList();
             ListViewModel<RoleInfo> viewModel = new ListViewModel<RoleInfo>(list, pageIndex: pageIndex, pageSize: pageSize, totalCount: totalCount);
-            //ListViewModel<RoleInfo> model = new ListViewModel<RoleInfo>(queryConditions, pageIndex: pageIndex, pageSize: pageSize);
             TempData["RedirectUrl"] = Request.RawUrl;
 
             return View(viewModel);
@@ -105,11 +100,9 @@ namespace WebUI.Areas.Admin.Controllers
                         return Json(new { code = -3, message = "游客名禁止修改" });
                     }
 
-                    //RoleInfo dbEntry = Container.Instance.Resolve<RoleInfoService>().GetEntity(model.ID);
                     RoleInfo dbModel = this._roleInfoService.Find(m => m.ID == inputModel.ID && !m.IsDeleted);
                     dbModel.Name = inputModel.Name;
 
-                    //Container.Instance.Resolve<RoleInfoService>().Edit(dbEntry);
                     this._roleInfoService.Update(dbModel);
 
                     return Json(new { code = 1, message = "保存成功" });
@@ -130,7 +123,6 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpGet]
         public ViewResult AssignPower(int id)
         {
-            //RoleInfo model = Container.Instance.Resolve<RoleInfoService>().GetEntity(id);
             RoleInfo viewModel = this._roleInfoService.Find(m => m.ID == id && !m.IsDeleted);
 
             return View(viewModel);
@@ -166,13 +158,11 @@ namespace WebUI.Areas.Admin.Controllers
                     {
                         funcIdList.Add(Convert.ToInt32(idStr));
                     }
-                    // TODO:角色分配菜单权限
-                    bool isSuccess = true;//this._authManager.AssignPower(id, menuIdList, funcIdList);
+                    int currentUserId = AccountManager.GetCurrentAccount().UserId;
+                    bool isSuccess = this._roleInfoService.AssignPower(id, menuIdList, funcIdList, currentUserId);//this._authManager.AssignPower(id, menuIdList, funcIdList);
 
                     if (isSuccess)
                     {
-                        // 更新 Session 登录用户
-                        //AccountManager.UpdateSessionAccount();
                         return Json(new { code = 1, message = "保存成功, 菜单需刷新后有效" });
                     }
                     else
@@ -204,15 +194,12 @@ namespace WebUI.Areas.Admin.Controllers
         {
             IList<ZNodeModel> rtnJson = new List<ZNodeModel>();
 
-            //RoleInfo roleInfo = Container.Instance.Resolve<RoleInfoService>().GetEntity(id);
-            RoleInfo roleInfo = this._roleInfoService.Find(m => m.ID == id && !m.IsDeleted);
-
-            IList<Sys_Menu> allMenuList = null;// this._authManager.AllMenuList();
-            IList<FunctionInfo> allFuncList = null;//this._authManager.AllFuncList();
+            IList<Sys_Menu> allMenuList = this._sys_MenuService.All().ToList();// this._authManager.AllMenuList();
+            IList<FunctionInfo> allFuncList = this._functionInfoService.All().ToList();//this._authManager.AllFuncList();
             // 排除抽象的特殊操作（只要拥有系统菜单下的任一权限，即会拥有进入管理中心，即拥有此操作权限）
             allFuncList = allFuncList.Where(m => m.Name != "(后台)管理中心(框架)").ToList();
-            IList<Sys_Menu> roleMenuList = null;//this._authManager.GetMenuListByRole(roleInfo);
-            IList<FunctionInfo> roleFuncList = null;// this._authManager.GetFuncListByRole(roleInfo);
+            IList<Sys_Menu> roleMenuList = this._roleInfoService.RoleHaveSys_Menus(id);//this._authManager.GetMenuListByRole(roleInfo);
+            IList<FunctionInfo> roleFuncList = this._roleInfoService.RoleHaveFunctions(id);// this._authManager.GetFuncListByRole(roleInfo);
 
             foreach (Sys_Menu menu in allMenuList)
             {

@@ -1,12 +1,10 @@
-﻿@using Framework.HtmlHelpers
+﻿@using WebUI.HtmlHelpers
 @using WebUI.Areas.Admin.Models.Common
+@using WebUI.Extensions
 @using Domain.Entities
 @model ListViewModel<RoleInfo>
 @{
-	Layout = "~/Areas/Admin/Views/Shared/_SimpleTableList.cshtml";
-
-	ViewBag.Title = "角色列表 - 后台管理";
-	ViewBag.Box_Title = "角色列表";
+	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
 }
 @section head {
 	<style>
@@ -16,13 +14,14 @@
 	</style>
 }
 @section body {
+	<script src="/assets/libs/pview/pview.js"></script>
 	<script>
+
 		// start 删除
 		function deleteOp(id) {
 			$("#js-id").val(id);
 			$('#deleteModal').modal();
 		}
-
 		function deleteSubmit() {
 			var id = $("#js-id").val();
 			$.ajax({
@@ -37,7 +36,6 @@
 					} else {
 						// 删除成功
 						$("#js-message").attr("class", "alert alert-success").find(".message").html(data.message);
-						//$(".table").find("tr:contains('" + id + "')").remove();
 						$(".table").find("tr[data-tr-id='" + id + "']").remove();
 						// 检查当前当前页面是否已经全部删除完，若是，则点击当前页码，重新加载
 						var trNum = $(".table").find("tr").length - 1;
@@ -54,40 +52,108 @@
 		}
 		// end 删除
 
+		var pview;
+		$(function () {
+			pview = new PView();
+			pview.init();
+		});
+
 	</script>
 }
 
-@section table {
-	<tr>
-		<th>ID</th>
-		<th>角色名</th>
-		<th>操作</th>
-	</tr>
-	@foreach (var item in Model.List)
-	{
-		<tr data-tr-id="@item.ID">
-			<td>@item.ID</td>
-			<td>@item.Name</td>
-			<td>
-				<div class="btn-group" role="group" data-pjax>
-					@if (Html.HasAuth("Admin", "RoleInfo", "Details"))
-					{
-						<a class="btn btn-success" href="@Url.Action("Details")?id=@item.ID">查看</a>
-					}
-					@if (Html.HasAuth("Admin", "RoleInfo", "Delete"))
-					{
-						<button class="btn btn-danger" type="button" onclick="deleteOp(@item.ID)">删除</button>
-					}
-					@if (Html.HasAuth("Admin", "RoleInfo", "Edit"))
-					{
-						<a class="btn btn-warning" href="@Url.Action("Edit")?id=@item.ID">修改</a>
-					}
-					@if (Html.HasAuth("Admin", "RoleInfo", "AssignPower"))
-					{
-						<a class="btn btn-primary" href="@Url.Action("AssignPower")?id=@item.ID">授权</a>
-					}
-				</div>
-			</td>
-		</tr>
-	}
-}
+<!-- start 删除确认框 -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+				<h4 class="modal-title">确认框</h4>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="form-group">
+						<label for="message-text" class="control-label">确定要删除？</label>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+				<button onclick="deleteSubmit()" type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end 删除确认框 -->
+<!-- start 提示框 -->
+@{ Html.RenderPartial("_MessagePartial"); }
+<!-- end 提示框 -->
+
+<input id="js-id" type="hidden" />
+
+<!-- start .box -->
+<div class="box">
+	<!-- start .box-header -->
+	<div class="box-header">
+		<h3 class="box-title">列表</h3>
+
+		<div class="box-tools">
+
+		</div>
+	</div>
+	<!-- end .box-header -->
+	<!-- start .box-body -->
+	<!-- start 简单表格 -->
+	<div class="box-body table-responsive no-padding">
+		<table id="js-table" class="table table-hover" pview="table">
+			<tr>
+				<th>ID</th>
+				<th>角色名</th>
+				<th>操作</th>
+			</tr>
+			@foreach (var item in Model.List)
+			{
+				<tr data-tr-id="@item.ID">
+					<td>@item.ID</td>
+					<td>@item.Name</td>
+					<td>
+						<div class="btn-group" role="group" data-pjax>
+							@if (Html.HasAuth("Admin.RoleInfo.Details"))
+							{
+								<a class="btn btn-success" href="@Url.Action("Details")?id=@item.ID">查看</a>
+							}
+							@if (Html.HasAuth("Admin.RoleInfo.Delete"))
+							{
+								<button class="btn btn-danger" type="button" onclick="deleteOp(@item.ID)">删除</button>
+							}
+							@if (Html.HasAuth("Admin.RoleInfo.Edit"))
+							{
+								<a class="btn btn-warning" href="@Url.Action("Edit")?id=@item.ID">编辑</a>
+							}
+							@if (Html.HasAuth("Admin.RoleInfo.AssignPower"))
+							{
+								<a class="btn btn-primary" href="@Url.Action("AssignPower")?id=@item.ID">授权</a>
+							}
+						</div>
+					</td>
+				</tr>
+			}
+		</table>
+	</div>
+	<!-- end 简单表格 -->
+	<!-- end .box-body -->
+	<!-- start .box-footer -->
+	<div class="box-footer clearfix">
+		<div class="btn-group pull-left">
+			<a class="btn btn-primary" href="@Url.Action("Create")">添加</a>
+		</div>
+		<!-- start 分页 -->
+		<div id="js-page" pview="pages">
+			<ul class="pagination pull-right" pview-btn-group pview-targets="table,pages">
+				@Html.PageLinks(Model.PageInfo, i => Url.Action("Index", new { pageIndex = i, q = Request["q"], type = Request["type"] }))
+			</ul>
+		</div>
+		<!-- end 分页 -->
+	</div>
+	<!-- end .box-footer -->
+</div>
+<!-- end .box -->

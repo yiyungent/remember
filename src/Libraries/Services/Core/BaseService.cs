@@ -100,6 +100,8 @@ namespace Services.Core
         public virtual void Create(T t)
         {
             _repository.Create(t);
+
+            _repository.SaveChanges();
         }
 
         /// <summary>
@@ -109,6 +111,8 @@ namespace Services.Core
         public virtual void Delete(T t)
         {
             _repository.Delete(t);
+
+            _repository.SaveChanges();
         }
 
         /// <summary>
@@ -129,6 +133,8 @@ namespace Services.Core
         public virtual void Update(T t)
         {
             _repository.Update(t);
+
+            _repository.SaveChanges();
         }
 
         /// <summary>

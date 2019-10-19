@@ -93,5 +93,11 @@ namespace Repositories.Core
         /// <param name="expression"></param>
         /// <returns></returns>
         T FirstOrDefault(Expression<Func<T, bool>> expression);
+
+        void ExecuteProcedure(string procedureCommand, params object[] sqlParams);
+
+        void ExecuteSql(string sql);
+
+        void SaveChanges();
     }
 }

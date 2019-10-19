@@ -1,12 +1,10 @@
-﻿using Domain;
-using Domain.Entities;
+﻿using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Framework.Infrastructure.Concrete
+namespace Domain
 {
     public class Sys_Menu_Compare : IEqualityComparer<Sys_Menu>
     {

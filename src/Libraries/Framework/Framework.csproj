@@ -95,7 +95,6 @@
     <Compile Include="Extensions\WebSetting.cs" />
     <Compile Include="Infrastructure\Concrete\AccountManager.cs" />
     <Compile Include="Infrastructure\Concrete\AuthManager.cs" />
-    <Compile Include="Infrastructure\Concrete\CommonEqualityComparer.cs" />
     <Compile Include="Infrastructure\Concrete\HttpSingleRequestStore.cs" />
     <Compile Include="Infrastructure\Concrete\UserInfo_Guest.cs" />
     <Compile Include="Models\CurrentAccountModel.cs" />

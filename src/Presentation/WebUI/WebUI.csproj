@@ -8302,7 +8302,6 @@
     <Content Include="Areas\Admin\Views\Shared\_AdminContent.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_LeftMenuPartial.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_MessagePartial.cshtml" />
-    <Content Include="Areas\Admin\Views\Shared\_SimpleTableList.cshtml" />
     <Content Include="Areas\Admin\Views\SysMenu\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\SysMenu\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ThemeTemplate\Index.cshtml" />

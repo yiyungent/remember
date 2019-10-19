@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.Common.Cache;
+using Domain;
 using Domain.Entities;
 using Services.Core;
 using Services.Interface;
@@ -92,38 +93,6 @@ namespace Services.Implement
             }
 
             return menuList;
-        }
-
-        #region 权限(操作)键相等比较器
-        public class AuthKeyCompare : IEqualityComparer<string>
-        {
-            public bool Equals(string x, string y)
-            {
-                return x.ToLower() == y.ToLower();
-            }
-
-            public int GetHashCode(string obj)
-            {
-                throw new NotImplementedException();
-            }
-        }
-        #endregion
-
-        public class Sys_Menu_Compare : IEqualityComparer<Sys_Menu>
-        {
-            public bool Equals(Sys_Menu x, Sys_Menu y)
-            {
-                if (x == null || y == null)
-                {
-                    return false;
-                }
-                return x.ID == y.ID;
-            }
-
-            public int GetHashCode(Sys_Menu obj)
-            {
-                throw new NotImplementedException();
-            }
         }
     }
 }

@@ -112,14 +112,19 @@
     <Compile Include="Core\IService.cs" />
     <Compile Include="Implement\ArticleService.cs" />
     <Compile Include="Implement\FunctionInfoService.cs" />
+    <Compile Include="Implement\RoleInfoService.cs" />
     <Compile Include="Implement\SettingService.cs" />
+    <Compile Include="Implement\Sys_MenuService.cs" />
     <Compile Include="Implement\ThemeTemplateService.cs" />
     <Compile Include="Implement\UserInfoService.cs" />
     <Compile Include="Interface\IArticleService.cs" />
     <Compile Include="Interface\IFunctionInfoService.cs" />
+    <Compile Include="Interface\IRoleInfoService.cs" />
     <Compile Include="Interface\ISettingService.cs" />
+    <Compile Include="Interface\ISys_MenuService.cs" />
     <Compile Include="Interface\IThemeTemplateService.cs" />
     <Compile Include="Interface\IUserInfoService.cs" />
+    <Compile Include="Interface\Sys_MenuService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

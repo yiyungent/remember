@@ -57,7 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseEntity.cs" />
-    <Compile Include="CommonEntity.cs" />
+    <Compile Include="CommonEqualityComparer.cs" />
     <Compile Include="Entities\Article.cs" />
     <Compile Include="Entities\CardBox.cs" />
     <Compile Include="Entities\CardInfo.cs" />
