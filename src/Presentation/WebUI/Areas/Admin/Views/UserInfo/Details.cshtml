@@ -12,27 +12,27 @@
 	<form>
 		<div class="box-body">
 			<div class="form-group">
-				@Html.LabelFor(m => m.ID)
+				<label>ID</label>
 				@Html.TextBoxFor(m => m.ID, new { @class = "form-control", disabled = "disabled" })
 			</div>
 			<div class="form-group">
-				@Html.LabelFor(m => m.UserName)
+				<label>用户名</label>
 				@Html.TextBoxFor(m => m.UserName, new { @class = "form-control", disabled = "disabled" })
 			</div>
 			<div class="form-group">
-				@Html.LabelFor(m => m.CreateTime)
+				<label>描述</label>
+				@Html.TextAreaFor(m => m.Description, new { @class = "form-control", disabled = "disabled" })
+			</div>
+			<div class="form-group">
+				<label>创建时间</label>
 				@Html.TextBoxFor(m => m.CreateTime, new { @class = "form-control", disabled = "disabled" })
 			</div>
 			<div class="form-group">
-				@Html.LabelFor(m => m.Email)
+				<label>电子邮箱</label>
 				@Html.TextBoxFor(m => m.Email, new { @class = "form-control", disabled = "disabled" })
 			</div>
 			<div class="form-group">
-				@Html.LabelFor(m => m.Description)
-				@Html.TextBoxFor(m => m.Description, new { @class = "form-control", disabled = "disabled" })
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.RoleInfos)
+				<label>角色</label>
 				@{ string[] colors = { "warning", "primary", "danger", "default" }; }
 				@for (int i = 0; i < Model.RoleInfos.Count; i++)
 				{
@@ -53,7 +53,14 @@
 		</div>
 		<div class="box-footer">
 			<div class="btn-group">
-				<a class="btn btn-default" href="javascript:history.go(-1);">返回</a>
+				@if (TempData["RedirectUrl"] != null)
+				{
+					<a class="btn btn-default" href="@TempData["RedirectUrl"].ToString()">返回</a>
+				}
+				else
+				{
+					<a class="btn btn-default" href="javascript:history.go(-1);">返回</a>
+				}
 			</div>
 		</div>
 	</form>

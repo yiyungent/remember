@@ -16,23 +16,7 @@
 	<script src="/assets/libs/AdminLTE/bower_components/select2/dist/js/select2.full.min.js"></script>
 	<script>
 
-		function showMessage(message, type) {
-			$("#js-message").fadeIn();
-			switch (type) {
-				case -1:
-					$("#js-message").attr("class", "alert alert-danger").find(".message").html(message);
-					break;
-				case 1:
-					$("#js-message").attr("class", "alert alert-success").find(".message").html(message);
-					break;
-			}
-			// 3s 后隐藏
-			setTimeout(function () {
-				$("#js-message").fadeOut("slow");
-			}, 3000);
-		}
-
-		function onSuccess(data) {
+		function saveDataSuccess(data) {
 			if (data.code <= 0) {
 				showMessage(data.message, -1);
 			} else {
@@ -42,14 +26,14 @@
 		}
 
 		function saveData() {
-			$("#js-btn-save").html("保存中").attr("disabled", "disabled");
 			selectRole();
+			$("#js-btn-save").html("保存中").attr("disabled", "disabled");
 			$.ajax({
 				url: "/Admin/UserInfo/Create",
 				type: "post",
 				dataType: "json",
 				data: $("#js-form").serialize(),
-				success: onSuccess
+				success: saveDataSuccess
 			});
 			return false;
 		}
@@ -79,7 +63,7 @@
 <!-- general form elements -->
 <div class="box box-primary">
 	<div class="box-header with-border">
-		<h3 class="box-title">创建</h3>
+		<h3 class="box-title">添加</h3>
 	</div>
 	<!-- /.box-header -->
 	<!-- form start -->
@@ -91,6 +75,10 @@
 				@Html.TextBoxFor(m => m.InputUserName, new { @class = "form-control" })
 			</div>
 			<div class="form-group">
+				<label>描述</label>
+				@Html.TextAreaFor(m => m.InputDescription, new { @class = "form-control" })
+			</div>
+			<div class="form-group">
 				<label for="InputEmail">邮箱</label>
 				@Html.TextBoxFor(m => m.InputEmail, new { @class = "form-control", placeholder = "请输入邮箱", type = "email" })
 			</div>
@@ -99,11 +87,11 @@
 				@Html.TextBoxFor(m => m.InputPassword, new { @class = "form-control", placeholder = "请输入密码", type = "password" })
 			</div>
 			@*<div class="form-group">
-					<label for="exampleInputFile">头像上传</label>
-					<input type="file" id="exampleInputFile">
+			<label for="exampleInputFile">头像上传</label>
+			<input type="file" id="exampleInputFile">
 
-					<p class="help-block">Example block-level help text here.</p>
-				</div>*@
+			<p class="help-block">Example block-level help text here.</p>
+		</div>*@
 			<div class="form-group">
 				<label>角色</label>
 				<select id="js-roleOptions" class="form-control select2" multiple data-placeholder="选择角色" style="width: 100%;">
@@ -129,7 +117,7 @@
 				{
 					<a class="btn btn-default" href="javascript:history.go(-1);">返回</a>
 				}
-				<input id="js-btn-save" class="btn btn-primary" type="submit" value="保存" onclick="return saveData();" />
+				<button id="js-btn-save" class="btn btn-primary" onclick="saveData()">保存</button>
 			</div>
 		</div>
 	</form>

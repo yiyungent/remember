@@ -18,6 +18,14 @@
 	<script>
 
 		// start 删除
+		function deleteSuccess(data) {
+			if (data.code <= 0) {
+				showMessage(data.message, -1);
+			} else {
+				showMessage(data.message, 1);
+				window.location.href = window.location.href;
+			}
+		}
 		function deleteOp(id) {
 			$("#js-id").val(id);
 			$('#deleteModal').modal();
@@ -29,25 +37,7 @@
 				url: '/Admin/RoleInfo/Delete',
 				data: { id: id },
 				dataType: 'json',
-				success: function (data) {
-					if (data.code <= 0) {
-						// 删除失败
-						$("#js-message").attr("class", "alert alert-danger").find(".message").html(data.message);
-					} else {
-						// 删除成功
-						$("#js-message").attr("class", "alert alert-success").find(".message").html(data.message);
-						$(".table").find("tr[data-tr-id='" + id + "']").remove();
-						// 检查当前当前页面是否已经全部删除完，若是，则点击当前页码，重新加载
-						var trNum = $(".table").find("tr").length - 1;
-						if (trNum == 0) {
-							$("#js-page").find("li[class*='active']>a")[0].click();
-						}
-					}
-					// 3s 后隐藏
-					setTimeout(function () {
-						$("#js-message").fadeOut("slow");
-					}, 3000);
-				}
+				success: deleteSuccess
 			});
 		}
 		// end 删除
@@ -62,27 +52,7 @@
 }
 
 <!-- start 删除确认框 -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-				<h4 class="modal-title">确认框</h4>
-			</div>
-			<div class="modal-body">
-				<form>
-					<div class="form-group">
-						<label for="message-text" class="control-label">确定要删除？</label>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
-				<button onclick="deleteSubmit()" type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
-			</div>
-		</div>
-	</div>
-</div>
+@{ Html.RenderPartial("_DeleteModelPartial"); }
 <!-- end 删除确认框 -->
 <!-- start 提示框 -->
 @{ Html.RenderPartial("_MessagePartial"); }

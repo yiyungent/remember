@@ -23,7 +23,6 @@
 				data: $("#js-form").serialize(),
 				success: saveDataSuccess
 			});
-			return false;
 		}
 	</script>
 }
@@ -58,7 +57,7 @@
 				{
 					<a class="btn btn-default" href="javascript:history.go(-1);">返回</a>
 				}
-				<input id="js-btn-save" class="btn btn-primary" type="submit" onclick="return saveData();" value="保存" />
+				<button id="js-btn-save" class="btn btn-primary" onclick="saveData()">保存</button>
 			</div>
 		</div>
 	</form>

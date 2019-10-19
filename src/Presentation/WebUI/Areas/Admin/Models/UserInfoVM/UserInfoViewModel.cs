@@ -98,6 +98,7 @@ namespace WebUI.Areas.Admin.Models.UserInfoVM
             {
                 ID = dbModel.ID,
                 InputUserName = dbModel.UserName,
+                InputDescription = dbModel.Description,
                 InputAvatar = dbModel.Avatar,
                 InputEmail = dbModel.Email,
                 RoleOptions = roleOptions,
@@ -107,35 +108,5 @@ namespace WebUI.Areas.Admin.Models.UserInfoVM
         }
         #endregion
 
-        #region 输入模型->数据库模型
-        public static explicit operator UserInfo(UserInfoViewModel inputModel)
-        {
-            UserInfo dbModel = null;
-            if (inputModel.ID == 0)
-            {
-                // 创建
-                dbModel = new UserInfo();
-                dbModel.CreateTime = DateTime.Now;
-            }
-            else
-            {
-                // 修改
-                dbModel = ContainerManager.Resolve<IUserInfoService>().Find(m => m.ID == inputModel.ID && !m.IsDeleted);
-            }
-            #region 赋值转换
-            if (!string.IsNullOrEmpty(inputModel.InputPassword))
-            {
-                dbModel.Password = EncryptHelper.MD5Encrypt32(inputModel.InputPassword);
-            }
-            
-            dbModel.UserName = inputModel.InputUserName?.Trim();
-            //dbModel.Avatar = inputModel.InputAvatar?.Trim();
-            dbModel.Email = inputModel.InputEmail?.Trim();
-            dbModel.Description = inputModel.InputDescription?.Trim();
-            #endregion
-
-            return dbModel;
-        }
-        #endregion
     }
 }
