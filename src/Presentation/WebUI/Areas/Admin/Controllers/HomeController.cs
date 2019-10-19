@@ -18,11 +18,22 @@ namespace WebUI.Areas.Admin.Controllers
 {
     public class HomeController : Controller
     {
+        #region Fields
         private AuthManager _authManager;
+        private readonly IUserInfoService _userInfoService;
+        private readonly IRoleInfoService _roleInfoService;
+        private readonly IRole_MenuService _role_MenuService;
+        private readonly ISys_MenuService _sys_MenuService;
+        #endregion
 
-        public HomeController()
+        public HomeController(IUserInfoService userInfoService, IRoleInfoService roleInfoService, IRole_MenuService role_MenuService, ISys_MenuService sys_MenuService)
         {
             this._authManager = new AuthManager();
+            this._userInfoService = userInfoService;
+            this._roleInfoService = roleInfoService;
+            this._role_MenuService = role_MenuService;
+            this._sys_MenuService = sys_MenuService;
+
             string title = WebSetting.Get("WebUITitle").Split(new string[] { "-", " " }, StringSplitOptions.RemoveEmptyEntries)[0];
             ViewBag.PageHeader = title.Split(new string[] { "-", " " }, StringSplitOptions.RemoveEmptyEntries)[0];
             ViewBag.PageHeaderDescription = title;
@@ -31,11 +42,11 @@ namespace WebUI.Areas.Admin.Controllers
             UserInfo currentUserInfo = AccountManager.GetCurrentUserInfo(true);
             ViewBag.CurrentUserInfo = currentUserInfo;
             // TODO: 后台菜单加载
-            ViewBag.MenuList = null;
+            ViewBag.MenuList = this._userInfoService.UserHaveSys_Menus(currentUserInfo.ID);
         }
 
         #region 后台框架
-        public ViewResult Index(CurrentAccountModel currentAccount)
+        public ViewResult Index()
         {
             return View();
         }
@@ -50,7 +61,8 @@ namespace WebUI.Areas.Admin.Controllers
 
         public PartialViewResult LeftMenuPartial()
         {
-            ViewBag.AllMenuList = null;// this._authManager.GetMenuListByUserInfo(AccountManager.GetCurrentUserInfo());
+            int currentUserId = AccountManager.GetCurrentAccount().UserId;
+            ViewBag.AllMenuList = this._userInfoService.UserHaveSys_Menus(currentUserId);// this._authManager.GetMenuListByUserInfo(AccountManager.GetCurrentUserInfo());
 
             return PartialView("_LeftMenuPartial");
         }

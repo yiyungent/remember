@@ -13,5 +13,7 @@ namespace Services.Interface
         bool Exists(string userName, int exceptId = 0);
 
         IList<string> UserHaveAuthKeys(int userId);
+
+        IList<Sys_Menu> UserHaveSys_Menus(int userId);
     }
 }
