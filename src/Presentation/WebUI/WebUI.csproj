@@ -8924,6 +8924,7 @@
     <Content Include="assets\libs\zui\dist\lib\kindeditor\plugins.zip" />
     <Content Include="assets\libs\zui\dist\lib\kindeditor\README.md" />
     <Content Include="assets\libs\zui\dist\lib\uploader\Moxie.xap" />
+    <Content Include="Areas\Admin\Views\RoleInfo\Create.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Install\Index.cshtml" />

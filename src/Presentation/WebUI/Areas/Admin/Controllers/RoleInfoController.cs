@@ -184,6 +184,40 @@ namespace WebUI.Areas.Admin.Controllers
 
         #endregion
 
+        #region 添加
+        [HttpGet]
+        public ViewResult Create()
+        {
+            RoleInfoViewModel viewModel = new RoleInfoViewModel();
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public JsonResult Create(RoleInfoViewModel inputModel)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    this._roleInfoService.Create(new RoleInfo
+                    {
+                        Name = inputModel.Name,
+                    });
+
+                    return Json(new { code = 1, message = "保存成功" });
+                }
+                else
+                {
+                    return Json(new { code = -1, message = "不合理的输入" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = -2, message = "保存失败" });
+            }
+        }
+        #endregion
 
         #region 获取此角色的菜单权限树
         /// <summary>

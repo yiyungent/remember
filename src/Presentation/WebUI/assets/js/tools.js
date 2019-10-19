@@ -3,7 +3,7 @@
  * @param {string} message 消息
  * @param {number} type 成功消息 1, 失败消息 -1
  */
-function sendTipMsg(message, type) {
+function showMessage(message, type) {
 	var icon = "/assets/images/notify/success.png";
 	if (type < 0) {
 		icon = "/assets/images/notify/failure.png";
@@ -19,7 +19,7 @@ function sendTipMsg(message, type) {
 	// 先检查浏览器是否支持
 	if (!window.Notification) {
 		//console.log('浏览器不支持通知');
-		showMessage(message, type);
+		simpleMsg(message, type);
 	} else {
 		// 检查用户曾经是否同意接受通知
 		if (Notification.permission === 'granted') {
@@ -32,17 +32,17 @@ function sendTipMsg(message, type) {
 					var notification = new Notification(message, options); // 显示通知
 				} else if (permission === 'default') {
 					//console.warn('用户关闭授权 未刷新页面之前 可以再次请求授权');
-					showMessage(message, type);
+					simpleMsg(message, type);
 				} else {
 					// denied
 					//console.log('用户拒绝授权 不能显示通知');
-					showMessage(message, type);
+					simpleMsg(message, type);
 				}
 			});
 		} else {
 			// denied 用户拒绝
 			//console.log('用户曾经拒绝显示通知');
-			showMessage(message, type);
+			simpleMsg(message, type);
 		}
 	}
 }
@@ -52,7 +52,7 @@ function sendTipMsg(message, type) {
  * @param {string} message 消息
  * @param {number} type 成功消息 1, 失败消息 -1
  */
-function showMessage(message, type) {
+function simpleMsg(message, type) {
 	$("#js-message").fadeIn();
 	switch (type) {
 		case -1:

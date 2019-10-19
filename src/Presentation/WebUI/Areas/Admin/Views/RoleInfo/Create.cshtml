@@ -17,7 +17,7 @@
 		function saveData() {
 			$("#js-btn-save").html("保存中").attr("disabled", "disabled");
 			$.ajax({
-				url: "/Admin/RoleInfo/Edit",
+				url: "/Admin/RoleInfo/Create",
 				type: "post",
 				dataType: "json",
 				data: $("#js-form").serialize(),
@@ -34,7 +34,7 @@
 <!-- general form elements -->
 <div class="box box-primary">
 	<div class="box-header with-border">
-		<h3 class="box-title">编辑</h3>
+		<h3 class="box-title">添加</h3>
 	</div>
 	<!-- /.box-header -->
 	<!-- form start -->
@@ -42,11 +42,7 @@
 		@Html.HiddenFor(m => m.ID)
 		<div class="box-body">
 			<div class="form-group">
-				<label for="InputUserName">ID</label>
-				@Html.TextBoxFor(m => m.ID, new { @class = "form-control", @readonly = "readonly" })
-			</div>
-			<div class="form-group">
-				<label for="InputEmail">角色名</label>
+				<label>角色名</label>
 				@Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "请输入角色名" })
 			</div>
 		</div>

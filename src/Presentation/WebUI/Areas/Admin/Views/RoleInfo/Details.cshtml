@@ -4,8 +4,43 @@
 	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
 }
 
-<div class="input-group">
-	<a class="btn btn-default" href="javascript:history.go(-1);">返回</a>
-	@Html.TextBoxFor(m => m.ID, new { @class = "form-control", @readonly = "readonly" })
-	@Html.TextBoxFor(m => m.Name, new { @class = "form-control", @readonly = "readonly" })
+<!-- general form elements -->
+<div class="box box-primary">
+	<div class="box-header with-border">
+		<h3 class="box-title">明细</h3>
+	</div>
+	<!-- /.box-header -->
+	<!-- form start -->
+	<form id="js-form">
+		@Html.HiddenFor(m => m.ID)
+		<div class="box-body">
+			<div class="form-group">
+				<label>ID</label>
+				@Html.TextBoxFor(m => m.ID, new { @class = "form-control", @readonly = "readonly" })
+			</div>
+			<div class="form-group">
+				<label>角色名</label>
+				@Html.TextBoxFor(m => m.Name, new { @class = "form-control", @readonly = "readonly" })
+			</div>
+			<div class="form-group">
+				<label>此角色的用户数</label>
+				@Html.TextBoxFor(m => m.Role_Users.Count, new { @class = "form-control", @readonly = "readonly" })
+			</div>
+		</div>
+		<!-- /.box-body -->
+
+		<div class="box-footer">
+			<div class="btn-group">
+				@if (TempData["RedirectUrl"] != null)
+				{
+					<a class="btn btn-default" href="@TempData["RedirectUrl"].ToString()">返回</a>
+				}
+				else
+				{
+					<a class="btn btn-default" href="javascript:history.go(-1);">返回</a>
+				}
+			</div>
+		</div>
+	</form>
 </div>
+<!-- /.box -->
