@@ -132,8 +132,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\InstalledPlugins.txt" />
-    <Content Include="App_Data\Logs\Logs_20191008.txt" />
-    <Content Include="App_Data\Logs\Logs_20191009.txt" />
     <Content Include="assets\css\app.css" />
     <Content Include="assets\css\base.css" />
     <Content Include="assets\css\comment.min.css" />
@@ -8961,6 +8959,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\Logs\" />
     <Folder Include="Areas\Account\Views\Control\" />
     <Folder Include="Areas\Admin\Models\CardBoxVM\" />
     <Folder Include="Areas\Admin\Views\Control\" />

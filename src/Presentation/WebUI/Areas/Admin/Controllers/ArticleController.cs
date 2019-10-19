@@ -7,6 +7,7 @@ using Services.Interface;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -51,17 +52,15 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 case "title":
                     queryType.Text = "标题";
-                    //queryConditions.Add(Expression.Like("Title", query, MatchMode.Anywhere));
                     list = this._articleService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.Title.Contains(query) && !m.IsDeleted, m => m.ID, false).ToList();
                     break;
                 case "id":
                     queryType.Text = "ID";
-                    //queryConditions.Add(Expression.Eq("ID", int.Parse(query)));
-                    list = this._articleService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.ID == int.Parse(query) && !m.IsDeleted, m => m.ID, false).ToList();
+                    int articleId = int.Parse(query);
+                    list = this._articleService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.ID == articleId && !m.IsDeleted, m => m.ID, false).ToList();
                     break;
                 default:
                     queryType.Text = "标题";
-                    //queryConditions.Add(Expression.Like("Title", query, MatchMode.Anywhere));
                     list = this._articleService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.Title.Contains(query) && !m.IsDeleted, m => m.ID, false).ToList();
                     break;
             }
@@ -74,10 +73,9 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpGet]
         public ViewResult Edit(int id)
         {
-            //Article dbModel = Container.Instance.Resolve<ArticleService>().GetEntity(id);
-            Article dbModel = this._articleService.Find(m => m.ID == id && !m.IsDeleted);
+            Article viewModel = this._articleService.Find(m => m.ID == id && !m.IsDeleted);
 
-            return View(dbModel);
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -96,7 +94,6 @@ namespace WebUI.Areas.Admin.Controllers
 
                     #endregion
 
-                    //ArticleService articleService = Container.Instance.Resolve<ArticleService>();
                     Article dbModel = this._articleService.Find(m => m.ID == inputModel.ID && !m.IsDeleted);
 
                     // 输入模型->数据库模型
@@ -105,7 +102,6 @@ namespace WebUI.Areas.Admin.Controllers
                     dbModel.CustomUrl = inputModel.CustomUrl;
                     dbModel.LastUpdateTime = DateTime.Now;
 
-                    //articleService.Edit(dbModel);
                     this._articleService.Update(dbModel);
 
                     // 添加到队列-新建此文章索引 -- 不需要先删除，因为 SearchIndexManager 会先删除此ID的索引，再新建
@@ -207,5 +203,68 @@ namespace WebUI.Areas.Admin.Controllers
             return View(dbModel);
         }
         #endregion
+
+        #region 上传图片
+        [HttpPost]
+        public JsonResult UploadImg()
+        {
+            try
+            {
+                int currentUserId = AccountManager.GetCurrentAccount().UserId;
+
+                // 保存到当前用户的文件夹
+                string basePath = $"~/Upload/images/{currentUserId}/{DateTime.Now.ToString("yyyy-MM-dd")}/";
+
+                // 如果路径含有~，即需要服务器映射为绝对路径，则进行映射
+                basePath = (basePath.IndexOf("~") > -1) ? System.Web.HttpContext.Current.Server.MapPath(basePath) : basePath;
+                HttpPostedFile file = System.Web.HttpContext.Current.Request.Files[0];
+                // 如果目录不存在，则创建目录
+                if (!Directory.Exists(basePath))
+                {
+                    Directory.CreateDirectory(basePath);
+                }
+
+                string fileName = System.Web.HttpContext.Current.Request["name"];
+                if (string.IsNullOrEmpty(fileName))
+                {
+                    fileName = file.FileName;
+                }
+                // 文件保存
+                string saveFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                string fullPath = basePath + saveFileName;
+                file.SaveAs(fullPath);
+
+                string imgUrl = ($"/Upload/images/{currentUserId}/{DateTime.Now.ToString("yyyy-MM-dd")}/" + saveFileName).ToHttpAbsoluteUrl();
+                return Json(new WangEditorUploadImgResult
+                {
+                    errno = 0,
+                    data = new string[] { imgUrl }
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new WangEditorUploadImgResult
+                {
+                    errno = -1,
+                    data = new string[] { }
+                });
+            }
+        }
+        #endregion
+
+        public sealed class WangEditorUploadImgResult
+        {
+
+            /// <summary>
+            /// errno 即错误代码，0 表示没有错误。
+            /// 如果有错误，errno != 0，可通过下文中的监听函数 fail 拿到该错误码进行自定义处理
+            /// </summary>
+            public int errno { get; set; }
+
+            /// <summary>
+            /// data 是一个数组，返回若干图片的线上地址
+            /// </summary>
+            public string[] data { get; set; }
+        }
     }
 }

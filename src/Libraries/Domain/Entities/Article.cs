@@ -21,7 +21,7 @@ namespace Domain.Entities
         /// 内容
         /// </summary>
         [Column(TypeName = "text")]
-        [StringLength(30)]
+        [StringLength(8000)]
         public string Content { get; set; }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Domain.Entities
         /// <summary>
         /// 自定义Url
         /// </summary>
-        [StringLength(500)]
+        [StringLength(1000)]
         [Column(TypeName = "text")]
         public string CustomUrl { get; set; }
 
