@@ -12,7 +12,7 @@
 
 	// 当前登录账号
 	CurrentAccountModel currentAccount = AccountManager.GetCurrentAccount();
-	UserInfo currentUserInfo = currentAccount.UserInfo;
+	UserInfo currentUserInfo = AccountManager.GetCurrentUserInfo(true);
 	currentUserInfo.Avatar = currentUserInfo.Avatar.ToHttpAbsoluteUrl();
 	EditUserInfoViewModel editUserInfoModel = new EditUserInfoViewModel
 	{

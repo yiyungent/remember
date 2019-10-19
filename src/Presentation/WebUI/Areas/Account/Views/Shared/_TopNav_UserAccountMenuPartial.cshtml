@@ -1,11 +1,12 @@
 ﻿@using Domain.Entities
 @using WebUI.Extensions
-@using Framework.HtmlHelpers
+@using WebUI.HtmlHelpers
 @using Framework.Models
+@using Framework.Infrastructure.Concrete
 @{
 	Layout = null;
-	CurrentAccountModel currentAccount = ViewBag.CurrentAccount;
-	UserInfo currentUserInfo = currentAccount.UserInfo;
+	CurrentAccountModel currentAccount = AccountManager.GetCurrentAccount();
+	UserInfo currentUserInfo = AccountManager.GetCurrentUserInfo(true);
 	string roleName = ViewBag.RoleName;
 }
 

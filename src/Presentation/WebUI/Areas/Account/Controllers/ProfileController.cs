@@ -73,10 +73,6 @@ namespace WebUI.Areas.Account.Controllers
                 }
 
                 // 为取到最新数据，从数据库中拿
-                //UserInfo dbUserInfo = Container.Instance.Resolve<UserInfoService>().Query(new List<ICriterion>
-                //{
-                //    Expression.Eq("UserName", currentLoginUserInfo.UserName)
-                //}).FirstOrDefault();
                 UserInfo dbUserInfo = this._userInfoService.Find(m =>
                     m.UserName == currentLoginUserInfo.UserName
                     && !m.IsDeleted
@@ -85,10 +81,7 @@ namespace WebUI.Areas.Account.Controllers
                 dbUserInfo.Email = inputModel.InputEmail;
                 dbUserInfo.Description = inputModel.InputDescription;
 
-                //Container.Instance.Resolve<UserInfoService>().Edit(dbUserInfo);
                 this._userInfoService.Update(dbUserInfo);
-                // 更新 Session 中登录用户信息
-                //AccountManager.UpdateSessionAccount();
 
                 return Json(new { code = 1, message = "保存成功" });
             }

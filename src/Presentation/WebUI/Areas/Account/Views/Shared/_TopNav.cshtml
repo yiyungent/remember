@@ -9,7 +9,7 @@
 	Layout = null;
 	// 当前登录账号
 	CurrentAccountModel currentAccount = AccountManager.GetCurrentAccount();
-	UserInfo currentUserInfo = currentAccount.UserInfo;
+	UserInfo currentUserInfo = AccountManager.GetCurrentUserInfo(true);
 	string roleName = currentUserInfo.RoleInfos.FirstOrDefault() == null ? "" : currentUserInfo.RoleInfos.FirstOrDefault().Name;
 
 	ViewBag.CurrentAccount = currentAccount;

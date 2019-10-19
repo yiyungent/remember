@@ -50,10 +50,11 @@ namespace WebUI.Areas.Account.Controllers
             ViewBag.ReturnUrl = returnUrl;
 
             #region 检查 登录状态
-            //if (Session[_sessionKeyLoginAccount] != null)
-            //{
-            //    return LoginSuccessRedirectResult(returnUrl);
-            //}
+            CurrentAccountModel currentAccount = AccountManager.GetCurrentAccount();
+            if (!currentAccount.IsGuest)
+            {
+                return LoginSuccessRedirectResult(returnUrl);
+            }
             #region 记住我
             if (Request.Cookies.AllKeys.Contains(_cookieKeyToken))
             {
@@ -70,9 +71,9 @@ namespace WebUI.Areas.Account.Controllers
                     if (user == null)
                     {
                         // 口令不正确
-                        Response.Cookies[_cookieKeyToken].Expires = DateTime.UtcNow.AddDays(-1);
+                        Response.Cookies[_cookieKeyToken].Expires = DateTime.Now.AddDays(-1);
                     }
-                    else if (user.LastLoginTime.AddDays(_rememberMeDayCount) > DateTime.UtcNow)
+                    else if (user.LastLoginTime.AddDays(_rememberMeDayCount) > DateTime.Now)
                     {
                         // 最多 "记住我" 保存7天的 登录状态
                         //Session[_sessionKeyLoginAccount] = user.ID;

@@ -11,7 +11,7 @@
 	Layout = null;
 
 	// 当前登录账号
-	UserInfo currentUserInfo = AccountManager.GetCurrentUserInfo();
+	UserInfo currentUserInfo = AccountManager.GetCurrentUserInfo(true);
 	string roleName = currentUserInfo.RoleInfos.FirstOrDefault() == null ? "" : currentUserInfo.RoleInfos.FirstOrDefault().Name;
 
 	//ViewBag.CurrentAccount = currentAccount;
@@ -19,10 +19,6 @@
 
 
 	IDictionary<int, string> themeTemplateDic = new Dictionary<int, string>();
-	//	IList<ThemeTemplate> themeTemplates = Container.Instance.Resolve<ThemeTemplateService>().Query(new List<ICriterion>
-	//{
-	//Expression.Eq("IsOpen", 1)
-	//});
 	IList<ThemeTemplate> themeTemplates = ContainerManager.Resolve<IThemeTemplateService>().Filter(m => m.IsOpen == 1 && !m.IsDeleted).ToList();
 	themeTemplateDic = new Dictionary<int, string>();
 	foreach (var item in themeTemplates)
