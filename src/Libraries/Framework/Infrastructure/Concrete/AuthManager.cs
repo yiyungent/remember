@@ -100,40 +100,7 @@ namespace Framework.Infrastructure.Concrete
             IList<string> authKeys = HttpSingleRequestStore.GetData($"UserHaveAuthKeys({userId})") as IList<string>;
             if (authKeys == null)
             {
-                authKeys = new List<string>();
-                var authKeyCompare = new AuthKeyCompare();
-                if (userId != 0)
-                {
-                    // 非游客
-                    UserInfo userInfo = ContainerManager.Resolve<IUserInfoService>().Find(m => m.ID == userId && !m.IsDeleted);
-                    if (userInfo.Role_Users != null && userInfo.Role_Users.Count >= 1)
-                    {
-                        var roleInfos = userInfo.Role_Users.Select(m => m.RoleInfo);
-                        foreach (var role in roleInfos)
-                        {
-                            var funcs = role.FunctionInfos;
-                            foreach (var func in funcs)
-                            {
-                                if (!authKeys.Contains(func.AuthKey, authKeyCompare))
-                                {
-                                    authKeys.Add(func.AuthKey);
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    // 游客
-                    RoleInfo roleInfo = ContainerManager.Resolve<IRoleInfoService>().Find(m => m.ID == 2);
-                    foreach (var func in roleInfo.FunctionInfos)
-                    {
-                        if (!authKeys.Contains(func.AuthKey, authKeyCompare))
-                        {
-                            authKeys.Add(func.AuthKey);
-                        }
-                    }
-                }
+                authKeys = ContainerManager.Resolve<IUserInfoService>().UserHaveAuthKeys(userId);
 
                 HttpSingleRequestStore.SetData($"UserHaveAuthKeys({userId})", authKeys);
             }
