@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
 using AutoMapperConfig;
-using Framework.Infrastructure.Abstract;
 using Framework.Infrastructure.Concrete;
 using Repositories.Core;
 using Repositories.Implement;

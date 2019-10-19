@@ -19,7 +19,7 @@ using PluginHub.Infrastructure;
 using PluginHub.Web.Mvc.Routes;
 using Framework.Config;
 using Framework.Common;
-//using log4net;
+using log4net;
 using System.Configuration;
 using Framework.Extensions;
 using WebUI.Attributes;
@@ -42,6 +42,7 @@ namespace WebUI
             RegisterRoutes(RouteTable.Routes);
 
             //initialize engine context
+            // TODO: The requested service 'PluginHub.Infrastructure.ITypeFinder' has not been registered
             //EngineContext.Initialize(false);
 
             FrameworkConfig.Register();
@@ -51,48 +52,48 @@ namespace WebUI
 
             #region log4net
 
-            //bool enableLog4Net = true;
-            //// 先尝试查询数据库
-            //try
-            //{
-            //    enableLog4Net = Convert.ToInt32(WebSetting.Get("EnableLog")) == 1;
-            //}
-            //catch (Exception ex)
-            //{ }
-            //// 再以配置文件
-            //// 启用 = 数据库配置启用 且 配置文件启用
-            //if (enableLog4Net)
-            //{
-            //    enableLog4Net = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableLog"]);
-            //}
-            //if (enableLog4Net)
-            //{
-            //    log4net.Config.XmlConfigurator.Configure();
-            //    GlobalFilters.Filters.Add(new LogErrorAttribute());
-            //    ThreadPool.QueueUserWorkItem(o =>
-            //    {
-            //        while (true)
-            //        {
-            //            if (LogErrorAttribute.ExceptionQueue.Count > 0)
-            //            {
-            //                Exception ex = LogErrorAttribute.ExceptionQueue.Dequeue();
-            //                if (ex != null)
-            //                {
-            //                    ILog logger = LogManager.GetLogger("testError");
-            //                    logger.Error(ex.ToString()); //将异常信息写入Log4Net中  
-            //                }
-            //                else
-            //                {
-            //                    Thread.Sleep(50);
-            //                }
-            //            }
-            //            else
-            //            {
-            //                Thread.Sleep(50);
-            //            }
-            //        }
-            //    });
-            //}
+            bool enableLog4Net = true;
+            // 先尝试查询数据库
+            try
+            {
+                enableLog4Net = Convert.ToInt32(WebSetting.Get("EnableLog")) == 1;
+            }
+            catch (Exception ex)
+            { }
+            // 再以配置文件
+            // 启用 = 数据库配置启用 且 配置文件启用
+            if (enableLog4Net)
+            {
+                enableLog4Net = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableLog"]);
+            }
+            if (enableLog4Net)
+            {
+                log4net.Config.XmlConfigurator.Configure();
+                GlobalFilters.Filters.Add(new LogErrorAttribute());
+                ThreadPool.QueueUserWorkItem(o =>
+                {
+                    while (true)
+                    {
+                        if (LogErrorAttribute.ExceptionQueue.Count > 0)
+                        {
+                            Exception ex = LogErrorAttribute.ExceptionQueue.Dequeue();
+                            if (ex != null)
+                            {
+                                ILog logger = LogManager.GetLogger("testError");
+                                logger.Error(ex.ToString()); //将异常信息写入Log4Net中  
+                            }
+                            else
+                            {
+                                Thread.Sleep(50);
+                            }
+                        }
+                        else
+                        {
+                            Thread.Sleep(50);
+                        }
+                    }
+                });
+            }
             #endregion
         }
 
@@ -232,6 +233,7 @@ namespace WebUI
             );
 
             // register custom routes (plugins, etc)
+            // TODO: Could not load file or assembly 'Autofac.Integration.Mvc, Version=3.3.0.0, Culture=neutral,
             //var routePublisher = EngineContext.Current.Resolve<IRoutePublisher>();
             //routePublisher.RegisterRoutes(routes);
 
