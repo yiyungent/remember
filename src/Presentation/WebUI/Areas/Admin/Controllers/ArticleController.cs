@@ -128,10 +128,11 @@ namespace WebUI.Areas.Admin.Controllers
         {
             try
             {
-                //Container.Instance.Resolve<ArticleService>().Delete(id);
                 var dbModel = this._articleService.Find(m => m.ID == id && !m.IsDeleted);
                 dbModel.IsDeleted = true;
                 dbModel.DeletedAt = DateTime.Now;
+                this._articleService.Update(dbModel);
+
 
                 // 添加到队列-删除此文章索引
                 //SearchIndexManager.GetInstance().DeleteQueue(id.ToString());
@@ -145,12 +146,13 @@ namespace WebUI.Areas.Admin.Controllers
         }
         #endregion
 
-        #region 新增
+        #region 添加
         [HttpGet]
         public ViewResult Create()
         {
             Article viewModel = new Article();
-            viewModel.CustomUrl = "article-" + DateTime.Now.Year + "-" + DateTime.Now.Month + "-" + DateTime.Now.Day;
+            DateTime now = DateTime.Now;
+            viewModel.CustomUrl = $"article-{now.Year}-{now.Month}-{now.Day}-" + Guid.NewGuid().ToString().Substring(0, 8) + ".html";
 
             return View(viewModel);
         }
@@ -169,12 +171,14 @@ namespace WebUI.Areas.Admin.Controllers
                     #endregion
 
                     Article dbModel = inputModel;
-                    dbModel.AuthorId = AccountManager.GetCurrentUserInfo().ID;
+                    dbModel.AuthorId = AccountManager.GetCurrentAccount().UserId;
                     dbModel.CreateTime = DateTime.Now;
                     dbModel.LastUpdateTime = DateTime.Now;
                     dbModel.CustomUrl = inputModel.CustomUrl;
 
                     this._articleService.Create(dbModel);
+
+                    // TODO: 添加搜索索引
                     //int lastId = _articleService.GetLastId();
 
                     // 添加到队列-新建此文章索引
@@ -198,9 +202,9 @@ namespace WebUI.Areas.Admin.Controllers
         #region 用于自定义Url的文章内容展示
         public ActionResult Page()
         {
-            Article dbModel = (Article)System.Web.HttpContext.Current.Items["CmsPage"];
+            Article viewModel = (Article)System.Web.HttpContext.Current.Items["CmsPage"];
 
-            return View(dbModel);
+            return View(viewModel);
         }
         #endregion
 

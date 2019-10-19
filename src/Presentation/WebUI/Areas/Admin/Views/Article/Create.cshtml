@@ -7,32 +7,12 @@
 	Html.EnableClientValidation(false);
 }
 @section head {
-	<link href="/assets/libs/AdminLTE/bower_components/select2/dist/css/select2.min.css" rel="stylesheet" />
-	<!-- 重新覆盖掉 select2 所覆盖的主题样式 -->
-	<link rel="stylesheet" href="/assets/libs/AdminLTE/dist/css/AdminLTE.min.css">
 }
 @section body {
-	<script src="/assets/libs/AdminLTE/bower_components/select2/dist/js/select2.full.min.js"></script>
 	<script src="/assets/libs/wangEditor/wangEditor.min.js"></script>
 	<script>
 
-		function showMessage(message, type) {
-			$("#js-message").fadeIn();
-			switch (type) {
-				case -1:
-					$("#js-message").attr("class", "alert alert-danger").find(".message").html(message);
-					break;
-				case 1:
-					$("#js-message").attr("class", "alert alert-success").find(".message").html(message);
-					break;
-			}
-			// 3s 后隐藏
-			setTimeout(function () {
-				$("#js-message").fadeOut("slow");
-			}, 3000);
-		}
-
-		function onSuccess(data) {
+		function saveDataSuccess(data) {
 			if (data.code <= 0) {
 				showMessage(data.message, -1);
 			} else {
@@ -48,26 +28,36 @@
 				type: "post",
 				dataType: "json",
 				data: $("#js-form").serialize(),
-				success: onSuccess
+				success: saveDataSuccess
 			});
-			return false;
 		}
 
 
 		$(function () {
-			//Initialize Select2 Elements
-			$(".select2").select2();
-
+			
 			var E = window.wangEditor;
 			var editor = new E('#js-editArea');
+			// editor 配置
+			// 关闭掉粘贴样式的过滤
+			editor.customConfig.pasteFilterStyle = false;
+			// 上传图片到服务器
+			editor.customConfig.uploadImgServer = '/Admin/Article/UploadImg';
+			// 限制一次最多上传 1 张图片
+			editor.customConfig.uploadImgMaxLength = 1;
+			// 上传图片的错误提示 自定义提示方法
+			editor.customConfig.customAlert = function (info) {
+				showMessage(info, -1);
+			}
 			var $hiddenEditArea = $("#Content");
 			editor.customConfig.onchange = function (html) {
 				// 监控变化，同步更新到 textarea
-				$hiddenEditArea.val(html)
+				$hiddenEditArea.val(html);
 			}
 			editor.create();
-			// 初始化 textarea 的值
-			$hiddenEditArea.val(editor.txt.html())
+			// 初始化 editor 的内容
+			editor.txt.html($hiddenEditArea.val());
+
+
 		});
 
 	</script>
@@ -79,7 +69,7 @@
 <!-- general form elements -->
 <div class="box box-primary">
 	<div class="box-header with-border">
-		<h3 class="box-title">创建</h3>
+		<h3 class="box-title">添加</h3>
 	</div>
 	<!-- /.box-header -->
 	<!-- form start -->
@@ -92,7 +82,7 @@
 			<div class="form-group">
 				<label for="InputName">内容</label>
 				<div id="js-editArea"></div>
-				@Html.TextAreaFor(model => model.Content, new { style = "display: none;" })
+				@Html.TextAreaFor(m => m.Content, new { style = "display: none;" })
 			</div>
 			<div class="form-group">
 				<label for="CustomUrl">自定义URL</label>
@@ -114,7 +104,7 @@
 				{
 					<a class="btn btn-default" href="javascript:history.go(-1);">返回</a>
 				}
-				<input id="js-btn-save" class="btn btn-primary" type="submit" value="保存" onclick="return saveData();" />
+				<button id="js-btn-save" class="btn btn-primary" onclick="saveData()">保存</button>
 			</div>
 		</div>
 	</form>
