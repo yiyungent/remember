@@ -28,7 +28,13 @@
 	<script src="/assets/libs/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<!-- AdminLTE App -->
 	<script src="/assets/libs/AdminLTE/dist/js/adminlte.min.js"></script>
-	<script src="/assets/libs/push.js/push.min.js"></script>
+	<!-- tools.js -->
+	<script src="/assets/js/tools.js"></script>
+	<!-- start log -->
+	<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+	<script src="/assets/libs/ua-parser-js/dist/ua-parser.min.js"></script>
+	<script src="/assets/js/log.js"></script>
+	<!-- end log -->
 	<script>
 		$(function () {
 			$(".js-left-menu-a").on("click", function () {
@@ -51,21 +57,6 @@
 			document.getElementById("loading").style.display = "none";
 		}
 
-		function pushMessage(title, message, imageUrl, redirectUrl) {
-			Push.create(title, {
-				body: message,
-				icon: imageUrl,
-				timeout: 4000,
-				onClick: function () {
-					window.focus();
-					this.close();
-					if (redirectUrl != null && redirectUrl != '') {
-						window.location.href = redirectUrl;
-					}
-				}
-			});
-		}
-
 		function selectTemplate(id) {
 			$.ajax({
 				url: '/Admin/ThemeTemplate/SelectTemplate',
@@ -73,10 +64,11 @@
 				data: { id: id },
 				dataType: 'json',
 				success: function (data) {
-					if (data.code <= 0) {
-						pushMessage('切换模板失败', data.message);
-					} else {
+					if (data.code >= 1) {
 						window.location.href = window.location.href;
+						showMessage(data.message, 1);
+					} else {
+						showMessage(data.message, -1);
 					}
 				}
 			});

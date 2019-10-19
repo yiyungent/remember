@@ -251,7 +251,7 @@ namespace WebUI.Areas.Admin.Controllers
                 //Container.Instance.Resolve<UserInfoService>().Edit(currentAccount.UserInfo);
                 this._userInfoService.Update(userInfo);
 
-                return Json(new { code = 1, message = "切换模板成功" });
+                return Json(new { code = 1, message = $"切换模板 {dbModel.Title}({dbModel.TemplateName}) 成功" });
             }
             catch (Exception ex)
             {
