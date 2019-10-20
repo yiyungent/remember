@@ -8222,7 +8222,6 @@
     <Compile Include="Extensions\MappingExtensions.cs" />
     <Compile Include="Extensions\ModelStateDicExt.cs" />
     <Compile Include="Extensions\RequestExt.cs" />
-    <Compile Include="Extensions\UrlExt.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -8279,8 +8278,6 @@
     <Content Include="Areas\Admin\Views\CourseBox\EditVideo.cshtml" />
     <Content Include="Areas\Admin\Views\CourseBox\Index.cshtml" />
     <Content Include="Areas\Admin\Views\CourseBox\Videos.cshtml" />
-    <Content Include="Areas\Admin\Views\Home\Default.cshtml" />
-    <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
     <Content Include="Areas\Admin\Views\LogInfo\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Plugin\Configure.cshtml" />
     <Content Include="Areas\Admin\Views\Plugin\Index.cshtml" />
@@ -8952,6 +8949,7 @@
     <Folder Include="Areas\Account\Views\Control\" />
     <Folder Include="Areas\Admin\Models\CardBoxVM\" />
     <Folder Include="Areas\Admin\Views\Control\" />
+    <Folder Include="Areas\Admin\Views\Home\" />
     <Folder Include="assets\libs\senna\node_modules\bootstrap\dist\css\" />
     <Folder Include="assets\libs\senna\node_modules\bootstrap\dist\fonts\" />
     <Folder Include="assets\libs\senna\node_modules\bootstrap\dist\js\" />

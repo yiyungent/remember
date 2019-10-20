@@ -1,11 +1,29 @@
 ﻿@using Domain.Entities
+@using WebUI.Extensions
+@using Framework.Infrastructure.Concrete
+@using Services.Interface
+@using Core
 @{
 	Layout = null;
+
 	ViewBag.MenuIcon = "fa fa-circle-o";
-	IList<Sys_Menu> allMenuList = ViewBag.AllMenuList as IList<Sys_Menu>;
+
+	int currentUserId = AccountManager.GetCurrentAccount().UserId;
+	IList<Sys_Menu> allMenuList = ContainerManager.Resolve<IUserInfoService>().UserHaveSys_Menus(currentUserId);
+	Sys_Menu currentSysMenu = ViewBag.CurrentSysMenu;
+	// 查找当前路由对应菜单的父级菜单（如果有的话）
+	Sys_Menu menu = currentSysMenu;
+	IList<int> activeMenuIds = new List<int>();
+	while (menu != null)
+	{
+		activeMenuIds.Add(menu.ID);
+		// 循环(递归)查找父级菜单
+		menu = menu.Parent;
+	}
 }
-@GenerateMenu(allMenuList)
-@helper GenerateMenu(IList<Sys_Menu> allMenuList)
+@GenerateMenu(allMenuList, activeMenuIds)
+
+@helper GenerateMenu(IList<Sys_Menu> allMenuList, IList<int> activeMenuIds)
 {
 	IList<Sys_Menu> firstMenuList = (from m in allMenuList
 									 where m.Parent == null
@@ -17,51 +35,95 @@
 		{
 			if (firstMenuItem.Children == null || firstMenuItem.Children.Count == 0)
 			{
-				<li><a class="js-left-menu-a" href="@Url.Action(firstMenuItem.ActionName, firstMenuItem.ControllerName, new { area = firstMenuItem.AreaName })" target="iframe-content"><i class="@ViewBag.MenuIcon"></i> <span>@firstMenuItem.Name</span></a></li>
+				if (activeMenuIds.Contains(firstMenuItem.ID))
+				{
+					<li class="active"><a href="@Url.Action(firstMenuItem.ActionName, firstMenuItem.ControllerName, new { area = firstMenuItem.AreaName })"><i class="@ViewBag.MenuIcon"></i> <span>@firstMenuItem.Name</span></a></li>
+				}
+				else
+				{
+					<li><a href="@Url.Action(firstMenuItem.ActionName, firstMenuItem.ControllerName, new { area = firstMenuItem.AreaName })"><i class="@ViewBag.MenuIcon"></i> <span>@firstMenuItem.Name</span></a></li>
+				}
 			}
 			else
 			{
-				// 否则又是一个折叠菜单
-				<li class="treeview">
-					<a href="#">
-						<i class="@ViewBag.MenuIcon"></i> <span>@firstMenuItem.Name</span>
-						<span class="pull-right-container">
-							<i class="fa fa-angle-left pull-right"></i>
-						</span>
-					</a>
-					@SubMenuList(firstMenuItem, allMenuList)
-				</li>
+				if (activeMenuIds.Contains(firstMenuItem.ID))
+				{
+					// 否则又是一个折叠菜单
+					<li class="treeview active">
+						<a href="#">
+							<i class="@ViewBag.MenuIcon"></i> <span>@firstMenuItem.Name</span>
+							<span class="pull-right-container">
+								<i class="fa fa-angle-left pull-right"></i>
+							</span>
+						</a>
+						@SubMenuList(firstMenuItem, allMenuList, activeMenuIds)
+					</li>
+				}
+				else
+				{
+					<li class="treeview">
+						<a href="#">
+							<i class="@ViewBag.MenuIcon"></i> <span>@firstMenuItem.Name</span>
+							<span class="pull-right-container">
+								<i class="fa fa-angle-left pull-right"></i>
+							</span>
+						</a>
+						@SubMenuList(firstMenuItem, allMenuList, activeMenuIds)
+					</li>
+				}
 			}
 		}
 	</ul>
 }
 
 @* 递归查找子菜单项 *@
-@helper SubMenuList(Sys_Menu currentMenu, IList<Sys_Menu> allMenuList)
+@helper SubMenuList(Sys_Menu currentMenu, IList<Sys_Menu> allMenuList, IList<int> activeMenuIds)
 {
 	IList<Sys_Menu> subMenuList = (from m in allMenuList
 								   where m.ParentId != null && m.ParentId == currentMenu.ID
 								   orderby m.SortCode ascending
 								   select m).ToList();
-	<ul class="treeview-menu" data-pjax>
+	<ul class="treeview-menu">
 		@*此菜单项下又嵌套一个折叠菜单*@
 		@foreach (Sys_Menu menuItem in subMenuList)
 		{
 			if (menuItem.Children == null || menuItem.Children.Count == 0)
 			{
-				<li><a class="js-left-menu-a" href="@Url.Action(menuItem.ActionName, menuItem.ControllerName, new { area = menuItem.AreaName })" target="iframe-content"><i class="@ViewBag.MenuIcon"></i> <span>@menuItem.Name</span></a></li>
+				if (activeMenuIds.Contains(menuItem.ID))
+				{
+					<li class="active"><a href="@Url.Action(menuItem.ActionName, menuItem.ControllerName, new { area = menuItem.AreaName })"><i class="@ViewBag.MenuIcon"></i> <span>@menuItem.Name</span></a></li>
+				}
+				else
+				{
+					<li><a href="@Url.Action(menuItem.ActionName, menuItem.ControllerName, new { area = menuItem.AreaName })"><i class="@ViewBag.MenuIcon"></i> <span>@menuItem.Name</span></a></li>
+				}
 			}
 			else
 			{
-				<li class="treeview">
-					<a href="#">
-						<i class="@ViewBag.MenuIcon"></i> <span>@menuItem.Name</span>
-						<span class="pull-right-container">
-							<i class="fa fa-angle-left pull-right"></i>
-						</span>
-					</a>
-					@SubMenuList(menuItem, allMenuList)
-				</li>
+				if (activeMenuIds.Contains(menuItem.ID))
+				{
+					<li class="treeview active">
+						<a href="#">
+							<i class="@ViewBag.MenuIcon"></i> <span>@menuItem.Name</span>
+							<span class="pull-right-container">
+								<i class="fa fa-angle-left pull-right"></i>
+							</span>
+						</a>
+						@SubMenuList(menuItem, allMenuList, activeMenuIds)
+					</li>
+				}
+				else
+				{
+					<li class="treeview">
+						<a href="#">
+							<i class="@ViewBag.MenuIcon"></i> <span>@menuItem.Name</span>
+							<span class="pull-right-container">
+								<i class="fa fa-angle-left pull-right"></i>
+							</span>
+						</a>
+						@SubMenuList(menuItem, allMenuList, activeMenuIds)
+					</li>
+				}
 			}
 		}
 	</ul>

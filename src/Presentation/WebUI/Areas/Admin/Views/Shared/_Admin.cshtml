@@ -1,15 +1,18 @@
 ﻿@using Domain.Entities
 @using WebUI.Areas.Admin.Models.Common
 @using WebUI.Extensions
+@using WebUI.Areas.Admin.Models
+@using Framework.Extensions
+@using Framework.Infrastructure.Concrete
 @using PluginHub.Mvc5
 @{
 	Layout = null;
 
+	ViewBag.Title = "管理中心 - " + WebSetting.Get("WebUITitle");
+
 	AdminWebBaseInfoViewModel BaseInfo = ViewBag.AdminWebBaseInfo as AdminWebBaseInfoViewModel;
 	BaseInfo = BaseInfo ?? new AdminWebBaseInfoViewModel();
-	UserInfo CurrentUserInfo = ViewBag.CurrentUserInfo as UserInfo;
-
-	IList<Sys_Menu> MenuList = ViewBag.MenuList as IList<Sys_Menu>;
+	UserInfo currentUserInfo = AccountManager.GetCurrentUserInfo(true);
 }
 
 <!DOCTYPE html>
@@ -18,6 +21,20 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>@ViewBag.Title</title>
+	<!-- Tell the browser to be responsive to screen width -->
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" href="/assets/libs/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="/assets/libs/AdminLTE/bower_components/font-awesome/css/font-awesome.min.css">
+	<!-- Ionicons -->
+	<link rel="stylesheet" href="/assets/libs/AdminLTE/bower_components/Ionicons/css/ionicons.min.css">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="/assets/libs/AdminLTE/dist/css/AdminLTE.min.css">
+	<link rel="stylesheet" href="/assets/libs/AdminLTE/dist/css/skins/skin-blue.min.css">
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
 	@RenderSection("head", false)
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -25,7 +42,7 @@
 		<!-- Main Header -->
 		<header class="main-header">
 			<!-- Logo -->
-			<a href="index2.html" class="logo">
+			<a href="/" class="logo">
 				<!-- mini logo for sidebar mini 50x50 pixels -->
 				<span class="logo-mini">@Html.Raw(BaseInfo.Logo_mini)</span>
 				<!-- logo for regular state and mobile devices -->
@@ -57,7 +74,7 @@
 											<a href="#">
 												<div class="pull-left">
 													<!-- User Image -->
-													<img src="@CurrentUserInfo.Avatar.ToHttpAbsoluteUrl()" class="img-circle" alt="User Image">
+													<img src="@currentUserInfo.Avatar.ToHttpAbsoluteUrl()" class="img-circle" alt="User Image">
 												</div>
 												<!-- Message title and timestamp -->
 												<h4>
@@ -81,18 +98,18 @@
 							<!-- Menu Toggle Button -->
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								<!-- The user image in the navbar-->
-								<img src="@CurrentUserInfo.Avatar.ToHttpAbsoluteUrl()" class="user-image" alt="User Image">
+								<img src="@currentUserInfo.Avatar.ToHttpAbsoluteUrl()" class="user-image" alt="User Image">
 								<!-- hidden-xs hides the username on small devices so only the image appears. -->
-								<span class="hidden-xs">@CurrentUserInfo.UserName</span>
+								<span class="hidden-xs">@currentUserInfo.UserName</span>
 							</a>
 							<ul class="dropdown-menu">
 								<!-- The user image in the menu -->
 								<li class="user-header">
-									<img src="@CurrentUserInfo.Avatar.ToHttpAbsoluteUrl()" class="img-circle" alt="User Image">
+									<img src="@currentUserInfo.Avatar.ToHttpAbsoluteUrl()" class="img-circle" alt="User Image">
 									<p>
-										@CurrentUserInfo.UserName - @CurrentUserInfo.RoleInfos.FirstOrDefault().Name
+										@currentUserInfo.UserName - @currentUserInfo.RoleInfos.FirstOrDefault().Name
 										@*<small>Member since Nov. 2012</small>*@
-										<small>加入自 @CurrentUserInfo.CreateTime.ToRegTime()</small>
+										<small>加入自 @currentUserInfo.CreateTime.ToRegTime()</small>
 									</p>
 								</li>
 								<!-- Menu Body -->
@@ -113,7 +130,7 @@
 								<!-- Menu Footer-->
 								<li class="user-footer">
 									<div class="pull-left">
-										<a href="@Url.Action("Index", "Profile", new { area = "Account", userName = CurrentUserInfo.UserName })" class="btn btn-default btn-flat" target="_blank">个人中心</a>
+										<a href="@Url.Action("Index", "Profile", new { area = "Account", userName = currentUserInfo.UserName })" class="btn btn-default btn-flat" target="_blank">个人中心</a>
 									</div>
 									<div class="pull-right">
 										<a href="@Url.Action("Exit", "Login", new { area = "Account", returnUrl = Url.Action("Index", "Login", new { area = "Account" }) })" class="btn btn-default btn-flat">退出</a>
@@ -136,12 +153,12 @@
 				<!-- Sidebar user panel (optional) -->
 				<div class="user-panel">
 					<div class="pull-left image">
-						<img src="@CurrentUserInfo.Avatar.ToHttpAbsoluteUrl()" class="img-circle" alt="User Image">
+						<img src="@currentUserInfo.Avatar.ToHttpAbsoluteUrl()" class="img-circle" alt="User Image">
 					</div>
 					<div class="pull-left info">
-						<p>@CurrentUserInfo.UserName</p>
+						<p>@currentUserInfo.UserName</p>
 						<!-- Status -->
-						<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+						<a target="_blank" href="@Url.Action("Index", "Profile", new { area = "Account", userName = currentUserInfo.UserName })"><i class="fa fa-circle text-success"></i> 在线</a>
 					</div>
 				</div>
 				<!-- search form (Optional) -->
@@ -157,29 +174,14 @@
 				</form>
 				<!-- /.search form -->
 				<!-- Sidebar Menu -->
-				@{ Html.RenderAction("LeftMenuPartial", new { area = "Admin" }); }
+				@{ Html.RenderPartial("_LeftMenuPartial"); }
 				<!-- /.sidebar-menu -->
 			</section>
 			<!-- /.sidebar -->
 		</aside>
 		<!-- Content Wrapper. Contains page content -->
-		<div id="js-content-wrapper" class="content-wrapper">
-			<div id="loading">
-				<div id="loading-center">
-					<div id="loading-center-absolute">
-						<div class="object" id="object_one"></div>
-						<div class="object" id="object_two"></div>
-						<div class="object" id="object_three"></div>
-						<div class="object" id="object_four"></div>
-						<div class="object" id="object_five"></div>
-						<div class="object" id="object_six"></div>
-						<div class="object" id="object_seven"></div>
-						<div class="object" id="object_eight"></div>
-						<div class="object" id="object_nine"></div>
-					</div>
-				</div>
-			</div>
-			<iframe id="js-iframe-content" name="iframe-content" src="@Url.Action("Default", "Home", new { area = "Admin" })" frameborder="0" scrolling="yes" style="width: 100%; min-height: 600px;">内容主体区域</iframe>
+		<div class="content-wrapper">
+			@RenderBody()
 		</div>
 		<!-- /.content-wrapper -->
 		<!-- Main Footer -->
@@ -239,10 +241,67 @@
 			</div>
 		</aside>
 		<!-- /.control-sidebar -->
+		<!-- Add the sidebar's background. This div must be placed
+		immediately after the control sidebar -->
 		<div class="control-sidebar-bg"></div>
 	</div>
 	<!-- ./wrapper -->
 	<!-- REQUIRED JS SCRIPTS -->
+	<!-- jQuery -->
+	<script src="/assets/libs/AdminLTE/bower_components/jquery/dist/jquery.min.js"></script>
+	<!-- Bootstrap 3.3.7 -->
+	<script src="/assets/libs/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="/assets/libs/AdminLTE/dist/js/adminlte.min.js"></script>
+	<!-- Slimscroll -->
+	<script src="/assets/libs/AdminLTE/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<!-- FastClick -->
+	<script src="/assets/libs/AdminLTE/bower_components/fastclick/lib/fastclick.js"></script>
+	<!-- tools.js -->
+	<script src="/assets/js/tools.js"></script>
+	<!-- start log -->
+	<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+	<script src="/assets/libs/ua-parser-js/dist/ua-parser.min.js"></script>
+	<script src="/assets/js/log.js"></script>
+	<!-- end log -->
+	<script>
+		$(function () {
+
+			/**
+			* Get access to plugins
+			 */
+			$('[data-toggle="control-sidebar"]').controlSidebar()
+			$('[data-toggle="push-menu"]').pushMenu()
+			var $pushMenu = $('[data-toggle="push-menu"]').data('lte.pushmenu')
+			var $controlSidebar = $('[data-toggle="control-sidebar"]').data('lte.controlsidebar')
+			var $layout = $('body').data('lte.layout')
+			$(window).on('load', function () {
+				// Reinitialize variables on load
+				$pushMenu = $('[data-toggle="push-menu"]').data('lte.pushmenu')
+				$controlSidebar = $('[data-toggle="control-sidebar"]').data('lte.controlsidebar')
+				$layout = $('body').data('lte.layout')
+			})
+
+		});
+
+		function selectTemplate(id) {
+			$.ajax({
+				url: '/Admin/ThemeTemplate/SelectTemplate',
+				type: 'post',
+				data: { id: id },
+				dataType: 'json',
+				success: function (data) {
+					if (data.code >= 1) {
+						window.location.href = window.location.href;
+						showMessage(data.message, 1);
+					} else {
+						showMessage(data.message, -1);
+					}
+				}
+			});
+		}
+
+	</script>
 	@RenderSection("body", false)
 </body>
 </html>

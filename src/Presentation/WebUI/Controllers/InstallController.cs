@@ -257,7 +257,7 @@ namespace WebUI.Controllers
                 {
                     Name = "常用操作管理",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -298,7 +298,7 @@ namespace WebUI.Controllers
                 {
                     Name = "注册与访问控制",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -307,7 +307,7 @@ namespace WebUI.Controllers
                 {
                     Name = "站点功能",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -316,7 +316,7 @@ namespace WebUI.Controllers
                 {
                     Name = "性能优化",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -325,7 +325,7 @@ namespace WebUI.Controllers
                 {
                     Name = "SEO设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -334,7 +334,7 @@ namespace WebUI.Controllers
                 {
                     Name = "域名设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -343,7 +343,7 @@ namespace WebUI.Controllers
                 {
                     Name = "空间设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -352,7 +352,7 @@ namespace WebUI.Controllers
                 {
                     Name = "用户权限",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -361,7 +361,7 @@ namespace WebUI.Controllers
                 {
                     Name = "积分设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -370,7 +370,7 @@ namespace WebUI.Controllers
                 {
                     Name = "时间设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -379,7 +379,7 @@ namespace WebUI.Controllers
                 {
                     Name = "上传设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -388,7 +388,7 @@ namespace WebUI.Controllers
                 {
                     Name = "水印设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -397,7 +397,7 @@ namespace WebUI.Controllers
                 {
                     Name = "附件类型尺寸",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -406,7 +406,7 @@ namespace WebUI.Controllers
                 {
                     Name = "搜索设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -415,7 +415,7 @@ namespace WebUI.Controllers
                 {
                     Name = "地区设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -424,7 +424,7 @@ namespace WebUI.Controllers
                 {
                     Name = "排行榜设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -433,7 +433,7 @@ namespace WebUI.Controllers
                 {
                     Name = "手机版访问设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -442,7 +442,7 @@ namespace WebUI.Controllers
                 {
                     Name = "防采集设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -456,7 +456,7 @@ namespace WebUI.Controllers
                 {
                     Name = "导航设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -465,7 +465,7 @@ namespace WebUI.Controllers
                 {
                     Name = "界面设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -492,7 +492,7 @@ namespace WebUI.Controllers
                 {
                     Name = "风格管理",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -501,7 +501,7 @@ namespace WebUI.Controllers
                 {
                     Name = "表情管理",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -510,7 +510,7 @@ namespace WebUI.Controllers
                 {
                     Name = "编辑器设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -519,7 +519,7 @@ namespace WebUI.Controllers
                 {
                     Name = "在线列表图标",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -542,7 +542,7 @@ namespace WebUI.Controllers
                 {
                     Name = "词语过滤",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     SortCode = 10,
                     Parent = parentMenu,
@@ -551,7 +551,7 @@ namespace WebUI.Controllers
                 {
                     Name = "用户举报",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     SortCode = 10,
                     Parent = parentMenu,
@@ -560,7 +560,7 @@ namespace WebUI.Controllers
                 {
                     Name = "标签管理",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     SortCode = 10,
                     Parent = parentMenu,
@@ -569,7 +569,7 @@ namespace WebUI.Controllers
                 {
                     Name = "回收站",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     SortCode = 10,
                     Parent = parentMenu,
@@ -601,7 +601,7 @@ namespace WebUI.Controllers
                 {
                     Name = "资料统计",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -610,7 +610,7 @@ namespace WebUI.Controllers
                 {
                     Name = "发送通知",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -619,7 +619,7 @@ namespace WebUI.Controllers
                 {
                     Name = "用户标签",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -646,7 +646,7 @@ namespace WebUI.Controllers
                 {
                     Name = "积分奖惩",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -655,7 +655,7 @@ namespace WebUI.Controllers
                 {
                     Name = "审核用户",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -664,7 +664,7 @@ namespace WebUI.Controllers
                 {
                     Name = "管理组",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -673,7 +673,7 @@ namespace WebUI.Controllers
                 {
                     Name = "用户组",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -682,7 +682,7 @@ namespace WebUI.Controllers
                 {
                     Name = "推荐关注",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -691,7 +691,7 @@ namespace WebUI.Controllers
                 {
                     Name = "推荐好友",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -700,7 +700,7 @@ namespace WebUI.Controllers
                 {
                     Name = "资料审核",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -709,7 +709,7 @@ namespace WebUI.Controllers
                 {
                     Name = "认证设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -723,7 +723,7 @@ namespace WebUI.Controllers
                 {
                     Name = "频道栏目",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -732,7 +732,7 @@ namespace WebUI.Controllers
                 {
                     Name = "分区管理",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -741,7 +741,7 @@ namespace WebUI.Controllers
                 {
                     Name = "专题管理",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -750,7 +750,7 @@ namespace WebUI.Controllers
                 {
                     Name = "HTML管理",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -759,7 +759,7 @@ namespace WebUI.Controllers
                 {
                     Name = "页面管理",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -768,7 +768,7 @@ namespace WebUI.Controllers
                 {
                     Name = "模块管理",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -777,7 +777,7 @@ namespace WebUI.Controllers
                 {
                     Name = "模块模板",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -786,7 +786,7 @@ namespace WebUI.Controllers
                 {
                     Name = "第三方模块",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -795,7 +795,7 @@ namespace WebUI.Controllers
                 {
                     Name = "权限列表",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -804,7 +804,7 @@ namespace WebUI.Controllers
                 {
                     Name = "日志列表",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -813,7 +813,7 @@ namespace WebUI.Controllers
                 {
                     Name = "相册分类",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -827,7 +827,7 @@ namespace WebUI.Controllers
                 {
                     Name = "基本设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -836,7 +836,7 @@ namespace WebUI.Controllers
                 {
                     Name = "验证设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -845,7 +845,7 @@ namespace WebUI.Controllers
                 {
                     Name = "安全大师",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -854,7 +854,7 @@ namespace WebUI.Controllers
                 {
                     Name = "账号保镖",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -886,7 +886,7 @@ namespace WebUI.Controllers
                 {
                     Name = "站点任务",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -895,7 +895,7 @@ namespace WebUI.Controllers
                 {
                     Name = "道具中心",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -904,7 +904,7 @@ namespace WebUI.Controllers
                 {
                     Name = "勋章中心",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -913,7 +913,7 @@ namespace WebUI.Controllers
                 {
                     Name = "站点帮助",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -922,7 +922,7 @@ namespace WebUI.Controllers
                 {
                     Name = "电子商务",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -931,7 +931,7 @@ namespace WebUI.Controllers
                 {
                     Name = "友情链接",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -940,7 +940,7 @@ namespace WebUI.Controllers
                 {
                     Name = "站长推荐",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -949,7 +949,7 @@ namespace WebUI.Controllers
                 {
                     Name = "关联链接",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -958,7 +958,7 @@ namespace WebUI.Controllers
                 {
                     Name = "充值卡密",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -986,7 +986,7 @@ namespace WebUI.Controllers
                 {
                     Name = "更新缓存",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -995,7 +995,7 @@ namespace WebUI.Controllers
                 {
                     Name = "更新统计",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -1004,7 +1004,7 @@ namespace WebUI.Controllers
                 {
                     Name = "运行记录",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -1013,7 +1013,7 @@ namespace WebUI.Controllers
                 {
                     Name = "计划任务",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -1022,7 +1022,7 @@ namespace WebUI.Controllers
                 {
                     Name = "文件权限检查",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -1031,7 +1031,7 @@ namespace WebUI.Controllers
                 {
                     Name = "文件效验",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -1040,7 +1040,7 @@ namespace WebUI.Controllers
                 {
                     Name = "嵌入点效验",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -1054,7 +1054,7 @@ namespace WebUI.Controllers
                 {
                     Name = "后台管理团队",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -1063,7 +1063,7 @@ namespace WebUI.Controllers
                 {
                     Name = "邮件设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
@@ -1072,7 +1072,7 @@ namespace WebUI.Controllers
                 {
                     Name = "UCenter 设置",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -1081,7 +1081,7 @@ namespace WebUI.Controllers
                 {
                     Name = "数据库",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -1090,7 +1090,7 @@ namespace WebUI.Controllers
                 {
                     Name = "用户表优化",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -1099,7 +1099,7 @@ namespace WebUI.Controllers
                 {
                     Name = "文章分表",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -1108,7 +1108,7 @@ namespace WebUI.Controllers
                 {
                     Name = "优化大师",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
@@ -1126,7 +1126,7 @@ namespace WebUI.Controllers
                 {
                     Name = "文章回收站",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     SortCode = 10,
                     Parent = parentMenu,
@@ -1135,7 +1135,7 @@ namespace WebUI.Controllers
                 {
                     Name = "课程回收站",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     SortCode = 10,
                     Parent = parentMenu,
@@ -1144,7 +1144,7 @@ namespace WebUI.Controllers
                 {
                     Name = "公告回收站",
                     ControllerName = "Home",
-                    ActionName = "Default",
+                    ActionName = "Index",
                     AreaName = "Admin",
                     SortCode = 10,
                     Parent = parentMenu,
