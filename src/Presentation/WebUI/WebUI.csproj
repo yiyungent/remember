@@ -8199,6 +8199,7 @@
     <Compile Include="Areas\Admin\Models\Common\ZNodeModel.cs" />
     <Compile Include="Areas\Admin\Models\CourseBoxVM\CourseBoxCreateViewModel.cs" />
     <Compile Include="Areas\Admin\Models\CourseBoxVM\CourseBoxViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\DashboardVM\DashboardOneViewModel.cs" />
     <Compile Include="Areas\Admin\Models\DashboardVM\EvaAnalyzeChart.cs" />
     <Compile Include="Areas\Admin\Models\PluginVM\ConfigureViewModel.cs" />
     <Compile Include="Areas\Admin\Models\PluginVM\PluginListViewModel.cs" />
@@ -8921,6 +8922,8 @@
     <Content Include="Areas\Admin\Views\RoleInfo\Create.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_DeleteModelPartial.cshtml" />
     <Content Include="Areas\Admin\Views\LogInfo\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Dashboard\IndexTwo.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Install\Index.cshtml" />
@@ -8949,7 +8952,6 @@
     <Folder Include="Areas\Account\Views\Control\" />
     <Folder Include="Areas\Admin\Models\CardBoxVM\" />
     <Folder Include="Areas\Admin\Views\Control\" />
-    <Folder Include="Areas\Admin\Views\Dashboard\" />
     <Folder Include="assets\libs\senna\node_modules\bootstrap\dist\css\" />
     <Folder Include="assets\libs\senna\node_modules\bootstrap\dist\fonts\" />
     <Folder Include="assets\libs\senna\node_modules\bootstrap\dist\js\" />
