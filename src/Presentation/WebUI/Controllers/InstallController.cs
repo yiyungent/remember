@@ -108,15 +108,11 @@ namespace WebUI.Controllers
             InitFunctionInfo();
             InitRoleInfo();
             InitUserInfo();
-            InitArticle();
 
-            InitFollower_Followed();
             InitFavorite();
+
             InitCourseBox();
             InitVideoInfo();
-            InitLearner_CourseBox();
-            InitLearner_VideoInfo();
-            InitComment();
         }
         #endregion
 
@@ -224,40 +220,29 @@ namespace WebUI.Controllers
                 ShowMessage("开始初始化系统菜单表");
 
                 #region 一级菜单
-                this._sys_MenuService.Create(new Sys_Menu()
+                string[] firstLevel_names = {
+                       "首页",
+                       "全局",
+                       "界面",
+                       "内容",
+                       "用户",
+                       "门户",
+                       "防灌水",
+                       "运营",
+                       "应用",
+                       "工具",
+                       "站长",
+                       "UCenter"
+                };
+                for (int i = 0; i < firstLevel_names.Length; i++)
                 {
-                    Name = "全局",
-                    SortCode = 10,
-                    Role_Menus = null,
-                });
-                this._sys_MenuService.Create(new Sys_Menu()
-                {
-                    Name = "界面",
-                    SortCode = 20,
-                });
-                this._sys_MenuService.Create(new Sys_Menu()
-                {
-                    Name = "用户",
-                    SortCode = 30,
-                });
-                this._sys_MenuService.Create(new Sys_Menu()
-                {
-                    Name = "运营",
-                    SortCode = 40,
-                });
-                this._sys_MenuService.Create(new Sys_Menu()
-                {
-                    Name = "应用",
-                    SortCode = 50,
-                });
-                this._sys_MenuService.Create(new Sys_Menu()
-                {
-                    Name = "课程",
-                    ControllerName = "CourseBox",
-                    ActionName = "Index",
-                    AreaName = "Admin",
-                    SortCode = 60,
-                });
+                    this._sys_MenuService.Create(new Sys_Menu()
+                    {
+                        Name = firstLevel_names[i],
+                        SortCode = i + 1,
+                    });
+
+                }
                 #endregion
 
                 #region 二级菜单
@@ -265,8 +250,40 @@ namespace WebUI.Controllers
                 // 一级菜单项---二级菜单的父菜单项
                 Sys_Menu parentMenu = null;
 
-                #region 全局的二级菜单
-                parentMenu = this._sys_MenuService.Find(m => m.Name == "全局" && !m.IsDeleted);
+                #region 首页
+                parentMenu = this._sys_MenuService.Find(m => m.Name == "首页");
+
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "常用操作管理",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "仪表盘-1",
+                    ControllerName = "Dashboard",
+                    ActionName = "Index",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "仪表盘-2",
+                    ControllerName = "Dashboard",
+                    ActionName = "IndexTwo",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                #endregion
+
+                #region 全局
+                parentMenu = this._sys_MenuService.Find(m => m.Name == "全局");
 
                 this._sys_MenuService.Create(new Sys_Menu()
                 {
@@ -277,11 +294,182 @@ namespace WebUI.Controllers
                     Parent = parentMenu,
                     SortCode = 10,
                 });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "注册与访问控制",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "站点功能",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "性能优化",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "SEO设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "域名设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "空间设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "用户权限",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "积分设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "时间设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "上传设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "水印设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "附件类型尺寸",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "搜索设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "地区设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "排行榜设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "手机版访问设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "防采集设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
                 #endregion
 
-                #region 界面的二级菜单
-                parentMenu = this._sys_MenuService.Find(m => m.Name == "界面" && !m.IsDeleted);
+                #region 界面
+                parentMenu = this._sys_MenuService.Find(m => m.Name == "界面");
 
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "导航设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "界面设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
                 this._sys_MenuService.Create(new Sys_Menu()
                 {
                     Name = "菜单管理",
@@ -293,17 +481,103 @@ namespace WebUI.Controllers
                 });
                 this._sys_MenuService.Create(new Sys_Menu()
                 {
-                    Name = "主题模板",
+                    Name = "模板管理",
                     ControllerName = "ThemeTemplate",
                     ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 20,
                 });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "风格管理",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "表情管理",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "编辑器设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "在线列表图标",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
                 #endregion
 
-                #region 用户的二级菜单
-                parentMenu = this._sys_MenuService.Find(m => m.Name == "用户" && !m.IsDeleted);
+                #region 内容
+                parentMenu = this._sys_MenuService.Find(m => m.Name == "内容");
+
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "课程管理",
+                    ControllerName = "CourseBox",
+                    ActionName = "Index",
+                    AreaName = "Admin",
+                    SortCode = 10,
+                    Parent = parentMenu,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "词语过滤",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    SortCode = 10,
+                    Parent = parentMenu,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "用户举报",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    SortCode = 10,
+                    Parent = parentMenu,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "标签管理",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    SortCode = 10,
+                    Parent = parentMenu,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "回收站",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    SortCode = 10,
+                    Parent = parentMenu,
+                });
+                #endregion
+
+                #region 用户
+                parentMenu = this._sys_MenuService.Find(m => m.Name == "用户");
 
                 this._sys_MenuService.Create(new Sys_Menu()
                 {
@@ -323,10 +597,272 @@ namespace WebUI.Controllers
                     Parent = parentMenu,
                     SortCode = 20,
                 });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "资料统计",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "发送通知",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "用户标签",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "禁止用户",
+                    ControllerName = "BanUser",
+                    ActionName = "Index",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "禁止IP",
+                    ControllerName = "BanIP",
+                    ActionName = "Index",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "积分奖惩",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "审核用户",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "管理组",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "用户组",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "推荐关注",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "推荐好友",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "资料审核",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "认证设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
                 #endregion
 
-                #region 运营的二级菜单
-                parentMenu = this._sys_MenuService.Find(m => m.Name == "运营" && !m.IsDeleted);
+                #region 门户
+                parentMenu = this._sys_MenuService.Find(m => m.Name == "门户");
+
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "频道栏目",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "分区管理",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "专题管理",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "HTML管理",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "页面管理",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "模块管理",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "模块模板",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "第三方模块",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "权限列表",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "日志列表",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "相册分类",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                #endregion
+
+                #region 防灌水
+                parentMenu = this._sys_MenuService.Find(m => m.Name == "防灌水");
+
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "基本设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "验证设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "安全大师",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "账号保镖",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                #endregion
+
+                #region 运营
+                parentMenu = this._sys_MenuService.Find(m => m.Name == "运营");
 
                 this._sys_MenuService.Create(new Sys_Menu()
                 {
@@ -346,10 +882,91 @@ namespace WebUI.Controllers
                     Parent = parentMenu,
                     SortCode = 20,
                 });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "站点任务",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "道具中心",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "勋章中心",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "站点帮助",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "电子商务",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "友情链接",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "站长推荐",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "关联链接",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "充值卡密",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
                 #endregion
 
-                #region 应用的二级菜单
-                parentMenu = this._sys_MenuService.Find(m => m.Name == "应用" && !m.IsDeleted);
+                #region 应用
+                parentMenu = this._sys_MenuService.Find(m => m.Name == "应用");
 
                 this._sys_MenuService.Create(new Sys_Menu()
                 {
@@ -359,6 +976,178 @@ namespace WebUI.Controllers
                     AreaName = "Admin",
                     Parent = parentMenu,
                     SortCode = 10,
+                });
+                #endregion
+
+                #region 工具
+                parentMenu = this._sys_MenuService.Find(m => m.Name == "工具");
+
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "更新缓存",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "更新统计",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "运行记录",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "计划任务",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "文件权限检查",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "文件效验",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "嵌入点效验",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                #endregion
+
+                #region 站长
+                parentMenu = this._sys_MenuService.Find(m => m.Name == "站长");
+
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "后台管理团队",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "邮件设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 20,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "UCenter 设置",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "数据库",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "用户表优化",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "文章分表",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "优化大师",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                #endregion
+
+                #endregion
+
+                #region 三级菜单
+
+                #region 内容-回收站
+                parentMenu = this._sys_MenuService.Find(m => m.Name == "回收站");
+
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "文章回收站",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    SortCode = 10,
+                    Parent = parentMenu,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "课程回收站",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    SortCode = 10,
+                    Parent = parentMenu,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "公告回收站",
+                    ControllerName = "Home",
+                    ActionName = "Default",
+                    AreaName = "Admin",
+                    SortCode = 10,
+                    Parent = parentMenu,
                 });
                 #endregion
 
@@ -809,56 +1598,7 @@ namespace WebUI.Controllers
         }
         #endregion
 
-        #region 初始化公告
-        private void InitArticle()
-        {
-            try
-            {
-                ShowMessage("开始初始化公告");
 
-                for (int i = 0; i < 10; i++)
-                {
-                    this._articleService.Create(new Article
-                    {
-                        CreateTime = DateTime.Now,
-                        LastUpdateTime = DateTime.Now,
-                        AuthorId = 1,
-                        Title = "测试公告" + (i + 1),
-                        Content = "测试内容" + (i + 1),
-                        CustomUrl = $"article-{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.Now.Day}-{i + 1}"
-                    });
-                }
-
-                ShowMessage("成功");
-            }
-            catch (Exception ex)
-            {
-                ShowMessage("失败");
-            }
-        }
-        #endregion
-
-
-
-
-        #region 初始化关注者被关注者表
-        private void InitFollower_Followed()
-        {
-            try
-            {
-                ShowMessage("初始化关注者被关注者表");
-
-
-
-                ShowMessage("成功");
-            }
-            catch (Exception ex)
-            {
-                ShowMessage("失败");
-                ShowMessage(ex.Message);
-            }
-        }
-        #endregion
 
         #region 初始化收藏夹表
         private void InitFavorite()
@@ -1017,61 +1757,6 @@ namespace WebUI.Controllers
                 ShowMessage("成功");
             }
             catch (Exception ex)
-            {
-                ShowMessage("失败");
-            }
-        }
-        #endregion
-
-        #region 初始化Learner_CourseBox表
-        private void InitLearner_CourseBox()
-        {
-            try
-            {
-                ShowMessage("初始化Learner_CourseBox表");
-
-
-
-                ShowMessage("成功");
-            }
-            catch (Exception)
-            {
-                ShowMessage("失败");
-            }
-        }
-        #endregion
-
-        #region 初始化Learner_VideoInfo表
-        private void InitLearner_VideoInfo()
-        {
-            try
-            {
-                ShowMessage("初始化Learner_VideoInfo表");
-
-
-
-
-                ShowMessage("成功");
-            }
-            catch (Exception)
-            {
-                ShowMessage("失败");
-            }
-        }
-        #endregion
-
-        #region 初始化评论
-        private void InitComment()
-        {
-            try
-            {
-                ShowMessage("初始化评论");
-
-
-
-                ShowMessage("成功");
-            }
-            catch (Exception)
             {
                 ShowMessage("失败");
             }

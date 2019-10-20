@@ -28,14 +28,6 @@ namespace Domain.Entities
         public string Password { get; set; }
 
         /// <summary>
-        /// 刷新Toke
-        /// </summary>
-        // TODO: 实际已经无用,等以后实现 OAuth2.0
-        [StringLength(100)]
-        [Column(TypeName = "text")]
-        public string RefreshToken { get; set; }
-
-        /// <summary>
         /// 最后登录时间
         /// </summary>
         public DateTime LastLoginTime { get; set; }
@@ -76,7 +68,12 @@ namespace Domain.Entities
         /// <summary>
         /// 硬币数
         /// </summary>
-        public long? Coin { get; set; }
+        public int Coin { get; set; }
+
+        /// <summary>
+        /// 积分
+        /// </summary>
+        public int Credit { get; set; }
 
         /// <summary>
         /// 注册时间

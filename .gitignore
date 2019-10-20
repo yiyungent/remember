@@ -270,4 +270,5 @@ __pycache__/
 /src/Presentation/WebUI/Upload/videos
 /src/Presentation/WebApi/Upload/videos
 /src/Presentation/WebUI/Upload
+/src/Presentation/WebUI/Upload/images/avatars
 /src/Presentation/WebUI/Templates

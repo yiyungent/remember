@@ -41,6 +41,11 @@ namespace Domain.Entities
         [Column(TypeName = "text")]
         public string CustomUrl { get; set; }
 
+        /// <summary>
+        /// ÎÄÕÂ×´Ì¬
+        /// </summary>
+        public Status ArticleStatus { get; set; }
+
         #region Relationships
 
         /// <summary>
@@ -53,6 +58,23 @@ namespace Domain.Entities
         /// </summary>
         [ForeignKey("AuthorId")]
         public virtual UserInfo Author { get; set; }
+
+        #endregion
+
+        #region Helpers
+
+        public enum Status
+        {
+            /// <summary>
+            /// ±»·¢²¼
+            /// </summary>
+            Published = 0,
+
+            /// <summary>
+            /// ±à¼­ÖÐ£¨²Ý¸å×´Ì¬£©
+            /// </summary>
+            Editing = 1,
+        } 
 
         #endregion
     }
