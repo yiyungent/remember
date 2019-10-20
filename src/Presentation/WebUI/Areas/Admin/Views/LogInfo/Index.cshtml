@@ -1,12 +1,17 @@
-﻿@using Framework.HtmlHelpers
+﻿@using WebUI.HtmlHelpers
 @using WebUI.Areas.Admin.Models.Common
-@using WebUI.Extensions
 @using Domain.Entities
 @using Services.Interface;
 @using Core
 @model ListViewModel<LogInfo>
 @{
 	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
+
+
+	IList<int> userIds = Model.List.Select(m => m.AccessUserId ?? 0).ToList();
+	var userInfos = ContainerManager.Resolve<IUserInfoService>().Filter(m => userIds.Contains(m.ID));
+	var userIdAndUserNames = (from m in userInfos
+							  select new { ID = m.ID, UserName = m.UserName }).ToList();
 }
 @section head {
 	<style>
@@ -14,19 +19,6 @@
 			vertical-align: middle !important;
 		}
 	</style>
-}
-@helper GetUserNameById(int id)
-{
-	if (id == 0)
-	{
-		@Html.Raw("未登录");
-	}
-	else
-	{
-		//string userName = Container.Instance.Resolve<UserInfoService>().GetEntity(id).UserName;
-		string userName = ContainerManager.Resolve<IUserInfoService>().Find(m => m.ID == id && !m.IsDeleted).UserName;
-		@Html.Raw(userName);
-	}
 }
 @helper PrettyTime(long second)
 {
@@ -50,40 +42,25 @@
 	<script src="/assets/libs/pview/pview.js"></script>
 	<script>
 
-		// start 删除
-		function deleteOp(id) {
-			$("#js-id").val(id);
-			$('#deleteModal').modal();
+		function submitSuccess(data) {
+			if (data.code <= 0) {
+				showMessage(data.message, -1);
+			} else {
+				showMessage(data.message, 1);
+			}
 		}
-		function deleteSubmit() {
-			var id = $("#js-id").val();
-			$.ajax({
-				type: 'POST',
-				url: '/Admin/LogInfo/Delete',
-				data: { id: id },
-				dataType: 'json',
-				success: function (data) {
-					if (data.code <= 0) {
-						// 删除失败
-						$("#js-message").attr("class", "alert alert-danger").find(".message").html(data.message);
-					} else {
-						// 删除成功
-						$("#js-message").attr("class", "alert alert-success").find(".message").html(data.message);
-						$(".table").find("tr[data-tr-id='" + id + "']").remove();
-						// 检查当前当前页面是否已经全部删除完，若是，则点击当前页码，重新加载
-						var trNum = $(".table").find("tr").length - 1;
-						if (trNum == 0) {
-							$("#js-page").find("li[class*='active']>a")[0].click();
-						}
-					}
-					// 3s 后隐藏
-					setTimeout(function () {
-						$("#js-message").fadeOut("slow");
-					}, 3000);
-				}
-			});
+
+		function banIP(ip) {
+			submitSuccess({ code: 1, message: "屏蔽IP: " + ip + " 成功" });
+
+			return false;
 		}
-		// end 删除
+
+		function banUser(userId) {
+			submitSuccess({ code: 1, message: "屏蔽用户: " + userId + " 成功" });
+
+			return false;
+		}
 
 		function search() {
 			var query = $('#js-search-input').val();
@@ -115,29 +92,6 @@
 	</script>
 }
 
-<!-- start 删除确认框 -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-				<h4 class="modal-title">确认框</h4>
-			</div>
-			<div class="modal-body">
-				<form>
-					<div class="form-group">
-						<label for="message-text" class="control-label">确定要删除？</label>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
-				<button onclick="deleteSubmit()" type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- end 删除确认框 -->
 <!-- start 提示框 -->
 @{ Html.RenderPartial("_MessagePartial"); }
 <!-- end 提示框 -->
@@ -159,8 +113,10 @@
 					</button>
 					<ul id="js-search-type-list" class="dropdown-menu">
 						<li search-type="uid"><a href="javascript:;">用户ID</a></li>
+						<li search-type="username"><a href="javascript:;">用户名</a></li>
 						<li search-type="browser"><a href="javascript:;">浏览器</a></li>
 						<li search-type="ip"><a href="javascript:;">IP</a></li>
+						<li search-type="city"><a href="javascript:;">城市</a></li>
 						<li search-type="id"><a href="javascript:;">ID</a></li>
 					</ul>
 				</div>
@@ -178,48 +134,48 @@
 		<table id="js-table" class="table table-hover" pview="table">
 			<tr>
 				<th>ID</th>
-				<th>用户</th>
+				<th>访问者</th>
 				<th>访问地</th>
 				<th>访问时间</th>
-				<th>跳出时间</th>
 				<th>时长</th>
 				<th>受访页面</th>
-				<th>信息</th>
+				<th>属性</th>
 				<th>操作</th>
 			</tr>
 			@foreach (var item in Model.List)
 			{
 				<tr data-tr-id="@item.ID">
 					<td>@item.ID</td>
-					<td>@GetUserNameById(item.AccessUserId ?? 0)</td>
-					<td><span class="label label-info">@item.AccessIp</span><span class="label label-default">@item.AccessCity</span></td>
-					<td><span class="label label-success">@(item.AccessTime?.ToString("yyyy-MM-dd HH:mm:ss"))</span></td>
-					<td><span class="label label-danger">@(item.JumpTime?.ToString("yyyy-MM-dd HH:mm:ss"))</span></td>
+					<td>
+						@if (item.AccessUserId == 0)
+						{
+							<span>未登录</span>
+						}
+						else
+						{
+							<span>@userIdAndUserNames.Where(m => m.ID == item.AccessUserId).First().UserName</span>
+						}
+					</td>
+					<td><span class="label label-default">@item.AccessCity</span></td>
+					<td><span class="label label-success">@(item.AccessTime?.ToString("yyyy-MM-dd HH:mm"))</span></td>
 					<td><span class="label label-primary">@PrettyTime(item.Duration ?? 0)</span></td>
 					<td><span class="label label-info">@item.AccessUrl</span></td>
 					<td>
-						<span class="label label-info">@item.Browser</span>
-						<span class="label label-warning">@item.BrowserEngine</span>
+						<span class="label label-info">@item.Browser.Split(' ')[0]</span>
 						<span class="label label-success">@item.OS</span>
 						<span class="label label-default">@item.Device</span>
 					</td>
 					<td>
 						<div class="btn-group">
-							@*@if (Html.HasAuth("Admin", "LogInfo", "Delete"))
-								{
-									<button class="btn btn-danger" type="button" onclick="deleteOp(@item.ID)">删除</button>
-								}*@
-							<button type="button" class="btn btn-danger">查看</button>
-							<button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<span class="caret"></span>
-								<span class="sr-only">Toggle Dropdown</span>
-							</button>
+							<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">更多 <span class="caret"></span></button>
 							<ul class="dropdown-menu">
-								<li><a href="#">Action</a></li>
-								<li><a href="#">Another action</a></li>
-								<li><a href="#">Something else here</a></li>
+								<li><a href="@Url.Action("Details")?id=@item.ID">查看</a></li>
+								<li><a href="#" onclick="banIP('@item.AccessIp')">屏蔽此IP</a></li>
 								<li role="separator" class="divider"></li>
-								<li><a href="#">Separated link</a></li>
+								@if (item.AccessUserId != null && item.AccessUserId != 0)
+								{
+									<li><a href="#" onclick="banUser(@item.AccessUserId)">屏蔽此用户</a></li>
+								}
 							</ul>
 						</div>
 					</td>

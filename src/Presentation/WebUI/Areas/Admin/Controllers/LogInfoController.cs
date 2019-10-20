@@ -15,12 +15,14 @@ namespace WebUI.Areas.Admin.Controllers
     {
         #region Fields
         private readonly ILogInfoService _logInfoService;
+        private readonly IUserInfoService _userInfoService;
         #endregion
 
         #region Ctor
-        public LogInfoController(ILogInfoService logInfoService)
+        public LogInfoController(ILogInfoService logInfoService, IUserInfoService userInfoService)
         {
             this._logInfoService = logInfoService;
+            this._userInfoService = userInfoService;
         }
         #endregion
 
@@ -46,20 +48,30 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 case "uid":
                     queryType.Text = "用户ID";
-                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.AccessUserId == int.Parse(query) && !m.IsDeleted, m => m.ID, false).ToList();
+                    int userId = int.Parse(query);
+                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.AccessUserId == userId && !m.IsDeleted, m => m.ID, false).ToList();
+                    break;
+                case "username":
+                    queryType.Text = "用户名";
+                    userId = this._userInfoService.Find(m => m.UserName.Contains(query) && !m.IsDeleted)?.ID ?? -1;
+                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.AccessUserId == userId && !m.IsDeleted, m => m.ID, false).ToList();
                     break;
                 case "browser":
                     queryType.Text = "浏览器";
-                    //queryConditions.Add(Expression.Like("Browser", query, MatchMode.Anywhere));
                     list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.Browser.Contains(query) && !m.IsDeleted, m => m.ID, false).ToList();
                     break;
                 case "ip":
                     queryType.Text = "IP";
                     list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.AccessIp.Contains(query) && !m.IsDeleted, m => m.ID, false).ToList();
                     break;
+                case "city":
+                    queryType.Text = "城市";
+                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.AccessCity.Contains(query) && !m.IsDeleted, m => m.ID, false).ToList();
+                    break;
                 case "id":
                     queryType.Text = "ID";
-                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.ID == int.Parse(query) && !m.IsDeleted, m => m.ID, false).ToList();
+                    int logId = int.Parse(query);
+                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.ID == logId && !m.IsDeleted, m => m.ID, false).ToList();
                     break;
                 default:
                     queryType.Text = "IP";
@@ -71,24 +83,16 @@ namespace WebUI.Areas.Admin.Controllers
         }
         #endregion
 
-        #region 删除
-        public JsonResult Delete(int id)
+        #region 查看
+        public ViewResult Details(int id)
         {
-            try
-            {
-                // TODO: 无法删除访问日志
-                var dbModel = this._logInfoService.Find(m => m.ID == id && !m.IsDeleted);
-                dbModel.IsDeleted = true;
-                dbModel.DeletedAt = DateTime.Now;
-                this._logInfoService.Update(dbModel);
+            LogInfo viewModel = this._logInfoService.Find(m => m.ID == id && !m.IsDeleted);
 
-                return Json(new { code = 1, message = "删除成功" });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { code = 1, message = "删除失败" });
-            }
+            return View(viewModel);
         }
         #endregion
+
+        // TODO: 点击记录操作 - 屏蔽IP，屏蔽用户
+
     }
 }

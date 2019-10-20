@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Framework.Infrastructure.Concrete
+namespace Framework.Models
 {
     public class UserInfo_Guest
     {

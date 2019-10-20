@@ -1,0 +1,109 @@
+﻿@using Domain.Entities
+@using Framework.Extensions
+@using Framework.Models
+@using Core
+@using Services.Interface;
+@model LogInfo
+@{
+	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
+
+	UserInfo userInfo = ContainerManager.Resolve<IUserInfoService>().Find(m => m.ID == Model.AccessUserId);
+	if (userInfo == null)
+	{
+		userInfo = UserInfo_Guest.Instance;
+	}
+	string avatar = userInfo?.Avatar.ToHttpAbsoluteUrl();
+	string userName = userInfo?.UserName;
+	int uid = userInfo?.ID ?? 0;
+	string desc = userInfo?.Description;
+}
+@helper PrettyTime(long second)
+{
+	if (second >= 3600)
+	{
+		// 小时
+		@Html.Raw(Math.Round((double)second / 3600, 2) + "时");
+	}
+	if (second >= 60)
+	{
+		// 分钟
+		@Html.Raw(Math.Round((double)second / 60, 2) + "分");
+	}
+	else
+	{
+		// 秒
+		@Html.Raw(second + "秒");
+	}
+}
+
+<!-- general form elements -->
+<div class="box box-primary">
+	<div class="box-header with-border">
+		<h3 class="box-title">详细</h3>
+	</div>
+	<!-- /.box-header -->
+	<!-- form start -->
+	<form id="js-form">
+		@Html.HiddenFor(m => m.ID)
+		<div class="box-body">
+			<!-- Widget: user widget style 1 -->
+			<div class="box box-widget widget-user-2">
+				<!-- Add the bg color to the header using any of the bg-* classes -->
+				<div class="widget-user-header bg-aqua">
+					<div class="widget-user-image">
+						<img class="img-circle" src="@avatar" alt="@userName">
+					</div>
+					<!-- /.widget-user-image -->
+					<h3 class="widget-user-username">访问者: @userName</h3>
+					<h5 class="widget-user-desc">
+						<label class="label label-default">UID: @uid</label>
+						@desc
+					</h5>
+				</div>
+				<div class="box-footer no-padding">
+					<ul class="nav nav-stacked">
+						<li><a href="javacript:void(0);">ID <span class="pull-right badge bg-primary">@Model.ID</span></a></li>
+						<li>
+							<a href="javacript:void(0);">
+								访问地
+								<span class="pull-right badge bg-blue">@Model.AccessIp</span>
+								<span class="pull-right badge bg-aqua">@Model.AccessCity</span>
+							</a>
+						</li>
+						<li><a href="javacript:void(0);">受访页面 <span class="pull-right badge bg-blue">@Model.AccessUrl</span></a></li>
+						<li><a href="javacript:void(0);">来源 <span class="pull-right badge bg-blue">@Model.RefererUrl</span></a></li>
+						<li><a href="javacript:void(0);">访问时间 <span class="pull-right badge bg-aqua">@(Model.AccessTime?.ToString("yyyy-MM-dd HH:mm:ss"))</span></a></li>
+						<li><a href="javacript:void(0);">跳出时间 <span class="pull-right badge bg-green">@(Model.JumpTime?.ToString("yyyy-MM-dd HH:mm:ss"))</span></a></li>
+						<li><a href="javacript:void(0);">访问时长 <span class="pull-right badge bg-green">@PrettyTime(Model.Duration ?? 0)</span></a></li>
+						<li>
+							<a href="javacript:void(0);">
+								属性
+								<span class="pull-right badge bg-green">架构: @Model.Cpu</span>
+								<span class="pull-right badge bg-green">操作系统: @Model.OS</span>
+								<span class="pull-right badge bg-warning">内核: @Model.BrowserEngine</span>
+								<span class="pull-right badge bg-aqua">浏览器: @Model.Browser</span>
+								<span class="pull-right badge bg-green">设备: @Model.Device</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!-- /.widget-user -->
+		</div>
+		<!-- /.box-body -->
+
+		<div class="box-footer">
+			<div class="btn-group">
+				@if (TempData["RedirectUrl"] != null)
+				{
+					<a class="btn btn-default" href="@TempData["RedirectUrl"].ToString()">返回</a>
+				}
+				else
+				{
+					<a class="btn btn-default" href="javascript:history.go(-1);">返回</a>
+				}
+			</div>
+		</div>
+	</form>
+</div>
+<!-- /.box -->

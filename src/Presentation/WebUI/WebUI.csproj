@@ -8924,6 +8924,7 @@
     <Content Include="assets\libs\zui\dist\lib\uploader\Moxie.xap" />
     <Content Include="Areas\Admin\Views\RoleInfo\Create.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_DeleteModelPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\LogInfo\Details.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Install\Index.cshtml" />
