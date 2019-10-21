@@ -55,18 +55,16 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 case "name":
                     queryType.Text = "课程名";
-                    //queryConditions.Add(Expression.Like("Name", query, NHibernate.Criterion.MatchMode.Anywhere));
                     list = this._courseBoxService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.Name.Contains(query) && !m.IsDeleted, m => m.ID, false).ToList();
                     break;
                 case "desc":
                     queryType.Text = "课程描述";
-                    //queryConditions.Add(Expression.Like("Description", query, NHibernate.Criterion.MatchMode.Anywhere));
                     list = this._courseBoxService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.Description.Contains(query) && !m.IsDeleted, m => m.ID, false).ToList();
                     break;
                 case "id":
                     queryType.Text = "ID";
-                    //queryConditions.Add(Expression.Eq("ID", int.Parse(query)));
-                    list = this._courseBoxService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.ID == int.Parse(query) && !m.IsDeleted, m => m.ID, false).ToList();
+                    int courseBoxId = int.Parse(query);
+                    list = this._courseBoxService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.ID == courseBoxId && !m.IsDeleted, m => m.ID, false).ToList();
                     break;
                 default:
                     queryType.Text = "课程名";
@@ -78,7 +76,7 @@ namespace WebUI.Areas.Admin.Controllers
         }
         #endregion
 
-        #region 创建课程-基本信息
+        #region 添加课程-基本信息
         [HttpGet]
         public ViewResult Create()
         {
@@ -126,6 +124,7 @@ namespace WebUI.Areas.Admin.Controllers
                 var dbModel = this._courseBoxService.Find(m => m.ID == id && !m.IsDeleted);
                 dbModel.IsDeleted = true;
                 dbModel.DeletedAt = DateTime.Now;
+                this._courseBoxService.Update(dbModel);
 
                 return Json(new { code = 1, message = "删除成功" });
             }
