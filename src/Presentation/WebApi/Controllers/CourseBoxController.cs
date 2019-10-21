@@ -73,9 +73,7 @@ namespace WebApi.Controllers
                 // 未登录用户返回基本课程数据
                 // TODO: 未处理课程不存在情况
                 CourseBox courseBox = this._courseBoxService.Find(id);
-                //int creatorFansNum = this._follower_FollowedService.Count(Expression.Eq("Followed.ID", courseBox.Creator.ID));
                 int creatorFansNum = this._follower_FollowedService.Count(m => m.FollowedId == courseBox.CreatorId && !m.IsDeleted);
-                //int learnViewNum = Container.Instance.Resolve<Learner_CourseBoxService>().Count(Expression.Eq("CourseBox.ID", courseBox.ID));
                 int learnViewNum = this._learner_CourseBoxService.Count(m => m.CourseBoxId == courseBox.ID);
 
                 viewModel = new CourseBoxViewModel
@@ -91,7 +89,7 @@ namespace WebApi.Controllers
                     PicUrl = courseBox.PicUrl.ToHttpAbsoluteUrl(),
                     Creator = new CourseBoxViewModel.CreatorViewModel
                     {
-                        ID = courseBox.Creator?.ID ?? 0,
+                        ID = courseBox.CreatorId ?? 0,
                         UserName = courseBox.Creator?.UserName ?? "",
                         Avatar = courseBox.Creator?.Avatar.ToHttpAbsoluteUrl(),
                         FansNum = creatorFansNum
@@ -116,58 +114,9 @@ namespace WebApi.Controllers
                     {
                         ID = item.ID,
                         Title = item.Title,
-                        Page = item.Page ?? 0,
+                        Page = item.Page,
                         PlayUrl = item.PlayUrl.ToHttpAbsoluteUrl()
                     });
-                }
-
-                // 登录用户增加返回学习记录数据
-                UserInfo user = AccountManager.GetCurrentUserInfo();
-                if (user != null)
-                {
-                    //Learner_CourseBox learner_CourseBox = Container.Instance.Resolve<Learner_CourseBoxService>().Query(new List<ICriterion>
-                    //{
-                    //    Expression.And(
-                    //     Expression.Eq("Learner.ID", user.ID),
-                    //     Expression.Eq("CourseBox.ID", id)
-                    //     )
-                    //}).FirstOrDefault();
-                    Learner_CourseBox learner_CourseBox = this._learner_CourseBoxService.Find(m => m.LearnerId == user.ID && m.CourseBoxId == id && !m.IsDeleted);
-                    // 此用户有学习此课程
-                    if (learner_CourseBox != null)
-                    {
-                        if (learner_CourseBox.LastPlayVideoInfo != null)
-                        {
-                            //learner_LastAccessVideoInfo = Container.Instance.Resolve<Learner_VideoInfoService>().GetEntity(learner_CourseBox.LastPlayVideoInfo.ID);
-                            Learner_VideoInfo learner_LastPlayVideoInfo = this._learner_VideoInfoService.Find(learner_CourseBox.LastPlayVideoInfoId);
-                            viewModel.LastPlayVideoInfo = new CourseBoxViewModel.VideoInfoViewModel
-                            {
-                                ID = learner_CourseBox.LastPlayVideoInfo.ID,
-                                Page = learner_CourseBox.LastPlayVideoInfo.Page ?? 0,
-                                Title = learner_CourseBox.LastPlayVideoInfo.Title ?? "",
-                                LastPlayAt = learner_LastPlayVideoInfo.LastPlayAt ?? 0,
-                                ProgressAt = learner_LastPlayVideoInfo.ProgressAt ?? 0
-                            };
-                        }
-
-                        viewModel.JoinTime = learner_CourseBox.JoinTime.ToTimeStamp13();
-                        viewModel.SpendTime = learner_CourseBox.SpendTime ?? 0;
-
-                        for (int i = 0; i < viewModel.VideoInfos.Count; i++)
-                        {
-                            int videoInfoId = viewModel.VideoInfos[i].ID;
-                            //Learner_VideoInfo learner_VideoInfo = Container.Instance.Resolve<Learner_VideoInfoService>().Query(new List<ICriterion>
-                            //{
-                            //    Expression.And(
-                            //        Expression.Eq("Learner.ID", user.ID ),
-                            //        Expression.Eq("VideoInfo.ID", videoInfoId)
-                            //    )
-                            //}).FirstOrDefault();
-                            Learner_VideoInfo learner_VideoInfo = this._learner_VideoInfoService.Find(m => m.LearnerId == user.ID && m.VideoInfoId == videoInfoId && !m.IsDeleted);
-                            viewModel.VideoInfos[i].LastPlayAt = learner_VideoInfo?.LastPlayAt ?? 0;
-                            viewModel.VideoInfos[i].ProgressAt = learner_VideoInfo?.ProgressAt ?? 0;
-                        }
-                    }
                 }
 
                 responseData = new ResponseData

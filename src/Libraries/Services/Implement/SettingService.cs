@@ -63,6 +63,7 @@ namespace Services.Implement
                 dbModel.SetValue = value;
                 this._repository.Update(dbModel);
             }
+            this._repository.SaveChanges();
 
             // 更新缓存
             CacheHelper.Insert<string>("Settings." + key, value, DateTime.Now.AddDays(1));

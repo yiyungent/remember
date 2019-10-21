@@ -104,7 +104,7 @@ namespace Domain.Entities
                 long duration = 0;
                 if (this.VideoInfos != null && this.VideoInfos.Count >= 1)
                 {
-                    duration = this.VideoInfos.Select(m => m.Duration ?? 0).Sum();
+                    duration = this.VideoInfos.Select(m => m.Duration).Sum();
                 }
 
                 return duration;
