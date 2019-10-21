@@ -72,9 +72,9 @@
 						</li>
 						<li><a href="javacript:void(0);">受访页面 <span class="pull-right badge bg-blue">@Model.AccessUrl</span></a></li>
 						<li><a href="javacript:void(0);">来源 <span class="pull-right badge bg-blue">@Model.RefererUrl</span></a></li>
-						<li><a href="javacript:void(0);">访问时间 <span class="pull-right badge bg-aqua">@(Model.AccessTime?.ToString("yyyy-MM-dd HH:mm:ss"))</span></a></li>
-						<li><a href="javacript:void(0);">跳出时间 <span class="pull-right badge bg-green">@(Model.JumpTime?.ToString("yyyy-MM-dd HH:mm:ss"))</span></a></li>
-						<li><a href="javacript:void(0);">访问时长 <span class="pull-right badge bg-green">@PrettyTime(Model.Duration ?? 0)</span></a></li>
+						<li><a href="javacript:void(0);">访问时间 <span class="pull-right badge bg-aqua">@(Model.AccessTime.ToString("yyyy-MM-dd HH:mm:ss"))</span></a></li>
+						<li><a href="javacript:void(0);">跳出时间 <span class="pull-right badge bg-green">@(Model.JumpTime.ToString("yyyy-MM-dd HH:mm:ss"))</span></a></li>
+						<li><a href="javacript:void(0);">访问时长 <span class="pull-right badge bg-green">@PrettyTime(Model.Duration)</span></a></li>
 						<li>
 							<a href="javacript:void(0);">
 								属性

@@ -81,18 +81,18 @@ namespace Domain.Entities
         /// <summary>
         /// 访问时间：进入网页，加载完的时间
         /// </summary>
-        public DateTime? AccessTime { get; set; }
+        public DateTime AccessTime { get; set; }
 
         /// <summary>
         /// 跳出网页时间
         /// </summary>
-        public DateTime? JumpTime { get; set; }
+        public DateTime JumpTime { get; set; }
 
         /// <summary>
         /// 在页面的持续时间 = JumpTime - AccessTime
         /// 总秒数
         /// </summary>
-        public long? Duration { get; set; }
+        public long Duration { get; set; }
 
         /// <summary>
         /// 访问地址
@@ -111,6 +111,6 @@ namespace Domain.Entities
         /// <summary>
         /// 创建时间
         /// </summary>
-        public DateTime? CreateTime { get; set; }
+        public DateTime CreateTime { get; set; }
     }
 }

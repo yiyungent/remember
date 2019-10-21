@@ -19,12 +19,14 @@ namespace WebUI.Areas.Admin.Controllers
     {
         #region Fields
         private readonly ILogInfoService _logInfoService;
+        private readonly IUserInfoService _userInfoService;
         #endregion
 
         #region Ctor
-        public DashboardController(ILogInfoService logInfoService)
+        public DashboardController(ILogInfoService logInfoService, IUserInfoService userInfoService)
         {
             this._logInfoService = logInfoService;
+            this._userInfoService = userInfoService;
         }
         #endregion
 
@@ -32,10 +34,24 @@ namespace WebUI.Areas.Admin.Controllers
         public ViewResult Index()
         {
             DashboardOneViewModel viewModel = new DashboardOneViewModel();
-            viewModel.PV = 1;
-            viewModel.UV = 2;
-            viewModel.JumpRate = 23;
-            viewModel.NewUserReg = 213;
+            int todayPV = 0, todayUV = 0, todayJumpRate = 0, todayNewUserReg = 0;
+            DateTime now = DateTime.Now;
+            string today = now.ToString("yyyy-MM-dd");
+            // TODO: 发现这样写 linq ，EF仍然无法翻译成SQL，所以待转为手写SQL，或则推荐使用long类型存13位时间戳
+            // 计算PV：当天访问量
+            //todayPV = this._logInfoService.Filter(m => !m.IsDeleted).Where(m => m.AccessTime.ToString("yyyy-MM-dd") == today).Count();
+            todayPV = this._logInfoService.Filter(m => !m.IsDeleted).ToList().Where(m => m.AccessTime.ToString("yyyy-MM-dd") == today).Count();
+            // TODO: UV 本来算 cookie，但这里简化，直接算 IP
+            //todayUV = this._logInfoService.Filter(m => !m.IsDeleted).Where(m => m.AccessTime.ToString("yyyy-MM-dd") == today).GroupBy(m => m.AccessIp).Count();
+            todayUV = this._logInfoService.Filter(m => !m.IsDeleted).ToList().Where(m => m.AccessTime.ToString("yyyy-MM-dd") == today).GroupBy(m => m.AccessIp).Count();
+            //todayNewUserReg = this._userInfoService.All().Where(m => m.CreateTime.ToString("yyyy-MM-dd") == today).Count();
+            todayNewUserReg = this._userInfoService.All().ToList().Where(m => m.CreateTime.ToString("yyyy-MM-dd") == today).Count();
+            // TODO: 当天跳出率计算
+
+            viewModel.PV = todayPV;
+            viewModel.UV = todayUV;
+            viewModel.JumpRate = todayJumpRate;
+            viewModel.NewUserReg = todayNewUserReg;
 
             return View(viewModel);
         }

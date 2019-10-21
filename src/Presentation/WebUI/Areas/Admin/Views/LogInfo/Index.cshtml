@@ -157,8 +157,8 @@
 						}
 					</td>
 					<td><span class="label label-default">@item.AccessCity</span></td>
-					<td><span class="label label-success">@(item.AccessTime?.ToString("yyyy-MM-dd HH:mm"))</span></td>
-					<td><span class="label label-primary">@PrettyTime(item.Duration ?? 0)</span></td>
+					<td><span class="label label-success">@(item.AccessTime.ToString("yyyy-MM-dd HH:mm"))</span></td>
+					<td><span class="label label-primary">@PrettyTime(item.Duration)</span></td>
 					<td><span class="label label-info">@item.AccessUrl</span></td>
 					<td>
 						<span class="label label-info">@item.Browser.Split(' ')[0]</span>
