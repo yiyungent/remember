@@ -1,0 +1,15 @@
+﻿@using WebUI.Areas.Admin.Models.Common
+@{
+	Layout = null;
+
+	AdminWebBaseInfoViewModel baseInfo = ViewBag.AdminWebBaseInfo;
+}
+
+<footer class="main-footer">
+	<!-- To the right -->
+	<div class="pull-right hidden-xs">
+		@Html.Raw(baseInfo.Logo_mini)
+	</div>
+	<!-- Default to the left -->
+	@Html.Raw(baseInfo.Copyright)
+</footer>

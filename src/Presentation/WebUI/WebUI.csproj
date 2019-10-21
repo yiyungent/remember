@@ -8217,7 +8217,6 @@
     <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Controllers\WidgetController.cs" />
     <Compile Include="DependencyRegistrar.cs" />
-    <Compile Include="Extensions\DateTimeExt.cs" />
     <Compile Include="Extensions\DomainExt.cs" />
     <Compile Include="Extensions\MappingExtensions.cs" />
     <Compile Include="Extensions\ModelStateDicExt.cs" />
@@ -8921,6 +8920,9 @@
     <Content Include="Areas\Admin\Views\LogInfo\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Dashboard\IndexTwo.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_FooterPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_RightControlSidebarPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_HeaderPartial.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Install\Index.cshtml" />

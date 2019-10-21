@@ -10,9 +10,11 @@
 
 	ViewBag.Title = "管理中心 - " + WebSetting.Get("WebUITitle");
 
-	AdminWebBaseInfoViewModel BaseInfo = ViewBag.AdminWebBaseInfo as AdminWebBaseInfoViewModel;
-	BaseInfo = BaseInfo ?? new AdminWebBaseInfoViewModel();
+	AdminWebBaseInfoViewModel baseInfo = new AdminWebBaseInfoViewModel();
 	UserInfo currentUserInfo = AccountManager.GetCurrentUserInfo(true);
+	currentUserInfo.Avatar = currentUserInfo.Avatar.ToHttpAbsoluteUrl();
+	ViewBag.AdminWebBaseInfo = baseInfo;
+	ViewBag.CurrentUserInfo = currentUserInfo;
 }
 
 <!DOCTYPE html>
@@ -37,115 +39,10 @@
 	<![endif]-->
 	@RenderSection("head", false)
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini fixed">
 	<div class="wrapper">
 		<!-- Main Header -->
-		<header class="main-header">
-			<!-- Logo -->
-			<a href="/" class="logo">
-				<!-- mini logo for sidebar mini 50x50 pixels -->
-				<span class="logo-mini">@Html.Raw(BaseInfo.Logo_mini)</span>
-				<!-- logo for regular state and mobile devices -->
-				<span class="logo-lg">@Html.Raw(BaseInfo.Logo_lg)</span>
-			</a>
-			<!-- Header Navbar -->
-			<nav class="navbar navbar-static-top" role="navigation">
-				<!-- Sidebar toggle button-->
-				<a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-					<span class="sr-only">Toggle navigation</span>
-				</a>
-				<!-- Navbar Right Menu -->
-				<div class="navbar-custom-menu">
-					<ul class="nav navbar-nav">
-						<!-- Messages: style can be found in dropdown.less-->
-						<li class="dropdown messages-menu">
-							<!-- Menu toggle button -->
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								<i class="fa fa-envelope-o"></i>
-								<span class="label label-success">4</span>
-							</a>
-							<ul class="dropdown-menu">
-								<li class="header">You have 4 messages</li>
-								<li>
-									<!-- inner menu: contains the messages -->
-									<ul class="menu">
-										<li>
-											<!-- start message -->
-											<a href="#">
-												<div class="pull-left">
-													<!-- User Image -->
-													<img src="@currentUserInfo.Avatar.ToHttpAbsoluteUrl()" class="img-circle" alt="User Image">
-												</div>
-												<!-- Message title and timestamp -->
-												<h4>
-													Support Team
-													<small><i class="fa fa-clock-o"></i> 5 mins</small>
-												</h4>
-												<!-- The message -->
-												<p>Why not buy a new awesome theme?</p>
-											</a>
-										</li>
-										<!-- end message -->
-									</ul>
-									<!-- /.menu -->
-								</li>
-								<li class="footer"><a href="#">See All Messages</a></li>
-							</ul>
-						</li>
-						<!-- /.messages-menu -->
-						<!-- User Account Menu -->
-						<li class="dropdown user user-menu">
-							<!-- Menu Toggle Button -->
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								<!-- The user image in the navbar-->
-								<img src="@currentUserInfo.Avatar.ToHttpAbsoluteUrl()" class="user-image" alt="User Image">
-								<!-- hidden-xs hides the username on small devices so only the image appears. -->
-								<span class="hidden-xs">@currentUserInfo.UserName</span>
-							</a>
-							<ul class="dropdown-menu">
-								<!-- The user image in the menu -->
-								<li class="user-header">
-									<img src="@currentUserInfo.Avatar.ToHttpAbsoluteUrl()" class="img-circle" alt="User Image">
-									<p>
-										@currentUserInfo.UserName - @currentUserInfo.RoleInfos.FirstOrDefault().Name
-										@*<small>Member since Nov. 2012</small>*@
-										<small>加入自 @currentUserInfo.CreateTime.ToRegTime()</small>
-									</p>
-								</li>
-								<!-- Menu Body -->
-								<li class="user-body">
-									<div class="row">
-										<div class="col-xs-4 text-center">
-											<a href="#">Followers</a>
-										</div>
-										<div class="col-xs-4 text-center">
-											<a href="#">Sales</a>
-										</div>
-										<div class="col-xs-4 text-center">
-											<a href="#">Friends</a>
-										</div>
-									</div>
-									<!-- /.row -->
-								</li>
-								<!-- Menu Footer-->
-								<li class="user-footer">
-									<div class="pull-left">
-										<a href="@Url.Action("Index", "Profile", new { area = "Account", userName = currentUserInfo.UserName })" class="btn btn-default btn-flat" target="_blank">个人中心</a>
-									</div>
-									<div class="pull-right">
-										<a href="@Url.Action("Exit", "Login", new { area = "Account", returnUrl = Url.Action("Index", "Login", new { area = "Account" }) })" class="btn btn-default btn-flat">退出</a>
-									</div>
-								</li>
-							</ul>
-						</li>
-						<!-- Control Sidebar Toggle Button -->
-						<li>
-							<a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-						</li>
-					</ul>
-				</div>
-			</nav>
-		</header>
+		@{ Html.RenderPartial("_HeaderPartial"); }
 		<!-- Left side column. contains the logo and sidebar -->
 		<aside class="main-sidebar">
 			<!-- sidebar: style can be found in sidebar.less -->
@@ -153,7 +50,7 @@
 				<!-- Sidebar user panel (optional) -->
 				<div class="user-panel">
 					<div class="pull-left image">
-						<img src="@currentUserInfo.Avatar.ToHttpAbsoluteUrl()" class="img-circle" alt="User Image">
+						<img src="@currentUserInfo.Avatar" class="img-circle" alt="User Image">
 					</div>
 					<div class="pull-left info">
 						<p>@currentUserInfo.UserName</p>
@@ -185,65 +82,10 @@
 		</div>
 		<!-- /.content-wrapper -->
 		<!-- Main Footer -->
-		<footer class="main-footer">
-			<!-- To the right -->
-			<div class="pull-right hidden-xs">
-				Anything you want
-			</div>
-			<!-- Default to the left -->
-			@Html.Raw(BaseInfo.Copyright)
-		</footer>
+		@{ Html.RenderPartial("_FooterPartial"); }
 		<!-- Control Sidebar -->
-		<aside class="control-sidebar control-sidebar-dark">
-			<!-- Create the tabs -->
-			<ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-				<li class="active"><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-				<li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-			</ul>
-			<!-- Tab panes -->
-			<div class="tab-content">
-				<!-- Home tab content -->
-				<div class="tab-pane active" id="control-sidebar-home-tab">
-					<h3 class="control-sidebar-heading">选择主题模板</h3>
-					<ul class="control-sidebar-menu">
-						@foreach (var item in BaseInfo.ThemeTemplateDic)
-						{
-							<li>
-								<a onclick="selectTemplate(@item.Key)">
-									<h4 class="control-sidebar-subheading"><i class="fa fa-th-large"></i> @item.Value</h4>
-								</a>
-							</li>
-						}
-					</ul>
-					<!-- /.control-sidebar-menu -->
-				</div>
-				<!-- /.tab-pane -->
-				<!-- Stats tab content -->
-				<div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
-				<!-- /.tab-pane -->
-				<!-- Settings tab content -->
-				<div class="tab-pane" id="control-sidebar-settings-tab">
-					<form method="post">
-						<h3 class="control-sidebar-heading">General Settings</h3>
-						<div class="form-group">
-							<label class="control-sidebar-subheading">
-								Report panel usage
-								<input type="checkbox" class="pull-right" checked>
-							</label>
-							<p>
-								Some information about this general settings option
-							</p>
-						</div>
-						<!-- /.form-group -->
-					</form>
-				</div>
-				<!-- /.tab-pane -->
-			</div>
-		</aside>
+		@{ Html.RenderPartial("_RightControlSidebarPartial"); }
 		<!-- /.control-sidebar -->
-		<!-- Add the sidebar's background. This div must be placed
-		immediately after the control sidebar -->
-		<div class="control-sidebar-bg"></div>
 	</div>
 	<!-- ./wrapper -->
 	<!-- REQUIRED JS SCRIPTS -->
