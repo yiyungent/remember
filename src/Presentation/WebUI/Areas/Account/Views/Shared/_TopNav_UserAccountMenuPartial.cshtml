@@ -6,8 +6,9 @@
 @using WebUI.Extensions
 @{
 	Layout = null;
-	CurrentAccountModel currentAccount = AccountManager.GetCurrentAccount();
-	UserInfo currentUserInfo = AccountManager.GetCurrentUserInfo(true);
+
+	CurrentAccountModel currentAccount = ViewBag.CurrentAccount;
+	UserInfo currentUserInfo = ViewBag.CurrentUserInfo;
 	string roleName = ViewBag.RoleName;
 }
 
@@ -15,7 +16,7 @@
 	<!-- Menu Toggle Button -->
 	<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 		<!-- The user image in the navbar-->
-		<img src="@currentUserInfo.Avatar.ToHttpAbsoluteUrl()" class="user-image" alt="User Image">
+		<img src="@currentUserInfo.Avatar" class="user-image" alt="User Image">
 		<!-- hidden-xs hides the username on small devices so only the image appears. -->
 		<span class="hidden-xs">@currentUserInfo.UserName</span>
 	</a>
@@ -28,7 +29,7 @@
 				@currentUserInfo.UserName - @roleName
 				@if (!currentAccount.IsGuest)
 				{
-					<small>加入自 @currentUserInfo.CreateTime.ToRegTime()</small>
+					<small>加入自 @currentUserInfo.CreateTime.ToString("yyyy-MM-dd")</small>
 				}
 			</p>
 		</li>
@@ -38,13 +39,13 @@
 			{
 				<div class="row">
 					<div class="col-xs-4 text-center">
-						<a href="#">花朵</a>
+						<a href="#">粉丝</a>
 					</div>
 					<div class="col-xs-4 text-center">
-						<a href="#">销量</a>
+						<a href="#">关注</a>
 					</div>
 					<div class="col-xs-4 text-center">
-						<a href="#">好友</a>
+						<a href="#">积分</a>
 					</div>
 				</div>
 				<!-- /.row -->

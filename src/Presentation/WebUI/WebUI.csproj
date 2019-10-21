@@ -8254,13 +8254,13 @@
     <Content Include="Areas\Account\Views\Profile\Index.cshtml" />
     <Content Include="Areas\Account\Views\Shared\_AboutMeBoxPartial.cshtml" />
     <Content Include="Areas\Account\Views\Shared\_ActivityPartial.cshtml" />
-    <Content Include="Areas\Account\Views\Shared\_LayoutMain.cshtml" />
+    <Content Include="Areas\Account\Views\Shared\_Login.cshtml" />
     <Content Include="Areas\Account\Views\Shared\_MessagePartial.cshtml" />
     <Content Include="Areas\Account\Views\Shared\_ProfileBoxPartial.cshtml" />
     <Content Include="Areas\Account\Views\Shared\_Redirect.cshtml" />
     <Content Include="Areas\Account\Views\Shared\_SettingsPartial.cshtml" />
     <Content Include="Areas\Account\Views\Shared\_TimeLinePartial.cshtml" />
-    <Content Include="Areas\Account\Views\Shared\_TopNav.cshtml" />
+    <Content Include="Areas\Account\Views\Shared\_LayoutMain.cshtml" />
     <Content Include="Areas\Account\Views\Shared\_TopNav_MessagesMenuPartial.cshtml" />
     <Content Include="Areas\Account\Views\Shared\_TopNav_NavbarCollapsePartial.cshtml" />
     <Content Include="Areas\Account\Views\Shared\_TopNav_NotificationsMenuPartial.cshtml" />
@@ -8923,6 +8923,8 @@
     <Content Include="Areas\Admin\Views\Shared\_FooterPartial.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_RightControlSidebarPartial.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_HeaderPartial.cshtml" />
+    <Content Include="Areas\Account\Views\Shared\_FooterPartial.cshtml" />
+    <Content Include="Areas\Account\Views\Shared\_RightControlSidebarPartial.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Install\Index.cshtml" />

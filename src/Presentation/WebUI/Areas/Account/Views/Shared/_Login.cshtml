@@ -1,0 +1,45 @@
+﻿@using Framework.Extensions
+@{
+	Layout = null;
+
+	string subTitle = ViewBag.SubTitle;
+	string title = WebSetting.Get("WebUITitle");
+	if (!string.IsNullOrEmpty(subTitle))
+	{
+		title = subTitle + " - " + title;
+	}
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>@title</title>
+	<link href="/assets/css/base.css" rel="stylesheet" />
+	<style>
+		.outer {
+			width: 980px;
+			margin: 0 auto;
+		}
+
+		.top-banner {
+			background: #00a0d8;
+			height: 86px;
+			text-align: center;
+			margin-bottom: 20px;
+		}
+	</style>
+	@RenderSection("head", false)
+</head>
+<body>
+	<div class="outer">
+		<div class="top-banner">
+			<img src="/assets/images/top_banner.png" alt="Banner" />
+		</div>
+		@RenderBody()
+	</div>
+	<script src="/assets/libs/AdminLTE/bower_components/jquery/dist/jquery.min.js"></script>
+	@RenderSection("foot", false)
+</body>
+</html>

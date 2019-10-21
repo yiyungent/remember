@@ -46,14 +46,14 @@ namespace WebUI.Areas.Account.Controllers
                 return RedirectToAction("Index", "Home", new { area = "" });
             }
             // 此主页对应的UserInfo
-            UserInfo model = AccountManager.GetUserInfoByUserName(userName);
-            if (model == null)
+            UserInfo viewModel = AccountManager.GetUserInfoByUserName(userName);
+            if (viewModel == null)
             {
                 // 不存在此用户
                 return new View_NotExistAccountResult();
             }
 
-            return View(model);
+            return View(viewModel);
         }
         #endregion
 
@@ -72,16 +72,25 @@ namespace WebUI.Areas.Account.Controllers
                     return Json(new { code = -2, message = "保存失败, 当前未登录" });
                 }
 
+                #region 数据有效性效验
+                bool isExistUserName = this._userInfoService.Contains(m => m.UserName == inputModel.InputUserName && m.ID != currentLoginUserInfo.ID);
+                if (isExistUserName)
+                {
+                    return Json(new { code = -4, message = "保存失败, 此用户名已被使用" });
+                }
+                #endregion
+
                 // 为取到最新数据，从数据库中拿
-                UserInfo dbUserInfo = this._userInfoService.Find(m =>
+                UserInfo dbModel = this._userInfoService.Find(m =>
                     m.UserName == currentLoginUserInfo.UserName
                     && !m.IsDeleted
                 );
 
-                dbUserInfo.Email = inputModel.InputEmail;
-                dbUserInfo.Description = inputModel.InputDescription;
+                dbModel.Email = inputModel.InputEmail;
+                dbModel.UserName = inputModel.InputUserName;
+                dbModel.Description = inputModel.InputDescription;
 
-                this._userInfoService.Update(dbUserInfo);
+                this._userInfoService.Update(dbModel);
 
                 return Json(new { code = 1, message = "保存成功" });
             }
