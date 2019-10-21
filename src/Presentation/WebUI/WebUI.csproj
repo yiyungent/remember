@@ -8928,9 +8928,8 @@
     <Content Include="Views\Install\Index.cshtml" />
     <Content Include="Views\CourseBox\Index.cshtml" />
     <Content Include="Views\Errors\PageNotFound.cshtml" />
-    <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Shared\_ErrorRedirect.cshtml" />
-    <Content Include="Views\Shared\_TopNav.cshtml" />
+    <Content Include="Views\Shared\_LayoutMain.cshtml" />
     <Content Include="Views\Shared\_TopNav_MessagesMenuPartial.cshtml" />
     <Content Include="Views\Shared\_TopNav_NavbarCollapsePartial.cshtml" />
     <Content Include="Views\Shared\_TopNav_NotificationsMenuPartial.cshtml" />
@@ -8939,6 +8938,9 @@
     <Content Include="Views\Widget\WidgetsByZone.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <Content Include="Views\Shared\_RightControlSidebarPartial.cshtml" />
+    <Content Include="Views\Shared\_FooterPartial.cshtml" />
+    <Content Include="Views\Shared\_ContentHeaderPartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

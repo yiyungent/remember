@@ -11,12 +11,10 @@
 	Layout = null;
 
 	// 当前登录账号
+	CurrentAccountModel currentAccount = AccountManager.GetCurrentAccount();
 	UserInfo currentUserInfo = AccountManager.GetCurrentUserInfo(true);
+	currentUserInfo.Avatar = currentUserInfo.Avatar.ToHttpAbsoluteUrl();
 	string roleName = currentUserInfo.RoleInfos.FirstOrDefault() == null ? "" : currentUserInfo.RoleInfos.FirstOrDefault().Name;
-
-	//ViewBag.CurrentAccount = currentAccount;
-	ViewBag.RoleName = roleName;
-
 
 	IDictionary<int, string> themeTemplateDic = new Dictionary<int, string>();
 	IList<ThemeTemplate> themeTemplates = ContainerManager.Resolve<IThemeTemplateService>().Filter(m => m.IsOpen == 1 && !m.IsDeleted).ToList();
@@ -25,6 +23,15 @@
 	{
 		themeTemplateDic.Add(item.ID, item.Title);
 	}
+	string title = WebSetting.Get("WebUITitle");
+	string subTitle = ViewBag.SubTitle;
+	string desc = ViewBag.Desc;
+	string site = WebSetting.Get("WebUISite");
+
+	ViewBag.CurrentAccount = currentAccount;
+	ViewBag.CurrentUserInfo = currentUserInfo;
+	ViewBag.RoleName = roleName;
+	ViewBag.ThemeTemplateDic = themeTemplateDic;
 }
 
 <!DOCTYPE html>
@@ -32,10 +39,19 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width" />
-	<title>@ViewBag.Title</title>
-	<meta name="title" content="@ViewBag.Title" />
-	<meta name="site" content="@WebSetting.Get("WebUISite")" />
-	<meta name="description" content="@ViewBag.Desc" />
+	<title>
+		@if (!string.IsNullOrEmpty(subTitle))
+		{
+			@(subTitle + " - " + title)
+		}
+		else
+		{
+			@title
+		}
+	</title>
+	<meta name="title" content="@subTitle - @title" />
+	<meta name="site" content="@site" />
+	<meta name="description" content="@desc" />
 	<!-- Tell the browser to be responsive to screen width -->
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 	<link rel="stylesheet" href="/assets/libs/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -60,7 +76,7 @@
 			<nav class="navbar navbar-static-top">
 				<div class="container">
 					<div class="navbar-header">
-						<a href="/" class="navbar-brand">@WebSetting.Get("WebUITitle")</a>
+						<a href="/" class="navbar-brand">@title</a>
 						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
 							<i class="fa fa-bars"></i>
 						</button>
@@ -95,70 +111,16 @@
 		<!-- Full Width Column -->
 		<div class="content-wrapper">
 			<div class="container">
+				@*@{Html.RenderPartial("_ContentHeaderPartial"); }*@
 				@RenderBody()
 			</div>
 			<!-- /.container -->
 		</div>
 		<!-- /.content-wrapper -->
-		<footer class="main-footer">
-			<div class="container">
-				<div class="pull-right hidden-xs">
-					<b>Version</b> 2.3.7
-				</div>
-				<strong>Copyright &copy; 2014-2016 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights
-				reserved.
-			</div>
-			<!-- /.container -->
-		</footer>
+		@{Html.RenderPartial("_FooterPartial"); }
 		<!-- Control Sidebar -->
-		<aside class="control-sidebar control-sidebar-dark">
-			<!-- Create the tabs -->
-			<ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-				<li class="active"><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-				<li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-			</ul>
-			<!-- Tab panes -->
-			<div class="tab-content">
-				<!-- Home tab content -->
-				<div class="tab-pane active" id="control-sidebar-home-tab">
-					<h3 class="control-sidebar-heading">选择主题模板</h3>
-					<ul class="control-sidebar-menu">
-						@foreach (var item in themeTemplateDic)
-						{
-							<li>
-								<a onclick="selectTemplate(@item.Key)">
-									<h4 class="control-sidebar-subheading"><i class="fa fa-th-large"></i> @item.Value</h4>
-								</a>
-							</li>
-						}
-					</ul>
-					<!-- /.control-sidebar-menu -->
-				</div>
-				<!-- /.tab-pane -->
-				<!-- Stats tab content -->
-				<div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
-				<!-- /.tab-pane -->
-				<!-- Settings tab content -->
-				<div class="tab-pane" id="control-sidebar-settings-tab">
-					<form method="post">
-						<h3 class="control-sidebar-heading">General Settings</h3>
-						<div class="form-group">
-							<label class="control-sidebar-subheading">
-								Report panel usage
-								<input type="checkbox" class="pull-right" checked>
-							</label>
-							<p>
-								Some information about this general settings option
-							</p>
-						</div>
-						<!-- /.form-group -->
-					</form>
-				</div>
-				<!-- /.tab-pane -->
-			</div>
-		</aside>
+		@{Html.RenderPartial("_RightControlSidebarPartial"); }
 		<!-- /.control-sidebar -->
-		<div class="control-sidebar-bg"></div>
 	</div>
 	<!-- ./wrapper -->
 	<!-- jQuery -->

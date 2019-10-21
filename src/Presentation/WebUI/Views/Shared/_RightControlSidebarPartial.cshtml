@@ -1,0 +1,56 @@
+﻿
+@{
+	Layout = null;
+
+	IDictionary<int, string> themeTemplateDic = ViewBag.ThemeTemplateDic;
+}
+
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+	<!-- Create the tabs -->
+	<ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+		<li class="active"><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+		<li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+	</ul>
+	<!-- Tab panes -->
+	<div class="tab-content">
+		<!-- Home tab content -->
+		<div class="tab-pane active" id="control-sidebar-home-tab">
+			<h3 class="control-sidebar-heading">选择主题模板</h3>
+			<ul class="control-sidebar-menu">
+				@foreach (var item in themeTemplateDic)
+				{
+					<li>
+						<a onclick="selectTemplate(@item.Key)">
+							<h4 class="control-sidebar-subheading"><i class="fa fa-th-large"></i> @item.Value</h4>
+						</a>
+					</li>
+				}
+			</ul>
+			<!-- /.control-sidebar-menu -->
+		</div>
+		<!-- /.tab-pane -->
+		<!-- Stats tab content -->
+		<div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+		<!-- /.tab-pane -->
+		<!-- Settings tab content -->
+		<div class="tab-pane" id="control-sidebar-settings-tab">
+			<form method="post">
+				<h3 class="control-sidebar-heading">常规设置</h3>
+				<div class="form-group">
+					<label class="control-sidebar-subheading">
+						免打扰
+						<input type="checkbox" class="pull-right" checked>
+					</label>
+					<p>
+						普通消息不再提醒
+					</p>
+				</div>
+				<!-- /.form-group -->
+			</form>
+		</div>
+		<!-- /.tab-pane -->
+	</div>
+</aside>
+<!-- /.control-sidebar -->
+<div class="control-sidebar-bg"></div>

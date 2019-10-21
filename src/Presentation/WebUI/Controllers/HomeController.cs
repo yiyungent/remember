@@ -36,8 +36,7 @@ namespace WebUI.Controllers
         #region 首页
         public ActionResult Index()
         {
-            //IList<CourseBox> courseBoxes = Container.Instance.Resolve<CourseBoxService>().GetAll();
-            IList<CourseBox> courseBoxes = this._courseBoxService.All().ToList();
+            IList<CourseBox> courseBoxes = this._courseBoxService.Filter(m => !m.IsDeleted).ToList();
             ViewBag.CourseBoxes = courseBoxes;
 
             return View();

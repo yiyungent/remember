@@ -1,45 +1,8 @@
-﻿@using Domain.Entities
-@using Framework.Models
-@using Framework.Extensions
-@using Framework.Infrastructure.Concrete
+﻿
 @{
 	Layout = null;
-	//CurrentAccountModel currentAccount = AccountManager.GetCurrentUserInfo();
-	UserInfo currentUserInfo = AccountManager.GetCurrentUserInfo();
-	string roleName = ViewBag.RoleName;
 }
 
 <li class="dropdown messages-menu">
-	<!-- Menu toggle button -->
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-		<i class="fa fa-envelope-o"></i>
-		<span class="label label-success">4</span>
-	</a>
-	<ul class="dropdown-menu">
-		<li class="header">You have 4 messages</li>
-		<li>
-			<!-- inner menu: contains the messages -->
-			<ul class="menu">
-				<li>
-					<!-- start message -->
-					<a href="#">
-						<div class="pull-left">
-							<!-- User Image -->
-							<img src="@currentUserInfo.Avatar.ToHttpAbsoluteUrl()" class="img-circle" alt="User Image">
-						</div>
-						<!-- Message title and timestamp -->
-						<h4>
-							Support Team
-							<small><i class="fa fa-clock-o"></i> 5 mins</small>
-						</h4>
-						<!-- The message -->
-						<p>Why not buy a new awesome theme?</p>
-					</a>
-				</li>
-				<!-- end message -->
-			</ul>
-			<!-- /.menu -->
-		</li>
-		<li class="footer"><a href="#">查看所有消息</a></li>
-	</ul>
+	
 </li>
