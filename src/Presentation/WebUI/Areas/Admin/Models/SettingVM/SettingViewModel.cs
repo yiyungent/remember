@@ -36,6 +36,11 @@ namespace WebUI.Areas.Admin.Models.SettingVM
 
         public bool EnableLog { get; set; }
 
+        /// <summary>
+        /// 跨域白名单
+        /// </summary>
+        public string CorsWhiteList { get; set; }
+
         #region 系统邮箱
 
         /// <summary>

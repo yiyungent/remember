@@ -168,7 +168,9 @@ namespace WebUI.Controllers
                     { "EnableLog", "0" },
 
                     { "FindPwd_MailSubject", "【{{WebUITitle}}】账号安全中心-找回登录密码-{{ReceiveMail}}正在尝试找回密码"},
-                    { "FindPwd_MailContent", findPwd_MailContent }
+                    { "FindPwd_MailContent", findPwd_MailContent },
+
+                    { "CorsWhiteList", "* live.a.com m.a.com"}
                 };
 
                 foreach (var keyValue in dic)

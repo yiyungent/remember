@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Framework.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -13,9 +14,9 @@ namespace WebApi.Infrastructure
         async protected override Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            IList<string> whiteList = new List<string>();
-            // TODO: WebApiWhiteList 白名单待查数据库
-            whiteList.Add("*");
+            string corsWhiteListStr = WebSetting.Get("CorsWhiteList");
+            IList<string> whiteList = corsWhiteListStr.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
             HttpResponseMessage response;
             if (request.Method == HttpMethod.Options)
             {

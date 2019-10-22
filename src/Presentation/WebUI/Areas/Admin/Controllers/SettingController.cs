@@ -99,6 +99,7 @@ namespace WebUI.Areas.Admin.Controllers
             viewModel.WebApiDesc = WebSetting.Get("WebApiDesc");
             viewModel.WebApiKeywords = WebSetting.Get("WebApiKeywords");
             viewModel.WebApiStat = WebSetting.Get("WebApiStat");
+            viewModel.CorsWhiteList = WebSetting.Get("CorsWhiteList");
 
             return View(viewModel);
         }
@@ -123,6 +124,7 @@ namespace WebUI.Areas.Admin.Controllers
                         WebSetting.Set("WebApiDesc", inputModel.WebApiDesc);
                         WebSetting.Set("WebApiKeywords", inputModel.WebApiKeywords);
                         WebSetting.Set("WebApiStat", inputModel.WebApiStat);
+                        WebSetting.Set("CorsWhiteList", inputModel.CorsWhiteList);
                     }
                     catch (Exception ex)
                     {
