@@ -27,7 +27,7 @@ namespace WebApi.Controllers
 {
     //[EnableCors(origins: "*", headers: "*", methods: "*")]
     [RoutePrefix("api/User")]
-    public class UserController : ApiController
+    public class UserController : BaseController
     {
         #region Fields
         private readonly ISettingService _settingService;
@@ -619,6 +619,8 @@ namespace WebApi.Controllers
 
         #endregion
 
+
+       
     }
 
     public class Follower_FollowedEqCompare : IEqualityComparer<Follower_Followed>

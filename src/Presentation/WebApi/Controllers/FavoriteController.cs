@@ -19,7 +19,7 @@ using WebApi.Models.FavoriteVM;
 namespace WebApi.Controllers
 {
     [RoutePrefix("api/Favorite")]
-    public class FavoriteController : ApiController
+    public class FavoriteController : BaseController
     {
         #region Fields
         private readonly IFavoriteService _favoriteService;

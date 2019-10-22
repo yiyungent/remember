@@ -19,7 +19,7 @@ using Framework.Extensions;
 namespace WebApi.Controllers
 {
     [RoutePrefix("api/Home")]
-    public class HomeController : ApiController
+    public class HomeController : BaseController
     {
         #region Fields
         private readonly ILearner_CourseBoxService _learner_CourseBoxService;
@@ -99,6 +99,7 @@ namespace WebApi.Controllers
 
         #region 最新课程
         [HttpGet]
+        [HttpOptions]
         [Route("LastCourseBox")]
         public ResponseData LastCourseBox(int number)
         {

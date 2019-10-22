@@ -124,6 +124,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attributes\NeedAuthAttribute.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CourseBoxController.cs" />
     <Compile Include="Controllers\FavoriteController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="Models\CourseBoxVM\LearnCourseBoxInputModel.cs" />
     <Compile Include="Models\CourseBoxVM\PlayHistoryPushInputModel.cs" />
     <Compile Include="Models\CourseBoxVM\SimpleCommentsViewModel.cs" />
+    <Compile Include="Models\VideoInfoVM\VideoHistoryViewModel.cs" />
     <Compile Include="Models\FavoriteVM\CreateInputModel.cs" />
     <Compile Include="Models\FavoriteVM\FavCourseBoxInputModel.cs" />
     <Compile Include="Models\FavoriteVM\FavoriteViewModel.cs" />

@@ -23,7 +23,7 @@ namespace WebApi.Controllers
 {
     //[EnableCors(origins: "*", headers: "*", methods: "*")]
     [RoutePrefix("api/CourseBox")]
-    public class CourseBoxController : ApiController
+    public class CourseBoxController : BaseController
     {
         #region Fields
         private readonly ICourseBoxService _courseBoxService;
@@ -139,6 +139,8 @@ namespace WebApi.Controllers
             return responseData;
         }
         #endregion
+
+        
 
         #region Post: 创建新课程
         [NeedAuth]
@@ -780,6 +782,7 @@ namespace WebApi.Controllers
         #region 播放历史推送
         [Route("PlayHistoryPush")]
         [HttpPost]
+        [HttpOptions]
         [NeedAuth]
         public ResponseData PlayHistoryPush(PlayHistoryPushInputModel inputModel)
         {

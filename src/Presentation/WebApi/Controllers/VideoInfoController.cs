@@ -2,6 +2,8 @@
 using Core.Common;
 using Domain;
 using Domain.Entities;
+using Framework.Extensions;
+using Framework.Infrastructure.Concrete;
 using Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -20,7 +22,7 @@ using WebApi.Models.VideoInfoVM;
 namespace WebApi.Controllers
 {
     [RoutePrefix("api/VideoInfo")]
-    public class VideoInfoController : ApiController
+    public class VideoInfoController : BaseController
     {
         #region Fields
         private readonly ILearner_VideoInfoService _learner_VideoInfoService;
@@ -245,6 +247,56 @@ namespace WebApi.Controllers
                 {
                     Code = -1,
                     Message = "添加视频失败"
+                };
+            }
+
+            return responseData;
+        }
+        #endregion
+
+        #region 获取此视频的历史记录
+        [NeedAuth]
+        [HttpGet]
+        [Route("VideoHistory")]
+        public ResponseData VideoHistory(int videoId)
+        {
+            ResponseData responseData = null;
+            try
+            {
+                VideoHistoryViewModel viewModel = new VideoHistoryViewModel();
+                int currentUserId = AccountManager.GetCurrentAccount().UserId;
+                Learner_VideoInfo learner_VideoInfo = this._learner_VideoInfoService.Find(m => m.LearnerId == currentUserId && m.VideoInfoId == videoId && !m.IsDeleted);
+                if (learner_VideoInfo != null)
+                {
+                    viewModel.Learner = new VideoHistoryViewModel.LearnerModel
+                    {
+                        ID = learner_VideoInfo.LearnerId ?? 0,
+                        Avatar = learner_VideoInfo.Learner.Avatar.ToHttpAbsoluteUrl(),
+                        UserName = learner_VideoInfo.Learner.UserName
+                    };
+                    viewModel.Video = new VideoHistoryViewModel.VideoModel
+                    {
+                        ID = learner_VideoInfo.VideoInfoId ?? 0,
+                        Title = learner_VideoInfo.VideoInfo.Title,
+                    };
+                    viewModel.LastPlayAt = learner_VideoInfo.LastPlayAt ?? 0;
+                    viewModel.LastPlayTime = learner_VideoInfo.LastPlayTime.ToTimeStamp13();
+                    viewModel.ProgressAt = learner_VideoInfo.ProgressAt ?? 0;
+                }
+
+                responseData = new ResponseData
+                {
+                    Code = 1,
+                    Message = "获取此视频的历史记录成功",
+                    Data = viewModel
+                };
+            }
+            catch (Exception ex)
+            {
+                responseData = new ResponseData
+                {
+                    Code = -1,
+                    Message = "获取此视频的历史记录失败"
                 };
             }
 
