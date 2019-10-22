@@ -140,7 +140,7 @@ namespace WebApi.Controllers
         }
         #endregion
 
-        
+
 
         #region Post: 创建新课程
         [NeedAuth]
@@ -633,44 +633,31 @@ namespace WebApi.Controllers
             ResponseData responseData = null;
             try
             {
-                //if (Container.Instance.Resolve<CourseBoxService>().Exist(inputModel.CourseBoxId))
                 if (this._courseBoxService.Contains(m => m.ID == inputModel.CourseBoxId))
                 {
                     // 评论课程  
                     // 1. CourseBox.CommentNum + 1  当前课程 评论数 + 1 
-                    //CourseBox courseBox = Container.Instance.Resolve<CourseBoxService>().GetEntity(inputModel.CourseBoxId);
                     CourseBox courseBox = this._courseBoxService.Find(inputModel.CourseBoxId);
                     courseBox.CommentNum = courseBox.CommentNum + 1;
 
-                    //Container.Instance.Resolve<CourseBoxService>().Edit(courseBox);
                     this._courseBoxService.Update(courseBox);
                     int currentUserId = ((UserIdentity)User.Identity).ID;
 
                     // 2. CourseBox_Comment 插入一条记录
-                    UserInfo userInfo = new UserInfo
-                    {
-                        ID = currentUserId
-                    };
 
                     Comment comment = new Comment
                     {
-                        Author = userInfo,
+                        AuthorId = currentUserId,
                         Content = inputModel.Content,
                         CreateTime = DateTime.Now,
                         LastUpdateTime = DateTime.Now
                     };
-                    //Container.Instance.Resolve<CommentService>().Create(comment);
                     this._commentService.Create(comment);
 
-                    //Container.Instance.Resolve<CourseBox_CommentService>().Create(new CourseBox_Comment
-                    //{
-                    //    Comment = comment,
-                    //    CourseBox = new CourseBox { ID = inputModel.CourseBoxId }
-                    //});
                     this._courseBox_CommentService.Create(new CourseBox_Comment
                     {
-                        Comment = comment,
-                        CourseBoxId = inputModel.CourseBoxId
+                        CommentId = comment.ID,
+                        CourseBoxId = inputModel.CourseBoxId,
                     });
 
                     responseData = new ResponseData

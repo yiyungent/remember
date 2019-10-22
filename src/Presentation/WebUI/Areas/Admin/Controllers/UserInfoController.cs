@@ -284,6 +284,29 @@ namespace WebUI.Areas.Admin.Controllers
         }
         #endregion
 
+        #region 用户画像
+        [HttpGet]
+        public ViewResult FaceStat(int id)
+        {
+            //IList<Learner_CourseBox> learner_CourseBoxes = Container.Instance.Resolve<Learner_CourseBoxService>().GetPaged(new List<ICriterion>
+            //{
+            //    Expression.Eq("Learner.ID", id )
+            //}, new List<Order> { new Order("JoinTime", false) }, 0, 10, out int totalCount);
+            IList<Learner_CourseBox> learner_CourseBoxes = ContainerManager.Resolve<ILearner_CourseBoxService>().Filter(1, 10, out int totalCount_CourseBox, m => m.LearnerId == id && !m.IsDeleted, m => m.JoinTime, false).ToList();
+
+            //IList<Learner_VideoInfo> learner_VideoInfos = Container.Instance.Resolve<Learner_VideoInfoService>().GetPaged(new List<ICriterion>
+            //{
+            //    Expression.Eq("Learner.ID", id )
+            //}, new List<Order> { new Order("LastPlayTime", false) }, 0, 10, out int totalCount2);
+            IList<Learner_VideoInfo> learner_VideoInfos = ContainerManager.Resolve<ILearner_VideoInfoService>().Filter(1, 10, out int totalCount_VideoInfo, m => m.LearnerId == id && !m.IsDeleted, m => m.LastPlayTime, false).ToList();
+
+            ViewBag.Learner_CourseBoxes = learner_CourseBoxes;
+            ViewBag.Learner_VideoInfos = learner_VideoInfos;
+
+            return View();
+        }
+        #endregion
+
         #region Helpers
 
         #region 检查邮箱是否已(被其它用户)绑定

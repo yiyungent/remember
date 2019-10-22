@@ -1,0 +1,145 @@
+﻿@using WebUI.HtmlHelpers
+@using Domain.Entities
+@{
+	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
+
+	IList<Learner_CourseBox> learner_CourseBoxes = ViewBag.Learner_CourseBoxes;
+	IList<Learner_VideoInfo> learner_VideoInfos = ViewBag.Learner_VideoInfos;
+}
+@helper PrettyTime(long second)
+{
+	if (second >= 3600)
+	{
+		// 小时
+		@Html.Raw(Math.Round((double)second / 3600, 2) + "时");
+	}
+	if (second >= 60)
+	{
+		// 分钟
+		@Html.Raw(Math.Round((double)second / 60, 2) + "分");
+	}
+	else
+	{
+		// 秒
+		@Html.Raw(second + "秒");
+	}
+}
+@section head {
+	<style>
+		table tr td {
+			vertical-align: middle !important;
+		}
+	</style>
+}
+@section body {
+	<script>
+		function flushPage() {
+			window.location.href = window.location.href;
+		}
+	</script>
+}
+
+<div class="row">
+	<div class="col-xs-12">
+		<!-- start .box -->
+		<div class="box">
+			<!-- start .box-header -->
+			<div class="box-header">
+				<h3 class="box-title">课程记录</h3>
+
+				<div class="box-tools">
+
+				</div>
+			</div>
+			<!-- end .box-header -->
+			<!-- start .box-body -->
+			<!-- start 简单表格 -->
+			<div class="box-body table-responsive no-padding">
+				<table id="js-table" class="table table-hover" pview="table">
+					<tr>
+						<th>ID</th>
+						<th>课程名</th>
+						<th>加入时间</th>
+						<th>最新播放视频</th>
+					</tr>
+					@foreach (var item in learner_CourseBoxes)
+					{
+						<tr data-tr-id="@item.ID">
+							<td>@item.ID</td>
+							<td>@item.CourseBox.Name</td>
+							<td><label class="label label-info">@(item.JoinTime?.ToString("yyyy-MM-dd HH:mm:ss"))</label></td>
+							<td><span class="badge bg-blue">@item.LastPlayVideoInfo.Page</span>@item.LastPlayVideoInfo.Title</td>
+						</tr>
+					}
+				</table>
+			</div>
+			<!-- end 简单表格 -->
+			<!-- end .box-body -->
+			<!-- start .box-footer -->
+			<div class="box-footer clearfix">
+				<div class="btn-group pull-left">
+				</div>
+
+			</div>
+			<!-- end .box-footer -->
+		</div>
+		<!-- end .box -->
+	</div>
+	<div class="col-xs-12">
+		<!-- start .box -->
+		<div class="box">
+			<!-- start .box-header -->
+			<div class="box-header">
+				<h3 class="box-title">学习记录</h3>
+
+				<div class="box-tools">
+
+				</div>
+			</div>
+			<!-- end .box-header -->
+			<!-- start .box-body -->
+			<!-- start 简单表格 -->
+			<div class="box-body table-responsive no-padding">
+				<table id="js-table" class="table table-hover" pview="table">
+					<tr>
+						<th>ID</th>
+						<th>视频名 - 课程名</th>
+						<th>最新播放位置</th>
+						<th>进度</th>
+						<th>最近观看时间</th>
+						<th>访问地</th>
+					</tr>
+					@foreach (var item in learner_VideoInfos)
+					{
+						<tr data-tr-id="@item.ID">
+							<td>@item.ID</td>
+							<td><span class="badge bg-blue">@item.VideoInfo.Page</span><label class="label label-info">@item.VideoInfo.Title</label><label class="label label-default">@item.VideoInfo.CourseBox.Name</label></td>
+							<td><small class="label label-primary"><i class="fa fa-clock-o"></i> @PrettyTime(item.LastPlayAt ?? 0)</small></td>
+							<td><small class="label label-info"><i class="fa fa-clock-o"></i> @PrettyTime(item.ProgressAt ?? 0)</small><label class="label label-default">@item.Percent</label></td>
+							<td><label class="label label-success">@(item.LastPlayTime?.ToString("yyyy-MM-dd HH:mm:ss"))</label></td>
+							<td><label class="label label-default">@item.LastAccessIp</label></td>
+						</tr>
+					}
+				</table>
+			</div>
+			<!-- end 简单表格 -->
+			<!-- end .box-body -->
+			<!-- start .box-footer -->
+			<div class="box-footer clearfix">
+				<div class="btn-group pull-left">
+					@if (TempData["RedirectUrl"] != null)
+					{
+						<a class="btn btn-default" href="@TempData["RedirectUrl"].ToString()">返回</a>
+					}
+					else
+					{
+						<a class="btn btn-default" href="javascript:history.go(-1);">返回</a>
+					}
+					<button onclick="flushPage()" class="btn btn-primary">刷新</button>
+				</div>
+			</div>
+			<!-- end .box-footer -->
+		</div>
+		<!-- end .box -->
+	</div>
+</div>
