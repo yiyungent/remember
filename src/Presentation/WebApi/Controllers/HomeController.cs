@@ -99,7 +99,6 @@ namespace WebApi.Controllers
 
         #region 最新课程
         [HttpGet]
-        [HttpOptions]
         [Route("LastCourseBox")]
         public ResponseData LastCourseBox(int number)
         {

@@ -15,6 +15,8 @@ using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using System.Web.Routing;
+using WebApi.Attributes;
+using WebApi.Infrastructure;
 
 namespace WebApi
 {
@@ -23,6 +25,9 @@ namespace WebApi
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            //GlobalConfiguration.Configuration.Filters.Add(new WhiteListAttribute());
+
+            GlobalConfiguration.Configuration.MessageHandlers.Insert(0, new CustomMessageHandler());
 
             AutofacRegister();
             AutoMapperRegister();
@@ -150,5 +155,8 @@ namespace WebApi
             new AutoMapperStartupTask().Execute();
         }
         #endregion
+
+
+
     }
 }

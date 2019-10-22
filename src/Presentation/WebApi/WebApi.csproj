@@ -124,6 +124,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attributes\NeedAuthAttribute.cs" />
+    <Compile Include="Attributes\WhiteListAttribute.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CourseBoxController.cs" />
     <Compile Include="Controllers\FavoriteController.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\CustomMessageHandler.cs" />
     <Compile Include="Infrastructure\UserIdentity.cs" />
     <Compile Include="Infrastructure\UserPrincipal.cs" />
     <Compile Include="Models\Common\ResponseData.cs" />
