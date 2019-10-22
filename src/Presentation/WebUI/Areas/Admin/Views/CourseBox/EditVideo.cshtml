@@ -5,7 +5,7 @@
 	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
 
 	string playUrl = Model.PlayUrl.ToHttpAbsoluteUrl();
-	long size = Model.Size ?? 0;
+	long size = Model.Size;
 	string playFileName = Model.Title + System.IO.Path.GetExtension(Model.PlayUrl);
 
 	Html.EnableClientValidation(false);
