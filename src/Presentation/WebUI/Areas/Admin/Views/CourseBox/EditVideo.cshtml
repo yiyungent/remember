@@ -13,11 +13,13 @@
 @section head {
 	<link href="/assets/libs/zui/dist/css/zui.min.css" rel="stylesheet" />
 	<link href="/assets/libs/zui/dist/lib/uploader/zui.uploader.css" rel="stylesheet" />
+	<link href="/assets/libs/dplayer/dist/DPlayer.min.css" rel="stylesheet" />
 }
 @section body {
 	<script src="/assets/js/tools.js"></script>
 	<script src="/assets/libs/zui/dist/js/zui.min.js"></script>
 	<script src="/assets/libs/zui/dist/lib/uploader/zui.uploader.min.js"></script>
+	<script src="/assets/libs/dplayer/dist/DPlayer.min.js"></script>
 	<script>
 
 		function saveDataSuccess(data) {
@@ -72,6 +74,27 @@
 					if (res.result == "ok") {
 						$("#PlayUrl").val(res.url);
 						$("#Size").val(file.size);
+
+						// 加载播放器，利用播放器播放已经上传成功的 视频url，来获取视频总时长
+						videoPlayer = new DPlayer({
+							container: document.getElementById('videoPlayer'),
+							screenshot: true,
+							autoplay: true,
+							video: {
+								url: res.url,
+							},
+							subtitle: {
+								url: res.url,
+							}
+						});
+
+						// 本想在这里获取到视频的总时长，但发现刚初始化视频时，无法拿到总时长
+						videoPlayer.on("durationchange", function () {
+							var duration = parseInt(videoPlayer.video.duration);
+							console.log("视频总时长", duration);
+							$("#Duration").val(duration);
+						});
+
 					}
 				}
 			});
@@ -140,6 +163,11 @@
 				@Html.TextBoxFor(m => m.Page, new { @class = "form-control", type = "number" })
 			</div>
 			<div class="form-group" style="display: none;">
+				@* 不知道为什么，视频播放黑屏，但能拿到总时长，干脆取消预览 *@
+				<label>视频预览</label>
+				<div id="videoPlayer" style="width: 500px;"></div>
+			</div>
+			<div class="form-group" style="display: none;">
 				@Html.HiddenFor(m => m.PlayUrl)
 			</div>
 			<div class="form-group" style="display: none;">
@@ -147,6 +175,9 @@
 			</div>
 			<div class="form-group" style="display: none;">
 				@Html.HiddenFor(m => m.Size)
+			</div>
+			<div class="form-group" style="display: none;">
+				@Html.HiddenFor(m => m.Duration)
 			</div>
 			<div class="form-group">
 				<label>上传视频</label>

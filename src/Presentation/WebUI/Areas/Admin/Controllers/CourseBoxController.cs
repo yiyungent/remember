@@ -277,7 +277,8 @@ namespace WebUI.Areas.Admin.Controllers
                     PlayUrl = inputModel.PlayUrl,
                     SubTitleUrl = inputModel.SubTitleUrl,
                     Title = inputModel.Title,
-                    Size = inputModel.Size
+                    Size = inputModel.Size,
+                    Duration = inputModel.Duration
                 });
 
 
@@ -395,6 +396,7 @@ namespace WebUI.Areas.Admin.Controllers
                 dbModel.SubTitleUrl = inputModel.SubTitleUrl;
                 dbModel.Page = inputModel.Page;
                 dbModel.Size = inputModel.Size;
+                dbModel.Duration = inputModel.Duration;
 
 
                 //Container.Instance.Resolve<VideoInfoService>().Edit(dbModel);
