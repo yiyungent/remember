@@ -8199,8 +8199,8 @@
     <Compile Include="Areas\Admin\Models\Common\ZNodeModel.cs" />
     <Compile Include="Areas\Admin\Models\CourseBoxVM\CourseBoxCreateViewModel.cs" />
     <Compile Include="Areas\Admin\Models\CourseBoxVM\CourseBoxViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\DashboardVM\DashboardOneViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\DashboardVM\EvaAnalyzeChart.cs" />
+    <Compile Include="Areas\Admin\Models\DashboardVM\AccessLogViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\DashboardVM\PvUvViewModel.cs" />
     <Compile Include="Areas\Admin\Models\PluginVM\ConfigureViewModel.cs" />
     <Compile Include="Areas\Admin\Models\PluginVM\PluginListViewModel.cs" />
     <Compile Include="Areas\Admin\Models\PluginVM\PluginModel.cs" />

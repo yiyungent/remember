@@ -1,6 +1,4 @@
-﻿@using WebUI.Areas.Admin.Models.DashboardVM
-@model DashboardOneViewModel
-@{
+﻿@{
 	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
 }
 
@@ -8,7 +6,51 @@
 
 }
 @section body {
+	<script src="/assets/libs/echarts/dist/echarts.min.js"></script>
+	<script>
 
+		var accessLog = null;
+
+		$(function () {
+			loadPvUv();
+			setInterval(loadPvUv, 200);
+
+			accessLog = echarts.init($('#js-access-log')[0]);
+			accessLog.showLoading();
+			loadAccessLog();
+			setInterval(loadAccessLog, 200);
+
+
+		});
+
+		function loadPvUv() {
+			$.ajax({
+				url: "/Admin/Dashboard/PvUv",
+				type: "get",
+				dataType: "json",
+				success: function (data) {
+					if (data.code > 0) {
+						var info = data.data;
+						$("#js-pv").html(info.PV);
+						$("#js-uv").html(info.UV);
+						$("#js-jumpRate").html(info.jumpRate);
+						$("#js-newUserReg").html(info.newUserReg);
+					}
+				}
+			});
+		}
+
+		function loadAccessLog() {
+			$.post('/Admin/Dashboard/AccessLog', function (data) {
+				accessLog.hideLoading();
+				if (data.code > 0) {
+					accessLog.setOption(data.data);
+				}
+			});
+		}
+
+
+	</script>
 }
 
 <!-- Small boxes (Stat box) -->
@@ -17,7 +59,7 @@
 		<!-- small box -->
 		<div class="small-box bg-aqua">
 			<div class="inner">
-				<h3>@Model.PV</h3>
+				<h3 id="js-pv">0</h3>
 				<p>访问量（PV）</p>
 			</div>
 			<div class="icon">
@@ -32,7 +74,7 @@
 		<!-- small box -->
 		<div class="small-box bg-red">
 			<div class="inner">
-				<h3>@Model.UV</h3>
+				<h3 id="js-uv">0</h3>
 				<p>访客（UV）</p>
 			</div>
 			<div class="icon">
@@ -46,7 +88,7 @@
 		<!-- small box -->
 		<div class="small-box bg-green">
 			<div class="inner">
-				<h3>@Model.JumpRate<sup style="font-size: 20px">%</sup></h3>
+				<h3><span id="js-jumpRate">0</span><sup style="font-size: 20px">%</sup></h3>
 				<p>跳出率</p>
 			</div>
 			<div class="icon">
@@ -61,7 +103,7 @@
 		<!-- small box -->
 		<div class="small-box bg-yellow">
 			<div class="inner">
-				<h3>@Model.NewUserReg</h3>
+				<h3 id="js-newUserReg">0</h3>
 				<p>新注册</p>
 			</div>
 			<div class="icon">
@@ -76,13 +118,12 @@
 <!-- Main row -->
 <div class="row">
 	<!-- Left col -->
-	<section class="col-lg-7 connectedSortable">
-		<!-- quick email widget -->
+	<section class="col-lg-12 connectedSortable">
+		<!-- 访问情况曲线图 -->
 		<div class="box box-info">
 			<div class="box-header">
 				<i class="fa fa-envelope"></i>
-
-				<h3 class="box-title">快速电子邮件</h3>
+				<h3 class="box-title">访问情况</h3>
 				<!-- tools box -->
 				<div class="pull-right box-tools">
 					<button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="Remove">
@@ -92,30 +133,12 @@
 				<!-- /. tools -->
 			</div>
 			<div class="box-body">
-				<form action="#" method="post">
-					<div class="form-group">
-						<input type="email" class="form-control" name="emailto" placeholder="Email to:">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" name="subject" placeholder="Subject">
-					</div>
-					<div>
-						<textarea class="textarea" placeholder="Message" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
-					</div>
-				</form>
+				<div id="js-access-log" style="height:400px;"></div>
 			</div>
 			<div class="box-footer clearfix">
-				<button type="button" class="pull-right btn btn-default" id="sendEmail">
-					发送
-					<i class="fa fa-arrow-circle-right"></i>
-				</button>
 			</div>
 		</div>
 	</section>
 	<!-- /.Left col -->
-	<!-- right col (We are only adding the ID to make the widgets sortable)-->
-	<section class="col-lg-5 connectedSortable">
-	</section>
-	<!-- right col -->
 </div>
 <!-- /.row (main row) -->

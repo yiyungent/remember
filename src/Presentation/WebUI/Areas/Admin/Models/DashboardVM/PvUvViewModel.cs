@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebUI.Areas.Admin.Models.DashboardVM
 {
-    public class DashboardOneViewModel
+    public class PvUvViewModel
     {
         /// <summary>
         /// 独立访客量
@@ -20,13 +20,12 @@ namespace WebUI.Areas.Admin.Models.DashboardVM
         /// <summary>
         /// 跳出率
         /// </summary>
-        public int JumpRate { get; set; }
+        public int jumpRate { get; set; }
 
         /// <summary>
         /// 新用户注册量
         /// 今日新注册量
         /// </summary>
-        public int NewUserReg { get; set; }
-
+        public int newUserReg { get; set; }
     }
 }

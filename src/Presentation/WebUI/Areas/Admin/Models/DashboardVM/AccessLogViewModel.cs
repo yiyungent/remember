@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebUI.Areas.Admin.Models.DashboardVM
 {
-    public class EvaAnalyzeChart
+    public class AccessLogViewModel
     {
         public Title title { get; set; }
         public Tooltip tooltip { get; set; }
