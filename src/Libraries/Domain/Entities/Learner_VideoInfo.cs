@@ -24,7 +24,7 @@ namespace Domain.Entities
         /// 最后播放时间
         /// eg: 我最后是在 2019-12-12 22:21 时播放了此视频
         /// </summary>
-        public DateTime? LastPlayTime { get; set; }
+        public DateTime LastPlayTime { get; set; }
 
         /// <summary>
         /// 此学习者在此课件-学习进度
@@ -32,13 +32,13 @@ namespace Domain.Entities
         /// 毫秒
         /// 最大的视频播放位置
         /// </summary>
-        public long? ProgressAt { get; set; }
+        public long ProgressAt { get; set; }
 
         /// <summary>
         /// 此学习者在此视频课件-最新播放位置
         /// 毫秒
         /// </summary>
-        public long? LastPlayAt { get; set; }
+        public long LastPlayAt { get; set; }
 
         #region Relationships
 
@@ -46,7 +46,7 @@ namespace Domain.Entities
         /// 学习者
         /// </summary>
         [ForeignKey("Learner")]
-        public int? LearnerId { get; set; }
+        public int LearnerId { get; set; }
         [ForeignKey("LearnerId")]
         public virtual UserInfo Learner { get; set; }
 
@@ -54,7 +54,7 @@ namespace Domain.Entities
         /// 视频课件
         /// </summary>
         [ForeignKey("VideoInfo")]
-        public int? VideoInfoId { get; set; } 
+        public int VideoInfoId { get; set; } 
         [ForeignKey("VideoInfoId")]
         public virtual VideoInfo VideoInfo { get; set; }
 

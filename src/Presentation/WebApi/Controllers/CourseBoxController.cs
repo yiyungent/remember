@@ -71,6 +71,7 @@ namespace WebApi.Controllers
             try
             {
                 // 未登录用户返回基本课程数据
+                #region 未登录用户返回 基本课程数据
                 // TODO: 未处理课程不存在情况
                 CourseBox courseBox = this._courseBoxService.Find(id);
                 int creatorFansNum = this._follower_FollowedService.Count(m => m.FollowedId == courseBox.CreatorId && !m.IsDeleted);
@@ -118,6 +119,34 @@ namespace WebApi.Controllers
                         PlayUrl = item.PlayUrl.ToHttpAbsoluteUrl()
                     });
                 }
+                #endregion
+
+                #region 登录用户 附加 播放历史
+                int currentUserId = AccountManager.GetCurrentAccount().UserId;
+                if (currentUserId != 0)
+                {
+                    // 登录用户 附加 播放历史
+                    Learner_CourseBox learner_CourseBox = this._learner_CourseBoxService.Find(m => m.LearnerId == currentUserId && m.CourseBoxId == id && !m.IsDeleted);
+                    if (learner_CourseBox != null)
+                    {
+                        Learner_VideoInfo learner_LastPlay_VideoInfo = this._learner_VideoInfoService.Find(m => m.LearnerId == currentUserId && m.VideoInfoId == learner_CourseBox.LastPlayVideoInfoId && !m.IsDeleted);
+                        if (learner_LastPlay_VideoInfo != null)
+                        {
+                            viewModel.LastPlayVideoInfo = new CourseBoxViewModel.VideoInfoViewModel
+                            {
+                                ID = learner_LastPlay_VideoInfo.ID,
+                                Page = learner_LastPlay_VideoInfo.VideoInfo.Page,
+                                PlayUrl = learner_LastPlay_VideoInfo.VideoInfo.PlayUrl.ToHttpAbsoluteUrl(),
+                                Title = learner_LastPlay_VideoInfo.VideoInfo.Title,
+
+                                ProgressAt = learner_LastPlay_VideoInfo.ProgressAt,
+                                LastPlayAt = learner_LastPlay_VideoInfo.LastPlayAt
+                            };
+                        }
+                        viewModel.JoinTime = learner_CourseBox.JoinTime.ToTimeStamp13();
+                    }
+                }
+                #endregion
 
                 responseData = new ResponseData
                 {

@@ -75,8 +75,8 @@ namespace WebApi.Controllers
                     CourseBoxId = courseBoxId,
                     LastAccessIp = learner_CourseInfo.LastAccessIp,
                     LastAccessTime = learner_CourseInfo.LastPlayTime.ToTimeStamp13(),
-                    LastPlayAt = learner_CourseInfo.LastPlayAt ?? 0,
-                    ProgressAt = learner_CourseInfo.ProgressAt ?? 0
+                    LastPlayAt = learner_CourseInfo.LastPlayAt,
+                    ProgressAt = learner_CourseInfo.ProgressAt
                 };
 
                 responseData = new ResponseData
@@ -270,18 +270,18 @@ namespace WebApi.Controllers
                 {
                     viewModel.Learner = new VideoHistoryViewModel.LearnerModel
                     {
-                        ID = learner_VideoInfo.LearnerId ?? 0,
+                        ID = learner_VideoInfo.LearnerId,
                         Avatar = learner_VideoInfo.Learner.Avatar.ToHttpAbsoluteUrl(),
                         UserName = learner_VideoInfo.Learner.UserName
                     };
                     viewModel.Video = new VideoHistoryViewModel.VideoModel
                     {
-                        ID = learner_VideoInfo.VideoInfoId ?? 0,
+                        ID = learner_VideoInfo.VideoInfoId,
                         Title = learner_VideoInfo.VideoInfo.Title,
                     };
-                    viewModel.LastPlayAt = learner_VideoInfo.LastPlayAt ?? 0;
+                    viewModel.LastPlayAt = learner_VideoInfo.LastPlayAt;
                     viewModel.LastPlayTime = learner_VideoInfo.LastPlayTime.ToTimeStamp13();
-                    viewModel.ProgressAt = learner_VideoInfo.ProgressAt ?? 0;
+                    viewModel.ProgressAt = learner_VideoInfo.ProgressAt;
                 }
 
                 responseData = new ResponseData

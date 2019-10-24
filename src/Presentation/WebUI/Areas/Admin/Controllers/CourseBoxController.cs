@@ -102,7 +102,7 @@ namespace WebUI.Areas.Admin.Controllers
                     CreatorId = AccountManager.GetCurrentUserInfo().ID,
                     Description = inputModel.Description,
                     Name = inputModel.Name,
-                    PicUrl = picUrl,
+                    PicUrl = ":WebUISite:" + picUrl,
                     StartTime = inputModel.StartTime,
                     EndTime = inputModel.EndTime,
                 });
@@ -269,6 +269,15 @@ namespace WebUI.Areas.Admin.Controllers
                 }
 
                 #endregion
+
+                CourseBox courseBox = this._courseBoxService.Find(m => m.ID == courseBoxId && !m.IsDeleted);
+                // TODO: 正确处理输入第几集
+                //int videoCount = courseBox.VideoInfos?.Count ?? 0;
+                //int page = inputModel.Page;
+                //if (inputModel.Page<0||inputModel)
+                //{
+
+                //}
 
                 this._videoInfoService.Create(new VideoInfo
                 {
@@ -559,7 +568,7 @@ namespace WebUI.Areas.Admin.Controllers
         {
             try
             {
-                int currentUserId = AccountManager.GetCurrentUserInfo().ID;
+                int currentUserId = AccountManager.GetCurrentAccount().UserId;
 
                 // 保存到当前用户的文件夹
                 string basePath = $"~/Upload/images/{currentUserId}/{DateTime.Now.ToString("yyyy-MM-dd")}/";

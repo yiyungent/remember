@@ -114,9 +114,9 @@
 						<tr data-tr-id="@item.ID">
 							<td>@item.ID</td>
 							<td><span class="badge bg-blue">@item.VideoInfo.Page</span><label class="label label-info">@item.VideoInfo.Title</label><label class="label label-default">@item.VideoInfo.CourseBox.Name</label></td>
-							<td><small class="label label-primary"><i class="fa fa-clock-o"></i> @PrettyTime(item.LastPlayAt ?? 0)</small></td>
-							<td><small class="label label-info"><i class="fa fa-clock-o"></i> @PrettyTime(item.ProgressAt ?? 0)</small><label class="label label-default">@item.Percent</label></td>
-							<td><label class="label label-success">@(item.LastPlayTime?.ToString("yyyy-MM-dd HH:mm:ss"))</label></td>
+							<td><small class="label label-primary"><i class="fa fa-clock-o"></i> @PrettyTime(item.LastPlayAt)</small></td>
+							<td><small class="label label-info"><i class="fa fa-clock-o"></i> @PrettyTime(item.ProgressAt)</small><label class="label label-default">@item.Percent</label></td>
+							<td><label class="label label-success">@(item.LastPlayTime.ToString("yyyy-MM-dd HH:mm:ss"))</label></td>
 							<td><label class="label label-default">@item.LastAccessIp</label></td>
 						</tr>
 					}

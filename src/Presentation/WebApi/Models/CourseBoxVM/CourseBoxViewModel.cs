@@ -58,11 +58,6 @@ namespace WebApi.Models.CourseBoxVM
         public long EndTime { get; set; }
 
         /// <summary>
-        /// 有效学习天数
-        /// </summary>
-        public int LearnDay { get; set; }
-
-        /// <summary>
         /// 此学习者在此课程总学习时间: 花费时间
         /// 毫秒
         /// <para>注意：不一定是学习者在此课程上的所有课件的进度时间，因为课程存在反复看，反复看时间也要计算在内</para>
