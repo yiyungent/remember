@@ -108,16 +108,18 @@ namespace WebApi.Controllers
                     JoinTime = 0,
                     VideoInfos = new List<CourseBoxViewModel.VideoInfoViewModel>()
                 };
-                IList<VideoInfo> courseInfos = courseBox.VideoInfos.OrderBy(m => m.Page).ToList();
-                foreach (var item in courseInfos)
+                IList<VideoInfo> videoInfos = courseBox.VideoInfos.OrderBy(m => m.Page).Where(m => !m.IsDeleted).ToList();
+                int pageNum = 1;
+                foreach (var item in videoInfos)
                 {
                     viewModel.VideoInfos.Add(new CourseBoxViewModel.VideoInfoViewModel
                     {
                         ID = item.ID,
                         Title = item.Title,
-                        Page = item.Page,
+                        Page = pageNum,
                         PlayUrl = item.PlayUrl.ToHttpAbsoluteUrl()
                     });
+                    pageNum++;
                 }
                 #endregion
 
