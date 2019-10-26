@@ -221,6 +221,7 @@ namespace WebUI.Controllers
             {
                 ShowMessage("开始初始化系统菜单表");
 
+                // TODO: 系统菜单图标初始化
                 #region 一级菜单
                 string[] firstLevel_names = {
                        "首页",
@@ -236,11 +237,18 @@ namespace WebUI.Controllers
                        "站长",
                        "UCenter"
                 };
+                string[] firstLevel_icons = {
+                    "glyphicon glyphicon-home",
+                    "glyphicon glyphicon-globe",
+                    "glyphicon glyphicon-blackboard",
+                    "glyphicon glyphicon-th-large",
+                };
                 for (int i = 0; i < firstLevel_names.Length; i++)
                 {
                     this._sys_MenuService.Create(new Sys_Menu()
                     {
                         Name = firstLevel_names[i],
+                        Icon = "",
                         SortCode = i + 1,
                     });
 

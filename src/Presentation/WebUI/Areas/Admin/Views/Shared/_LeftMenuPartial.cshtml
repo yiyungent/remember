@@ -6,7 +6,7 @@
 @{
 	Layout = null;
 
-	ViewBag.MenuIcon = "fa fa-circle-o";
+	//ViewBag.MenuIcon = "fa fa-circle-o";
 
 	int currentUserId = AccountManager.GetCurrentAccount().UserId;
 	IList<Sys_Menu> allMenuList = ContainerManager.Resolve<IUserInfoService>().UserHaveSys_Menus(currentUserId);
@@ -37,11 +37,11 @@
 			{
 				if (activeMenuIds.Contains(firstMenuItem.ID))
 				{
-					<li class="active"><a href="@Url.Action(firstMenuItem.ActionName, firstMenuItem.ControllerName, new { area = firstMenuItem.AreaName })"><i class="@ViewBag.MenuIcon"></i> <span>@firstMenuItem.Name</span></a></li>
+					<li class="active"><a href="@Url.Action(firstMenuItem.ActionName, firstMenuItem.ControllerName, new { area = firstMenuItem.AreaName })"><i class="@firstMenuItem.Icon"></i> <span>@firstMenuItem.Name</span></a></li>
 				}
 				else
 				{
-					<li><a href="@Url.Action(firstMenuItem.ActionName, firstMenuItem.ControllerName, new { area = firstMenuItem.AreaName })"><i class="@ViewBag.MenuIcon"></i> <span>@firstMenuItem.Name</span></a></li>
+					<li><a href="@Url.Action(firstMenuItem.ActionName, firstMenuItem.ControllerName, new { area = firstMenuItem.AreaName })"><i class="@firstMenuItem.Icon"></i> <span>@firstMenuItem.Name</span></a></li>
 				}
 			}
 			else
@@ -51,7 +51,7 @@
 					// 否则又是一个折叠菜单
 					<li class="treeview active">
 						<a href="#">
-							<i class="@ViewBag.MenuIcon"></i> <span>@firstMenuItem.Name</span>
+							<i class="@firstMenuItem.Icon"></i> <span>@firstMenuItem.Name</span>
 							<span class="pull-right-container">
 								<i class="fa fa-angle-left pull-right"></i>
 							</span>
@@ -63,7 +63,7 @@
 				{
 					<li class="treeview">
 						<a href="#">
-							<i class="@ViewBag.MenuIcon"></i> <span>@firstMenuItem.Name</span>
+							<i class="@firstMenuItem.Icon"></i> <span>@firstMenuItem.Name</span>
 							<span class="pull-right-container">
 								<i class="fa fa-angle-left pull-right"></i>
 							</span>
@@ -91,11 +91,11 @@
 			{
 				if (activeMenuIds.Contains(menuItem.ID))
 				{
-					<li class="active"><a href="@Url.Action(menuItem.ActionName, menuItem.ControllerName, new { area = menuItem.AreaName })"><i class="@ViewBag.MenuIcon"></i> <span>@menuItem.Name</span></a></li>
+					<li class="active"><a href="@Url.Action(menuItem.ActionName, menuItem.ControllerName, new { area = menuItem.AreaName })"><i class="@menuItem.Icon"></i> <span>@menuItem.Name</span></a></li>
 				}
 				else
 				{
-					<li><a href="@Url.Action(menuItem.ActionName, menuItem.ControllerName, new { area = menuItem.AreaName })"><i class="@ViewBag.MenuIcon"></i> <span>@menuItem.Name</span></a></li>
+					<li><a href="@Url.Action(menuItem.ActionName, menuItem.ControllerName, new { area = menuItem.AreaName })"><i class="@menuItem.Icon"></i> <span>@menuItem.Name</span></a></li>
 				}
 			}
 			else
@@ -104,7 +104,7 @@
 				{
 					<li class="treeview active">
 						<a href="#">
-							<i class="@ViewBag.MenuIcon"></i> <span>@menuItem.Name</span>
+							<i class="@menuItem.Icon"></i> <span>@menuItem.Name</span>
 							<span class="pull-right-container">
 								<i class="fa fa-angle-left pull-right"></i>
 							</span>
@@ -116,7 +116,7 @@
 				{
 					<li class="treeview">
 						<a href="#">
-							<i class="@ViewBag.MenuIcon"></i> <span>@menuItem.Name</span>
+							<i class="@menuItem.Icon"></i> <span>@menuItem.Name</span>
 							<span class="pull-right-container">
 								<i class="fa fa-angle-left pull-right"></i>
 							</span>

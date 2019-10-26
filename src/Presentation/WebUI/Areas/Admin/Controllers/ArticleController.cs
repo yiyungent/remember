@@ -200,15 +200,6 @@ namespace WebUI.Areas.Admin.Controllers
         }
         #endregion
 
-        #region 用于自定义Url的文章内容展示
-        public ActionResult Page()
-        {
-            Article viewModel = (Article)System.Web.HttpContext.Current.Items["CmsPage"];
-
-            return View(viewModel);
-        }
-        #endregion
-
         #region 上传图片
         [HttpPost]
         public JsonResult UploadImg()

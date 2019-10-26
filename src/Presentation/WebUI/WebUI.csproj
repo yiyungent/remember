@@ -8211,6 +8211,7 @@
     <Compile Include="Areas\Admin\Models\ThemeTemplateVM\ThemeTemplateListViewModel.cs" />
     <Compile Include="Areas\Admin\Models\UserInfoVM\UserInfoViewModel.cs" />
     <Compile Include="Attributes\LogErrorAttribute.cs" />
+    <Compile Include="Controllers\ArticleController.cs" />
     <Compile Include="Controllers\CourseBoxController.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -8270,7 +8271,7 @@
     <Content Include="Areas\Admin\Views\Article\Create.cshtml" />
     <Content Include="Areas\Admin\Views\Article\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Article\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Article\Page.cshtml" />
+    <Content Include="Views\Article\Index.cshtml" />
     <Content Include="Areas\Admin\Views\CourseBox\AddVideo.cshtml" />
     <Content Include="Areas\Admin\Views\CourseBox\Create.cshtml" />
     <Content Include="Areas\Admin\Views\CourseBox\Edit.cshtml" />
@@ -8920,9 +8921,9 @@
     <Content Include="Areas\Admin\Views\LogInfo\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Dashboard\IndexTwo.cshtml" />
-    <Content Include="Areas\Admin\Views\Shared\_FooterPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_Admin_FooterPartial.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_RightControlSidebarPartial.cshtml" />
-    <Content Include="Areas\Admin\Views\Shared\_HeaderPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_Admin_HeaderPartial.cshtml" />
     <Content Include="Areas\Account\Views\Shared\_FooterPartial.cshtml" />
     <Content Include="Areas\Account\Views\Shared\_RightControlSidebarPartial.cshtml" />
     <Content Include="Areas\Admin\Views\UserInfo\FaceStat.cshtml" />

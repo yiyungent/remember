@@ -1,17 +1,17 @@
-﻿
+﻿@using Framework.Extensions
 @{
 	Layout = null;
 
-	string copyright = "";
+	string webUIName = WebSetting.Get("WebUITitle").Split(new string[] { "-", " " }, StringSplitOptions.RemoveEmptyEntries)[0];
+	string copyright = "<strong>Copyright &copy; 2019 <a href='#'>" + webUIName + "</a>.</strong> All rights reserved."; //WebSetting.Get("Copyright");
 }
 
 <footer class="main-footer">
 	<div class="container">
 		<div class="pull-right hidden-xs">
-			<b>Version</b> 2.3.7
+			<b>@webUIName</b> 0.2.0
 		</div>
-		<strong>Copyright &copy; 2014-2016 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights
-		reserved.
+		@Html.Raw(copyright)
 	</div>
 	<!-- /.container -->
 </footer>

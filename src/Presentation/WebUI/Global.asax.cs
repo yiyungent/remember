@@ -241,11 +241,11 @@ namespace WebUI
             var route = routes.MapRoute(
                   name: "ArticleCustomUrl",
                   url: "{*cmsurl}",
-                  defaults: new { controller = "Article", action = "Page" },
+                  defaults: new { controller = "Article", action = "Index" },
                   constraints: new { cmsurl = new CmsUrlConstraint() },
-                  namespaces: new string[] { "WebUI.Areas.Admin.Controllers" }
+                  namespaces: new string[] { "WebUI.Controllers" }
              );
-            route.DataTokens["area"] = "Admin";
+            route.DataTokens["area"] = "";
 
             RouteConfig.RegisterRoutes(RouteTable.Routes);
         }

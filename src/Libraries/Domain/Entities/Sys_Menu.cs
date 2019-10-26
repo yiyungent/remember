@@ -21,6 +21,19 @@ namespace Domain.Entities
         public string Name { get; set; }
 
         /// <summary>
+        /// ²Ëµ¥ÃèÊö
+        /// </summary>
+        [StringLength(500)]
+        [Column(TypeName = "text")]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Í¼±ê
+        /// </summary>
+        [StringLength(24)]
+        public string Icon { get; set; }
+
+        /// <summary>
         /// ¿ØÖÆÆ÷Ãû
         /// </summary>
         [StringLength(500)]
@@ -44,7 +57,7 @@ namespace Domain.Entities
         /// <summary>
         /// ÅÅĞòÂë
         /// </summary>
-        public int? SortCode { get; set; }
+        public int SortCode { get; set; }
 
         #region Relationships
 
