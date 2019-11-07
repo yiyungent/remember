@@ -523,12 +523,12 @@ namespace WebApi.Controllers
                 // IList<Follower_Followed> iFollow = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
                 //     Expression.Eq("Follower.ID", ((UserIdentity)User.Identity).ID)
                 //}).Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
-                IList<Follower_Followed> iFollow = this._follower_FollowedService.Filter(m => m.FollowerId == currentUserId && !m.IsDeleted).Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+                IList<Follower_Followed> iFollow = this._follower_FollowedService.Filter(m => m.FollowerId == currentUserId && !m.IsDeleted).ToList().Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
                 // 关注我的所有人
                 // IList<Follower_Followed> iFollowed = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
                 //     Expression.Eq("Followed.ID", ((UserIdentity)User.Identity).ID)
                 //}).Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
-                IList<Follower_Followed> iFollowed = this._follower_FollowedService.Filter(m => m.FollowedId == currentUserId && !m.IsDeleted).Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+                IList<Follower_Followed> iFollowed = this._follower_FollowedService.Filter(m => m.FollowedId == currentUserId && !m.IsDeleted).ToList().Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
 
                 // 互粉 = 关注我的所有人  中 挑选出 我关注的人
                 // 我和这些人互粉 （UserInfo.ID）
@@ -576,7 +576,7 @@ namespace WebApi.Controllers
                 responseData = new ResponseData
                 {
                     Code = -1,
-                    Message = "获取我的关注失败"
+                    Message = "获取我的关注失败 " + ex.Message + " " + ex.InnerException?.Message
                 };
             }
 
@@ -602,12 +602,12 @@ namespace WebApi.Controllers
                 // IList<Follower_Followed> iFollow = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
                 //     Expression.Eq("Follower.ID", ((UserIdentity)User.Identity).ID)
                 //}).Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
-                IList<Follower_Followed> iFollow = this._follower_FollowedService.Filter(m => m.FollowerId == currentUserId && !m.IsDeleted).Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+                IList<Follower_Followed> iFollow = this._follower_FollowedService.Filter(m => m.FollowerId == currentUserId && !m.IsDeleted).ToList().Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
                 // 关注我的所有人
                 // IList<Follower_Followed> iFollowed = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
                 //     Expression.Eq("Followed.ID", ((UserIdentity)User.Identity).ID)
                 //}).Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
-                IList<Follower_Followed> iFollowed = this._follower_FollowedService.Filter(m => m.FollowedId == currentUserId && !m.IsDeleted).Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+                IList<Follower_Followed> iFollowed = this._follower_FollowedService.Filter(m => m.FollowedId == currentUserId && !m.IsDeleted).ToList().Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
 
                 // 互粉 = 关注我的所有人  中 挑选出 我关注的人
                 // 我和这些人互粉 （UserInfo.ID）
