@@ -94,5 +94,115 @@ namespace Services.Implement
 
             return menuList;
         }
+
+        #region 关注/取消关注
+        /// <summary>
+        /// 关注/取消关注
+        /// </summary>
+        /// <param name="followerId">关注者用户ID</param>
+        /// <param name="followUId">被关注者用户ID</param>
+        /// <param name="act">关注：1，取消关注：2</param>
+        public void Follow(int followerId, int followedId, out string message, int act = 1)
+        {
+            message = "";
+            IFollower_FollowedService follower_FollowedService = ContainerManager.Resolve<IFollower_FollowedService>();
+            bool isFollowed = follower_FollowedService.Contains(m => m.FollowerId == followerId && m.FollowedId == followedId && !m.IsDeleted);
+            if (act == 1)
+            {
+                if (!isFollowed)
+                {
+                    // 未关注-》关注
+                    follower_FollowedService.Create(new Follower_Followed
+                    {
+                        FollowerId = followerId,
+                        FollowedId = followedId,
+                        CreateTime = DateTime.Now,
+                        IsDeleted = false
+                    });
+
+                    message = "关注成功";
+                }
+                else
+                {
+                    message = "已关注";
+                }
+            }
+            else if (act == 2)
+            {
+                if (isFollowed)
+                {
+                    // 已经关注-》取消关注
+                    Follower_Followed follower_Followed = follower_FollowedService.Find(m => m.FollowerId == followerId && m.FollowedId == followedId && !m.IsDeleted);
+                    follower_Followed.DeletedAt = DateTime.Now;
+                    follower_Followed.IsDeleted = true;
+                    follower_FollowedService.Update(follower_Followed);
+
+                    message = "取消关注成功";
+                }
+                else
+                {
+                    message = "已取消关注";
+                }
+            }
+        }
+        #endregion
+
+        #region 获取关注关系
+        /// <summary>
+        /// 获取关注关系
+        /// 0: 没有关系
+        /// 1: 我单方面关注他
+        /// 2: 他单方面关注我
+        /// 3: 互相关注
+        /// </summary>
+        /// <param name="meUID">我的用户ID</param>
+        /// <param name="himUID">他的用户ID</param>
+        /// <param name="relation"></param>
+        public int Relation(int meUID, int himUID)
+        {
+            int relation = 0;
+            IFollower_FollowedService follower_FollowedService = ContainerManager.Resolve<IFollower_FollowedService>();
+
+            // 我有 关注 他 吗？
+            bool isMeFollowHim = follower_FollowedService.Contains(m => m.FollowerId == meUID && m.FollowedId == himUID && !m.IsDeleted);
+            // 他 有 关注 我 吗？
+            bool isHimFollowMe = follower_FollowedService.Contains(m => m.FollowedId == meUID && m.FollowerId == himUID && !m.IsDeleted);
+
+            if (isMeFollowHim && !isHimFollowMe)
+            {
+                relation = 1;
+            }
+            else if (!isMeFollowHim && isHimFollowMe)
+            {
+                relation = 2;
+            }
+            else if (isMeFollowHim && isHimFollowMe)
+            {
+                relation = 3;
+            }
+
+            return relation;
+        }
+        #endregion
+
+        #region 获取此人的关注数和粉丝数
+        /// <summary>
+        /// 获取此人的关注数和粉丝数
+        /// </summary>
+        /// <param name="uid"></param>
+        /// <param name="following"></param>
+        /// <param name="fans"></param>
+        public void FollowAndFans(int uid, out int follow, out int fans)
+        {
+            follow = 0;
+            fans = 0;
+
+            IFollower_FollowedService follower_FollowedService = ContainerManager.Resolve<IFollower_FollowedService>();
+            follow = follower_FollowedService.Count(m => m.FollowerId == uid && !m.IsDeleted);
+            fans = follower_FollowedService.Count(m => m.FollowedId == uid && !m.IsDeleted);
+        }
+        #endregion
+
+
     }
 }

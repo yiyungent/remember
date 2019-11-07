@@ -146,6 +146,8 @@
     <Compile Include="Models\CourseBoxVM\LearnCourseBoxInputModel.cs" />
     <Compile Include="Models\CourseBoxVM\PlayHistoryPushInputModel.cs" />
     <Compile Include="Models\CourseBoxVM\SimpleCommentsViewModel.cs" />
+    <Compile Include="Models\UserInfoVM\FollowViewModel.cs" />
+    <Compile Include="Models\UserInfoVM\RelationViewModel.cs" />
     <Compile Include="Models\VideoInfoVM\VideoHistoryViewModel.cs" />
     <Compile Include="Models\FavoriteVM\CreateInputModel.cs" />
     <Compile Include="Models\FavoriteVM\FavCourseBoxInputModel.cs" />

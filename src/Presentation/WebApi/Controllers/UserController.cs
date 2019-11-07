@@ -418,6 +418,67 @@ namespace WebApi.Controllers
         }
         #endregion
 
+        #region 关注/取消关注
+        /// <summary>
+        /// 关注/取消关注
+        /// </summary>
+        /// <param name="uid">关注的用户Id</param>
+        /// <param name="act">关注：1，取消关注：2</param>
+        /// <returns></returns>
+        [NeedAuth]
+        [Route("Follow")]
+        [HttpPost]
+        public ResponseData Follow(int uid, int act = 1)
+        {
+            ResponseData responseData = null;
+            FollowViewModel viewModel = null;
+            try
+            {
+                int userId = AccountManager.GetCurrentAccount().UserId;
+
+                this._userInfoService.Follow(userId, uid, out string message, act);
+
+                this._userInfoService.FollowAndFans(userId, out int follower_follow, out int follower_fans);
+                this._userInfoService.FollowAndFans(uid, out int followed_follow, out int followed_fans);
+                int relation = this._userInfoService.Relation(userId, uid);
+
+                viewModel = new FollowViewModel
+                {
+                    Follower = new FollowViewModel.User
+                    {
+                        ID = userId,
+                        Follow = follower_follow,
+                        Fans = follower_fans
+                    },
+                    Followed = new FollowViewModel.User
+                    {
+                        ID = uid,
+                        Follow = followed_follow,
+                        Fans = followed_fans
+                    },
+                    Relation = relation
+                };
+
+                responseData = new ResponseData
+                {
+                    Code = 1,
+                    Message = message,
+                    Data = viewModel
+                };
+            }
+            catch (Exception ex)
+            {
+                responseData = new ResponseData
+                {
+                    Code = -1,
+                    Message = "失败"
+                };
+            }
+
+            return responseData;
+        }
+        #endregion
+
         #region 我的关注
         [NeedAuth]
         [Route("MyFollow")]
@@ -592,6 +653,54 @@ namespace WebApi.Controllers
                 {
                     Code = -1,
                     Message = "获取我的粉丝失败"
+                };
+            }
+
+            return responseData;
+        }
+        #endregion
+
+        #region 我和他们的关系
+        /// <summary>
+        /// 我和他们的关系
+        /// </summary>
+        /// <param name="uids">用户ID列表eg: 132,4324</param>
+        /// <returns></returns>
+        [HttpGet]
+        [NeedAuth]
+        [Route("Relation")]
+        public ResponseData Relation(string uids)
+        {
+            ResponseData responseData = null;
+            RelationViewModel viewModel = null;
+            try
+            {
+                int userId = AccountManager.GetCurrentAccount().UserId;
+                string[] uidArr = uids.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                viewModel = new RelationViewModel();
+                viewModel.Relations = new List<RelationViewModel.RelationItem>();
+                foreach (var item in uidArr)
+                {
+                    viewModel.Relations.Add(new RelationViewModel.RelationItem
+                    {
+                        uid = Convert.ToInt32(item),
+                        Relation = this._userInfoService.Relation(userId, Convert.ToInt32(item))
+                    }); ;
+                }
+
+                responseData = new ResponseData
+                {
+                    Code = 1,
+                    Message = "获取关系成功",
+                    Data = viewModel
+                };
+            }
+            catch (Exception ex)
+            {
+                responseData = new ResponseData
+                {
+                    Code = -1,
+                    Message = "获取关系失败" + ex.Message + " " + ex.InnerException?.Message
                 };
             }
 
