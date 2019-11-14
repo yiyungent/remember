@@ -153,7 +153,7 @@ namespace WebApi.Controllers
                 responseData = new ResponseData
                 {
                     Code = -1,
-                    Message = "获取最新课程失败"
+                    Message = "获取最新课程失败 " + ex.Message + " " + ex.InnerException?.Message
                 };
             }
 
