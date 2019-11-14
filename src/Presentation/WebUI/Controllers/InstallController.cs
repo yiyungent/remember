@@ -541,6 +541,15 @@ namespace WebUI.Controllers
 
                 this._sys_MenuService.Create(new Sys_Menu()
                 {
+                    Name = "文章管理",
+                    ControllerName = "Article",
+                    ActionName = "Index",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
                     Name = "课程管理",
                     ControllerName = "CourseBox",
                     ActionName = "Index",
@@ -876,16 +885,7 @@ namespace WebUI.Controllers
 
                 this._sys_MenuService.Create(new Sys_Menu()
                 {
-                    Name = "站点公告",
-                    ControllerName = "Article",
-                    ActionName = "Index",
-                    AreaName = "Admin",
-                    Parent = parentMenu,
-                    SortCode = 10,
-                });
-                this._sys_MenuService.Create(new Sys_Menu()
-                {
-                    Name = "访问日志",
+                    Name = "访客日志",
                     ControllerName = "LogInfo",
                     ActionName = "Index",
                     AreaName = "Admin",
