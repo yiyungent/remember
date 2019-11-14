@@ -8143,26 +8143,8 @@
     <Content Include="favicon.ico" />
     <Content Include="FileNotFound.htm" />
     <Content Include="Global.asax" />
-    <Content Include="Upload\images\1\14bc24a4-9fef-480f-af85-98b0678954ad.png" />
-    <Content Include="Upload\images\1\14c64bf8-22d3-46d0-9776-788f5f9883c3.jpg" />
-    <Content Include="Upload\images\1\59f80244-d4bf-4850-9491-2602385d7fa7.png" />
-    <Content Include="Upload\images\1\5b45e430-deae-4664-bca5-b5acdc8d1783.png" />
-    <Content Include="Upload\images\1\5d25f1db-99bb-4525-8163-0ec62ef6da85.png" />
-    <Content Include="Upload\images\1\68a22f7c-862c-4247-90d8-0f57ecc21029.png" />
-    <Content Include="Upload\images\1\79b4e5f0-b2be-4604-9797-e39220b53820.png" />
-    <Content Include="Upload\images\1\834f3476-b354-4512-ad58-cca8e796f815.png" />
-    <Content Include="Upload\images\1\87bc5ba3-ba09-4afe-bd6b-479b4639152b.png" />
-    <Content Include="Upload\images\1\8964d446-b12d-4545-a5eb-29101dea1e3f.png" />
-    <Content Include="Upload\images\1\92a5f1dd-bcb1-4d03-8ea8-5aeca669c12b.png" />
-    <Content Include="Upload\images\1\a0f584fb-96e7-4b9e-bb6e-fe11f7e474cc.png" />
-    <Content Include="Upload\images\1\b7a275b9-eccf-48ef-94e1-f8fd202b8e17.png" />
-    <Content Include="Upload\images\1\cd1405f1-d7b1-4394-bff4-a1a47a8792b2.jpg" />
-    <Content Include="Upload\images\1\eb8dc5a4-bf64-4d3e-b014-aa6fa9c12525.png" />
-    <Content Include="Upload\images\1\f6166158-fc96-4245-ab69-7e6cd14ee7be.png" />
-    <Content Include="Upload\images\1\fa7ffaf1-89f0-41c0-96c8-9a00c324a292.png" />
     <Content Include="Upload\images\card.jpg" />
     <Content Include="Upload\images\courseBoxPics\1.jpeg" />
-    <Content Include="Upload\images\courseBoxPics\2.png" />
     <Content Include="Upload\images\courseBoxPics\3.jpg" />
     <Content Include="Upload\images\courseBoxPics\4.jpg" />
     <Content Include="Upload\images\courseBoxPics\5.jpg" />
@@ -8941,10 +8923,10 @@
     <Content Include="Views\Shared\_TopNav_UserAccountMenuPartial.cshtml" />
     <Content Include="Views\Widget\WidgetsByZone.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Views\Shared\_RightControlSidebarPartial.cshtml" />
     <Content Include="Views\Shared\_FooterPartial.cshtml" />
     <Content Include="Views\Shared\_ContentHeaderPartial.cshtml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -8967,6 +8949,7 @@
     <Folder Include="assets\libs\senna\node_modules\bootstrap\less\mixins\" />
     <Folder Include="Plugins\" />
     <Folder Include="Templates\" />
+    <Folder Include="Upload\images\1\" />
     <Folder Include="Upload\images\avatars\" />
     <Folder Include="Upload\subtitles\" />
     <Folder Include="Upload\TemplateInstallZip\" />
