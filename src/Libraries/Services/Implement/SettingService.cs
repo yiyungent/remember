@@ -87,8 +87,8 @@ namespace Services.Implement
                     || m.SetKey == "MailDisplayName"
                     || m.SetKey == "MailUserName"
                     || m.SetKey == "MailPassword"
-                    || m.SetKey == "StmpHost"
-                    || m.SetKey == "StmpPort"
+                    || m.SetKey == "SmtpHost"
+                    || m.SetKey == "SmtpPort"
                     || m.SetKey == "SmtpEnableSsl"
                 ).Where(m => !m.IsDeleted).ToList();
 
@@ -99,17 +99,16 @@ namespace Services.Implement
                 string mailContent = ReplaceMailTemplate(mailContentTemplate, mail, vCode);
 
                 MailOptions mailOptions = new MailOptions();
-                mailOptions.SenderDisplayAddress = settings.FirstOrDefault(m => m.SetKey == "MailDisplayAddress")?.SetValue ?? ""; //GetSet("MailDisplayAddress");
-                mailOptions.SenderDisplayName = settings.FirstOrDefault(m => m.SetKey == "MailDisplayName")?.SetValue ?? "";//GetSet("MailDisplayName");
-                mailOptions.UserName = settings.FirstOrDefault(m => m.SetKey == "MailUserName")?.SetValue ?? "";//GetSet("MailUserName");
-                mailOptions.Password = settings.FirstOrDefault(m => m.SetKey == "MailPassword")?.SetValue ?? "";//GetSet("MailPassword");
+                mailOptions.SenderDisplayAddress = settings.FirstOrDefault(m => m.SetKey == "MailDisplayAddress")?.SetValue ?? "";
+                mailOptions.SenderDisplayName = settings.FirstOrDefault(m => m.SetKey == "MailDisplayName")?.SetValue ?? "";
+                mailOptions.UserName = settings.FirstOrDefault(m => m.SetKey == "MailUserName")?.SetValue ?? "";
+                mailOptions.Password = settings.FirstOrDefault(m => m.SetKey == "MailPassword")?.SetValue ?? "";
                 mailOptions.Subject = mailSubject;
                 mailOptions.Content = mailContent;
                 mailOptions.ReceiveAddress = mail;
-                mailOptions.Host = settings.FirstOrDefault(m => m.SetKey == "StmpHost")?.SetValue ?? ""; //GetSet("StmpHost");
-                //mailOptions.Port = Convert.ToInt32(GetSet("StmpPort"));
-                mailOptions.Port = Convert.ToInt32(settings.FirstOrDefault(m => m.SetKey == "StmpPort")?.SetValue ?? "25");
-                string enableSsl = settings.FirstOrDefault(m => m.SetKey == "SmtpEnableSsl")?.SetValue ?? "";//GetSet("SmtpEnableSsl");
+                mailOptions.Host = settings.FirstOrDefault(m => m.SetKey == "SmtpHost")?.SetValue ?? "";
+                mailOptions.Port = Convert.ToInt32(settings.FirstOrDefault(m => m.SetKey == "SmtpPort")?.SetValue ?? "25");
+                string enableSsl = settings.FirstOrDefault(m => m.SetKey == "SmtpEnableSsl")?.SetValue ?? "";
                 if (enableSsl == "" || enableSsl == "0")
                 {
                     mailOptions.EnableSsl = false;

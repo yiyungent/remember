@@ -23,17 +23,23 @@ namespace Core.Common
             mailMessage.Body = options.Content;
             // 邮件内容编码
             mailMessage.BodyEncoding = Encoding.UTF8;
-            // 添加附件
-            foreach (var attachment in options.Attachments)
+            if (options.Attachments != null && options.Attachments.Count >= 1)
             {
-                mailMessage.Attachments.Add(attachment);
+                // 添加附件
+                foreach (var attachment in options.Attachments)
+                {
+                    mailMessage.Attachments.Add(attachment);
+                }
+            }
+            if (options.Cc != null && options.Cc.Count >= 1)
+            {
+                // 抄送到其他邮箱
+                foreach (var str in options.Cc)
+                {
+                    mailMessage.CC.Add(new MailAddress(str));
+                }
             }
 
-            // 抄送到其他邮箱
-            foreach (var str in options.Cc)
-            {
-                mailMessage.CC.Add(new MailAddress(str));
-            }
 
             // 是否是HTML邮件
             mailMessage.IsBodyHtml = options.IsHtml;
