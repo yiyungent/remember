@@ -60,9 +60,8 @@ namespace WebUI.Areas.Admin.Controllers
                 // 计算PV：当天访问量
                 //todayPV = this._logInfoService.Filter(m => !m.IsDeleted).Where(m => m.AccessTime.ToString("yyyy-MM-dd") == today).Count();
                 todayPV = this._logInfoService.Filter(m => !m.IsDeleted).ToList().Where(m => m.AccessTime.ToString("yyyy-MM-dd") == today).Count();
-                // TODO: UV 本来算 cookie，但这里简化，直接算 IP
-                //todayUV = this._logInfoService.Filter(m => !m.IsDeleted).Where(m => m.AccessTime.ToString("yyyy-MM-dd") == today).GroupBy(m => m.AccessIp).Count();
-                todayUV = this._logInfoService.Filter(m => !m.IsDeleted).ToList().Where(m => m.AccessTime.ToString("yyyy-MM-dd") == today).GroupBy(m => m.AccessIp).Count();
+                //todayUV = this._logInfoService.Filter(m => !m.IsDeleted).Where(m => m.AccessTime.ToString("yyyy-MM-dd") == today).GroupBy(m => m.IdCode).Count();
+                todayUV = this._logInfoService.Filter(m => !m.IsDeleted).ToList().Where(m => m.AccessTime.ToString("yyyy-MM-dd") == today).GroupBy(m => m.IdCode).Count();
                 //todayNewUserReg = this._userInfoService.All().Where(m => m.CreateTime.ToString("yyyy-MM-dd") == today).Count();
                 todayNewUserReg = this._userInfoService.All().ToList().Where(m => m.CreateTime.ToString("yyyy-MM-dd") == today).Count();
                 // TODO: 当天跳出率计算
