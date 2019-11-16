@@ -21,6 +21,13 @@ namespace Domain.Entities
         public int? AccessUserId { get; set; }
 
         /// <summary>
+        /// 访客识别码：浏览器指纹
+        /// </summary>
+        [StringLength(100)]
+        [Column(TypeName = "text")]
+        public string IdCode { get; set; }
+
+        /// <summary>
         /// 访问者的IP
         /// </summary>
         [StringLength(30)]
@@ -57,7 +64,7 @@ namespace Domain.Entities
         ///      cpu: {
         ///          architecture: ""
         ///      }
-        //} }
+        /// }
         /// </summary>
         [Column(TypeName = "text")]
         [StringLength(500)]
@@ -77,6 +84,25 @@ namespace Domain.Entities
 
         [StringLength(30)]
         public string Cpu { get; set; }
+
+        /// <summary>
+        /// 访客信息
+        /// {
+        ///      screen: {
+        ///          width: 1280,
+        ///          height: 720
+        ///      },
+        ///      
+        /// }
+        /// </summary>
+        [StringLength(500)]
+        [Column(TypeName = "text")]
+        public string VisitorInfo { get; set; }
+
+        /// <summary>
+        /// 页面点击次数
+        /// </summary>
+        public int ClickCount { get; set; }
 
         /// <summary>
         /// 访问时间：进入网页，加载完的时间

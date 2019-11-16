@@ -1,6 +1,7 @@
 ﻿using Core;
 using Domain;
 using Domain.Entities;
+using Newtonsoft.Json;
 using Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebUI.Areas.Admin.Models.Common;
+using WebUI.Areas.Admin.Models.LogInfoVM;
 
 namespace WebUI.Areas.Admin.Controllers
 {
@@ -87,6 +89,7 @@ namespace WebUI.Areas.Admin.Controllers
         public ViewResult Details(int id)
         {
             LogInfo viewModel = this._logInfoService.Find(m => m.ID == id && !m.IsDeleted);
+            ViewBag.VisitorInfo = JsonConvert.DeserializeObject<VisitorInfoViewModel>(viewModel.VisitorInfo);
 
             return View(viewModel);
         }

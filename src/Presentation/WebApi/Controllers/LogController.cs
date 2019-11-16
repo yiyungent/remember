@@ -45,6 +45,9 @@ namespace WebApi.Controllers
 
                 this._logInfoService.Create(new LogInfo
                 {
+                    IdCode = inputModel.IdCode,
+                    VisitorInfo = inputModel.VisitorInfo,
+                    ClickCount = inputModel.ClickCount,
                     AccessIp = inputModel.Ip,
                     AccessCity = inputModel.City,
                     AccessTime = inputModel.AccessTime.ToDateTime13(),

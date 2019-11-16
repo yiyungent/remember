@@ -6824,6 +6824,7 @@
     <Content Include="assets\libs\echarts\theme\roma.js" />
     <Content Include="assets\libs\echarts\theme\shine.js" />
     <Content Include="assets\libs\echarts\theme\vintage.js" />
+    <Content Include="assets\libs\fingerprintjs2\dist\fingerprint2.min.js" />
     <Content Include="assets\libs\highlight.js\lib\highlight.js" />
     <Content Include="assets\libs\highlight.js\lib\index.js" />
     <Content Include="assets\libs\highlight.js\lib\languages\1c.js" />
@@ -8183,6 +8184,7 @@
     <Compile Include="Areas\Admin\Models\CourseBoxVM\CourseBoxViewModel.cs" />
     <Compile Include="Areas\Admin\Models\DashboardVM\AccessLogViewModel.cs" />
     <Compile Include="Areas\Admin\Models\DashboardVM\PvUvViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\LogInfoVM\VisitorInfoViewModel.cs" />
     <Compile Include="Areas\Admin\Models\PluginVM\ConfigureViewModel.cs" />
     <Compile Include="Areas\Admin\Models\PluginVM\PluginListViewModel.cs" />
     <Compile Include="Areas\Admin\Models\PluginVM\PluginModel.cs" />

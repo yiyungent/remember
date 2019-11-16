@@ -8,6 +8,11 @@ namespace WebUI.Models.LogVM
     public class AccessLogInputModel
     {
         /// <summary>
+        /// 访客识别码
+        /// </summary>
+        public string IdCode { get; set; }
+
+        /// <summary>
         /// 访问者的IP
         /// </summary>
         public string Ip { get; set; }
@@ -44,5 +49,16 @@ namespace WebUI.Models.LogVM
         /// json字符串
         /// </summary>
         public string UserAgent { get; set; }
+
+        /// <summary>
+        /// 访客信息
+        /// json字符串
+        /// </summary>
+        public string VisitorInfo { get; set; }
+
+        /// <summary>
+        /// 页面点击次数
+        /// </summary>
+        public int ClickCount { get; set; }
     }
 }

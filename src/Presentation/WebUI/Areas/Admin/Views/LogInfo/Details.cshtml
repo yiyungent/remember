@@ -3,6 +3,7 @@
 @using Framework.Models
 @using Core
 @using Services.Interface;
+@using WebUI.Areas.Admin.Models.LogInfoVM
 @model LogInfo
 @{
 	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
@@ -16,6 +17,7 @@
 	string userName = userInfo?.UserName;
 	int uid = userInfo?.ID ?? 0;
 	string desc = userInfo?.Description;
+	VisitorInfoViewModel visitorInfo = ViewBag.VisitorInfo;
 }
 @helper PrettyTime(long second)
 {
@@ -54,7 +56,7 @@
 						<img class="img-circle" src="@avatar" alt="@userName">
 					</div>
 					<!-- /.widget-user-image -->
-					<h3 class="widget-user-username">访问者: @userName</h3>
+					<h3 class="widget-user-username">访客: @userName</h3>
 					<h5 class="widget-user-desc">
 						<label class="label label-default">UID: @uid</label>
 						@desc
@@ -65,9 +67,28 @@
 						<li><a href="javacript:void(0);">ID <span class="pull-right badge bg-primary">@Model.ID</span></a></li>
 						<li>
 							<a href="javacript:void(0);">
+								访客识别码
+								<span class="pull-right badge bg-aqua">@Model.IdCode</span>
+							</a>
+						</li>
+						<li>
+							<a href="javacript:void(0);">
 								访问地
 								<span class="pull-right badge bg-blue">@Model.AccessIp</span>
 								<span class="pull-right badge bg-aqua">@Model.AccessCity</span>
+							</a>
+						</li>
+						<li>
+							<a href="javacript:void(0);">
+								访客信息
+								<span class="pull-right badge bg-blue">屏幕宽: @visitorInfo.Screen.Width</span>
+								<span class="pull-right badge bg-aqua">屏幕高: @visitorInfo.Screen.Height</span>
+							</a>
+						</li>
+						<li>
+							<a href="javacript:void(0);">
+								页面点击数（仅为 此访客 此次访问 此页面）
+								<span class="pull-right badge bg-success">@Model.ClickCount</span>
 							</a>
 						</li>
 						<li><a href="javacript:void(0);">受访页面 <span class="pull-right badge bg-blue">@Model.AccessUrl</span></a></li>

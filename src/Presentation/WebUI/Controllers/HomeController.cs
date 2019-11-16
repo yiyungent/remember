@@ -60,8 +60,17 @@ namespace WebUI.Controllers
                 {
                 }
 
+                // 优先从 参数中获取 IdCode
+                if (string.IsNullOrEmpty(inputModel.IdCode))
+                {
+                    inputModel.IdCode = Request.Cookies["IdCode"].Value;
+                }
+
                 this._logInfoService.Create(new LogInfo
                 {
+                    IdCode = inputModel.IdCode,
+                    VisitorInfo = inputModel.VisitorInfo,
+                    ClickCount = inputModel.ClickCount,
                     AccessIp = inputModel.Ip,
                     AccessCity = inputModel.City,
                     AccessTime = inputModel.AccessTime.ToDateTime13(),
