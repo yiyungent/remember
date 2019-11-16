@@ -27,7 +27,9 @@ namespace Services.Implement
 
         public IList<string> UserHaveAuthKeys(int userId)
         {
-            IList<string> authKeys = CacheHelper.Get<IList<string>>($"UserHaveAuthKeys({userId})");
+            // TODO: 原本这样缓存 每个人拥有的缓存键，不合适，如果修改角色的权限，则此角色下的所有用户拥有的权限键也需要更新缓存
+            //IList<string> authKeys = CacheHelper.Get<IList<string>>($"UserHaveAuthKeys({userId})");
+            IList<string> authKeys = null;
             if (authKeys == null)
             {
                 authKeys = new List<string>();
@@ -65,7 +67,7 @@ namespace Services.Implement
                     }
                 }
 
-                CacheHelper.Insert<IList<string>>($"UserHaveAuthKeys({userId})", authKeys);
+                //CacheHelper.Insert<IList<string>>($"UserHaveAuthKeys({userId})", authKeys);
             }
 
             return authKeys;

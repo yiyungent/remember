@@ -1,4 +1,5 @@
 using Core;
+using Core.Common.Cache;
 using Domain;
 using Domain.Entities;
 using Repositories.Interface;
@@ -185,6 +186,18 @@ namespace Services.Implement
                     #endregion
 
                     isSuccess = true;
+
+                    // 刷新相关缓存
+                    // 失败：无效，且这样不合适，太多用户
+                    //var userInfoList = roleInfo.UserInfos;
+                    //if (userInfoList != null && userInfoList.Count >= 1)
+                    //{
+                    //    int[] userIds = userInfoList.Select(m => m.ID).ToArray();
+                    //    foreach (var userId in userIds)
+                    //    {
+                    //        CacheHelper.Remove($"UserHaveAuthKeys({userId})");
+                    //    }
+                    //}
                 }
                 catch (Exception ex)
                 {
