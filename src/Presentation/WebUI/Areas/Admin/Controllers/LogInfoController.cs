@@ -89,7 +89,16 @@ namespace WebUI.Areas.Admin.Controllers
         public ViewResult Details(int id)
         {
             LogInfo viewModel = this._logInfoService.Find(m => m.ID == id && !m.IsDeleted);
-            ViewBag.VisitorInfo = JsonConvert.DeserializeObject<VisitorInfoViewModel>(viewModel.VisitorInfo);
+            VisitorInfoViewModel visitorInfo = JsonConvert.DeserializeObject<VisitorInfoViewModel>(viewModel.VisitorInfo);
+            if (visitorInfo == null)
+            {
+                visitorInfo = new VisitorInfoViewModel();
+            }
+            if (visitorInfo.Screen == null)
+            {
+                visitorInfo.Screen = new VisitorInfoViewModel.ScreenModel { Width = 0, Height = 0 };
+            }
+            ViewBag.VisitorInfo = visitorInfo;
 
             return View(viewModel);
         }
