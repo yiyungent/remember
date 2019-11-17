@@ -74,8 +74,8 @@ namespace Services.Implement
             if (roleInfo != null)
             {
                 // 计算新 旧 菜单以及 权限差异
-                var old_Role_Menus = roleInfo.Role_Menus.ToList();
-                var old_Role_Funcs = roleInfo.Role_Functions.ToList();
+                var old_Role_Menus = roleInfo.Role_Menus.Where(m => !m.IsDeleted).ToList();
+                var old_Role_Funcs = roleInfo.Role_Functions.Where(m => !m.IsDeleted).ToList();
 
                 try
                 {

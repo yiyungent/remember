@@ -40,15 +40,19 @@ namespace Services.Implement
                     UserInfo userInfo = this.Find(m => m.ID == userId && !m.IsDeleted);
                     if (userInfo.Role_Users != null && userInfo.Role_Users.Count >= 1)
                     {
-                        var roleInfos = userInfo.Role_Users.Select(m => m.RoleInfo);
+                        var roleInfos = userInfo.Role_Users.Where(m => !m.IsDeleted).Select(m => m.RoleInfo);
                         foreach (var role in roleInfos)
                         {
-                            var funcs = role.FunctionInfos;
-                            foreach (var func in funcs)
+                            var role_funcs = role.Role_Functions;
+                            if (role_funcs != null && role_funcs.Count >= 1)
                             {
-                                if (!authKeys.Contains(func.AuthKey, authKeyCompare))
+                                var funcs = role_funcs.Where(m => !m.IsDeleted).Select(m => m.FunctionInfo);
+                                foreach (var func in funcs)
                                 {
-                                    authKeys.Add(func.AuthKey);
+                                    if (!authKeys.Contains(func.AuthKey, authKeyCompare))
+                                    {
+                                        authKeys.Add(func.AuthKey);
+                                    }
                                 }
                             }
                         }
@@ -58,11 +62,16 @@ namespace Services.Implement
                 {
                     // 游客
                     RoleInfo roleInfo = ContainerManager.Resolve<IRoleInfoService>().Find(m => m.ID == 2);
-                    foreach (var func in roleInfo.FunctionInfos)
+                    var role_funcs = roleInfo.Role_Functions;
+                    if (role_funcs != null && role_funcs.Count >= 1)
                     {
-                        if (!authKeys.Contains(func.AuthKey, authKeyCompare))
+                        var funcs = role_funcs.Where(m => !m.IsDeleted).Select(m => m.FunctionInfo);
+                        foreach (var func in funcs)
                         {
-                            authKeys.Add(func.AuthKey);
+                            if (!authKeys.Contains(func.AuthKey, authKeyCompare))
+                            {
+                                authKeys.Add(func.AuthKey);
+                            }
                         }
                     }
                 }
@@ -79,11 +88,11 @@ namespace Services.Implement
             UserInfo userInfo = this.Find(m => m.ID == userId && !m.IsDeleted);
             if (userInfo != null)
             {
-                var role_Users = userInfo.Role_Users.Select(m => m.RoleInfo);
+                var role_Users = userInfo.Role_Users.Where(m => !m.IsDeleted).Select(m => m.RoleInfo);
                 IEnumerable<Sys_Menu> sys_Menus;
                 foreach (RoleInfo role in role_Users)
                 {
-                    sys_Menus = role.Role_Menus.Select(m => m.Sys_Menu);
+                    sys_Menus = role.Role_Menus.Where(m => !m.IsDeleted).Select(m => m.Sys_Menu);
                     foreach (Sys_Menu menu in sys_Menus)
                     {
                         if (!menuList.Contains(menu, new Sys_Menu_Compare()))
