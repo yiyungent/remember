@@ -300,7 +300,38 @@ namespace WebUI.Areas.Admin.Controllers
             //}, new List<Order> { new Order("LastPlayTime", false) }, 0, 10, out int totalCount2);
             IList<Learner_VideoInfo> learner_VideoInfos = ContainerManager.Resolve<ILearner_VideoInfoService>().Filter(1, 10, out int totalCount_VideoInfo, m => m.LearnerId == id && !m.IsDeleted, m => m.LastPlayTime, false).ToList();
 
-            ViewBag.Learner_CourseBoxes = learner_CourseBoxes;
+            IList<Learner_CourseBoxViewModel> learner_CourseBoxViewModels = new List<Learner_CourseBoxViewModel>();
+            foreach (var item in learner_CourseBoxes)
+            {
+                Learner_CourseBoxViewModel viewModelItem = new Learner_CourseBoxViewModel
+                {
+                    ID = item.ID,
+                    JoinTime = item.JoinTime?.ToString("yyyy-MM-dd HH:mm:ss"),
+                    CourseBox = new Learner_CourseBoxViewModel.CourseBoxModel
+                    {
+                        Name = item.CourseBox.Name
+                    },
+                    LastPlayVideoInfo = new Learner_CourseBoxViewModel.VideoInfoModel
+                    {
+                        Page = item.LastPlayVideoInfo.Page,
+                        Title = item.LastPlayVideoInfo.Title
+                    },
+                    Score = 0
+                };
+                var relate_Learner_VideoInfos = learner_VideoInfos.Where(m => m.VideoInfo.CourseBoxId == item.CourseBoxId);
+                long totalLen = relate_Learner_VideoInfos.Select(m => m.VideoInfo).Select(m => m.Duration).Sum();
+                long playLen = relate_Learner_VideoInfos.Select(m => m.ProgressAt).Sum();
+
+                if (totalLen > 0)
+                {
+                    viewModelItem.Score = (int)(playLen / totalLen) * 100;
+                }
+
+                learner_CourseBoxViewModels.Add(viewModelItem);
+            }
+
+
+            ViewBag.Learner_CourseBoxes = learner_CourseBoxViewModels;
             ViewBag.Learner_VideoInfos = learner_VideoInfos;
 
             return View();

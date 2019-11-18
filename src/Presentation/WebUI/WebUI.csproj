@@ -8193,6 +8193,7 @@
     <Compile Include="Areas\Admin\Models\ThemeTemplateVM\InstallZipItem.cs" />
     <Compile Include="Areas\Admin\Models\ThemeTemplateVM\OpenCloseItem.cs" />
     <Compile Include="Areas\Admin\Models\ThemeTemplateVM\ThemeTemplateListViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\UserInfoVM\Learner_CourseBoxViewModel.cs" />
     <Compile Include="Areas\Admin\Models\UserInfoVM\UserInfoViewModel.cs" />
     <Compile Include="Attributes\LogErrorAttribute.cs" />
     <Compile Include="Controllers\ArticleController.cs" />

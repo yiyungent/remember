@@ -1,9 +1,10 @@
 ﻿@using WebUI.HtmlHelpers
+@using WebUI.Areas.Admin.Models.UserInfoVM
 @using Domain.Entities
 @{
 	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
 
-	IList<Learner_CourseBox> learner_CourseBoxes = ViewBag.Learner_CourseBoxes;
+	IList<Learner_CourseBoxViewModel> learner_CourseBoxes = ViewBag.Learner_CourseBoxes;
 	IList<Learner_VideoInfo> learner_VideoInfos = ViewBag.Learner_VideoInfos;
 }
 @helper PrettyTime(long second)
@@ -60,6 +61,7 @@
 						<th>ID</th>
 						<th>课程名</th>
 						<th>加入时间</th>
+						<th>分数</th>
 						<th>最新播放视频</th>
 					</tr>
 					@foreach (var item in learner_CourseBoxes)
@@ -67,7 +69,8 @@
 						<tr data-tr-id="@item.ID">
 							<td>@item.ID</td>
 							<td>@item.CourseBox.Name</td>
-							<td><label class="label label-info">@(item.JoinTime?.ToString("yyyy-MM-dd HH:mm:ss"))</label></td>
+							<td><label class="label label-info">@(item.JoinTime)</label></td>
+							<td><label class="label label-info">@item.Score</label></td>
 							<td><span class="badge bg-blue">@item.LastPlayVideoInfo.Page</span>@item.LastPlayVideoInfo.Title</td>
 						</tr>
 					}
@@ -115,7 +118,13 @@
 							<td>@item.ID</td>
 							<td><span class="badge bg-blue">@item.VideoInfo.Page</span><label class="label label-info">@item.VideoInfo.Title</label><label class="label label-default">@item.VideoInfo.CourseBox.Name</label></td>
 							<td><small class="label label-primary"><i class="fa fa-clock-o"></i> @PrettyTime(item.LastPlayAt)</small></td>
-							<td><small class="label label-info"><i class="fa fa-clock-o"></i> @PrettyTime(item.ProgressAt)</small><label class="label label-default">@item.Percent</label></td>
+							<td>
+								<small class="label label-info"><i class="fa fa-clock-o"></i> @PrettyTime(item.ProgressAt)</small>
+								<label class="label label-default">@(Math.Round(item.Percent * 100, 1))%</label>
+								<div class="progress xs">
+									<div class="progress-bar progress-bar-green" style="width: @(Math.Round(item.Percent * 100, 1))%;"></div>
+								</div>
+							</td>
 							<td><label class="label label-success">@(item.LastPlayTime.ToString("yyyy-MM-dd HH:mm:ss"))</label></td>
 							<td><label class="label label-default">@item.LastAccessIp</label></td>
 						</tr>
