@@ -866,6 +866,7 @@ namespace WebApi.Controllers
                     learner_VideoInfo = new Learner_VideoInfo();
                     learner_VideoInfo.LastAccessIp = HttpContext.Current.Request.UserHostName;
                     learner_VideoInfo.LastPlayAt = (long)inputModel.LastPlayAt;
+                    learner_VideoInfo.ProgressAt = (long)inputModel.LastPlayAt;
                     learner_VideoInfo.LastPlayTime = DateTime.Now;
 
                     learner_VideoInfo.LearnerId = currentUserId;
@@ -879,6 +880,13 @@ namespace WebApi.Controllers
                     learner_VideoInfo.LastAccessIp = HttpContext.Current.Request.UserHostName;
                     learner_VideoInfo.LastPlayAt = (long)inputModel.LastPlayAt;
                     learner_VideoInfo.LastPlayTime = DateTime.Now;
+
+                    if (learner_VideoInfo.LastPlayAt > learner_VideoInfo.ProgressAt)
+                    {
+                        // 最新播放位置 大于 播放进度，则更新播放进度
+                        learner_VideoInfo.ProgressAt = learner_VideoInfo.LastPlayAt;
+                    }
+
                     //Container.Instance.Resolve<Learner_VideoInfoService>().Edit(learner_VideoInfo);
                     this._learner_VideoInfoService.Update(learner_VideoInfo);
                 }
