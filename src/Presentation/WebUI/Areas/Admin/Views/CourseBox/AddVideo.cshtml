@@ -165,10 +165,10 @@
 							<label>课件排序码</label>
 							@Html.TextBox("Page", "", new { @class = "form-control", type = "number" })
 						</div>
-						<div class="form-group" style="display: none;">
+						<div class="form-group">
 							@* 不知道为什么，视频播放黑屏，但能拿到总时长，干脆取消预览 *@
 							<label>视频预览</label>
-							<div id="videoPlayer" style="width: 500px;"></div>
+							<div id="videoPlayer" style="width: 500px;margin: 0 auto;"></div>
 						</div>
 						<div class="form-group" style="display: none;">
 							@Html.Hidden("PlayUrl")
