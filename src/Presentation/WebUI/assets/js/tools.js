@@ -53,17 +53,12 @@ function showMessage(message, type) {
  * @param {number} type 成功消息 1, 失败消息 -1
  */
 function simpleMsg(message, type) {
-	$("#js-message").fadeIn();
 	switch (type) {
 		case -1:
-			$("#js-message").attr("class", "alert alert-danger").find(".message").html(message);
+			toastr.error(message, '失败！');
 			break;
 		case 1:
-			$("#js-message").attr("class", "alert alert-success").find(".message").html(message);
+			toastr.success(message, '成功！');
 			break;
 	}
-	// 3s 后隐藏
-	setTimeout(function () {
-		$("#js-message").fadeOut("slow");
-	}, 3000);
 }

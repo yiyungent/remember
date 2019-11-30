@@ -7366,6 +7366,9 @@
     <Content Include="assets\libs\senna\test\screen\Screen.js" />
     <Content Include="assets\libs\senna\test\surface\Surface.js" />
     <Content Include="assets\libs\senna\test\utils\utils.js" />
+    <Content Include="assets\libs\toastr\build\toastr.css" />
+    <Content Include="assets\libs\toastr\build\toastr.min.css" />
+    <Content Include="assets\libs\toastr\build\toastr.min.js" />
     <Content Include="assets\libs\turn.js\changelog.txt" />
     <Content Include="assets\libs\turn.js\demos\bible\index.html" />
     <Content Include="assets\libs\turn.js\demos\bible\loader.gif" />
@@ -8912,6 +8915,7 @@
     <Content Include="Areas\Account\Views\Shared\_FooterPartial.cshtml" />
     <Content Include="Areas\Account\Views\Shared\_RightControlSidebarPartial.cshtml" />
     <Content Include="Areas\Admin\Views\UserInfo\FaceStat.cshtml" />
+    <Content Include="assets\libs\toastr\build\toastr.js.map" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Install\Index.cshtml" />
