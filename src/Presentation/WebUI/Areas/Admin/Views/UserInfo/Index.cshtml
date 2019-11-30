@@ -8,14 +8,44 @@
 	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
 }
 @section head {
+	<!-- iCheck for checkboxes and radio inputs -->
+	<link href="/assets/libs/AdminLTE/plugins/iCheck/all.css" rel="stylesheet" />
 	<style>
 		table tr td {
 			vertical-align: middle !important;
+		}
+		.ul-cat {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			font-size: 13px;
+			float: left;
+			color: #666;
+		}
+		.ul-cat li {
+			display: inline-block;
+			margin: 0;
+			padding: 0;
+			white-space: nowrap;
+		}
+		.ul-cat a.current {
+			color: #000;
+			font-weight: 600;
+			border: none;
+		}
+		.ul-cat a .count, .ul-cat a.current .count {
+			color: #555d66;
+			font-weight: 400;
+		}
+		.dropdown-menu {
+			min-width: 100%;
 		}
 	</style>
 }
 @section body {
 	<script src="/assets/libs/pview/pview.js"></script>
+	<!-- iCheck 1.0.1 -->
+	<script src="/assets/libs/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 	<script>
 
 		// start 删除
@@ -41,6 +71,27 @@
 				success: deleteSuccess
 			});
 		}
+
+		function batchDelete() {
+			var str="";
+			var ids="";
+			$('input[type="checkbox"].cb-item').each(function(){
+				if(true == $(this).is(':checked')){
+					str+=$(this).val()+",";
+				}
+			});
+			if(str.substr(str.length-1)== ','){
+				ids = str.substr(0,str.length-1);
+			}
+			console.log("批量删除", ids);
+			$.ajax({
+				type: 'POST',
+				url: '/Admin/UserInfo/BatchDelete',
+				data: { ids: ids },
+				dataType: 'json',
+				success: deleteSuccess
+			});
+		}
 		// end 删除
 
 		function search() {
@@ -49,9 +100,36 @@
 			window.location.href = window.location.origin + window.location.pathname + '?q=' + query + '&type=' + queryType;
 		}
 
+		function initCheckbox() {
+			//iCheck for checkbox inputs
+			$('input[type="checkbox"]').iCheck({
+				checkboxClass: 'icheckbox_minimal-blue',
+				radioClass: 'iradio_minimal-blue'
+			});
+
+			//全选获取数值
+			var checkAll = $('input[type="checkbox"].cb-all');
+			var checkboxes = $('input[type="checkbox"].cb-item');
+			checkAll.on('ifChecked ifUnchecked', function (event) {
+				if (event.type == 'ifChecked') {
+					checkboxes.iCheck('check');
+				} else {
+					checkboxes.iCheck('uncheck');
+				}
+			});
+			checkboxes.on('ifChanged', function (event) {
+				if (checkboxes.filter(':checked').length == checkboxes.length) {
+					checkAll.prop('checked', 'checked');
+				} else {
+					checkAll.removeProp('checked');
+				}
+				checkAll.iCheck('update');
+			});
+		}
+
 		var pview;
 		$(function () {
-			pview = new PView();
+			pview = new PView({cb: initCheckbox });
 			pview.init();
 
 			$('#js-search-input').on('keypress', function (event) {
@@ -68,6 +146,9 @@
 				$('#js-search-type').attr('search-type', type);
 				$('#js-search-type').html(typeName);
 			});
+
+			initCheckbox();
+
 		});
 
 	</script>
@@ -86,23 +167,40 @@
 <div class="box">
 	<!-- start .box-header -->
 	<div class="box-header">
-		<h3 class="box-title">列表</h3>
-
-		<div class="box-tools">
-			<div class="input-group input-group-sm" style="width: 250px;">
-				<div class="input-group-btn">
-					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-						<span id="js-search-type" search-type="@(ViewBag.QueryType.Val)">@(ViewBag.QueryType.Text)</span>
-						<span class="fa fa-caret-down"></span>
-					</button>
-					<ul id="js-search-type-list" class="dropdown-menu">
-						<li search-type="username"><a href="javascript:;">用户名</a></li>
-						<li search-type="id"><a href="javascript:;">ID</a></li>
-					</ul>
+		<div class="row">
+			<div class="col-xs-12">
+				<ul class="ul-cat">
+					<li><a href="#" class="current">全部<span class="count">（@Model.PageInfo.TotalRecordCount）</span></a> |</li>
+					<li><a href="#">超级管理员<span class="count">（1）</span></a></li>
+				</ul>
+				<div class="pull-right">
+					<div class="input-group input-group-sm" style="width: 250px;">
+						<div class="input-group-btn">
+							<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+								<span id="js-search-type" search-type="@(ViewBag.QueryType.Val)">@(ViewBag.QueryType.Text)</span>
+								<span class="fa fa-caret-down"></span>
+							</button>
+							<ul id="js-search-type-list" class="dropdown-menu">
+								<li search-type="username"><a href="javascript:;">用户名</a></li>
+								<li search-type="id"><a href="javascript:;">ID</a></li>
+							</ul>
+						</div>
+						<input id="js-search-input" type="text" name="table_search" class="form-control pull-right" placeholder="Search" value="@ViewBag.Query">
+						<div class="input-group-btn">
+							<button id="js-search-btn" type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+						</div>
+					</div>
 				</div>
-				<input id="js-search-input" type="text" name="table_search" class="form-control pull-right" placeholder="Search" value="@ViewBag.Query">
-				<div class="input-group-btn">
-					<button id="js-search-btn" type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="btn-group">
+					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">批量操作 <span class="caret"></span></button>
+					<ul class="dropdown-menu">
+						<li><a href="#" onclick="batchDelete()">删除</a></li>
+						<li><a href="#" onclick="">冻结</a></li>
+					</ul>
 				</div>
 			</div>
 		</div>
@@ -113,35 +211,28 @@
 	<div class="box-body table-responsive no-padding">
 		<table id="js-table" class="table table-hover" pview="table">
 			<tr>
-				<th>ID</th>
+				<th><input class="cb-all" type="checkbox"></th>
+				<th>UID</th>
 				<th>用户名</th>
 				<th>头像</th>
+				<th>邮箱</th>
 				<th>角色</th>
 				<th>操作</th>
 			</tr>
+			@{ string[] colors = { "warning", "primary", "danger", "default" }; }
 			@foreach (var item in Model.List)
 			{
 				<tr data-tr-id="@item.ID">
+					<td><input class="cb-item" type="checkbox" value="@item.ID"></td>
 					<td>@item.ID</td>
 					<td>@item.UserName</td>
 					<td><img class="img-rounded img-responsive" style="width:30px;" src="@item.Avatar.ToHttpAbsoluteUrl()" alt="@item.UserName" /></td>
+					<td><a href="mailto:@item.Email">@item.Email</a></td>
 					<td>
-						@{ string[] colors = { "warning", "primary", "danger", "default" }; }
-						@for (int i = 0; i < item.RoleInfos.Count; i++)
+						@{ var roleInfos = item.Role_Users.Select(m => m.RoleInfo).ToList(); }
+						@for (int i = 0; i < roleInfos.Count; i++)
 						{
-							var roleInfos = item.Role_Users.Select(m => m.RoleInfo).ToList();
-							if (roleInfos[i].Name == "教师")
-							{
-								<span class="label label-success">@roleInfos[i].Name</span>
-							}
-							else if (roleInfos[i].Name == "学生")
-							{
-								<span class="label label-info">@roleInfos[i].Name</span>
-							}
-							else
-							{
-								<span class="label label-@colors[i % colors.Length]">@roleInfos[i].Name</span>
-							}
+							<span class="label label-@colors[i % colors.Length]">@roleInfos[i].Name</span>
 						}
 					</td>
 					<td>

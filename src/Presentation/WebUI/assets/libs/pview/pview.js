@@ -31,7 +31,12 @@
 				pview = this.parentNode.parentNode.getAttribute('pview-targets');
 			}
 
-			that.go(pview, goUrl, 'get', {});
+			if (options.cb) {
+				that.go(pview, goUrl, 'get', {}, options.cb);
+			} else {
+				that.go(pview, goUrl, 'get', {});
+			}
+
 			console.log('init success');
 		});
 
@@ -47,8 +52,9 @@
 		* @param {String} url	eg: www.baidu.com
 		* @param {String} type eg: get or post
 		* @param {String | Object} data 要发送的数据
+	    * @param {method} callback 更新页面成功后回调
 		*/
-	this.go = function (pview, url, type, data) {
+	this.go = function (pview, url, type, data, callback) {
 		var that = this;
 		$.ajax({
 			url: url,
@@ -96,6 +102,10 @@
 						updatePviews[i].innerHTML = pviewItemHtml;
 						console.log('----update success-----');
 					}
+				}
+				// 成功更新页面后回调
+				if (callback) {
+					callback();
 				}
 				// 重新绑定 btn, 防止 btn 位于更新的区块，而引起的未绑定点击事件
 				that.init();
