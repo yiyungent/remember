@@ -54,14 +54,16 @@
 				showMessage(data.message, -1);
 			} else {
 				showMessage(data.message, 1);
-				window.location.href = window.location.href;
+				setTimeout(function () {
+					window.location.reload();
+				}, 500);
 			}
 		}
-		function deleteOp(id) {
+		function oneDeleteOp(id) {
 			$("#js-id").val(id);
-			$('#deleteModal').modal();
+			$('#oneDeleteModal').modal();
 		}
-		function deleteSubmit() {
+		function oneDeleteSubmit() {
 			var id = $("#js-id").val();
 			$.ajax({
 				type: 'POST',
@@ -72,25 +74,30 @@
 			});
 		}
 
-		function batchDelete() {
-			var str="";
-			var ids="";
-			$('input[type="checkbox"].cb-item').each(function(){
-				if(true == $(this).is(':checked')){
-					str+=$(this).val()+",";
+		function batchDelete(action) {
+			if (action) {
+				var str="";
+				var ids="";
+				$('input[type="checkbox"].cb-item').each(function(){
+					if(true == $(this).is(':checked')){
+						str+=$(this).val()+",";
+					}
+				});
+				if(str.substr(str.length-1)== ','){
+					ids = str.substr(0,str.length-1);
 				}
-			});
-			if(str.substr(str.length-1)== ','){
-				ids = str.substr(0,str.length-1);
+				console.log("批量删除", ids);
+				$.ajax({
+					type: 'POST',
+					url: '/Admin/UserInfo/BatchDelete',
+					data: { ids: ids },
+					dataType: 'json',
+					success: deleteSuccess
+				});
+			} else {
+				// 弹出删除确认框
+				$('#batchDeleteModal').modal();
 			}
-			console.log("批量删除", ids);
-			$.ajax({
-				type: 'POST',
-				url: '/Admin/UserInfo/BatchDelete',
-				data: { ids: ids },
-				dataType: 'json',
-				success: deleteSuccess
-			});
 		}
 		// end 删除
 
@@ -102,7 +109,7 @@
 
 		function initCheckbox() {
 			//iCheck for checkbox inputs
-			$('input[type="checkbox"]').iCheck({
+			$('input[type="checkbox"].cb-all,input[type="checkbox"].cb-item').iCheck({
 				checkboxClass: 'icheckbox_minimal-blue',
 				radioClass: 'iradio_minimal-blue'
 			});
@@ -170,8 +177,8 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<ul class="ul-cat">
-					<li><a href="#" class="current">全部<span class="count">（@Model.PageInfo.TotalRecordCount）</span></a> |</li>
-					<li><a href="#">超级管理员<span class="count">（1）</span></a></li>
+					<li><a href="?cat=all" class="current">全部<span class="count">（@Model.PageInfo.TotalRecordCount）</span></a> |</li>
+					<li><a href="?cat=frozen">已冻结<span class="count">（1）</span></a></li>
 				</ul>
 				<div class="pull-right">
 					<div class="input-group input-group-sm" style="width: 250px;">
@@ -198,7 +205,7 @@
 				<div class="btn-group">
 					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">批量操作 <span class="caret"></span></button>
 					<ul class="dropdown-menu">
-						<li><a href="#" onclick="batchDelete()">删除</a></li>
+						<li><a href="#" onclick="batchDelete(false)">删除</a></li>
 						<li><a href="#" onclick="">冻结</a></li>
 					</ul>
 				</div>
@@ -243,7 +250,7 @@
 							}
 							@if (Html.HasAuth("Admin.UserInfo.Delete"))
 							{
-								<button class="btn btn-danger" type="button" onclick="deleteOp(@item.ID)">删除</button>
+								<button class="btn btn-danger" type="button" onclick="oneDeleteOp(@item.ID)">删除</button>
 							}
 							@if (Html.HasAuth("Admin.UserInfo.Edit"))
 							{

@@ -38,7 +38,7 @@ namespace WebUI.Areas.Admin.Controllers
         #endregion
 
         #region 列表
-        public ViewResult Index(int pageIndex = 1, int pageSize = 6)
+        public ViewResult Index(string cat = "all", int pageIndex = 1, int pageSize = 6)
         {
             Query(pageIndex, pageSize, out IList<UserInfo> list, out int totalCount);
 
@@ -63,8 +63,19 @@ namespace WebUI.Areas.Admin.Controllers
                     break;
                 case "id":
                     queryType.Text = "ID";
-                    int userId = int.Parse(query);
-                    list = this._userInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.ID == userId && !m.IsDeleted, m => m.ID, false).ToList();
+                    if (int.TryParse(query, out int userId))
+                    {
+                        list = this._userInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.ID == userId && !m.IsDeleted, m => m.ID, false).ToList();
+                    }
+                    else if (string.IsNullOrEmpty(query))
+                    {
+                        list = this._userInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => !m.IsDeleted, m => m.ID, false).ToList();
+                    }
+                    else
+                    {
+                        list = new List<UserInfo>();
+                        totalCount = 0;
+                    }
                     break;
                 default:
                     queryType.Text = "用户名";
@@ -87,6 +98,22 @@ namespace WebUI.Areas.Admin.Controllers
                 this._userInfoService.Update(dbModel);
 
                 return Json(new { code = 1, message = $"删除 {dbModel.UserName} 成功" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 1, message = "删除失败" });
+            }
+        }
+        #endregion
+
+        #region 批量删除
+        public JsonResult BatchDelete(string ids)
+        {
+            try
+            {
+                int count = this._userInfoService.BatchDelete(ids);
+
+                return Json(new { code = 1, message = $"成功删除 {count} 名用户" });
             }
             catch (Exception ex)
             {

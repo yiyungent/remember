@@ -214,6 +214,33 @@ namespace Services.Implement
         }
         #endregion
 
+        #region 批量删除
+        /// <summary>
+        /// 批量删除, 标记删除
+        /// </summary>
+        /// <param name="ids"></param>
+        public int BatchDelete(string ids)
+        {
+            int successCount = 0;
+            string[] idArr = ids.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
 
+            int id = 0;
+            foreach (var idStr in idArr)
+            {
+                id = Convert.ToInt32(idStr);
+                var dbModel = this._repository.Find(m => m.ID == id && !m.IsDeleted);
+                if (dbModel != null)
+                {
+                    dbModel.IsDeleted = true;
+                    dbModel.DeletedAt = DateTime.Now;
+                    this._repository.Update(dbModel);
+                    successCount++;
+                }
+            }
+            this._repository.SaveChanges();
+
+            return successCount;
+        }
+        #endregion
     }
 }

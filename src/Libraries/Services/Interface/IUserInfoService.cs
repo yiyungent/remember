@@ -43,5 +43,11 @@ namespace Services.Interface
         /// <param name="following"></param>
         /// <param name="fans"></param>
         void FollowAndFans(int uid, out int follow, out int fans);
+
+        /// <summary>
+        /// 批量删除, 标记删除
+        /// </summary>
+        /// <param name="ids"></param>
+        int BatchDelete(string ids);
     }
 }
