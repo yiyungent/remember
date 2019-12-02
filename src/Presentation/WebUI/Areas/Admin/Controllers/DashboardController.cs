@@ -42,7 +42,15 @@ namespace WebUI.Areas.Admin.Controllers
         #region 仪表盘2
         public ViewResult IndexTwo()
         {
-            return View();
+            IndexTwoViewModel viewModel = new IndexTwoViewModel();
+            viewModel.ServerName = Server.MachineName.ToString();
+            viewModel.ServerIp = Request.ServerVariables["LOCAL_ADDR"];
+            viewModel.ServerOutTime = Server.ScriptTimeout.ToString() + "秒";
+            viewModel.NetVer = System.Environment.Version.ToString();
+            viewModel.IISVer = Request.ServerVariables["SERVER_SOFTWARE"];
+            viewModel.CpuNum = int.Parse(Environment.GetEnvironmentVariable("NUMBER_OF_PROCESSORS"));
+
+            return View(viewModel);
         }
         #endregion
 
@@ -81,7 +89,6 @@ namespace WebUI.Areas.Admin.Controllers
         }
         #endregion
 
-
         #region 访问情况
         [AuthKey("Admin.Dashboard.Index")]
         public JsonResult AccessLog()
@@ -91,7 +98,7 @@ namespace WebUI.Areas.Admin.Controllers
             {
                 DateTime now = DateTime.Now;
 
-                viewModel.title = new Title() { text = "最近七天访问情况图" };
+                viewModel.title = new Title() { text = "最近七天访问趋势图" };
                 viewModel.legend = new Legend() { data = new string[] { "PV", "UV" } };
                 viewModel.tooltip = new Tooltip();
                 viewModel.tooltip.trigger = "axis";
@@ -171,5 +178,27 @@ namespace WebUI.Areas.Admin.Controllers
             return Json(new { code = 1, message = "获取 访问情况 成功", data = viewModel }, JsonRequestBehavior.AllowGet);
         }
         #endregion
+
+        #region CPU，内存等实时使用率
+        [AuthKey("Admin.Dashboard.IndexTwo")]
+        public JsonResult CpuMemory()
+        {
+            CpuMemoryViewModel viewModel = new CpuMemoryViewModel();
+            try
+            {
+                viewModel.serverSessionTotal = Session.Contents.Count;
+                viewModel.serverRunTime = (Math.Round((double)Environment.TickCount / 600 / 60) / 100).ToString() + "小时";
+                viewModel.cpu = ((TimeSpan)System.Diagnostics.Process.GetCurrentProcess().TotalProcessorTime).TotalSeconds.ToString("N0");
+                viewModel.memory = ((Double)System.Diagnostics.Process.GetCurrentProcess().WorkingSet64 / 1048576).ToString("N2");
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = -1, message = "获取 CPU，内存等实时使用率 失败" });
+            }
+
+            return Json(new { code = 1, message = "获取 CPU，内存等实时使用率 成功", data = viewModel }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
     }
 }

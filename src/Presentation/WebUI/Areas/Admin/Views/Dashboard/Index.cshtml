@@ -13,12 +13,12 @@
 
 		$(function () {
 			loadPvUv();
-			setInterval(loadPvUv, 200);
+			setInterval(loadPvUv, 2000);
 
 			accessLog = echarts.init($('#js-access-log')[0]);
 			accessLog.showLoading();
 			loadAccessLog();
-			setInterval(loadAccessLog, 200);
+			setInterval(loadAccessLog, 2000);
 
 
 		});
@@ -123,7 +123,7 @@
 		<div class="box box-info">
 			<div class="box-header">
 				<i class="fa fa-envelope"></i>
-				<h3 class="box-title">访问情况</h3>
+				<h3 class="box-title">访问趋势</h3>
 				<!-- tools box -->
 				<div class="pull-right box-tools">
 					<button type="button" class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="Remove">
