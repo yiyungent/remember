@@ -55,23 +55,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auto\Implement\ArticleRepository.cs" />
-    <Compile Include="Auto\Implement\CardBoxRepository.cs" />
-    <Compile Include="Auto\Implement\CardInfoRepository.cs" />
+    <Compile Include="Auto\Implement\BookInfoRepository.cs" />
+    <Compile Include="Auto\Implement\BookInfo_CommentRepository.cs" />
+    <Compile Include="Auto\Implement\BookInfo_DislikeRepository.cs" />
+    <Compile Include="Auto\Implement\BookInfo_LikeRepository.cs" />
+    <Compile Include="Auto\Implement\BookInfo_ParticipantRepository.cs" />
+    <Compile Include="Auto\Implement\BookSectionRepository.cs" />
+    <Compile Include="Auto\Implement\BookSection_CommentRepository.cs" />
     <Compile Include="Auto\Implement\CommentRepository.cs" />
     <Compile Include="Auto\Implement\Comment_DislikeRepository.cs" />
     <Compile Include="Auto\Implement\Comment_LikeRepository.cs" />
-    <Compile Include="Auto\Implement\CourseBoxRepository.cs" />
-    <Compile Include="Auto\Implement\CourseBox_CommentRepository.cs" />
-    <Compile Include="Auto\Implement\CourseBox_DislikeRepository.cs" />
-    <Compile Include="Auto\Implement\CourseBox_LikeRepository.cs" />
-    <Compile Include="Auto\Implement\CourseBox_ParticipantRepository.cs" />
     <Compile Include="Auto\Implement\FavoriteRepository.cs" />
-    <Compile Include="Auto\Implement\Favorite_CardBoxRepository.cs" />
-    <Compile Include="Auto\Implement\Favorite_CourseBoxRepository.cs" />
+    <Compile Include="Auto\Implement\Favorite_BookInfoRepository.cs" />
     <Compile Include="Auto\Implement\Follower_FollowedRepository.cs" />
     <Compile Include="Auto\Implement\FunctionInfoRepository.cs" />
-    <Compile Include="Auto\Implement\Learner_CourseBoxRepository.cs" />
-    <Compile Include="Auto\Implement\Learner_VideoInfoRepository.cs" />
     <Compile Include="Auto\Implement\LogInfoRepository.cs" />
     <Compile Include="Auto\Implement\ParticipantInfoRepository.cs" />
     <Compile Include="Auto\Implement\RoleInfoRepository.cs" />
@@ -84,26 +81,23 @@
     <Compile Include="Auto\Implement\Sys_MenuRepository.cs" />
     <Compile Include="Auto\Implement\ThemeTemplateRepository.cs" />
     <Compile Include="Auto\Implement\UserInfoRepository.cs" />
-    <Compile Include="Auto\Implement\VideoInfoRepository.cs" />
-    <Compile Include="Auto\Implement\VideoInfo_CommentRepository.cs" />
+    <Compile Include="Auto\Implement\User_BookInfoRepository.cs" />
+    <Compile Include="Auto\Implement\User_BookSectionRepository.cs" />
     <Compile Include="Auto\Interface\IArticleRepository.cs" />
-    <Compile Include="Auto\Interface\ICardBoxRepository.cs" />
-    <Compile Include="Auto\Interface\ICardInfoRepository.cs" />
+    <Compile Include="Auto\Interface\IBookInfoRepository.cs" />
+    <Compile Include="Auto\Interface\IBookInfo_CommentRepository.cs" />
+    <Compile Include="Auto\Interface\IBookInfo_DislikeRepository.cs" />
+    <Compile Include="Auto\Interface\IBookInfo_LikeRepository.cs" />
+    <Compile Include="Auto\Interface\IBookInfo_ParticipantRepository.cs" />
+    <Compile Include="Auto\Interface\IBookSectionRepository.cs" />
+    <Compile Include="Auto\Interface\IBookSection_CommentRepository.cs" />
     <Compile Include="Auto\Interface\ICommentRepository.cs" />
     <Compile Include="Auto\Interface\IComment_DislikeRepository.cs" />
     <Compile Include="Auto\Interface\IComment_LikeRepository.cs" />
-    <Compile Include="Auto\Interface\ICourseBoxRepository.cs" />
-    <Compile Include="Auto\Interface\ICourseBox_CommentRepository.cs" />
-    <Compile Include="Auto\Interface\ICourseBox_DislikeRepository.cs" />
-    <Compile Include="Auto\Interface\ICourseBox_LikeRepository.cs" />
-    <Compile Include="Auto\Interface\ICourseBox_ParticipantRepository.cs" />
     <Compile Include="Auto\Interface\IFavoriteRepository.cs" />
-    <Compile Include="Auto\Interface\IFavorite_CardBoxRepository.cs" />
-    <Compile Include="Auto\Interface\IFavorite_CourseBoxRepository.cs" />
+    <Compile Include="Auto\Interface\IFavorite_BookInfoRepository.cs" />
     <Compile Include="Auto\Interface\IFollower_FollowedRepository.cs" />
     <Compile Include="Auto\Interface\IFunctionInfoRepository.cs" />
-    <Compile Include="Auto\Interface\ILearner_CourseBoxRepository.cs" />
-    <Compile Include="Auto\Interface\ILearner_VideoInfoRepository.cs" />
     <Compile Include="Auto\Interface\ILogInfoRepository.cs" />
     <Compile Include="Auto\Interface\IParticipantInfoRepository.cs" />
     <Compile Include="Auto\Interface\IRoleInfoRepository.cs" />
@@ -116,8 +110,8 @@
     <Compile Include="Auto\Interface\ISys_MenuRepository.cs" />
     <Compile Include="Auto\Interface\IThemeTemplateRepository.cs" />
     <Compile Include="Auto\Interface\IUserInfoRepository.cs" />
-    <Compile Include="Auto\Interface\IVideoInfoRepository.cs" />
-    <Compile Include="Auto\Interface\IVideoInfo_CommentRepository.cs" />
+    <Compile Include="Auto\Interface\IUser_BookInfoRepository.cs" />
+    <Compile Include="Auto\Interface\IUser_BookSectionRepository.cs" />
     <Compile Include="Core\BaseRepository.cs" />
     <Compile Include="Core\DbFactory.cs" />
     <Compile Include="Core\IDependency.cs" />
@@ -127,9 +121,9 @@
     <Compile Include="Implement\SearchTotalRepository.cs" />
     <Compile Include="Interface\IArticleRepository.cs" />
     <Compile Include="Interface\ISearchTotalRepository.cs" />
-    <Compile Include="Migrations\201910220156447_update.cs" />
-    <Compile Include="Migrations\201910220156447_update.Designer.cs">
-      <DependentUpon>201910220156447_update.cs</DependentUpon>
+    <Compile Include="Migrations\201912061147219_update.cs" />
+    <Compile Include="Migrations\201912061147219_update.Designer.cs">
+      <DependentUpon>201912061147219_update.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -167,8 +161,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201910220156447_update.resx">
-      <DependentUpon>201910220156447_update.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201912061147219_update.resx">
+      <DependentUpon>201912061147219_update.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

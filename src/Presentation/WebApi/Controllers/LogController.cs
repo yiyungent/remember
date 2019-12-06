@@ -10,7 +10,7 @@ using WebApi.Models.LogVM;
 
 namespace WebApi.Controllers
 {
-    public class LogController : BaseController
+    public class LogController : BaseApiController
     {
         #region Fields
         private readonly ILogInfoService _logInfoService;

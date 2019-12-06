@@ -21,14 +21,14 @@ namespace WebUI.Controllers
     public class HomeController : Controller
     {
         #region Fields
-        private readonly ICourseBoxService _courseBoxService;
+        private readonly IBookInfoService _bookInfoService;
         private readonly ILogInfoService _logInfoService;
         #endregion
 
         #region Ctor
-        public HomeController(ICourseBoxService courseBoxService, ILogInfoService logInfoService)
+        public HomeController(IBookInfoService bookInfoService, ILogInfoService logInfoService)
         {
-            this._courseBoxService = courseBoxService;
+            this._bookInfoService = bookInfoService;
             this._logInfoService = logInfoService;
         }
         #endregion
@@ -36,7 +36,7 @@ namespace WebUI.Controllers
         #region 首页
         public ActionResult Index()
         {
-            IList<CourseBox> courseBoxes = this._courseBoxService.Filter(m => !m.IsDeleted).ToList();
+            IList<BookInfo> courseBoxes = this._bookInfoService.Filter(m => !m.IsDeleted).ToList();
             ViewBag.CourseBoxes = courseBoxes;
 
             return View();

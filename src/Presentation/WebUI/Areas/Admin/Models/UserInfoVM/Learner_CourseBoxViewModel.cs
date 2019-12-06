@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebUI.Areas.Admin.Models.UserInfoVM
 {
-    public class Learner_CourseBoxViewModel
+    public class User_BookInfoViewModel
     {
         public int ID { get; set; }
 

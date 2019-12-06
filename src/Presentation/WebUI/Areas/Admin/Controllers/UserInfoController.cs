@@ -315,38 +315,30 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpGet]
         public ViewResult FaceStat(int id)
         {
-            //IList<Learner_CourseBox> learner_CourseBoxes = Container.Instance.Resolve<Learner_CourseBoxService>().GetPaged(new List<ICriterion>
-            //{
-            //    Expression.Eq("Learner.ID", id )
-            //}, new List<Order> { new Order("JoinTime", false) }, 0, 10, out int totalCount);
-            IList<Learner_CourseBox> learner_CourseBoxes = ContainerManager.Resolve<ILearner_CourseBoxService>().Filter(1, 10, out int totalCount_CourseBox, m => m.LearnerId == id && !m.IsDeleted, m => m.JoinTime, false).ToList();
+            IList<User_BookInfo> user_BookInfos = ContainerManager.Resolve<IUser_BookInfoService>().Filter(1, 10, out int totalCount_CourseBox, m => m.ReaderId == id && !m.IsDeleted, m => m.CreateTime, false).ToList();
 
-            //IList<Learner_VideoInfo> learner_VideoInfos = Container.Instance.Resolve<Learner_VideoInfoService>().GetPaged(new List<ICriterion>
-            //{
-            //    Expression.Eq("Learner.ID", id )
-            //}, new List<Order> { new Order("LastPlayTime", false) }, 0, 10, out int totalCount2);
-            IList<Learner_VideoInfo> learner_VideoInfos = ContainerManager.Resolve<ILearner_VideoInfoService>().Filter(1, 10, out int totalCount_VideoInfo, m => m.LearnerId == id && !m.IsDeleted, m => m.LastPlayTime, false).ToList();
+            IList<User_BookSection> user_BookSections = ContainerManager.Resolve<IUser_BookSectionService>().Filter(1, 10, out int totalCount_VideoInfo, m => m.ReaderId == id && !m.IsDeleted, m => m.LastViewAt, false).ToList();
 
-            IList<Learner_CourseBoxViewModel> learner_CourseBoxViewModels = new List<Learner_CourseBoxViewModel>();
-            foreach (var item in learner_CourseBoxes)
+            IList<User_BookInfoViewModel> user_BookInfoViewModels = new List<User_BookInfoViewModel>();
+            foreach (var item in user_BookInfos)
             {
-                Learner_CourseBoxViewModel viewModelItem = new Learner_CourseBoxViewModel
+                User_BookInfoViewModel viewModelItem = new User_BookInfoViewModel
                 {
                     ID = item.ID,
-                    JoinTime = item.JoinTime?.ToString("yyyy-MM-dd HH:mm:ss"),
-                    CourseBox = new Learner_CourseBoxViewModel.CourseBoxModel
+                    JoinTime = item.CreateTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                    CourseBox = new User_BookInfoViewModel.CourseBoxModel
                     {
-                        Name = item.CourseBox.Name
+                        Name = item.BookInfo.Name
                     },
-                    LastPlayVideoInfo = new Learner_CourseBoxViewModel.VideoInfoModel
+                    LastPlayVideoInfo = new User_BookInfoViewModel.VideoInfoModel
                     {
-                        Page = item.LastPlayVideoInfo.Page,
-                        Title = item.LastPlayVideoInfo.Title
+                        Page = item.LastViewSection.SortCode,
+                        Title = item.LastViewSection.Title
                     },
                     Score = 0
                 };
-                var relate_Learner_VideoInfos = learner_VideoInfos.Where(m => m.VideoInfo.CourseBoxId == item.CourseBoxId);
-                long totalLen = relate_Learner_VideoInfos.Select(m => m.VideoInfo).Select(m => m.Duration).Sum();
+                var relate_Learner_VideoInfos = user_BookSections.Where(m => m.BookSection.BookInfoId == item.BookInfoId);
+                long totalLen = relate_Learner_VideoInfos.Select(m => m.BookSection).Select(m => m.Duration).Sum();
                 long playLen = relate_Learner_VideoInfos.Select(m => m.ProgressAt).Sum();
 
                 if (totalLen > 0)
@@ -354,12 +346,12 @@ namespace WebUI.Areas.Admin.Controllers
                     viewModelItem.Score = (int)(playLen / totalLen) * 100;
                 }
 
-                learner_CourseBoxViewModels.Add(viewModelItem);
+                user_BookInfoViewModels.Add(viewModelItem);
             }
 
 
-            ViewBag.Learner_CourseBoxes = learner_CourseBoxViewModels;
-            ViewBag.Learner_VideoInfos = learner_VideoInfos;
+            ViewBag.Learner_CourseBoxes = user_BookInfoViewModels;
+            ViewBag.Learner_VideoInfos = user_BookSections;
 
             return View();
         }
@@ -373,21 +365,10 @@ namespace WebUI.Areas.Admin.Controllers
             bool isExist = false;
             if (exceptUserId == 0)
             {
-                //criteria = new List<ICriterion>
-                //{
-                //    Expression.Eq("Email", email)
-                //};
                 isExist = this._userInfoService.Contains(m => m.Email == email && !m.IsDeleted);
             }
             else
             {
-                //criteria = new List<ICriterion>
-                //{
-                //     Expression.And(
-                //        Expression.Eq("Email", email),
-                //        Expression.Not(Expression.Eq("ID", exceptUserId))
-                //     )
-                //};
                 isExist = this._userInfoService.Contains(m =>
                     m.Email == email
                     && m.ID != exceptUserId

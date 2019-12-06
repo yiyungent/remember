@@ -18,7 +18,7 @@ namespace Domain.Entities
         /// 访问者的用户ID
         /// 如果未登录，则为 0
         /// </summary>
-        public int? AccessUserId { get; set; }
+        public int AccessUserId { get; set; }
 
         /// <summary>
         /// 访客识别码：浏览器指纹
@@ -138,5 +138,15 @@ namespace Domain.Entities
         /// 创建时间
         /// </summary>
         public DateTime CreateTime { get; set; }
+
+        /// <summary>
+        /// 删除时间：为null，则未删除
+        /// </summary>
+        public DateTime? DeletedAt { get; set; }
+
+        /// <summary>
+        /// 是否被删除
+        /// </summary>
+        public bool IsDeleted { get; set; }
     }
 }

@@ -8,7 +8,7 @@
 	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
 
 
-	IList<int> userIds = Model.List.Select(m => m.AccessUserId ?? 0).ToList();
+	IList<int> userIds = Model.List.Select(m => m.AccessUserId).ToList();
 	var userInfos = ContainerManager.Resolve<IUserInfoService>().Filter(m => userIds.Contains(m.ID));
 	var userIdAndUserNames = (from m in userInfos
 							  select new { ID = m.ID, UserName = m.UserName }).ToList();

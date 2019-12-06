@@ -20,7 +20,7 @@ namespace WebApi.Models.FavoriteVM
 
         public CreatorViewModel Creator { get; set; }
 
-        public IList<CourseBox> CourseBoxs { get; set; }
+        public IList<BookInfoItem> BookInfos { get; set; }
 
         /// <summary>
         /// 收藏夹的封面图由内容决定，若无内容则默认图，否则选择此收藏夹最新收藏的内容的封面图为此收藏夹的封面图
@@ -28,7 +28,7 @@ namespace WebApi.Models.FavoriteVM
         public string PicUrl { get; set; }
 
 
-        public sealed class CourseBox
+        public sealed class BookInfoItem
         {
             /// <summary>
             /// 课程ID

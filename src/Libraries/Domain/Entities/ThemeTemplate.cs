@@ -12,7 +12,7 @@ namespace Domain.Entities
         public int ID { get; set; }
 
         /// <summary>
-        /// 模板名
+        /// 模板名(标识，唯一)
         /// </summary>
         [Required]
         [StringLength(100)]
@@ -20,7 +20,7 @@ namespace Domain.Entities
         public string TemplateName { get; set; }
 
         /// <summary>
-        /// 模板标题
+        /// 模板标题（展示名）
         /// </summary>
         [Required]
         [StringLength(100)]
@@ -32,6 +32,6 @@ namespace Domain.Entities
         ///     0: 禁用
         ///     1: 开启
         /// </summary>
-        public int? IsOpen { get; set; }
+        public int IsOpen { get; set; }
     }
 }

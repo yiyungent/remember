@@ -27,12 +27,12 @@ namespace Domain.Entities
         /// <summary>
         /// 创建时间
         /// </summary>
-        public DateTime? CreateTime { get; set; }
+        public DateTime CreateTime { get; set; }
 
         /// <summary>
         /// 最近更新
         /// </summary>
-        public DateTime? LastUpdateTime { get; set; }
+        public DateTime LastUpdateTime { get; set; }
 
         /// <summary>
         /// 自定义Url
@@ -44,7 +44,7 @@ namespace Domain.Entities
         /// <summary>
         /// 文章状态
         /// </summary>
-        public Status ArticleStatus { get; set; }
+        public AStatus ArticleStatus { get; set; }
 
         #region Relationships
 
@@ -52,18 +52,28 @@ namespace Domain.Entities
         /// 作者
         /// </summary>
         [ForeignKey("Author")]
-        public int? AuthorId { get; set; }
+        public int AuthorId { get; set; }
         /// <summary>
         /// 作者
         /// </summary>
         [ForeignKey("AuthorId")]
         public virtual UserInfo Author { get; set; }
 
+        /// <summary>
+        /// 删除时间：为null，则未删除
+        /// </summary>
+        public DateTime? DeletedAt { get; set; }
+
+        /// <summary>
+        /// 是否被删除
+        /// </summary>
+        public bool IsDeleted { get; set; }
+
         #endregion
 
         #region Helpers
 
-        public enum Status
+        public enum AStatus
         {
             /// <summary>
             /// 被发布
@@ -74,7 +84,7 @@ namespace Domain.Entities
             /// 编辑中（草稿状态）
             /// </summary>
             Editing = 1,
-        } 
+        }
 
         #endregion
     }

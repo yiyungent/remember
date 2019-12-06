@@ -51,7 +51,7 @@ namespace WebUI.Areas.Admin.Models.ThemeTemplateVM
                         openItem.Description = templateConfiguration.Description;
                         openItem.PreviewImageUrl = templateConfiguration.PreviewImageUrl;
                         openItem.IsDefault = templateName.ToLower() == defaultTemplateName.ToLower();
-                        openItem.Status = installedTemplateList.Where(m => m.TemplateName.ToLower() == templateName.ToLower()).Select(m => m.IsOpen ?? 0).FirstOrDefault();
+                        openItem.Status = installedTemplateList.Where(m => m.TemplateName.ToLower() == templateName.ToLower()).Select(m => m.IsOpen).FirstOrDefault();
                         openItem.ID = installedTemplateList.Where(m => m.TemplateName.ToLower() == templateName.ToLower()).Select(m => m.ID).FirstOrDefault();
 
                         list.Add(openItem);
@@ -75,7 +75,7 @@ namespace WebUI.Areas.Admin.Models.ThemeTemplateVM
                         closeItem.Description = templateConfiguration.Description;
                         closeItem.PreviewImageUrl = templateConfiguration.PreviewImageUrl;
                         closeItem.IsDefault = templateName.ToLower() == defaultTemplateName.ToLower();
-                        closeItem.Status = installedTemplateList.Where(m => m.TemplateName.ToLower() == templateName.ToLower()).Select(m => m.IsOpen ?? 0).FirstOrDefault();
+                        closeItem.Status = installedTemplateList.Where(m => m.TemplateName.ToLower() == templateName.ToLower()).Select(m => m.IsOpen).FirstOrDefault();
                         closeItem.ID = installedTemplateList.Where(m => m.TemplateName.ToLower() == templateName.ToLower()).Select(m => m.ID).FirstOrDefault();
 
                         list.Add(closeItem);
@@ -98,7 +98,7 @@ namespace WebUI.Areas.Admin.Models.ThemeTemplateVM
                         opencloseItem.Description = templateConfiguration.Description;
                         opencloseItem.PreviewImageUrl = templateConfiguration.PreviewImageUrl;
                         opencloseItem.IsDefault = templateName.ToLower() == defaultTemplateName.ToLower();
-                        opencloseItem.Status = installedTemplateList.Where(m => m.TemplateName.ToLower() == templateName.ToLower()).Select(m => m.IsOpen ?? 0).FirstOrDefault();
+                        opencloseItem.Status = installedTemplateList.Where(m => m.TemplateName.ToLower() == templateName.ToLower()).Select(m => m.IsOpen).FirstOrDefault();
                         opencloseItem.ID = installedTemplateList.Where(m => m.TemplateName.ToLower() == templateName.ToLower()).Select(m => m.ID).FirstOrDefault();
 
                         list.Add(opencloseItem);

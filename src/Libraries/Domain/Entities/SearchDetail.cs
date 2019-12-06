@@ -15,6 +15,6 @@ namespace Domain.Entities
         [Column(TypeName = "text")]
         public string KeyWord { get; set; }
 
-        public DateTime? SearchTime { get; set; }
+        public DateTime SearchTime { get; set; }
     }
 }

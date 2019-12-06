@@ -26,7 +26,6 @@ namespace WebUI.Extensions
                 m.AreaName.Contains(areaName)
                 && m.ControllerName.Contains(controllerName)
                 && m.ActionName.Contains(actionName)
-                && !m.IsDeleted
             );
             if (rtn == null)
             {
@@ -39,7 +38,6 @@ namespace WebUI.Extensions
                 rtn= ContainerManager.Resolve<ISys_MenuService>().Find(m =>
                      m.AreaName.Contains(areaName)
                      && m.ControllerName.Contains(controllerName)
-                     && !m.IsDeleted
                 );
             }
 

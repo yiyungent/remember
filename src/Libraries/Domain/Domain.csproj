@@ -59,23 +59,20 @@
     <Compile Include="BaseEntity.cs" />
     <Compile Include="CommonEqualityComparer.cs" />
     <Compile Include="Entities\Article.cs" />
-    <Compile Include="Entities\CardBox.cs" />
-    <Compile Include="Entities\CardInfo.cs" />
     <Compile Include="Entities\Comment.cs" />
     <Compile Include="Entities\Comment_Dislike.cs" />
     <Compile Include="Entities\Comment_Like.cs" />
-    <Compile Include="Entities\CourseBox.cs" />
-    <Compile Include="Entities\CourseBox_Comment.cs" />
-    <Compile Include="Entities\CourseBox_Dislike.cs" />
-    <Compile Include="Entities\CourseBox_Like.cs" />
-    <Compile Include="Entities\CourseBox_Participant.cs" />
+    <Compile Include="Entities\BookInfo.cs" />
+    <Compile Include="Entities\BookInfo_Comment.cs" />
+    <Compile Include="Entities\BookInfo_Dislike.cs" />
+    <Compile Include="Entities\BookInfo_Like.cs" />
+    <Compile Include="Entities\BookInfo_Participant.cs" />
     <Compile Include="Entities\Favorite.cs" />
-    <Compile Include="Entities\Favorite_CardBox.cs" />
-    <Compile Include="Entities\Favorite_CourseBox.cs" />
+    <Compile Include="Entities\Favorite_BookInfo.cs" />
     <Compile Include="Entities\Follower_Followed.cs" />
     <Compile Include="Entities\FunctionInfo.cs" />
-    <Compile Include="Entities\Learner_CourseBox.cs" />
-    <Compile Include="Entities\Learner_VideoInfo.cs" />
+    <Compile Include="Entities\User_BookInfo.cs" />
+    <Compile Include="Entities\User_BookSection.cs" />
     <Compile Include="Entities\LogInfo.cs" />
     <Compile Include="Entities\ParticipantInfo.cs" />
     <Compile Include="Entities\RoleInfo.cs" />
@@ -88,8 +85,8 @@
     <Compile Include="Entities\Sys_Menu.cs" />
     <Compile Include="Entities\ThemeTemplate.cs" />
     <Compile Include="Entities\UserInfo.cs" />
-    <Compile Include="Entities\VideoInfo.cs" />
-    <Compile Include="Entities\VideoInfo_Comment.cs" />
+    <Compile Include="Entities\BookSection.cs" />
+    <Compile Include="Entities\BookSection_Comment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

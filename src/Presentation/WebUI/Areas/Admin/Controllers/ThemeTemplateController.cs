@@ -30,7 +30,7 @@ namespace WebUI.Areas.Admin.Controllers
         #region 主题模板列表
         public ActionResult Index(int pageIndex = 1, int pageSize = 6, string cat = "open")
         {
-            ThemeTemplateListViewModel viewModel = new ThemeTemplateListViewModel(m => !m.IsDeleted, pageIndex, pageSize, HttpContext, cat);
+            ThemeTemplateListViewModel viewModel = new ThemeTemplateListViewModel(m => true, pageIndex, pageSize, HttpContext, cat);
 
             ViewBag.Cat = cat;
             TempData["RedirectUrl"] = Request.RawUrl;
@@ -104,19 +104,14 @@ namespace WebUI.Areas.Admin.Controllers
         {
             try
             {
-                //bool isExist = Container.Instance.Resolve<ThemeTemplateService>().Exist(id);
-                bool isExist = this._themeTemplateService.Contains(m => m.ID == id && !m.IsDeleted);
+                bool isExist = this._themeTemplateService.Contains(m => m.ID == id);
                 if (!isExist)
                 {
                     return Json(new { code = -1, message = "卸载失败, 要卸载的模板不存在，或未安装" });
                 }
-                //ThemeTemplate dbModel = Container.Instance.Resolve<ThemeTemplateService>().GetEntity(id);
-                ThemeTemplate dbModel = this._themeTemplateService.Find(m => m.ID == id && !m.IsDeleted);
+                ThemeTemplate dbModel = this._themeTemplateService.Find(m => m.ID == id);
 
-                //Container.Instance.Resolve<ThemeTemplateService>().Delete(id);
-                dbModel.IsDeleted = true;
-                dbModel.DeletedAt = DateTime.Now;
-                this._themeTemplateService.Update(dbModel);
+                this._themeTemplateService.Delete(dbModel);
                 try
                 {
                     Core.Common.FileHelper.DeleteDir(Server.MapPath(@"~/Templates/" + dbModel.TemplateName));
@@ -156,12 +151,12 @@ namespace WebUI.Areas.Admin.Controllers
             try
             {
                 //if (!Container.Instance.Resolve<ThemeTemplateService>().Exist(id))
-                if (!this._themeTemplateService.Contains(m => m.ID == id && !m.IsDeleted))
+                if (!this._themeTemplateService.Contains(m => m.ID == id))
                 {
                     return Json(new { code = -1, message = "指定的模板不存在" });
                 }
                 //ThemeTemplate dbModel = Container.Instance.Resolve<ThemeTemplateService>().GetEntity(id);
-                ThemeTemplate dbModel = this._themeTemplateService.Find(m => m.ID == id && !m.IsDeleted);
+                ThemeTemplate dbModel = this._themeTemplateService.Find(m => m.ID == id);
                 string msg = "";
                 switch (dbModel.IsOpen)
                 {
@@ -197,21 +192,18 @@ namespace WebUI.Areas.Admin.Controllers
         {
             try
             {
-                //bool isExist = Container.Instance.Resolve<ThemeTemplateService>().Exist(id);
-                bool isExist = this._themeTemplateService.Contains(m => m.ID == id && !m.IsDeleted);
+                bool isExist = this._themeTemplateService.Contains(m => m.ID == id);
                 if (!isExist)
                 {
                     return Json(new { code = -1, message = "模板不存在，或未安装" });
                 }
 
-                //ThemeTemplate dbModel = Container.Instance.Resolve<ThemeTemplateService>().GetEntity(id);
-                ThemeTemplate dbModel = this._themeTemplateService.Find(m => m.ID == id && !m.IsDeleted);
+                ThemeTemplate dbModel = this._themeTemplateService.Find(m => m.ID == id);
                 if (dbModel.IsOpen == 0)
                 {
                     return Json(new { code = -2, message = "模板未启用，请先启用再设置为默认模板" });
                 }
 
-                //Container.Instance.Resolve<SettingService>().Set("DefaultTemplateName", dbModel.TemplateName);
                 this._settingService.Set("DefaultTemplateName", dbModel.TemplateName);
 
                 return Json(new { code = 1, message = dbModel.Title + " 成功设置为默认模板" });
@@ -233,14 +225,12 @@ namespace WebUI.Areas.Admin.Controllers
                 {
                     return Json(new { code = -2, message = "未登录状态不允许切换模板" });
                 }
-                //bool isExist = Container.Instance.Resolve<ThemeTemplateService>().Exist(id);
-                bool isExist = this._themeTemplateService.Contains(m => m.ID == id && !m.IsDeleted);
+                bool isExist = this._themeTemplateService.Contains(m => m.ID == id);
                 if (!isExist)
                 {
                     return Json(new { code = -3, message = "切换模板失败, 不存在此模板" });
                 }
-                //ThemeTemplate dbModel = Container.Instance.Resolve<ThemeTemplateService>().GetEntity(id);
-                ThemeTemplate dbModel = this._themeTemplateService.Find(m => m.ID == id && !m.IsDeleted);
+                ThemeTemplate dbModel = this._themeTemplateService.Find(m => m.ID == id);
                 if (dbModel.IsOpen == 0)
                 {
                     return Json(new { code = -4, message = "切换模板失败，此模板被禁用" });

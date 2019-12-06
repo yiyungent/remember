@@ -22,8 +22,6 @@ namespace WebUI.Controllers
         private readonly IRoleInfoService _roleInfoService;
         private readonly IArticleService _articleService;
         private readonly IFavoriteService _favoriteService;
-        private readonly ICourseBoxService _courseBoxService;
-        private readonly IVideoInfoService _videoInfoService;
         private readonly IRole_MenuService _role_MenuService;
         private readonly IRole_FunctionService _role_FunctionService;
         #endregion
@@ -37,8 +35,6 @@ namespace WebUI.Controllers
                                  IRoleInfoService roleInfoService,
                                  IArticleService articleService,
                                  IFavoriteService favoriteService,
-                                 ICourseBoxService courseBoxService,
-                                 IVideoInfoService videoInfoService,
                                  IRole_MenuService role_MenuService,
                                  IRole_FunctionService role_FunctionService)
         {
@@ -50,8 +46,6 @@ namespace WebUI.Controllers
             this._roleInfoService = roleInfoService;
             this._articleService = articleService;
             this._favoriteService = favoriteService;
-            this._courseBoxService = courseBoxService;
-            this._videoInfoService = videoInfoService;
             this._role_MenuService = role_MenuService;
             this._role_FunctionService = role_FunctionService;
         }
@@ -111,8 +105,6 @@ namespace WebUI.Controllers
 
             InitFavorite();
 
-            InitCourseBox();
-            InitVideoInfo();
         }
         #endregion
 
@@ -135,7 +127,7 @@ namespace WebUI.Controllers
                 findPwd_MailContent += "&nbsp; &nbsp;如非本人操作，及时检查账号或";
                 findPwd_MailContent += "<a href='#' target='_blank'>联系在线客服</a>";
                 findPwd_MailContent += "<br>";
-                findPwd_MailContent += "&nbsp; &nbsp;祝在【TES】收获愉快！";
+                findPwd_MailContent += "&nbsp; &nbsp;祝在【remember】收获愉快！";
                 findPwd_MailContent += "<br><br>";
                 findPwd_MailContent += "&nbsp; &nbsp;（这是一封自动发送的邮件，请不要直接回复）";
                 findPwd_MailContent += "</p>";
@@ -242,13 +234,34 @@ namespace WebUI.Controllers
                     "glyphicon glyphicon-globe",
                     "glyphicon glyphicon-blackboard",
                     "glyphicon glyphicon-th-large",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
                 };
                 for (int i = 0; i < firstLevel_names.Length; i++)
                 {
                     this._sys_MenuService.Create(new Sys_Menu()
                     {
                         Name = firstLevel_names[i],
-                        Icon = "",
+                        Icon = firstLevel_icons[i],
                         SortCode = i + 1,
                     });
 
@@ -275,6 +288,7 @@ namespace WebUI.Controllers
                 this._sys_MenuService.Create(new Sys_Menu()
                 {
                     Name = "仪表盘-1",
+                    Description = "站点每日基本信息",
                     ControllerName = "Dashboard",
                     ActionName = "Index",
                     AreaName = "Admin",
@@ -550,8 +564,8 @@ namespace WebUI.Controllers
                 });
                 this._sys_MenuService.Create(new Sys_Menu()
                 {
-                    Name = "课程管理",
-                    ControllerName = "CourseBox",
+                    Name = "文库管理",
+                    ControllerName = "BookInfo",
                     ActionName = "Index",
                     AreaName = "Admin",
                     SortCode = 10,
@@ -885,7 +899,8 @@ namespace WebUI.Controllers
 
                 this._sys_MenuService.Create(new Sys_Menu()
                 {
-                    Name = "访客日志",
+                    Name = "访问日志",
+                    Description = "站点访问统计",
                     ControllerName = "LogInfo",
                     ActionName = "Index",
                     AreaName = "Admin",
@@ -1143,16 +1158,7 @@ namespace WebUI.Controllers
                 });
                 this._sys_MenuService.Create(new Sys_Menu()
                 {
-                    Name = "课程回收站",
-                    ControllerName = "Home",
-                    ActionName = "Index",
-                    AreaName = "Admin",
-                    SortCode = 10,
-                    Parent = parentMenu,
-                });
-                this._sys_MenuService.Create(new Sys_Menu()
-                {
-                    Name = "公告回收站",
+                    Name = "文库回收站",
                     ControllerName = "Home",
                     ActionName = "Index",
                     AreaName = "Admin",
@@ -1229,7 +1235,7 @@ namespace WebUI.Controllers
                 #endregion
 
                 #region 文章管理
-                Sys_Menu article_Sys_Menu = this._sys_MenuService.Find(m => m.ControllerName == "Article" && !m.IsDeleted);
+                Sys_Menu article_Sys_Menu = this._sys_MenuService.Find(m => m.ControllerName == "Article");
                 this._functionInfoService.Create(new FunctionInfo
                 {
                     AuthKey = "Admin.Article.Create",
@@ -1258,7 +1264,7 @@ namespace WebUI.Controllers
 
                 #region 角色管理
                 // 角色RoleInfo菜单 增加授权操作
-                Sys_Menu roleInfo_Sys_Menu = this._sys_MenuService.Find(m => m.ControllerName == "RoleInfo" && !m.IsDeleted);
+                Sys_Menu roleInfo_Sys_Menu = this._sys_MenuService.Find(m => m.ControllerName == "RoleInfo");
                 this._functionInfoService.Create(new FunctionInfo
                 {
                     AuthKey = "Admin.RoleInfo.AssignPower",
@@ -1268,7 +1274,7 @@ namespace WebUI.Controllers
                 #endregion
 
                 #region 主题模板 ThemeTemplate
-                Sys_Menu themeTemplate_Sys_Menu = this._sys_MenuService.Find(m => m.ControllerName == "ThemeTemplate" && !m.IsDeleted);
+                Sys_Menu themeTemplate_Sys_Menu = this._sys_MenuService.Find(m => m.ControllerName == "ThemeTemplate");
                 this._functionInfoService.Create(new FunctionInfo
                 {
                     AuthKey = "Admin.ThemeTemplate.Index",
@@ -1329,7 +1335,7 @@ namespace WebUI.Controllers
                 #endregion
 
                 #region 全局-站点设置
-                Sys_Menu setting_Sys_Menu = this._sys_MenuService.Find(m => m.ControllerName == "Setting" && !m.IsDeleted);
+                Sys_Menu setting_Sys_Menu = this._sys_MenuService.Find(m => m.ControllerName == "Setting");
                 this._functionInfoService.Create(new FunctionInfo
                 {
                     AuthKey = "Admin.Setting.Index",
@@ -1362,60 +1368,60 @@ namespace WebUI.Controllers
                 });
                 #endregion
 
-                #region 课程
-                Sys_Menu courseBox_Sys_Menu = this._sys_MenuService.Find(m => m.ControllerName == "CourseBox" && !m.IsDeleted);
+                #region 文库
+                Sys_Menu bookInfo_Sys_Menu = this._sys_MenuService.Find(m => m.ControllerName == "BookInfo");
                 this._functionInfoService.Create(new FunctionInfo
                 {
-                    AuthKey = "Admin.CourseBox.Index",
-                    Name = "课程-列表",
-                    Sys_Menu = courseBox_Sys_Menu
+                    AuthKey = "Admin.BookInfo.Index",
+                    Name = "文库-列表",
+                    Sys_Menu = bookInfo_Sys_Menu
                 });
                 this._functionInfoService.Create(new FunctionInfo
                 {
-                    AuthKey = "Admin.CourseBox.Edit",
-                    Name = "课程-编辑",
-                    Sys_Menu = courseBox_Sys_Menu
+                    AuthKey = "Admin.BookInfo.Edit",
+                    Name = "文库-编辑",
+                    Sys_Menu = bookInfo_Sys_Menu
                 });
                 this._functionInfoService.Create(new FunctionInfo
                 {
-                    AuthKey = "Admin.CourseBox.UploadVideo",
-                    Name = "课程-上传视频",
-                    Sys_Menu = courseBox_Sys_Menu
+                    AuthKey = "Admin.BookInfo.ImportBook",
+                    Name = "文库-导入文库",
+                    Sys_Menu = bookInfo_Sys_Menu
                 });
                 this._functionInfoService.Create(new FunctionInfo
                 {
-                    AuthKey = "Admin.CourseBox.Delete",
-                    Name = "课程-删除",
-                    Sys_Menu = courseBox_Sys_Menu
+                    AuthKey = "Admin.BookInfo.Delete",
+                    Name = "文库-删除",
+                    Sys_Menu = bookInfo_Sys_Menu
                 });
                 this._functionInfoService.Create(new FunctionInfo
                 {
-                    AuthKey = "Admin.CourseBox.Create",
-                    Name = "课程-创建",
-                    Sys_Menu = courseBox_Sys_Menu
+                    AuthKey = "Admin.BookInfo.Create",
+                    Name = "文库-创建",
+                    Sys_Menu = bookInfo_Sys_Menu
                 });
                 this._functionInfoService.Create(new FunctionInfo
                 {
-                    AuthKey = "Admin.CourseBox.AddVideo",
-                    Name = "视频课件-添加",
-                    Sys_Menu = courseBox_Sys_Menu
+                    AuthKey = "Admin.BookInfo.AddVideo",
+                    Name = "文库章节-添加",
+                    Sys_Menu = bookInfo_Sys_Menu
                 });
                 this._functionInfoService.Create(new FunctionInfo
                 {
-                    AuthKey = "Admin.CourseBox.DeleteVideo",
-                    Name = "视频课件-删除",
-                    Sys_Menu = courseBox_Sys_Menu
+                    AuthKey = "Admin.BookInfo.DeleteVideo",
+                    Name = "文库章节-删除",
+                    Sys_Menu = bookInfo_Sys_Menu
                 });
                 this._functionInfoService.Create(new FunctionInfo
                 {
-                    AuthKey = "Admin.CourseBox.EditVideo",
-                    Name = "视频课件-编辑",
-                    Sys_Menu = courseBox_Sys_Menu
+                    AuthKey = "Admin.BookInfo.EditVideo",
+                    Name = "文库章节-编辑",
+                    Sys_Menu = bookInfo_Sys_Menu
                 });
                 #endregion
 
                 #region 访问日志
-                Sys_Menu logInfo_Sys_Menu = this._sys_MenuService.Find(m => m.ControllerName == "LogInfo" && !m.IsDeleted);
+                Sys_Menu logInfo_Sys_Menu = this._sys_MenuService.Find(m => m.ControllerName == "LogInfo");
                 this._functionInfoService.Create(new FunctionInfo
                 {
                     AuthKey = "Admin.LogInfo.Index",
@@ -1639,136 +1645,6 @@ namespace WebUI.Controllers
             {
                 ShowMessage("失败");
                 ShowMessage(ex.Message);
-            }
-        }
-        #endregion
-
-        #region 初始化课程
-        private void InitCourseBox()
-        {
-            try
-            {
-                ShowMessage("开始初始化课程");
-                string[] names = {
-                    "高等数学（一）",
-                    "Python语言程序设计 ",
-                    "沟通心理学",
-                    "程序设计入门——C语言",
-                    "金融学"
-                };
-                string[] descs = {
-                    "高等数学是以微积分为主要内容的课程，它不但是理工类各专业，也是其他众多专业最重要的基础课程之一。我们的工作、科研以及生活中的很多例子，如：卫星成功驶进预定轨道，火车在弯道上飞驰而过，经济金融、天气预报和深海下潜，都与数学有着深深的联系。现在就让我们一起去高等数学的殿堂探索吧！",
-
-                    "计算机是运算工具，更是创新平台，高效有趣地利用计算机需要更简洁实用的编程语言。Python简洁却强大、简单却专业，它是当今世界最受欢迎的编程语言，学好它终身受用。请跟随我们，学习并掌握Python语言，一起动起来，站在风口、享受创新！",
-
-                    "视角独特的“主持型”心理课，正能量的“烧脑”之旅。言语犀利，案例丰富，思维训练，实用性强，主讲人裴秋宇老师凝聚19年心理医生“心战”经历、15年世界五百强员工心理内训精华，获得2016最受欢迎慕课top1、2017十大最受欢迎国家精品在线课程。",
-
-                    "C语言是古老而长青的编程语言，它具备了现代程序设计的基础要求，它的语法是很多其他编程语言的基础，在系统程序、嵌入式系统等领域依然是无可替代的编程语言，在各类编程语言排行榜上常年占据前两名的位置。 本课程是零基础的编程入门课，是后续的操作系统、编译原理、体系结构等课程的基石。",
-
-                    "本课程是金融专业统帅性基础理论课。教学资源丰富，教学理念先进，教学方法多元。采用宽口径的范畴，涵盖货币、信用、金融资产与价格、金融市场、金融机构、金融总量与均衡、调控与监管、金融发展等所有金融活动的集合。有利于认识金融原理，了解金融现状，掌握分析方法，培养解决金融问题的能力。"
-                };
-                string[] picUrls = {
-                    ":WebUISite:/upload/images/courseBoxPics/1.jpeg",
-                    ":WebUISite:/upload/images/courseBoxPics/2.png",
-                    ":WebUISite:/upload/images/courseBoxPics/3.jpg",
-                    ":WebUISite:/upload/images/courseBoxPics/4.jpg",
-                    ":WebUISite:/upload/images/courseBoxPics/5.jpg",
-                };
-
-                for (int i = 0; i < names.Length; i++)
-                {
-                    this._courseBoxService.Create(new CourseBox
-                    {
-                        CreateTime = DateTime.Now.AddDays(i),
-                        LastUpdateTime = DateTime.Now.AddDays(i),
-                        CreatorId = 1,
-                        StartTime = DateTime.Now.AddDays(i),
-                        EndTime = DateTime.Now.AddMonths(7).AddDays(i),
-                        Name = names[i],
-                        Description = descs[i],
-                        PicUrl = picUrls[i]
-                    });
-                }
-
-                ShowMessage("成功");
-            }
-            catch (Exception ex)
-            {
-                ShowMessage("失败");
-            }
-        }
-        #endregion
-
-        #region 初始化视频课件
-        private void InitVideoInfo()
-        {
-            try
-            {
-                ShowMessage("开始初始化视频课件");
-
-                string[] playUrls = {
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/1%E3%80%81%E5%A7%94%E6%89%98%E5%A4%8D%E4%B9%A0.mp4",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/2%E3%80%81%E6%B3%9B%E5%9E%8B%E5%A7%94%E6%89%98.mp4",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/3%E3%80%81%E5%A4%9A%E6%92%AD%E5%A7%94%E6%89%98.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/4%E3%80%81%E4%BD%BF%E7%94%A8%E5%A7%94%E6%89%98%E8%BF%9B%E8%A1%8C%E7%AA%97%E4%BD%93%E4%BC%A0%E5%80%BC.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/5%E3%80%81%E4%BA%8B%E4%BB%B6.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/6%E3%80%81%E4%BA%8B%E4%BB%B6%E7%BB%93%E6%9D%9F.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/6%E3%80%81%E4%BA%8B%E4%BB%B6%E7%BB%93%E6%9D%9F.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/7%E3%80%81%E5%8F%8D%E5%B0%84.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/8%E3%80%81%E7%A8%8B%E5%BA%8F%E9%9B%86%E4%B8%AD%E7%9A%843%E4%B8%AA%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0.mp4",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/9%E3%80%81%E4%BD%BF%E7%94%A8%E5%8F%8D%E5%B0%84%E5%88%B6%E4%BD%9C%E8%AE%A1%E7%AE%97%E5%99%A8.mp4",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8A%E5%8D%8802-%E6%96%87%E6%A1%A3%E7%BB%93%E6%9E%841.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8A%E5%8D%8803-%E8%A7%86%E5%8F%A3.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8A%E5%8D%8804-Bootstrap%E9%BB%98%E8%AE%A4%E6%A8%A1%E7%89%88.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8A%E5%8D%8805-%E5%85%A8%E5%B1%80CSS%E6%A0%B7%E5%BC%8F.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8A%E5%8D%8806-Bootstrap%E7%BB%84%E4%BB%B6%E5%BF%AB%E9%80%9F%E8%BF%87.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8B%E5%8D%8802-%E9%A1%B6%E9%83%A8%E9%80%9A%E6%A0%8F%EF%BC%88%E5%AD%97%E4%BD%93%E5%9B%BE%E6%A0%87%EF%BC%89.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8B%E5%8D%8804-%E5%8A%A0%E5%8F%B7%E9%80%89%E6%8B%A9%E5%99%A8.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8B%E5%8D%8806-%E5%9B%BE%E6%A0%87%E5%AD%97%E4%BD%93%E5%9B%9E%E9%A1%BE.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8B%E5%8D%8808-%E5%AF%BC%E8%88%AA%E6%A0%B7%E5%BC%8F.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/01-%E7%A7%BB%E5%8A%A8web%E5%BC%80%E5%8F%91_01/%E4%B8%8B%E5%8D%8810-%E5%93%8D%E5%BA%94%E5%BC%8F%E8%8F%9C%E5%8D%95.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/5%E3%80%81%E5%AF%B9XML%E6%96%87%E6%A1%A3%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5%282%29.mp4",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8A%E5%8D%881-ASPX%E9%80%92%E5%BD%92%E5%88%86%E7%B1%BB.wmv",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8A%E5%8D%882-FlipView.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8A%E5%8D%883-Hub%2BPivot.wmv",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8A%E5%8D%884-%E5%B9%BF%E5%91%8A%E5%B9%B3%E5%8F%B0.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8A%E5%8D%886-%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E6%A0%8F%E5%92%8CWebView.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8A%E5%8D%887-%E6%8E%A7%E4%BB%B6%E8%A1%A5%E5%85%85.wmv",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8B%E5%8D%882-Style%E7%9A%84%E7%BB%A7%E6%89%BF.wmv",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8B%E5%8D%884-Timer%E6%A8%A1%E6%8B%9F%E5%8A%A8%E7%94%BB.wmv",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8B%E5%8D%886-%E5%85%B3%E9%94%AE%E5%B8%A7%E5%8A%A8%E7%94%BB%E5%92%8C%E4%BE%9D%E8%B5%96%E5%B1%9E%E6%80%A7%E5%8A%A8%E7%94%BB%E8%A1%A5%E5%85%85.wmv",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8B%E5%8D%887-%E5%8A%A8%E7%94%BB%E6%93%8D%E4%BD%9C%E8%A1%A5%E5%85%85.avi",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8B%E5%8D%888-%E5%89%8D%E7%AB%AF%E5%B0%8F%E7%9F%A5%E8%AF%86%E5%88%86%E4%BA%AB.wmv",
-                    "https://remstatic.oss-cn-beijing.aliyuncs.com/videos/%E4%B8%8B%E5%8D%889-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%BB%98%E5%9B%BEAPI.avi"
-                };
-
-
-                // 共5门课程
-                int playIndex = 0;
-                for (int i = 0; i < 5; i++)
-                {
-                    // 每门课程 3个课件
-                    for (int j = 0; j < 3; j++)
-                    {
-                        this._videoInfoService.Create(new VideoInfo
-                        {
-                            CourseBoxId = i + 1,
-                            Page = j + 1,
-                            PlayUrl = playUrls[playIndex],
-                            // 获取文件名(无扩展名)作为标题
-                            Title = System.IO.Path.GetFileNameWithoutExtension(Server.UrlDecode(playUrls[playIndex])),
-                            Size = 141344,
-                        });
-                        playIndex++;
-                    }
-                }
-
-
-                ShowMessage("成功");
-            }
-            catch (Exception ex)
-            {
-                ShowMessage("失败");
             }
         }
         #endregion

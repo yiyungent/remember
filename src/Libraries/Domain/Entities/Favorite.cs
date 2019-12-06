@@ -31,12 +31,22 @@ namespace Domain.Entities
         /// <summary>
         /// 是否公开
         /// </summary>
-        public bool? IsOpen { get; set; }
+        public bool IsOpen { get; set; }
 
         /// <summary>
         /// 创建时间
         /// </summary>
-        public DateTime? CreateTime { get; set; }
+        public DateTime CreateTime { get; set; }
+
+        /// <summary>
+        /// 删除时间：为null，则未删除
+        /// </summary>
+        public DateTime? DeletedAt { get; set; }
+
+        /// <summary>
+        /// 是否被删除
+        /// </summary>
+        public bool IsDeleted { get; set; }
 
         #region Relationships
 
@@ -44,36 +54,31 @@ namespace Domain.Entities
         /// 收藏夹的创建者
         /// </summary>
         [ForeignKey("Creator")]
-        public int? CreatorId { get; set; }
+        public int CreatorId { get; set; }
         [ForeignKey("CreatorId")]
         public virtual UserInfo Creator { get; set; }
 
         /// <summary>
-        /// 收藏的课程列表
+        /// 收藏的文库列表
         /// </summary>
-        public virtual ICollection<Favorite_CourseBox> Favorite_CourseBoxes { get; set; }
-
-        /// <summary>
-        /// 收藏的卡片盒列表
-        /// </summary>
-        public virtual ICollection<Favorite_CardBox> Favorite_CardBoxes { get; set; }
+        public virtual ICollection<Favorite_BookInfo> Favorite_BookInfos { get; set; }
 
         #endregion
 
         #region Helpers
 
         [NotMapped]
-        public IList<CourseBox> CourseBoxes
+        public IList<BookInfo> BookInfos
         {
             get
             {
-                IList<CourseBox> courseBoxes = new List<CourseBox>();
-                if (this.Favorite_CourseBoxes != null && this.Favorite_CourseBoxes.Count >= 1)
+                IList<BookInfo> bookInfos = new List<BookInfo>();
+                if (this.Favorite_BookInfos != null && this.Favorite_BookInfos.Count >= 1)
                 {
-                    courseBoxes = this.Favorite_CourseBoxes.Select(m => m.CourseBox)?.ToList();
+                    bookInfos = this.Favorite_BookInfos.Select(m => m.BookInfo)?.ToList();
                 }
 
-                return courseBoxes;
+                return bookInfos;
             }
         }
 

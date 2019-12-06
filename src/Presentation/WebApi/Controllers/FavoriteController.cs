@@ -19,20 +19,20 @@ using WebApi.Models.FavoriteVM;
 namespace WebApi.Controllers
 {
     [RoutePrefix("api/Favorite")]
-    public class FavoriteController : BaseController
+    public class FavoriteController : BaseApiController
     {
         #region Fields
         private readonly IFavoriteService _favoriteService;
-        private readonly IFavorite_CourseBoxService _favorite_CourseBoxService;
-        private readonly ILearner_CourseBoxService _learner_CourseBoxService;
+        private readonly IFavorite_BookInfoService _favorite_BookInfoService;
+        private readonly IUser_BookInfoService _learner_BookInfoService;
         #endregion
 
         #region Ctor
-        public FavoriteController(IFavoriteService favoriteService, IFavorite_CourseBoxService favorite_CourseBoxService, ILearner_CourseBoxService learner_CourseBoxService)
+        public FavoriteController(IFavoriteService favoriteService, IFavorite_BookInfoService favorite_BookInfoService, IUser_BookInfoService learner_BookInfoService)
         {
             this._favoriteService = favoriteService;
-            this._favorite_CourseBoxService = favorite_CourseBoxService;
-            this._learner_CourseBoxService = learner_CourseBoxService;
+            this._favorite_BookInfoService = favorite_BookInfoService;
+            this._learner_BookInfoService = learner_BookInfoService;
         }
         #endregion
 
@@ -51,17 +51,17 @@ namespace WebApi.Controllers
                 {
                     //Favorite favorite = Container.Instance.Resolve<FavoriteService>().GetEntity(id);
                     Favorite favorite = this._favoriteService.Find(id);
-                    if (favorite.IsOpen ?? false)
+                    if (favorite.IsOpen)
                     {
                         // 公开：谁都可以访问，无需登录
 
                         #region 获取收藏夹内容数据->视图模型
                         // 此收藏夹内的课程-按加入收藏夹的时间-从最新到最早
-                        //IList<Favorite_CourseBox> favorite_CourseBoxes = Container.Instance.Resolve<Favorite_CourseBoxService>().Query(new List<ICriterion>
+                        //IList<Favorite_BookInfo> favorite_BookInfos = Container.Instance.Resolve<Favorite_BookInfoService>().Query(new List<ICriterion>
                         //{
                         //    Expression.Eq("Favorite.ID", favorite.ID)
                         //}).OrderByDescending(m => m.CreateTime).ToList();
-                        IList<Favorite_CourseBox> favorite_CourseBoxes = this._favorite_CourseBoxService.Filter(m => m.FavoriteId == favorite.ID && !m.IsDeleted).OrderByDescending(m => m.CreateTime).ToList();
+                        IList<Favorite_BookInfo> favorite_BookInfos = this._favorite_BookInfoService.Filter(m => m.FavoriteId == favorite.ID && !m.IsDeleted).OrderByDescending(m => m.CreateTime).ToList();
 
                         viewModel = new FavoriteViewModel();
                         viewModel.ID = favorite.ID;
@@ -73,37 +73,37 @@ namespace WebApi.Controllers
                             ID = favorite.Creator.ID,
                             UserName = favorite.Creator.UserName
                         };
-                        if (favorite.CourseBoxes == null || favorite.CourseBoxes.Count <= 0)
+                        if (favorite.BookInfos == null || favorite.BookInfos.Count <= 0)
                         {
                             // 无收藏内容，默认封面图
                             viewModel.PicUrl = ":WebApiSite:/assets/images/default-favorite-pic.jpg".ToHttpAbsoluteUrl();
                         }
                         else
                         {
-                            viewModel.PicUrl = favorite_CourseBoxes.FirstOrDefault().CourseBox.PicUrl.ToHttpAbsoluteUrl();
+                            viewModel.PicUrl = favorite_BookInfos.FirstOrDefault().BookInfo.PicUrl.ToHttpAbsoluteUrl();
                         }
-                        viewModel.CourseBoxs = new List<FavoriteViewModel.CourseBox>();
-                        foreach (var item in favorite_CourseBoxes)
+                        viewModel.BookInfos = new List<FavoriteViewModel.BookInfoItem>();
+                        foreach (var item in favorite_BookInfos)
                         {
                             // 此课程的学习人数
-                            //int learnNum = Container.Instance.Resolve<Learner_CourseBoxService>().Count(Expression.Eq("CourseBox.ID", item.CourseBox.ID));
-                            int learnNum = this._learner_CourseBoxService.Count(m => m.CourseBoxId == item.CourseBoxId && !m.IsDeleted);
+                            //int learnNum = Container.Instance.Resolve<User_BookInfoService>().Count(Expression.Eq("BookInfo.ID", item.BookInfo.ID));
+                            int learnNum = this._learner_BookInfoService.Count(m => m.BookInfoId == item.BookInfoId && !m.IsDeleted);
 
-                            viewModel.CourseBoxs.Add(new FavoriteViewModel.CourseBox
+                            viewModel.BookInfos.Add(new FavoriteViewModel.BookInfoItem
                             {
-                                ID = item.CourseBox.ID,
+                                ID = item.BookInfo.ID,
                                 Creator = new FavoriteViewModel.CreatorViewModel
                                 {
-                                    ID = item.CourseBox.Creator.ID,
-                                    UserName = item.CourseBox.Creator.UserName
+                                    ID = item.BookInfo.Creator.ID,
+                                    UserName = item.BookInfo.Creator.UserName
                                 },
-                                Name = item.CourseBox.Name,
-                                PicUrl = item.CourseBox.PicUrl.ToHttpAbsoluteUrl(),
+                                Name = item.BookInfo.Name,
+                                PicUrl = item.BookInfo.PicUrl.ToHttpAbsoluteUrl(),
                                 FavTime = item.CreateTime.ToTimeStamp13(),
                                 Stat = new FavoriteViewModel.StatModel
                                 {
                                     LearnNum = learnNum,
-                                    FavNum = item.CourseBox.Favorite_CourseBoxes.Count
+                                    FavNum = item.BookInfo.Favorite_BookInfos.Count
                                 }
                             });
                         }
@@ -126,11 +126,11 @@ namespace WebApi.Controllers
 
                             #region 获取收藏夹内容数据->视图模型
                             // 此收藏夹内的课程-按加入收藏夹的时间-从最新到最早
-                            //IList<Favorite_CourseBox> favorite_CourseBoxes = Container.Instance.Resolve<Favorite_CourseBoxService>().Query(new List<ICriterion>
+                            //IList<Favorite_BookInfo> favorite_BookInfos = Container.Instance.Resolve<Favorite_BookInfoService>().Query(new List<ICriterion>
                             //{
                             //    Expression.Eq("Favorite.ID", favorite.ID)
                             //}).OrderByDescending(m => m.CreateTime).ToList();
-                            IList<Favorite_CourseBox> favorite_CourseBoxes = this._favorite_CourseBoxService.Filter(m => m.FavoriteId == favorite.ID && !m.IsDeleted).OrderByDescending(m => m.CreateTime).ToList();
+                            IList<Favorite_BookInfo> favorite_BookInfos = this._favorite_BookInfoService.Filter(m => m.FavoriteId == favorite.ID && !m.IsDeleted).OrderByDescending(m => m.CreateTime).ToList();
 
                             viewModel = new FavoriteViewModel();
                             viewModel.ID = favorite.ID;
@@ -142,37 +142,37 @@ namespace WebApi.Controllers
                                 ID = favorite.Creator.ID,
                                 UserName = favorite.Creator.UserName
                             };
-                            if (favorite.Favorite_CourseBoxes == null || favorite.Favorite_CourseBoxes.Count <= 0)
+                            if (favorite.Favorite_BookInfos == null || favorite.Favorite_BookInfos.Count <= 0)
                             {
                                 // 无收藏内容，默认封面图
                                 viewModel.PicUrl = ":WebApiSite:/assets/images/default-favorite-pic.jpg".ToHttpAbsoluteUrl();
                             }
                             else
                             {
-                                viewModel.PicUrl = favorite_CourseBoxes.FirstOrDefault().CourseBox.PicUrl.ToHttpAbsoluteUrl();
+                                viewModel.PicUrl = favorite_BookInfos.FirstOrDefault().BookInfo.PicUrl.ToHttpAbsoluteUrl();
                             }
-                            viewModel.CourseBoxs = new List<FavoriteViewModel.CourseBox>();
-                            foreach (var item in favorite_CourseBoxes)
+                            viewModel.BookInfos = new List<FavoriteViewModel.BookInfoItem>();
+                            foreach (var item in favorite_BookInfos)
                             {
                                 // 此课程的学习人数
-                                //int learnNum = Container.Instance.Resolve<Learner_CourseBoxService>().Count(Expression.Eq("CourseBox.ID", item.CourseBox.ID));
-                                int learnNum = this._learner_CourseBoxService.Count(m => m.CourseBoxId == item.CourseBoxId && !m.IsDeleted);
+                                //int learnNum = Container.Instance.Resolve<User_BookInfoService>().Count(Expression.Eq("BookInfo.ID", item.BookInfo.ID));
+                                int learnNum = this._learner_BookInfoService.Count(m => m.BookInfoId == item.BookInfoId && !m.IsDeleted);
 
-                                viewModel.CourseBoxs.Add(new FavoriteViewModel.CourseBox
+                                viewModel.BookInfos.Add(new FavoriteViewModel.BookInfoItem
                                 {
-                                    ID = item.CourseBox.ID,
+                                    ID = item.BookInfo.ID,
                                     Creator = new FavoriteViewModel.CreatorViewModel
                                     {
-                                        ID = item.CourseBox.Creator.ID,
-                                        UserName = item.CourseBox.Creator.UserName
+                                        ID = item.BookInfo.Creator.ID,
+                                        UserName = item.BookInfo.Creator.UserName
                                     },
-                                    Name = item.CourseBox.Name,
-                                    PicUrl = item.CourseBox.PicUrl.ToHttpAbsoluteUrl(),
+                                    Name = item.BookInfo.Name,
+                                    PicUrl = item.BookInfo.PicUrl.ToHttpAbsoluteUrl(),
                                     FavTime = item.CreateTime.ToTimeStamp13(),
                                     Stat = new FavoriteViewModel.StatModel
                                     {
                                         LearnNum = learnNum,
-                                        FavNum = item.CourseBox.Favorite_CourseBoxes.Count
+                                        FavNum = item.BookInfo.Favorite_BookInfos.Count
                                     }
                                 });
                             }
@@ -241,17 +241,17 @@ namespace WebApi.Controllers
                 foreach (var item in favorites)
                 {
                     // 此收藏夹的课程列表 - 按时间倒序排序
-                    //int favorite_CourseBox_Num = Container.Instance.Resolve<Favorite_CourseBoxService>().Count(Expression.Eq("Favorite.ID", item.ID));
-                    int favorite_CourseBox_Num = this._favorite_CourseBoxService.Count(m => m.FavoriteId == item.ID && !m.IsDeleted);
+                    //int favorite_BookInfo_Num = Container.Instance.Resolve<Favorite_BookInfoService>().Count(Expression.Eq("Favorite.ID", item.ID));
+                    int favorite_BookInfo_Num = this._favorite_BookInfoService.Count(m => m.FavoriteId == item.ID && !m.IsDeleted);
                     string picUrl = "";
-                    if (favorite_CourseBox_Num >= 1)
+                    if (favorite_BookInfo_Num >= 1)
                     {
-                        //IList<Favorite_CourseBox> favorite_CourseBoxes = Container.Instance.Resolve<Favorite_CourseBoxService>().Query(new List<ICriterion>
+                        //IList<Favorite_BookInfo> favorite_BookInfos = Container.Instance.Resolve<Favorite_BookInfoService>().Query(new List<ICriterion>
                         //{
                         //    Expression.Eq("Favorite.ID", item.ID)
                         //}).OrderByDescending(m => m.CreateTime).ToList();
-                        IList<Favorite_CourseBox> favorite_CourseBoxes = this._favorite_CourseBoxService.Filter(m => m.FavoriteId == item.ID && !m.IsDeleted).OrderByDescending(m => m.CreateTime).ToList();
-                        picUrl = favorite_CourseBoxes.FirstOrDefault()?.CourseBox?.PicUrl.ToHttpAbsoluteUrl();
+                        IList<Favorite_BookInfo> favorite_BookInfos = this._favorite_BookInfoService.Filter(m => m.FavoriteId == item.ID && !m.IsDeleted).OrderByDescending(m => m.CreateTime).ToList();
+                        picUrl = favorite_BookInfos.FirstOrDefault()?.BookInfo?.PicUrl.ToHttpAbsoluteUrl();
                     }
                     else
                     {
@@ -262,8 +262,8 @@ namespace WebApi.Controllers
                     {
                         ID = item.ID,
                         Name = item.Name,
-                        IsOpen = item.IsOpen ?? false,
-                        Count = favorite_CourseBox_Num,
+                        IsOpen = item.IsOpen,
+                        Count = favorite_BookInfo_Num,
                         // 取 最新收藏的课程  的 PicUrl
                         PicUrl = picUrl
                     });
@@ -300,9 +300,9 @@ namespace WebApi.Controllers
 
         #region 收藏指定课程
         [HttpPost]
-        [Route("FavCourseBox")]
+        [Route("FavBookInfo")]
         [NeedAuth]
-        public ResponseData FavCourseBox(FavCourseBoxInputModel inputModel)
+        public ResponseData FavBookInfo(FavBookInfoInputModel inputModel)
         {
             ResponseData responseData = null;
             try
@@ -317,8 +317,8 @@ namespace WebApi.Controllers
                 //        // 该收藏夹是你创建的
                 //        // 将课程放入此收藏夹
                 //        // 查询此课程是否已经放入此收藏夹，防止再次插入出现脏数据
-                //        bool isExist = Container.Instance.Resolve<Favorite_CourseBoxService>().Count(Expression.And(
-                //             Expression.Eq("CourseBox.ID", inputModel.CourseBoxId),
+                //        bool isExist = Container.Instance.Resolve<Favorite_BookInfoService>().Count(Expression.And(
+                //             Expression.Eq("BookInfo.ID", inputModel.BookInfoId),
                 //             Expression.Eq("Favorite.ID", inputModel.FavoriteId)
                 //        )) >= 1;
 
@@ -327,9 +327,9 @@ namespace WebApi.Controllers
                 //            // 此收藏夹 还未收藏 此课程
                 //            try
                 //            {
-                //                Container.Instance.Resolve<Favorite_CourseBoxService>().Create(new Favorite_CourseBox
+                //                Container.Instance.Resolve<Favorite_BookInfoService>().Create(new Favorite_BookInfo
                 //                {
-                //                    CourseBox = new CourseBox { ID = inputModel.CourseBoxId },
+                //                    BookInfo = new BookInfo { ID = inputModel.BookInfoId },
                 //                    Favorite = new Favorite { ID = inputModel.FavoriteId },
                 //                    CreateTime = DateTime.Now
                 //                });
@@ -397,36 +397,36 @@ namespace WebApi.Controllers
                     IList<Favorite> myAllFavList = this._favoriteService.Filter(m => m.CreatorId == currentUserId && !m.IsDeleted).ToList();
 
                     // 先将我的收藏夹列表与此课程的所有关系都删除
-                    //IList<Favorite_CourseBox> favorite_CourseBoxes = Container.Instance.Resolve<Favorite_CourseBoxService>().Query(new List<ICriterion>
+                    //IList<Favorite_BookInfo> favorite_BookInfos = Container.Instance.Resolve<Favorite_BookInfoService>().Query(new List<ICriterion>
                     //{
                     //    Expression.And(
-                    //        Expression.Eq("CourseBox.ID", inputModel.CourseBoxId),
+                    //        Expression.Eq("BookInfo.ID", inputModel.BookInfoId),
                     //        Expression.In("Favorite.ID", myAllFavList.Select(m=>m.ID).ToArray())
                     //    )
                     //});
                     List<int> tempIds = myAllFavList.Select(t => t.ID).ToList();
-                    IList<Favorite_CourseBox> favorite_CourseBoxes = this._favorite_CourseBoxService.Filter(m => m.CourseBoxId == inputModel.CourseBoxId && tempIds.Contains(m.FavoriteId ?? 0) && !m.IsDeleted).ToList();
-                    foreach (var item in favorite_CourseBoxes)
+                    IList<Favorite_BookInfo> favorite_BookInfos = this._favorite_BookInfoService.Filter(m => m.BookInfoId == inputModel.BookInfoId && tempIds.Contains(m.FavoriteId) && !m.IsDeleted).ToList();
+                    foreach (var item in favorite_BookInfos)
                     {
-                        //Container.Instance.Resolve<Favorite_CourseBoxService>().Delete(item.ID);
+                        //Container.Instance.Resolve<Favorite_BookInfoService>().Delete(item.ID);
                         item.IsDeleted = true;
                         item.DeletedAt = DateTime.Now;
-                        this._favorite_CourseBoxService.Update(item);
+                        this._favorite_BookInfoService.Update(item);
                     }
                     if (favIds != null && favIds.Count >= 1)
                     {
                         // 在此列表内的 - 此课程加入收藏
                         foreach (var favId in favIds)
                         {
-                            //Container.Instance.Resolve<Favorite_CourseBoxService>().Create(new Favorite_CourseBox
+                            //Container.Instance.Resolve<Favorite_BookInfoService>().Create(new Favorite_BookInfo
                             //{
-                            //    CourseBox = new CourseBox { ID = inputModel.CourseBoxId },
+                            //    BookInfo = new BookInfo { ID = inputModel.BookInfoId },
                             //    Favorite = new Favorite { ID = favId },
                             //    CreateTime = DateTime.Now
                             //});
-                            this._favorite_CourseBoxService.Create(new Favorite_CourseBox
+                            this._favorite_BookInfoService.Create(new Favorite_BookInfo
                             {
-                                CourseBoxId = inputModel.CourseBoxId,
+                                BookInfoId = inputModel.BookInfoId,
                                 FavoriteId = favId,
                                 CreateTime = DateTime.Now
                             });
@@ -480,18 +480,18 @@ namespace WebApi.Controllers
         /// <param name="courseBoxId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("FavStatInCourseBox")]
-        public ResponseData FavStatInCourseBox(int courseBoxId)
+        [Route("FavStatInBookInfo")]
+        public ResponseData FavStatInBookInfo(int courseBoxId)
         {
             ResponseData responseData = null;
-            FavStatInCourseBoxViewModel viewModel = null;
+            FavStatInBookInfoViewModel viewModel = null;
             try
             {
-                //int courseBoxFavCount = Container.Instance.Resolve<Favorite_CourseBoxService>().Count(Expression.Eq("CourseBox.ID", courseBoxId));
-                int courseBoxFavCount = this._favorite_CourseBoxService.Count(m => m.CourseBoxId == courseBoxId && !m.IsDeleted);
-                viewModel = new FavStatInCourseBoxViewModel
+                //int courseBoxFavCount = Container.Instance.Resolve<Favorite_BookInfoService>().Count(Expression.Eq("BookInfo.ID", courseBoxId));
+                int courseBoxFavCount = this._favorite_BookInfoService.Count(m => m.BookInfoId == courseBoxId && !m.IsDeleted);
+                viewModel = new FavStatInBookInfoViewModel
                 {
-                    CourseBoxFavCount = courseBoxFavCount,
+                    BookInfoFavCount = courseBoxFavCount,
                 };
 
                 // 登录用户，追加登录用户对于此课程的收藏统计
@@ -507,19 +507,19 @@ namespace WebApi.Controllers
                     IList<int> myFavListIds = myFavList.Select(m => m.ID).ToList();
 
                     // 关于这门课程，我的这些收藏夹收藏了，附带每个收藏夹多久收藏了这么课程的详细情况
-                    //IList<Favorite_CourseBox> fav_CourseBox_InMyFav = Container.Instance.Resolve<Favorite_CourseBoxService>().Query(new List<ICriterion>
+                    //IList<Favorite_BookInfo> fav_BookInfo_InMyFav = Container.Instance.Resolve<Favorite_BookInfoService>().Query(new List<ICriterion>
                     //{
                     //    Expression.And(
-                    //        Expression.Eq("CourseBox.ID", courseBoxId),
+                    //        Expression.Eq("BookInfo.ID", courseBoxId),
                     //        Expression.In("Favorite.ID", myFavListIds.ToArray())
                     //    )
                     //});
-                    IList<Favorite_CourseBox> fav_CourseBox_InMyFav = this._favorite_CourseBoxService.Filter(m => m.CourseBoxId == courseBoxId && myFavListIds.Contains(m.FavoriteId ?? 0) && !m.IsDeleted).ToList();
+                    IList<Favorite_BookInfo> fav_BookInfo_InMyFav = this._favorite_BookInfoService.Filter(m => m.BookInfoId == courseBoxId && myFavListIds.Contains(m.FavoriteId) && !m.IsDeleted).ToList();
                     // 关于这门课程我的这些收藏夹收藏了，按创建收藏夹的时间倒序排序，****与获取我的收藏夹列表的顺序相同******
-                    IList<Favorite> myFavListInCourseBox = fav_CourseBox_InMyFav.Select(m => m.Favorite).OrderByDescending(m => m.CreateTime).ToList();
+                    IList<Favorite> myFavListInBookInfo = fav_BookInfo_InMyFav.Select(m => m.Favorite).OrderByDescending(m => m.CreateTime).ToList();
 
-                    viewModel.MyFavStat = new FavStatInCourseBoxViewModel.MyFavStatViewModel();
-                    viewModel.MyFavStat.FavIds = myFavListInCourseBox.Select(m => m.ID).ToList();
+                    viewModel.MyFavStat = new FavStatInBookInfoViewModel.MyFavStatViewModel();
+                    viewModel.MyFavStat.FavIds = myFavListInBookInfo.Select(m => m.ID).ToList();
                 }
 
 
@@ -553,13 +553,6 @@ namespace WebApi.Controllers
             ResponseData responseData = null;
             try
             {
-                //Container.Instance.Resolve<FavoriteService>().Create(new Favorite
-                //{
-                //    IsOpen = inputModel.IsOpen,
-                //    Name = inputModel.Name,
-                //    Description = inputModel.Desc,
-                //    Creator = new UserInfo { ID = ((UserIdentity)User.Identity).ID }
-                //});
                 int currentUserId = ((UserIdentity)User.Identity).ID;
                 this._favoriteService.Create(new Favorite
                 {

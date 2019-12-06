@@ -8,7 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WebApi.Models.Common;
-using WebApi.Models.CourseBoxVM;
+using WebApi.Models.BookInfoVM;
 using WebApi.Models.HomeVM;
 using System.Diagnostics;
 using Domain.Entities;
@@ -19,28 +19,28 @@ using Framework.Extensions;
 namespace WebApi.Controllers
 {
     [RoutePrefix("api/Home")]
-    public class HomeController : BaseController
+    public class HomeController : BaseApiController
     {
         #region Fields
-        private readonly ILearner_CourseBoxService _learner_CourseBoxService;
-        private readonly ICourseBoxService _courseBoxService;
+        private readonly IUser_BookInfoService _user_BookInfoService;
+        private readonly IBookInfoService _bookInfoService;
         #endregion
 
-        public HomeController(ILearner_CourseBoxService learner_CourseBoxService, ICourseBoxService courseBoxService)
+        public HomeController(IUser_BookInfoService user_BookInfoService, IBookInfoService bookInfoService)
         {
-            this._learner_CourseBoxService = learner_CourseBoxService;
-            this._courseBoxService = courseBoxService;
+            this._user_BookInfoService = user_BookInfoService;
+            this._bookInfoService = bookInfoService;
         }
 
-        #region 热门课程
+        #region 热门文库
         /// <summary>
-        /// 热门课程
+        /// 热门文库
         /// </summary>
         /// <param name="number">前多少名</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("RankingCourseBox")]
-        public ResponseData RankingCourseBox(int number)
+        [Route("Ranking")]
+        public ResponseData Ranking(int number)
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -48,9 +48,9 @@ namespace WebApi.Controllers
             ResponseData responseData = null;
             IList<RankingCourseBoxViewModel> viewModel = new List<RankingCourseBoxViewModel>();
             //IList<Learner_CourseBox> allCourseBoxTable = Container.Instance.Resolve<Learner_CourseBoxService>().GetAll().Where(m => m.CourseBox.IsOpen = true).ToList();
-            IList<Learner_CourseBox> allCourseBoxTable = this._learner_CourseBoxService.Filter(m => m.CourseBox.IsOpen == true && !m.IsDeleted).ToList();
+            IList<User_BookInfo> allCourseBoxTable = this._user_BookInfoService.Filter(m => m.BookInfo.IsOpen == true && !m.IsDeleted).ToList();
             var query = from a in allCourseBoxTable
-                        group a by a.CourseBox.ID
+                        group a by a.BookInfo.ID
                       into g
                         select new
                         {
@@ -59,13 +59,13 @@ namespace WebApi.Controllers
                                 ID = g.Key,
                                 Creator = new RankingCourseBoxViewModel.Creator
                                 {
-                                    ID = g.First().CourseBox.Creator.ID,
-                                    UserName = g.First().CourseBox.Creator.UserName,
-                                    Avatar = g.First().CourseBox.Creator.Avatar.ToHttpAbsoluteUrl(),
+                                    ID = g.First().BookInfo.Creator.ID,
+                                    UserName = g.First().BookInfo.Creator.UserName,
+                                    Avatar = g.First().BookInfo.Creator.Avatar.ToHttpAbsoluteUrl(),
                                 },
-                                Desc = g.First().CourseBox.Description,
-                                Name = g.First().CourseBox.Name,
-                                PicUrl = g.First().CourseBox.PicUrl.ToHttpAbsoluteUrl()
+                                Desc = g.First().BookInfo.Description,
+                                Name = g.First().BookInfo.Name,
+                                PicUrl = g.First().BookInfo.PicUrl.ToHttpAbsoluteUrl()
                             },
                             LearnNum = g.Count(),
                             TotalSpendTime = g.Sum(s => s.SpendTime)
@@ -78,7 +78,7 @@ namespace WebApi.Controllers
                 {
                     CourseBox = rankingQuery[i].CourseBox,
                     LearnNum = rankingQuery[i].LearnNum,
-                    TotalSpendTime = rankingQuery[i].TotalSpendTime ?? 0,
+                    TotalSpendTime = rankingQuery[i].TotalSpendTime,
                     RankingNum = i + 1
                 });
             }
@@ -89,7 +89,7 @@ namespace WebApi.Controllers
             responseData = new ResponseData
             {
                 Code = 1,
-                Message = "成功获取热门课程",
+                Message = "成功获取热门文库",
                 Data = viewModel
             };
 
@@ -97,26 +97,23 @@ namespace WebApi.Controllers
         }
         #endregion
 
-        #region 最新课程
+        #region 最新文库
         [HttpGet]
-        [Route("LastCourseBox")]
-        public ResponseData LastCourseBox(int number)
+        [Route("LastBook")]
+        public ResponseData LastBook(int number)
         {
             ResponseData responseData = null;
             try
             {
                 IList<LastCourseBoxViewModel> viewModel = new List<LastCourseBoxViewModel>();
-                //List<Order> orders = new List<Order> { new Order("CreateTime", false) };
-                //IList<CourseBox> courseBoxes = Container.Instance.Resolve<CourseBoxService>().GetPaged(new List<ICriterion>(), orders, 1, number, out int count).ToList();
-                IList<CourseBox> courseBoxes = this._courseBoxService.Filter<DateTime>(1, number, out int count, m => !m.IsDeleted, m => m.CreateTime ?? DateTime.MinValue, false).ToList();
+                IList<BookInfo> courseBoxes = this._bookInfoService.Filter<DateTime>(1, number, out int count, m => !m.IsDeleted, m => m.CreateTime, false).ToList();
 
 
                 for (int i = 0; i < courseBoxes.Count; i++)
                 {
-                    CourseBox courseBox = courseBoxes[i];
+                    BookInfo courseBox = courseBoxes[i];
 
-                    //int learnNum = Container.Instance.Resolve<Learner_CourseBoxService>().Count(Expression.Eq("CourseBox.ID", courseBox.ID));
-                    int learnNum = this._learner_CourseBoxService.Count(m => m.CourseBoxId == courseBox.ID && !m.IsDeleted);
+                    int learnNum = this._user_BookInfoService.Count(m => m.BookInfoId == courseBox.ID && !m.IsDeleted);
 
                     viewModel.Add(new LastCourseBoxViewModel
                     {
@@ -144,7 +141,7 @@ namespace WebApi.Controllers
                 responseData = new ResponseData
                 {
                     Code = 1,
-                    Message = "成功获取最新课程",
+                    Message = "成功获取最新文库",
                     Data = viewModel
                 };
             }
@@ -153,7 +150,7 @@ namespace WebApi.Controllers
                 responseData = new ResponseData
                 {
                     Code = -1,
-                    Message = "获取最新课程失败 " + ex.Message + " " + ex.InnerException?.Message
+                    Message = "获取最新文库失败 " + ex.Message + " " + ex.InnerException?.Message
                 };
             }
 

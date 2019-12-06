@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using WebApi.Models.CourseBoxVM;
+using WebApi.Models.BookInfoVM;
 
 namespace WebApi.Models.HomeVM
 {

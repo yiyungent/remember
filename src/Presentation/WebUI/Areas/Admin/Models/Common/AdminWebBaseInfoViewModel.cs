@@ -25,8 +25,8 @@ namespace WebUI.Areas.Admin.Models.Common
             this.Logo_mini = title_mini;
             this.Logo_lg = title_mini;
             this.Copyright = "<strong>Copyright &copy; " + DateTime.Now.Year + $" <a target='_blank' href=\"{webUiUrl}\">{title_mini}</a>.</strong> All rights reserved.";
-            
-            IList<ThemeTemplate> themeTemplates = ContainerManager.Resolve<IThemeTemplateService>().Filter(m => m.IsOpen == 1 && !m.IsDeleted).ToList();
+
+            IList<ThemeTemplate> themeTemplates = ContainerManager.Resolve<IThemeTemplateService>().Filter(m => m.IsOpen == 1).ToList();
             this.ThemeTemplateDic = new Dictionary<int, string>();
             foreach (var item in themeTemplates)
             {

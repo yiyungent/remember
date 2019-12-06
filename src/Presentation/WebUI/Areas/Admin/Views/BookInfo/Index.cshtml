@@ -1,0 +1,160 @@
+﻿@using WebUI.Areas.Admin.Models.Common
+@using WebUI.Extensions
+@using Domain.Entities
+@using Framework.Extensions
+@using WebUI.HtmlHelpers
+@model ListViewModel<BookInfo>
+@{
+	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
+}
+@section head {
+	<style>
+		table tr td {
+			vertical-align: middle !important;
+		}
+	</style>
+}
+@section body {
+	<script src="/assets/libs/pview/pview.js"></script>
+	<script>
+
+		// start 删除
+		function deleteSuccess(data) {
+			if (data.code <= 0) {
+				showMessage(data.message, -1);
+			} else {
+				showMessage(data.message, 1);
+				window.location.href = window.location.href;
+			}
+		}
+		function deleteOp(id) {
+			$("#js-id").val(id);
+			$('#deleteModal').modal();
+		}
+		function deleteSubmit() {
+			var id = $("#js-id").val();
+			$.ajax({
+				type: 'POST',
+				url: '/Admin/CourseBox/Delete',
+				data: { id: id },
+				dataType: 'json',
+				success: deleteSuccess
+			});
+		}
+		// end 删除
+
+		function search() {
+			var query = $('#js-search-input').val();
+			var queryType = $('#js-search-type').attr('search-type');
+			window.location.href = window.location.origin + window.location.pathname + '?q=' + query + '&type=' + queryType;
+		}
+
+		var pview;
+		$(function () {
+			pview = new PView();
+			pview.init();
+
+			$('#js-search-input').on('keypress', function (event) {
+				if (event.keyCode == "13") {
+					search();
+				}
+			});
+			$('#js-search-btn').on('click', function () {
+				search();
+			});
+			$('#js-search-type-list li').on('click', function () {
+				var type = $(this).attr('search-type');
+				var typeName = $(this).find('a').html();
+				$('#js-search-type').attr('search-type', type);
+				$('#js-search-type').html(typeName);
+			});
+		});
+
+	</script>
+}
+
+<!-- start 删除确认框 -->
+@{ Html.RenderPartial("_DeleteModelPartial"); }
+<!-- end 删除确认框 -->
+<!-- start 提示框 -->
+@{ Html.RenderPartial("_MessagePartial"); }
+<!-- end 提示框 -->
+
+<input id="js-id" type="hidden" />
+
+<!-- start .box -->
+<div class="box">
+	<!-- start .box-header -->
+	<div class="box-header">
+		<h3 class="box-title">列表</h3>
+
+		<div class="box-tools">
+			<div class="input-group input-group-sm" style="width: 250px;">
+				<div class="input-group-btn">
+					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+						<span id="js-search-type" search-type="@(ViewBag.QueryType.Val)">@(ViewBag.QueryType.Text)</span>
+						<span class="fa fa-caret-down"></span>
+					</button>
+					<ul id="js-search-type-list" class="dropdown-menu">
+						<li search-type="name"><a href="javascript:;">课程名</a></li>
+						<li search-type="desc"><a href="javascript:;">课程描述</a></li>
+						<li search-type="id"><a href="javascript:;">ID</a></li>
+					</ul>
+				</div>
+				<input id="js-search-input" type="text" name="table_search" class="form-control pull-right" placeholder="Search" value="@ViewBag.Query">
+				<div class="input-group-btn">
+					<button id="js-search-btn" type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end .box-header -->
+	<!-- start .box-body -->
+	<div class="box-body table-responsive no-padding" style="overflow-x: hidden;">
+		<div id="list" class="row" pview="list">
+			<div class="col-xs-12">
+				@foreach (var item in Model.List)
+				{
+					<div data-tr-id="@item.ID" class="col-sm-6 col-md-3">
+						<div class="thumbnail" style="height: 234px;width: 212px;overflow:hidden;">
+							<img style="width:284px;height:100px;" src="@item.PicUrl.ToHttpAbsoluteUrl()" alt="@item.Name">
+							<div class="caption">
+								<h4 style="margin-top:0;">@(item.Name.Length > 7 ? item.Name.Substring(0, 8) + "..." : item.Name)</h4>
+								<p id="js-btn-group-@item.ID" class="btn-group">
+									@if (Html.HasAuth("Admin.CourseBox.Edit"))
+									{
+										<a class="btn btn-primary" href="/Admin/CourseBox/Edit?id=@item.ID">编辑</a>
+									}
+									@if (Html.HasAuth("Admin.CourseBox.Delete"))
+									{
+										<button class="btn btn-danger" type="button" onclick="deleteOp(@item.ID)">删除</button>
+									}
+								</p>
+								<p><span>描述: </span><span>@(item.Description.Length > 13 ? item.Description.Substring(0, 13) + "..." : item.Description)</span></p>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+	<!-- end .box-body -->
+	<!-- start .box-footer -->
+	<div class="box-footer clearfix">
+		<div class="btn-group pull-left">
+			@if (Html.HasAuth("Admin.CourseBox.Create"))
+			{
+				<a class="btn btn-primary" href="@Url.Action("Create")">添加</a>
+			}
+		</div>
+		<!-- start 分页 -->
+		<div id="js-page" pview="pages">
+			<ul class="pagination pull-right" pview-btn-group pview-targets="list,pages">
+				@Html.PageLinks(Model.PageInfo, i => Url.Action("Index", new { pageIndex = i, q = Request["q"], type = Request["type"] }))
+			</ul>
+		</div>
+		<!-- end 分页 -->
+	</div>
+	<!-- end .box-footer -->
+</div>
+<!-- end .box -->

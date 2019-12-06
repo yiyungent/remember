@@ -27,7 +27,7 @@ namespace WebApi.Controllers
 {
     //[EnableCors(origins: "*", headers: "*", methods: "*")]
     [RoutePrefix("api/User")]
-    public class UserController : BaseController
+    public class UserController : BaseApiController
     {
         #region Fields
         private readonly ISettingService _settingService;

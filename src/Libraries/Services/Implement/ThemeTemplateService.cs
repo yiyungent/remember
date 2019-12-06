@@ -15,9 +15,8 @@ namespace Services.Implement
         public bool Exists(string templateName, int exceptId = 0)
         {
             bool isExist = this._repository.Count(
-                m => m.TemplateName == templateName 
-                && m.ID != exceptId 
-                && !m.IsDeleted) > 0;
+                m => m.TemplateName == templateName
+                && m.ID != exceptId) > 0;
 
             return isExist;
         }

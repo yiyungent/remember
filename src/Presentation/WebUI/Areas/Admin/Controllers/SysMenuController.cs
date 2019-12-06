@@ -43,7 +43,7 @@ namespace WebUI.Areas.Admin.Controllers
         public ViewResult Edit(int id)
         {
             //Sys_Menu viewModel = Container.Instance.Resolve<Sys_MenuService>().GetEntity(id);
-            Sys_Menu viewModel = this._sys_MenuService.Find(m => m.ID == id && !m.IsDeleted);
+            Sys_Menu viewModel = this._sys_MenuService.Find(m => m.ID == id);
             int parentId = viewModel.ParentId ?? 0;
             ViewBag.DDLParent = InitDDLForParent(viewModel, parentId);
 
@@ -55,20 +55,16 @@ namespace WebUI.Areas.Admin.Controllers
         {
             try
             {
-                //Sys_Menu dbModel = Container.Instance.Resolve<Sys_MenuService>().GetEntity(inputModel.ID);
-                Sys_Menu dbModel = this._sys_MenuService.Find(m => m.ID == inputModel.ID && !m.IsDeleted);
+                Sys_Menu dbModel = this._sys_MenuService.Find(m => m.ID == inputModel.ID);
                 // 上级菜单
                 if (inputModel.ParentId == null || inputModel.ParentId == 0)
                 {
-                    //inputModel.ParentMenu = null;
                     inputModel.ParentId = null;
                 }
                 // 设置修改后的值
                 dbModel.Name = inputModel.Name;
                 dbModel.SortCode = inputModel.SortCode;
-                //dbModel.ParentMenu = inputModel.ParentMenu;
                 dbModel.ParentId = inputModel.ParentId;
-                //Container.Instance.Resolve<Sys_MenuService>().Edit(dbModel);
                 this._sys_MenuService.Update(dbModel);
 
                 return Json(new { code = 1, message = "保存成功" });
@@ -138,7 +134,6 @@ namespace WebUI.Areas.Admin.Controllers
             var child = from m in all
                             //where m.ParentMenu != null && m.ParentMenu.ID == self.ID
                         where m.ParentId != null && m.ParentId != 0 && m.Parent.ID == self.ID
-                                && !m.IsDeleted
                         orderby m.SortCode
                         select m;
             foreach (var item in child)

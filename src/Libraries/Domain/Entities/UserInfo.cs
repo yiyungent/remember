@@ -4,7 +4,6 @@ namespace Domain.Entities
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
     using System.Linq;
 
     [Serializable]
@@ -31,6 +30,18 @@ namespace Domain.Entities
         /// 最后登录时间
         /// </summary>
         public DateTime LastLoginTime { get; set; }
+
+        /// <summary>
+        /// 最后登录Ip
+        /// </summary>
+        [StringLength(60)]
+        public string LastLoginIp { get; set; }
+
+        /// <summary>
+        /// 最后登录地址
+        /// </summary>
+        [StringLength(60)]
+        public string LastLoginAddress { get; set; }
 
         /// <summary>
         /// 选择的主体模板
@@ -66,11 +77,6 @@ namespace Domain.Entities
         public string Description { get; set; }
 
         /// <summary>
-        /// 硬币数
-        /// </summary>
-        public int Coin { get; set; }
-
-        /// <summary>
         /// 积分
         /// </summary>
         public int Credit { get; set; }
@@ -86,6 +92,21 @@ namespace Domain.Entities
         [Column(TypeName = "text")]
         [StringLength(30)]
         public string Remark { get; set; }
+
+        /// <summary>
+        /// 用户状态
+        /// </summary>
+        public UStatus UserStatus { get; set; }
+
+        /// <summary>
+        /// 删除时间：为null，则未删除
+        /// </summary>
+        public DateTime? DeletedAt { get; set; }
+
+        /// <summary>
+        /// 是否被删除
+        /// </summary>
+        public bool IsDeleted { get; set; }
 
         #region Relationships
 
@@ -113,6 +134,25 @@ namespace Domain.Entities
             }
         }
 
+        public enum UStatus
+        {
+            /// <summary>
+            /// 正常
+            /// </summary>
+            Normal = 0,
+
+            /// <summary>
+            /// 冻结
+            /// </summary>
+            Frozen = 1,
+
+            /// <summary>
+            /// 限制访问
+            /// </summary>
+            Limited = 2
+        }
+
         #endregion
+
     }
 }
