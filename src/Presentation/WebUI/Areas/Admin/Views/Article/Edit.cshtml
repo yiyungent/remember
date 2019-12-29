@@ -88,7 +88,8 @@
 				<label for="CustomUrl">自定义URL</label>
 			</div>
 			<div class="input-group">
-				<span class="input-group-addon">@WebSetting.Get("WebUISite")</span>
+				@{ string str = $"{WebSetting.Get("WebUISite")}/u{Model.AuthorId}/"; }
+				<span class="input-group-addon">@str</span>
 				@Html.TextBoxFor(m => m.CustomUrl, new { @class = "form-control" })
 			</div>
 		</div>

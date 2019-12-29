@@ -126,10 +126,10 @@
 					<td>@item.Title</td>
 					<td>@(item.Author?.UserName)</td>
 					<td>
-						<span class="label label-info">@(item.LastUpdateTime?.ToString("yyyy-MM-dd HH:mm:ss"))</span>
+						<span class="label label-info">@(item.LastUpdateTime.ToString("yyyy-MM-dd HH:mm:ss"))</span>
 					</td>
 					<td>
-						<span class="label label-info">@(item.CreateTime?.ToString("yyyy-MM-dd HH:mm:ss"))</span>
+						<span class="label label-info">@(item.CreateTime.ToString("yyyy-MM-dd HH:mm:ss"))</span>
 					</td>
 					<td>
 						<div class="btn-group" role="group" data-pjax>

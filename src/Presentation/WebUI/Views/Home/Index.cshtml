@@ -1,55 +1,130 @@
 ﻿@using Domain.Entities
 @using Framework.Models
 @using Framework.Extensions
+@using WebUI.HtmlHelpers
+@using WebUI.Areas.Admin.Models.Common;
 @{
 	Layout = "~/Views/Shared/_LayoutMain.cshtml";
 
-	IList<CourseBox> courseBoxes = ViewBag.CourseBoxes;
-	courseBoxes = courseBoxes.OrderByDescending(m => m.LastUpdateTime).ToList();
+	ListViewModel<Article> articleVM = ViewBag.ArticleVM;
+	IList<Article> articles = articleVM.List.OrderByDescending(m => m.LastUpdateTime).ToList();
 
 	ViewBag.Title = WebSetting.Get("WebUITitle");
 	ViewBag.Desc = WebSetting.Get("WebUIDesc");
+	// TODO: Article.Description 需要做html清理，只保存纯文本
 }
 @section head {
 	<style>
-		.picItem {
-			padding-bottom: 6px;
-		}
-
-			.picItem a {
-				display: inline-block;
-			}
-
-			.picItem .thumbnail {
-				display: inline-block;
-				padding: 0;
-				border: none;
-			}
-
-			.picItem .caption {
-				height: 48px;
-			}
 	</style>
 }
 @section body {
+}
+@helper PrettyTime(DateTime time)
+{
+	DateTime now = DateTime.Now;
+	TimeSpan ts = now - time;
+	if (ts.TotalDays > 5)
+	{
+		@Html.Raw(time.ToString("yyyy-MM-dd HH:mm:ss"))
+	}
+	else if (ts.TotalHours >= 24)
+	{
+		@Html.Raw((int)ts.TotalDays + "天前");
+	}
+	else if (ts.TotalMinutes >= 60)
+	{
+		@Html.Raw((int)ts.TotalHours + "小时前");
+	}
+	else if (ts.TotalSeconds >= 60)
+	{
+		@Html.Raw((int)ts.TotalMinutes + "分钟前");
+	}
+	else
+	{
+		@Html.Raw((int)ts.TotalSeconds + "秒前");
+	}
+}
+@* TODO: 这里需要根据可见程度决定是否显示在首页，未做 *@
+@helper OpenStatus(Article.OStatus oStatus)
+{
+	switch (oStatus)
+	{
+		case Article.OStatus.All:
+			@Html.Raw("所有人可见");
+			break;
+		case Article.OStatus.Self:
+			@Html.Raw("仅自己可见");
+			break;
+		default:
+			@Html.Raw("所有人可见");
+			break;
+	}
 }
 
 <!-- Main content -->
 <section class="content">
 	<div class="row">
-		@foreach (var item in courseBoxes)
+		@foreach (var item in articles)
 		{
-			<div class="col-md-2 picItem">
-				<a href="@Url.Action("Index", "CourseBox", new { id= item.ID })">
-					<div class="thumbnail" style="margin:0;">
-						<img style="width:160px;height:100px;" src="@item.PicUrl.ToHttpAbsoluteUrl()" alt="@item.Name">
-						<div class="caption">
-							<span style="margin-top:0;">@(item.Name.Length > 7 ? item.Name.Substring(0, 8) + "..." : item.Name)</span>
+			<!-- Post -->
+			<div class="post">
+				<div class="user-block">
+					<img class="img-circle img-bordered-sm" src="@item.Author.Avatar.ToHttpAbsoluteUrl()" alt="@item.Author.UserName">
+					<span class="username">
+						<a href="#">@item.Author.UserName</a>
+						<a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
+					</span>
+					<span class="description">@OpenStatus(item.OpenStatus) - @PrettyTime(item.CreateTime)</span>
+				</div>
+				<!-- /.user-block -->
+				<p>
+					<h4 class="text-center">
+						<a href="/@item.CustomUrl" target="_blank">@item.Title</a>
+					</h4>
+					<div>
+						@item.Description
+					</div>
+					<div class="text-center">
+						<a href="/@item.CustomUrl" class="btn btn-primary btn-sm" target="_blank">阅读</a>
+					</div>
+				</p>
+				<ul class="list-inline">
+					<li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> 分享</a></li>
+					<li>
+						<a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> 赞</a>
+					</li>
+					<li class="pull-right">
+						<a href="#" class="link-black text-sm">
+							<i class="fa fa-comments-o margin-r-5"></i> 评论
+							(@item.CommentCount)
+						</a>
+					</li>
+				</ul>
+
+				<form class="form-horizontal">
+					<div class="form-group margin-bottom-none">
+						<div class="col-sm-10">
+							<input class="form-control input-sm" placeholder="留下评论吧">
+						</div>
+						<div class="col-sm-2">
+							<button type="submit" class="btn btn-danger pull-right btn-block btn-sm">评论</button>
 						</div>
 					</div>
-				</a>
+				</form>
 			</div>
+			<!-- /.post -->
 		}
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<!-- start 分页 -->
+			<div id="js-page" pview="pages">
+				<ul class="pagination pull-right" pview-btn-group pview-targets="table,pages">
+					@Html.PageLinks(articleVM.PageInfo, i => Url.Action("Index", new { pageIndex = i, q = Request["q"], type = Request["type"] }))
+				</ul>
+			</div>
+			<!-- end 分页 -->
+		</div>
 	</div>
 </section>
 <!-- /.content -->

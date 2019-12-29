@@ -17,7 +17,7 @@
 	string roleName = currentUserInfo.RoleInfos.FirstOrDefault() == null ? "" : currentUserInfo.RoleInfos.FirstOrDefault().Name;
 
 	IDictionary<int, string> themeTemplateDic = new Dictionary<int, string>();
-	IList<ThemeTemplate> themeTemplates = ContainerManager.Resolve<IThemeTemplateService>().Filter(m => m.IsOpen == 1 && !m.IsDeleted).ToList();
+	IList<ThemeTemplate> themeTemplates = ContainerManager.Resolve<IThemeTemplateService>().Filter(m => m.IsOpen == 1).ToList();
 	themeTemplateDic = new Dictionary<int, string>();
 	foreach (var item in themeTemplates)
 	{

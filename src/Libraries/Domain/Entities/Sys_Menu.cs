@@ -29,7 +29,8 @@ namespace Domain.Entities
         /// <summary>
         /// Í¼±ê
         /// </summary>
-        [StringLength(24)]
+        [StringLength(500)]
+        [Column(TypeName = "text")]
         public string Icon { get; set; }
 
         /// <summary>

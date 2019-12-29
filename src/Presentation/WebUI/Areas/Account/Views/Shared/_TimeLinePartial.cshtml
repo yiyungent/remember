@@ -2,4 +2,60 @@
 	Layout = null;
 }
 
-<!-- The timeline -->
+@helper PrettyTime(DateTime time)
+{
+	DateTime now = DateTime.Now;
+	TimeSpan ts = now - time;
+	if (ts.TotalDays > 5)
+	{
+		@Html.Raw(time.ToString("yyyy-MM-dd HH:mm:ss"))
+	}
+	else if (ts.TotalHours >= 24)
+	{
+		@Html.Raw((int)ts.TotalDays + "天前");
+	}
+	else if (ts.TotalMinutes >= 60)
+	{
+		@Html.Raw((int)ts.TotalHours + "小时前");
+	}
+	else if (ts.TotalSeconds >= 60)
+	{
+		@Html.Raw((int)ts.TotalMinutes + "分钟前");
+	}
+	else
+	{
+		@Html.Raw((int)ts.TotalSeconds + "秒前");
+	}
+}
+
+<ul class="timeline">
+	<!-- timeline time label -->
+	<li class="time-label">
+		<span class="bg-red">
+			10 Feb. 2014
+		</span>
+	</li>
+	<!-- /.timeline-label -->
+	<!-- timeline item -->
+	@foreach (var item in articles)
+	{
+		<li>
+			<!-- timeline icon -->
+			<i class="fa fa-envelope bg-blue"></i>
+			<div class="timeline-item">
+				<span class="time"><i class="fa fa-clock-o"></i> @PrettyTime(item.CreateTime)</span>
+
+				<h3 class="timeline-header"><a href="@Url.Action("Index", "Profile", new { area = "Account" ,userName=item.Author.UserName })">@item.Author.UserName</a> 投稿 @item.Title</h3>
+
+				<div class="timeline-body">
+					@item.Description
+				</div>
+
+				<div class="timeline-footer">
+					<a class="btn btn-primary btn-xs">阅读</a>
+				</div>
+			</div>
+		</li>
+	}
+	<!-- END timeline item -->
+</ul>

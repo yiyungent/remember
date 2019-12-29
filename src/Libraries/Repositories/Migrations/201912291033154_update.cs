@@ -503,6 +503,7 @@ namespace Repositories.Migrations
                         ID = c.Int(nullable: false, identity: true),
                         LastAccessIp = c.String(maxLength: 20, storeType: "nvarchar"),
                         LastViewAt = c.Long(nullable: false),
+                        LastViewTime = c.DateTime(nullable: false, precision: 0),
                         ProgressAt = c.Long(nullable: false),
                         DeletedAt = c.DateTime(precision: 0),
                         IsDeleted = c.Boolean(nullable: false),

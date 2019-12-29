@@ -75,6 +75,7 @@ namespace WebUI.Areas.Admin.Controllers
         public ViewResult Edit(int id)
         {
             Article viewModel = this._articleService.Find(m => m.ID == id && !m.IsDeleted);
+            viewModel.CustomUrl = viewModel.CustomUrl.Replace($"u{viewModel.AuthorId}/", "");
 
             return View(viewModel);
         }
@@ -97,10 +98,11 @@ namespace WebUI.Areas.Admin.Controllers
 
                     Article dbModel = this._articleService.Find(m => m.ID == inputModel.ID && !m.IsDeleted);
 
+                    int userId = AccountManager.GetCurrentAccount().UserId;
                     // 输入模型->数据库模型
                     dbModel.Title = inputModel.Title;
                     dbModel.Content = inputModel.Content;
-                    dbModel.CustomUrl = inputModel.CustomUrl;
+                    dbModel.CustomUrl = $"u{userId}/{inputModel.CustomUrl}";
                     dbModel.LastUpdateTime = DateTime.Now;
 
                     this._articleService.Update(dbModel);
@@ -153,6 +155,8 @@ namespace WebUI.Areas.Admin.Controllers
         {
             Article viewModel = new Article();
             DateTime now = DateTime.Now;
+            int userId = AccountManager.GetCurrentAccount().UserId;
+            viewModel.AuthorId = userId;
             viewModel.CustomUrl = $"article-{now.Year}-{now.Month}-{now.Day}-" + Guid.NewGuid().ToString().Substring(0, 8) + ".html";
 
             return View(viewModel);
@@ -172,10 +176,11 @@ namespace WebUI.Areas.Admin.Controllers
                     #endregion
 
                     Article dbModel = inputModel;
-                    dbModel.AuthorId = AccountManager.GetCurrentAccount().UserId;
+                    int userId = AccountManager.GetCurrentAccount().UserId;
+                    dbModel.AuthorId = userId;
                     dbModel.CreateTime = DateTime.Now;
                     dbModel.LastUpdateTime = DateTime.Now;
-                    dbModel.CustomUrl = inputModel.CustomUrl;
+                    dbModel.CustomUrl = $"u{userId}/{inputModel.CustomUrl}";
 
                     this._articleService.Create(dbModel);
 

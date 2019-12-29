@@ -1,12 +1,9 @@
-﻿using Core.Common;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Framework.Common;
-using Jdenticon;
 using Services.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace WebUI.Controllers
@@ -104,7 +101,7 @@ namespace WebUI.Controllers
             InitUserInfo();
 
             InitFavorite();
-
+            InitArticle();
         }
         #endregion
 
@@ -1521,7 +1518,7 @@ namespace WebUI.Controllers
                 // 6
                 RoleInfo roleInfo_6 = new RoleInfo
                 {
-                    Name = "学生",
+                    Name = "蓝钻",
                     Role_Menus = new List<Role_Menu>(),
                     Role_Functions = new List<Role_Function>()
                 };
@@ -1529,7 +1526,7 @@ namespace WebUI.Controllers
                 // 7
                 RoleInfo roleInfo_7 = new RoleInfo
                 {
-                    Name = "教师",
+                    Name = "红钻",
                     Role_Menus = new List<Role_Menu>(),
                     Role_Functions = new List<Role_Function>()
                 };
@@ -1574,36 +1571,6 @@ namespace WebUI.Controllers
                 });
                 this._userInfoService.Create(userInfo);
 
-                // 正式会员 50
-                string userName = "", avatar = "";
-                int randomNum = 6;
-                for (int i = 0; i < 50; i++)
-                {
-                    userName = GetRandom.GetRandomName();
-
-                    Identicon
-                   .FromValue(EncryptHelper.MD5Encrypt32(userName), size: 100)
-                   .SaveAsPng(Server.MapPath("/upload/images/avatars/" + (i + 2).ToString() + ".png"));
-
-                    randomNum = new Random().Next(6, 7);
-                    UserInfo tempUser = new UserInfo
-                    {
-                        UserName = userName,
-                        Description = $"我是会员-{i + 1}",
-                        Avatar = $":WebUISite:/upload/images/avatars/{(i + 2)}.png",
-                        Password = EncryptHelper.MD5Encrypt32(userName),
-                        Email = "acc" + (i + 1) + "@qq.com",
-                        //RoleInfoList = (from m in allRole where m.ID == randomNum select m).ToList(),
-                        Role_Users = new List<Role_User>(),
-                        CreateTime = DateTime.Now.AddDays(i).AddMinutes(i + 1)
-                    };
-                    tempUser.Role_Users.Add(new Role_User
-                    {
-                        RoleInfoId = (from m in allRole where m.ID == randomNum select m).FirstOrDefault()?.ID ?? 0
-                    });
-                    this._userInfoService.Create(tempUser);
-                }
-
                 ShowMessage("成功");
             }
             catch (Exception ex)
@@ -1614,6 +1581,38 @@ namespace WebUI.Controllers
         }
         #endregion
 
+        #region 初始化文章
+        private void InitArticle()
+        {
+            try
+            {
+                ShowMessage("开始初始化文章表");
+
+                // 默认文章
+                this._articleService.Create(new Article
+                {
+                    AuthorId = 1,
+                    ArticleStatus = Article.AStatus.Publish,
+                    OpenStatus = Article.OStatus.All,
+                    CommentCount = 0,
+                    CommentStatus = Article.CStatus.Open,
+                    CreateTime = DateTime.Now,
+                    LastUpdateTime = DateTime.Now,
+                    Title = "Hello World！",
+                    Content = "Hello World! 这是一篇自动生成的文章",
+                    CustomUrl = "HelloWorld.html",
+                    Description = "这是一篇自动生成的文章"
+                });
+
+                ShowMessage("成功");
+            }
+            catch (Exception ex)
+            {
+                ShowMessage("失败");
+                ShowMessage(ex.Message);
+            }
+        }
+        #endregion
 
 
         #region 初始化收藏夹表

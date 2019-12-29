@@ -14,6 +14,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebUI.Areas.Admin.Models;
+using WebUI.Areas.Admin.Models.Common;
 using WebUI.Models.LogVM;
 
 namespace WebUI.Controllers
@@ -21,25 +22,67 @@ namespace WebUI.Controllers
     public class HomeController : Controller
     {
         #region Fields
-        private readonly IBookInfoService _bookInfoService;
+        private readonly IArticleService _articleService;
         private readonly ILogInfoService _logInfoService;
         #endregion
 
         #region Ctor
-        public HomeController(IBookInfoService bookInfoService, ILogInfoService logInfoService)
+        public HomeController(IArticleService articleService, ILogInfoService logInfoService)
         {
-            this._bookInfoService = bookInfoService;
+            this._articleService = articleService;
             this._logInfoService = logInfoService;
         }
         #endregion
 
         #region 首页
-        public ActionResult Index()
+        public ActionResult Index(string cat = "all", int pageIndex = 1)
         {
-            IList<BookInfo> courseBoxes = this._bookInfoService.Filter(m => !m.IsDeleted).ToList();
-            ViewBag.CourseBoxes = courseBoxes;
+            int pageSize = 6;
+            pageIndex = pageIndex >= 1 ? pageIndex : 1;
+            Query(pageIndex, pageSize, out IList<Article> list, out int totalCount);
+
+            ListViewModel<Article> articles = new ListViewModel<Article>(list, pageIndex: pageIndex, pageSize: pageSize, totalCount: totalCount);
+            ViewBag.ArticleVM = articles;
 
             return View();
+        }
+
+        private void Query(int pageIndex, int pageSize, out IList<Article> list, out int totalCount)
+        {
+            // 输入的查询关键词
+            string query = Request["q"]?.Trim() ?? "";
+            // 查询类型
+            QueryType queryType = new QueryType();
+            queryType.Val = Request["type"]?.Trim() ?? "title";
+            switch (queryType.Val.ToLower())
+            {
+                case "title":
+                    queryType.Text = "标题";
+                    list = this._articleService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.Title.Contains(query) && !m.IsDeleted, m => m.ID, false).ToList();
+                    break;
+                case "id":
+                    queryType.Text = "ID";
+                    if (int.TryParse(query, out int userId))
+                    {
+                        list = this._articleService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.ID == userId && !m.IsDeleted, m => m.ID, false).ToList();
+                    }
+                    else if (string.IsNullOrEmpty(query))
+                    {
+                        list = this._articleService.Filter<int>(pageIndex, pageSize, out totalCount, m => !m.IsDeleted, m => m.ID, false).ToList();
+                    }
+                    else
+                    {
+                        list = new List<Article>();
+                        totalCount = 0;
+                    }
+                    break;
+                default:
+                    queryType.Text = "标题";
+                    list = this._articleService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.Title.Contains(query) && !m.IsDeleted, m => m.ID, false).ToList();
+                    break;
+            }
+            ViewBag.Query = query;
+            ViewBag.QueryType = queryType;
         }
         #endregion
 

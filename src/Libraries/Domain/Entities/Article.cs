@@ -18,6 +18,20 @@ namespace Domain.Entities
         public string Title { get; set; }
 
         /// <summary>
+        /// 描述/摘要
+        /// </summary>
+        [Column(TypeName = "text")]
+        [StringLength(1000)]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// 封面图
+        /// </summary>
+        [Column(TypeName = "text")]
+        [StringLength(1000)]
+        public string PicUrl { get; set; }
+
+        /// <summary>
         /// 内容
         /// </summary>
         [Column(TypeName = "text")]
@@ -42,9 +56,24 @@ namespace Domain.Entities
         public string CustomUrl { get; set; }
 
         /// <summary>
+        /// 评论数
+        /// </summary>
+        public int CommentCount { get; set; }
+
+        /// <summary>
         /// 文章状态
         /// </summary>
         public AStatus ArticleStatus { get; set; }
+
+        /// <summary>
+        /// 评论状态
+        /// </summary>
+        public CStatus CommentStatus { get; set; }
+
+        /// <summary>
+        /// 可见程度
+        /// </summary>
+        public OStatus OpenStatus { get; set; }
 
         #region Relationships
 
@@ -78,14 +107,40 @@ namespace Domain.Entities
             /// <summary>
             /// 被发布
             /// </summary>
-            Published = 0,
+            Publish = 0,
 
             /// <summary>
             /// 编辑中（草稿状态）
             /// </summary>
-            Editing = 1,
+            Draft = 1,
         }
 
         #endregion
+
+        public enum CStatus
+        {
+            /// <summary>
+            /// 允许评论
+            /// </summary>
+            Open,
+
+            /// <summary>
+            /// 关闭评论
+            /// </summary>
+            Closed,
+        }
+
+        public enum OStatus
+        {
+            /// <summary>
+            /// 所有人可见
+            /// </summary>
+            All,
+
+            /// <summary>
+            /// 仅自己可见
+            /// </summary>
+            Self
+        }
     }
 }

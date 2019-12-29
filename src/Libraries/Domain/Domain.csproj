@@ -59,6 +59,9 @@
     <Compile Include="BaseEntity.cs" />
     <Compile Include="CommonEqualityComparer.cs" />
     <Compile Include="Entities\Article.cs" />
+    <Compile Include="Entities\Article_Comment.cs" />
+    <Compile Include="Entities\Article_Dislike.cs" />
+    <Compile Include="Entities\Article_Like.cs" />
     <Compile Include="Entities\Comment.cs" />
     <Compile Include="Entities\Comment_Dislike.cs" />
     <Compile Include="Entities\Comment_Like.cs" />
