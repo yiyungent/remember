@@ -1,5 +1,11 @@
-﻿@{
+﻿@using WebUI.HtmlHelpers
+@using WebUI.Areas.Admin.Models.Common;
+@using Domain.Entities
+@{
 	Layout = null;
+
+	ListViewModel<Article> articleVM = ViewBag.ArticleVM;
+	IList<Article> articles = articleVM.List.OrderByDescending(m => m.LastUpdateTime).ToList();
 }
 
 @helper PrettyTime(DateTime time)
