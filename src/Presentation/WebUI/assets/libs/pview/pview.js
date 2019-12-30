@@ -31,7 +31,7 @@
 				pview = this.parentNode.parentNode.getAttribute('pview-targets');
 			}
 
-			if (options.cb) {
+			if (options !== undefined && options.cb !== undefined) {
 				that.go(pview, goUrl, 'get', {}, options.cb);
 			} else {
 				that.go(pview, goUrl, 'get', {});
