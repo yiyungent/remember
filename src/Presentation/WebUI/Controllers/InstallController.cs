@@ -23,6 +23,28 @@ namespace WebUI.Controllers
         private readonly IRole_FunctionService _role_FunctionService;
         #endregion
 
+        #region Properties
+        public bool IsInstalled
+        {
+            get
+            {
+                bool isInstalled = true;
+                try
+                {
+                    string installLockFilePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data/install.lock");
+                    if (!System.IO.File.Exists(installLockFilePath))
+                    {
+                        isInstalled = false;
+                    }
+                }
+                catch (Exception ex)
+                { }
+                return isInstalled;
+
+            }
+        }
+        #endregion
+
         #region Ctor
         public InstallController(IUserInfoService userInfoService,
                                  ISettingService settingService,
@@ -51,7 +73,24 @@ namespace WebUI.Controllers
         #region 安装首页
         public ActionResult Index()
         {
+            if (this.IsInstalled)
+            {
+                return Content("已安装");
+            }
             return View();
+        }
+        #endregion
+
+        #region 开始安装
+        public ActionResult StartInstall()
+        {
+            if (this.IsInstalled)
+            {
+                return Content("已安装");
+            }
+            CreateDB();
+
+            return View("Index");
         }
         #endregion
 
@@ -60,15 +99,6 @@ namespace WebUI.Controllers
         {
             Response.Write(message + "<br>");
             Response.Flush();
-        }
-        #endregion
-
-        #region 开始安装
-        public ViewResult StartInstall()
-        {
-            CreateDB();
-
-            return View("Index");
         }
         #endregion
 

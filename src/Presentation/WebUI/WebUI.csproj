@@ -8915,6 +8915,7 @@
     <Content Include="Areas\Account\Views\Shared\_RightControlSidebarPartial.cshtml" />
     <Content Include="Areas\Admin\Views\UserInfo\FaceStat.cshtml" />
     <Content Include="assets\libs\toastr\build\toastr.js.map" />
+    <Content Include="App_Data\install.lock" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Install\Index.cshtml" />
