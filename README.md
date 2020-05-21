@@ -1,5 +1,5 @@
 <p align="center">
-<img src="docs/_images/remember.png" alt="remember">
+<img src="docs/_images/logo.png" alt="remember" height="680">
 </p>
 <h1 align="center">remember</h1>
 
@@ -9,10 +9,18 @@
 [![LICENSE](https://img.shields.io/github/license/yiyungent/remember.svg?style=flat)](https://github.com/yiyungent/remember/blob/master/LICENSE)
 
 
-
 ## 介绍
 
 remember 是一个强大的内容管理系统，旨在让每个人都能轻松建站。
+
+<a href="https://www.bilibili.com/video/BV1gT4y1g7aP/" target="_blank">项目介绍视频（PPT版）</a>
+
+## 截图
+
+<p align="center">
+<img src="docs/_images/ppt3.png" height="400">
+<img src="docs/_images/PC多页面展示.png">
+</p>
 
 ## 使用的第三方库
 
@@ -71,13 +79,14 @@ remember 是一个强大的内容管理系统，旨在让每个人都能轻松�
   - [x] 管理中心-文章管理
   - [ ] SEO设置 - 文章 - 默认链接
   - [ ] SEO设置 - 文章 - title, description, keywords
-  - [ ] 固定链接
+  - [x] 固定链接
   - [ ] 文章评论
   - [ ] 文章分类
   - [ ] 文章标签
 - [x] 文库
   - [x] 管理中心-文库管理
   - [x] 一个文库有多个章节内容
+  - [x] 在线视频
   - [ ] 章节内容 支持发送弹幕
   - [ ] 文库评论
   - [ ] 文库分类
@@ -103,3 +112,11 @@ remember 是一个强大的内容管理系统，旨在让每个人都能轻松�
  
 ## 鸣谢
 
+
+
+## Author
+
+**Meting4Net** © [yiyun](https://github.com/yiyungent), Released under the [Apache-2.0](./LICENSE) License.<br>
+Authored and maintained by yiyun with help from contributors ([list](https://github.com/yiyungent/remember/contributors)).
+
+> GitHub [@yiyungent](https://github.com/yiyungent)
