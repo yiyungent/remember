@@ -5,7 +5,8 @@
 
 > :blue_book: remember - 期望能帮到你
 
-[![repo size](https://img.shields.io/github/repo-size/yiyungent/remember.svg?style=flat)]()
+[![repo size](https://img.shields.io/github/repo-size/yiyungent/remember.svg?style=flat)][![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fyiyungent%2Fremember.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fyiyungent%2Fremember?ref=badge_shield)
+()
 [![LICENSE](https://img.shields.io/github/license/yiyungent/remember.svg?style=flat)](https://github.com/yiyungent/remember/blob/master/LICENSE)
 
 
@@ -120,3 +121,6 @@ remember 是一个强大的内容管理系统，旨在让每个人都能轻松�
 Authored and maintained by yiyun with help from contributors ([list](https://github.com/yiyungent/remember/contributors)).
 
 > GitHub [@yiyungent](https://github.com/yiyungent)
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fyiyungent%2Fremember.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fyiyungent%2Fremember?ref=badge_large)
