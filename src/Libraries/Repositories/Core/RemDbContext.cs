@@ -35,17 +35,11 @@ namespace Repositories.Core
         public virtual DbSet<Comment> Comment { get; set; }
         public virtual DbSet<Comment_Dislike> Comment_Dislike { get; set; }
         public virtual DbSet<Comment_Like> Comment_Like { get; set; }
-        public virtual DbSet<BookInfo> BookInfo { get; set; }
-        public virtual DbSet<BookInfo_Comment> BookInfo_Comment { get; set; }
-        public virtual DbSet<BookInfo_Dislike> BookInfo_Dislike { get; set; }
-        public virtual DbSet<BookInfo_Like> BookInfo_Like { get; set; }
-        public virtual DbSet<BookInfo_Participant> BookInfo_Participant { get; set; }
+        public virtual DbSet<Article_Participant> Article_Participant { get; set; }
         public virtual DbSet<Favorite> Favorite { get; set; }
-        public virtual DbSet<Favorite_BookInfo> Favorite_BookInfo { get; set; }
+        public virtual DbSet<Favorite_Article> Favorite_BookInfo { get; set; }
         public virtual DbSet<Follower_Followed> Follower_Followed { get; set; }
         public virtual DbSet<FunctionInfo> FunctionInfo { get; set; }
-        public virtual DbSet<User_BookInfo> User_BookInfo { get; set; }
-        public virtual DbSet<User_BookSection> User_BookSection { get; set; }
         public virtual DbSet<LogInfo> LogInfo { get; set; }
         public virtual DbSet<ParticipantInfo> ParticipantInfo { get; set; }
         public virtual DbSet<RoleInfo> RoleInfo { get; set; }
@@ -55,8 +49,6 @@ namespace Repositories.Core
         public virtual DbSet<Sys_Menu> Sys_Menu { get; set; }
         public virtual DbSet<ThemeTemplate> ThemeTemplate { get; set; }
         public virtual DbSet<UserInfo> UserInfo { get; set; }
-        public virtual DbSet<BookSection> BookSection { get; set; }
-        public virtual DbSet<BookSection_Comment> BookSection_Comment { get; set; }
         public virtual DbSet<Role_Function> Role_Function { get; set; }
         public virtual DbSet<Role_Menu> Role_Menu { get; set; }
         public virtual DbSet<Role_User> Role_User { get; set; }

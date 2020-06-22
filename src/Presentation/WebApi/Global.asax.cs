@@ -58,17 +58,14 @@ namespace WebApi
             builder.RegisterType<CommentRepository>().As<ICommentRepository>();
             builder.RegisterType<Comment_DislikeRepository>().As<IComment_DislikeRepository>();
             builder.RegisterType<Comment_LikeRepository>().As<IComment_LikeRepository>();
-            builder.RegisterType<BookInfoRepository>().As<IBookInfoRepository>();
-            builder.RegisterType<BookInfo_CommentRepository>().As<IBookInfo_CommentRepository>();
-            builder.RegisterType<BookInfo_DislikeRepository>().As<IBookInfo_DislikeRepository>();
-            builder.RegisterType<BookInfo_LikeRepository>().As<IBookInfo_LikeRepository>();
-            builder.RegisterType<BookInfo_ParticipantRepository>().As<IBookInfo_ParticipantRepository>();
+            builder.RegisterType<Article_CommentRepository>().As<IArticle_CommentRepository>();
+            builder.RegisterType<Article_DislikeRepository>().As<IArticle_DislikeRepository>();
+            builder.RegisterType<Article_LikeRepository>().As<IArticle_LikeRepository>();
+            builder.RegisterType<Article_ParticipantRepository>().As<IArticle_ParticipantRepository>();
             builder.RegisterType<FavoriteRepository>().As<IFavoriteRepository>();
-            builder.RegisterType<Favorite_BookInfoRepository>().As<IFavorite_BookInfoRepository>();
+            builder.RegisterType<Favorite_ArticleRepository>().As<IFavorite_ArticleRepository>();
             builder.RegisterType<Follower_FollowedRepository>().As<IFollower_FollowedRepository>();
             builder.RegisterType<FunctionInfoRepository>().As<IFunctionInfoRepository>();
-            builder.RegisterType<User_BookInfoRepository>().As<IUser_BookInfoRepository>();
-            builder.RegisterType<User_BookSectionRepository>().As<IUser_BookSectionRepository>();
             builder.RegisterType<LogInfoRepository>().As<ILogInfoRepository>();
             builder.RegisterType<ParticipantInfoRepository>().As<IParticipantInfoRepository>();
             builder.RegisterType<Role_FunctionRepository>().As<IRole_FunctionRepository>();
@@ -81,25 +78,20 @@ namespace WebApi
             builder.RegisterType<Sys_MenuRepository>().As<ISys_MenuRepository>();
             builder.RegisterType<ThemeTemplateRepository>().As<IThemeTemplateRepository>();
             builder.RegisterType<UserInfoRepository>().As<IUserInfoRepository>();
-            builder.RegisterType<BookSectionRepository>().As<IBookSectionRepository>();
-            builder.RegisterType<BookSection_CommentRepository>().As<IBookSection_CommentRepository>();
 
             // 注册服务层服务
             builder.RegisterType<ArticleService>().As<IArticleService>();
             builder.RegisterType<CommentService>().As<ICommentService>();
             builder.RegisterType<Comment_DislikeService>().As<IComment_DislikeService>();
             builder.RegisterType<Comment_LikeService>().As<IComment_LikeService>();
-            builder.RegisterType<BookInfoService>().As<IBookInfoService>();
-            builder.RegisterType<BookInfo_CommentService>().As<IBookInfo_CommentService>();
-            builder.RegisterType<BookInfo_DislikeService>().As<IBookInfo_DislikeService>();
-            builder.RegisterType<BookInfo_LikeService>().As<IBookInfo_LikeService>();
-            builder.RegisterType<BookInfo_ParticipantService>().As<IBookInfo_ParticipantService>();
+            builder.RegisterType<Article_CommentService>().As<IArticle_CommentService>();
+            builder.RegisterType<Article_DislikeService>().As<IArticle_DislikeService>();
+            builder.RegisterType<Article_LikeService>().As<IArticle_LikeService>();
+            builder.RegisterType<Article_ParticipantService>().As<IArticle_ParticipantService>();
             builder.RegisterType<FavoriteService>().As<IFavoriteService>();
-            builder.RegisterType<Favorite_BookInfoService>().As<IFavorite_BookInfoService>();
+            builder.RegisterType<Favorite_ArticleService>().As<IFavorite_ArticleService>();
             builder.RegisterType<Follower_FollowedService>().As<IFollower_FollowedService>();
             builder.RegisterType<FunctionInfoService>().As<IFunctionInfoService>();
-            builder.RegisterType<User_BookInfoService>().As<IUser_BookInfoService>();
-            builder.RegisterType<User_BookSectionService>().As<IUser_BookSectionService>();
             builder.RegisterType<LogInfoService>().As<ILogInfoService>();
             builder.RegisterType<ParticipantInfoService>().As<IParticipantInfoService>();
             builder.RegisterType<Role_FunctionService>().As<IRole_FunctionService>();
@@ -112,8 +104,6 @@ namespace WebApi
             builder.RegisterType<Sys_MenuService>().As<ISys_MenuService>();
             builder.RegisterType<ThemeTemplateService>().As<IThemeTemplateService>();
             builder.RegisterType<UserInfoService>().As<IUserInfoService>();
-            builder.RegisterType<BookSectionService>().As<IBookSectionService>();
-            builder.RegisterType<BookSection_CommentService>().As<IBookSection_CommentService>();
 
             // TODO: 注册基于接口约束的实体，不知道为什么，改为部分类后就失败了，以前还测试成功
             // 注册基于接口约束的实体

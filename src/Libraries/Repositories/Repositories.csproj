@@ -55,18 +55,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auto\Implement\ArticleRepository.cs" />
-    <Compile Include="Auto\Implement\BookInfoRepository.cs" />
-    <Compile Include="Auto\Implement\BookInfo_CommentRepository.cs" />
-    <Compile Include="Auto\Implement\BookInfo_DislikeRepository.cs" />
-    <Compile Include="Auto\Implement\BookInfo_LikeRepository.cs" />
-    <Compile Include="Auto\Implement\BookInfo_ParticipantRepository.cs" />
-    <Compile Include="Auto\Implement\BookSectionRepository.cs" />
-    <Compile Include="Auto\Implement\BookSection_CommentRepository.cs" />
+    <Compile Include="Auto\Implement\Article_CommentRepository.cs" />
+    <Compile Include="Auto\Implement\Article_DislikeRepository.cs" />
+    <Compile Include="Auto\Implement\Article_LikeRepository.cs" />
+    <Compile Include="Auto\Implement\Article_ParticipantRepository.cs" />
     <Compile Include="Auto\Implement\CommentRepository.cs" />
     <Compile Include="Auto\Implement\Comment_DislikeRepository.cs" />
     <Compile Include="Auto\Implement\Comment_LikeRepository.cs" />
     <Compile Include="Auto\Implement\FavoriteRepository.cs" />
-    <Compile Include="Auto\Implement\Favorite_BookInfoRepository.cs" />
+    <Compile Include="Auto\Implement\Favorite_ArticleRepository.cs" />
     <Compile Include="Auto\Implement\Follower_FollowedRepository.cs" />
     <Compile Include="Auto\Implement\FunctionInfoRepository.cs" />
     <Compile Include="Auto\Implement\LogInfoRepository.cs" />
@@ -81,21 +78,16 @@
     <Compile Include="Auto\Implement\Sys_MenuRepository.cs" />
     <Compile Include="Auto\Implement\ThemeTemplateRepository.cs" />
     <Compile Include="Auto\Implement\UserInfoRepository.cs" />
-    <Compile Include="Auto\Implement\User_BookInfoRepository.cs" />
-    <Compile Include="Auto\Implement\User_BookSectionRepository.cs" />
     <Compile Include="Auto\Interface\IArticleRepository.cs" />
-    <Compile Include="Auto\Interface\IBookInfoRepository.cs" />
-    <Compile Include="Auto\Interface\IBookInfo_CommentRepository.cs" />
-    <Compile Include="Auto\Interface\IBookInfo_DislikeRepository.cs" />
-    <Compile Include="Auto\Interface\IBookInfo_LikeRepository.cs" />
-    <Compile Include="Auto\Interface\IBookInfo_ParticipantRepository.cs" />
-    <Compile Include="Auto\Interface\IBookSectionRepository.cs" />
-    <Compile Include="Auto\Interface\IBookSection_CommentRepository.cs" />
+    <Compile Include="Auto\Interface\IArticle_CommentRepository.cs" />
+    <Compile Include="Auto\Interface\IArticle_DislikeRepository.cs" />
+    <Compile Include="Auto\Interface\IArticle_LikeRepository.cs" />
+    <Compile Include="Auto\Interface\IArticle_ParticipantRepository.cs" />
     <Compile Include="Auto\Interface\ICommentRepository.cs" />
     <Compile Include="Auto\Interface\IComment_DislikeRepository.cs" />
     <Compile Include="Auto\Interface\IComment_LikeRepository.cs" />
     <Compile Include="Auto\Interface\IFavoriteRepository.cs" />
-    <Compile Include="Auto\Interface\IFavorite_BookInfoRepository.cs" />
+    <Compile Include="Auto\Interface\IFavorite_ArticleRepository.cs" />
     <Compile Include="Auto\Interface\IFollower_FollowedRepository.cs" />
     <Compile Include="Auto\Interface\IFunctionInfoRepository.cs" />
     <Compile Include="Auto\Interface\ILogInfoRepository.cs" />
@@ -110,8 +102,6 @@
     <Compile Include="Auto\Interface\ISys_MenuRepository.cs" />
     <Compile Include="Auto\Interface\IThemeTemplateRepository.cs" />
     <Compile Include="Auto\Interface\IUserInfoRepository.cs" />
-    <Compile Include="Auto\Interface\IUser_BookInfoRepository.cs" />
-    <Compile Include="Auto\Interface\IUser_BookSectionRepository.cs" />
     <Compile Include="Core\BaseRepository.cs" />
     <Compile Include="Core\DbFactory.cs" />
     <Compile Include="Core\IDependency.cs" />
@@ -165,5 +155,6 @@
       <DependentUpon>201912291033154_update.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

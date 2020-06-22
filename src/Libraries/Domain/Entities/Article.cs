@@ -5,6 +5,7 @@ namespace Domain.Entities
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+    using System.Linq;
 
     public partial class Article : BaseEntity
     {
@@ -56,9 +57,24 @@ namespace Domain.Entities
         public string CustomUrl { get; set; }
 
         /// <summary>
+        /// 赞数
+        /// </summary>
+        public int LikeNum { get; set; }
+
+        /// <summary>
+        /// 踩数
+        /// </summary>
+        public int DislikeNum { get; set; }
+
+        /// <summary>
+        /// 分享数
+        /// </summary>
+        public int ShareNum { get; set; }
+
+        /// <summary>
         /// 评论数
         /// </summary>
-        public int CommentCount { get; set; }
+        public int CommentNum { get; set; }
 
         /// <summary>
         /// 文章状态
@@ -82,11 +98,13 @@ namespace Domain.Entities
         /// </summary>
         [ForeignKey("Author")]
         public int AuthorId { get; set; }
-        /// <summary>
-        /// 作者
-        /// </summary>
         [ForeignKey("AuthorId")]
         public virtual UserInfo Author { get; set; }
+
+        /// <summary>
+        /// 属于哪些收藏夹
+        /// </summary>
+        public virtual ICollection<Favorite_Article> Favorite_Articles { get; set; }
 
         /// <summary>
         /// 删除时间：为null，则未删除
@@ -102,6 +120,25 @@ namespace Domain.Entities
 
         #region Helpers
 
+        [NotMapped]
+        public IList<Favorite> Favorites
+        {
+            get
+            {
+                IList<Favorite> favorites = new List<Favorite>();
+                if (this.Favorite_Articles != null && this.Favorite_Articles.Count >= 1)
+                {
+                    favorites = this.Favorite_Articles.Select(m => m.Favorite).ToList();
+                }
+
+                return favorites;
+            }
+        }
+
+
+
+        #endregion
+
         public enum AStatus
         {
             /// <summary>
@@ -114,8 +151,6 @@ namespace Domain.Entities
             /// </summary>
             Draft = 1,
         }
-
-        #endregion
 
         public enum CStatus
         {

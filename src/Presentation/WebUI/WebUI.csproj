@@ -8199,7 +8199,6 @@
     <Compile Include="Areas\Admin\Models\UserInfoVM\UserInfoViewModel.cs" />
     <Compile Include="Attributes\LogErrorAttribute.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
-    <Compile Include="Controllers\BookInfoController.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstallController.cs" />

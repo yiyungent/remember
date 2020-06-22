@@ -1624,7 +1624,7 @@ namespace WebUI.Controllers
                     AuthorId = 1,
                     ArticleStatus = Article.AStatus.Publish,
                     OpenStatus = Article.OStatus.All,
-                    CommentCount = 0,
+                    CommentNum = 0,
                     CommentStatus = Article.CStatus.Open,
                     CreateTime = DateTime.Now,
                     LastUpdateTime = DateTime.Now,

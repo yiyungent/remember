@@ -8,7 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WebApi.Models.Common;
-using WebApi.Models.BookInfoVM;
+using WebApi.Models.ArticleVM;
 using WebApi.Models.HomeVM;
 using System.Diagnostics;
 using Domain.Entities;
@@ -22,19 +22,17 @@ namespace WebApi.Controllers
     public class HomeController : BaseApiController
     {
         #region Fields
-        private readonly IUser_BookInfoService _user_BookInfoService;
-        private readonly IBookInfoService _bookInfoService;
+        private readonly IArticleService _articleService;
         #endregion
 
-        public HomeController(IUser_BookInfoService user_BookInfoService, IBookInfoService bookInfoService)
+        public HomeController(IArticleService articleService)
         {
-            this._user_BookInfoService = user_BookInfoService;
-            this._bookInfoService = bookInfoService;
+            this._articleService = articleService;
         }
 
-        #region 热门文库
+        #region 热门文章
         /// <summary>
-        /// 热门文库
+        /// 热门文章
         /// </summary>
         /// <param name="number">前多少名</param>
         /// <returns></returns>
@@ -42,54 +40,14 @@ namespace WebApi.Controllers
         [Route("Ranking")]
         public ResponseData Ranking(int number)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
             ResponseData responseData = null;
             IList<RankingCourseBoxViewModel> viewModel = new List<RankingCourseBoxViewModel>();
-            //IList<Learner_CourseBox> allCourseBoxTable = Container.Instance.Resolve<Learner_CourseBoxService>().GetAll().Where(m => m.CourseBox.IsOpen = true).ToList();
-            IList<User_BookInfo> allCourseBoxTable = this._user_BookInfoService.Filter(m => m.BookInfo.IsOpen == true && !m.IsDeleted).ToList();
-            var query = from a in allCourseBoxTable
-                        group a by a.BookInfo.ID
-                      into g
-                        select new
-                        {
-                            CourseBox = new RankingCourseBoxViewModel.RankingCourseBoxItem
-                            {
-                                ID = g.Key,
-                                Creator = new RankingCourseBoxViewModel.Creator
-                                {
-                                    ID = g.First().BookInfo.Creator.ID,
-                                    UserName = g.First().BookInfo.Creator.UserName,
-                                    Avatar = g.First().BookInfo.Creator.Avatar.ToHttpAbsoluteUrl(),
-                                },
-                                Desc = g.First().BookInfo.Description,
-                                Name = g.First().BookInfo.Name,
-                                PicUrl = g.First().BookInfo.PicUrl.ToHttpAbsoluteUrl()
-                            },
-                            LearnNum = g.Count(),
-                            TotalSpendTime = g.Sum(s => s.SpendTime)
-                        };
-            // 倒序排序：学习人数越多越靠前
-            var rankingQuery = query.OrderByDescending(m => m.LearnNum).Take(number).ToList();
-            for (int i = 0; i < rankingQuery.Count(); i++)
-            {
-                viewModel.Add(new RankingCourseBoxViewModel
-                {
-                    CourseBox = rankingQuery[i].CourseBox,
-                    LearnNum = rankingQuery[i].LearnNum,
-                    TotalSpendTime = rankingQuery[i].TotalSpendTime,
-                    RankingNum = i + 1
-                });
-            }
 
-            stopwatch.Stop();
-            long time = stopwatch.ElapsedMilliseconds;
 
             responseData = new ResponseData
             {
                 Code = 1,
-                Message = "成功获取热门文库",
+                Message = "成功获取热门文章",
                 Data = viewModel
             };
 
@@ -97,42 +55,39 @@ namespace WebApi.Controllers
         }
         #endregion
 
-        #region 最新文库
+        #region 最新文章
         [HttpGet]
         [Route("LastBook")]
-        public ResponseData LastBook(int number)
+        public ResponseData LastArticles(int number)
         {
             ResponseData responseData = null;
             try
             {
-                IList<LastCourseBoxViewModel> viewModel = new List<LastCourseBoxViewModel>();
-                IList<BookInfo> courseBoxes = this._bookInfoService.Filter<DateTime>(1, number, out int count, m => !m.IsDeleted, m => m.CreateTime, false).ToList();
+                IList<LastArticleViewModel> viewModel = new List<LastArticleViewModel>();
+                IList<Article> articles = this._articleService.Filter<DateTime>(1, number, out int count, m => !m.IsDeleted, m => m.CreateTime, false).ToList();
 
 
-                for (int i = 0; i < courseBoxes.Count; i++)
+                for (int i = 0; i < articles.Count; i++)
                 {
-                    BookInfo courseBox = courseBoxes[i];
+                    Article article = articles[i];
 
-                    int learnNum = this._user_BookInfoService.Count(m => m.BookInfoId == courseBox.ID && !m.IsDeleted);
-
-                    viewModel.Add(new LastCourseBoxViewModel
+                    viewModel.Add(new LastArticleViewModel
                     {
-                        CourseBox = new LastCourseBoxViewModel.CourseBoxItem
+                        Article = new LastArticleViewModel.ArticleItem
                         {
-                            ID = courseBox.ID,
-                            CreateTime = courseBox.CreateTime.ToTimeStamp13(),
-                            Creator = new LastCourseBoxViewModel.Creator
+                            ID = article.ID,
+                            CreateTime = article.CreateTime.ToTimeStamp13(),
+                            Author = new LastArticleViewModel.Author
                             {
-                                ID = courseBox.Creator.ID,
-                                Avatar = courseBox.Creator.Avatar.ToHttpAbsoluteUrl(),
-                                Desc = courseBox.Creator.Description,
-                                UserName = courseBox.Creator.UserName
+                                ID = article.Author.ID,
+                                Avatar = article.Author.Avatar.ToHttpAbsoluteUrl(),
+                                Desc = article.Author.Description,
+                                UserName = article.Author.UserName
                             },
-                            Desc = courseBox.Description,
-                            Name = courseBox.Name,
-                            PicUrl = courseBox.PicUrl.ToHttpAbsoluteUrl()
+                            Desc = article.Description,
+                            Title = article.Title,
+                            PicUrl = article.PicUrl.ToHttpAbsoluteUrl()
                         },
-                        LearnNum = learnNum,
                         RankingNum = i + 1
                     });
                 }
@@ -141,7 +96,7 @@ namespace WebApi.Controllers
                 responseData = new ResponseData
                 {
                     Code = 1,
-                    Message = "成功获取最新文库",
+                    Message = "成功获取最新文章",
                     Data = viewModel
                 };
             }
@@ -150,7 +105,7 @@ namespace WebApi.Controllers
                 responseData = new ResponseData
                 {
                     Code = -1,
-                    Message = "获取最新文库失败 " + ex.Message + " " + ex.InnerException?.Message
+                    Message = "获取最新文章失败 " + ex.Message + " " + ex.InnerException?.Message
                 };
             }
 

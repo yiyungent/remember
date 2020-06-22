@@ -59,23 +59,23 @@ namespace Domain.Entities
         public virtual UserInfo Creator { get; set; }
 
         /// <summary>
-        /// 收藏的文库列表
+        /// 收藏的文章列表
         /// </summary>
-        public virtual ICollection<Favorite_BookInfo> Favorite_BookInfos { get; set; }
+        public virtual ICollection<Favorite_Article> Favorite_Articles { get; set; }
 
         #endregion
 
         #region Helpers
 
         [NotMapped]
-        public IList<BookInfo> BookInfos
+        public IList<Article> Articles
         {
             get
             {
-                IList<BookInfo> bookInfos = new List<BookInfo>();
-                if (this.Favorite_BookInfos != null && this.Favorite_BookInfos.Count >= 1)
+                IList<Article> bookInfos = new List<Article>();
+                if (this.Favorite_Articles != null && this.Favorite_Articles.Count >= 1)
                 {
-                    bookInfos = this.Favorite_BookInfos.Select(m => m.BookInfo)?.ToList();
+                    bookInfos = this.Favorite_Articles.Select(m => m.Article)?.ToList();
                 }
 
                 return bookInfos;

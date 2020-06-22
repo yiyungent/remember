@@ -65,17 +65,11 @@
     <Compile Include="Entities\Comment.cs" />
     <Compile Include="Entities\Comment_Dislike.cs" />
     <Compile Include="Entities\Comment_Like.cs" />
-    <Compile Include="Entities\BookInfo.cs" />
-    <Compile Include="Entities\BookInfo_Comment.cs" />
-    <Compile Include="Entities\BookInfo_Dislike.cs" />
-    <Compile Include="Entities\BookInfo_Like.cs" />
-    <Compile Include="Entities\BookInfo_Participant.cs" />
+    <Compile Include="Entities\Article_Participant.cs" />
     <Compile Include="Entities\Favorite.cs" />
-    <Compile Include="Entities\Favorite_BookInfo.cs" />
+    <Compile Include="Entities\Favorite_Article.cs" />
     <Compile Include="Entities\Follower_Followed.cs" />
     <Compile Include="Entities\FunctionInfo.cs" />
-    <Compile Include="Entities\User_BookInfo.cs" />
-    <Compile Include="Entities\User_BookSection.cs" />
     <Compile Include="Entities\LogInfo.cs" />
     <Compile Include="Entities\ParticipantInfo.cs" />
     <Compile Include="Entities\RoleInfo.cs" />
@@ -88,8 +82,6 @@
     <Compile Include="Entities\Sys_Menu.cs" />
     <Compile Include="Entities\ThemeTemplate.cs" />
     <Compile Include="Entities\UserInfo.cs" />
-    <Compile Include="Entities\BookSection.cs" />
-    <Compile Include="Entities\BookSection_Comment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

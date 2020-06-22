@@ -5,25 +5,23 @@ using System.Web;
 
 namespace WebApi.Models.HomeVM
 {
-    public class LastCourseBoxViewModel
+    public class LastArticleViewModel
     {
-        public int LearnNum { get; set; }
-
-        public CourseBoxItem CourseBox { get; set; }
+        public ArticleItem Article { get; set; }
 
         public int RankingNum { get; set; }
 
-        public sealed class CourseBoxItem
+        public sealed class ArticleItem
         {
             /// <summary>
-            /// 课程ID
+            /// ID
             /// </summary>
             public int ID { get; set; }
 
             /// <summary>
-            /// 课程名
+            /// 文章标题
             /// </summary>
-            public string Name { get; set; }
+            public string Title { get; set; }
 
             /// <summary>
             /// 描述
@@ -33,7 +31,7 @@ namespace WebApi.Models.HomeVM
             /// <summary>
             /// 创建者
             /// </summary>
-            public Creator Creator { get; set; }
+            public Author Author { get; set; }
 
             /// <summary>
             /// 封面图
@@ -46,11 +44,9 @@ namespace WebApi.Models.HomeVM
             public long CreateTime { get; set; }
         }
 
-        public sealed class Creator
+        public sealed class Author
         {
             public int ID { get; set; }
-
-            public string Name { get; set; }
 
             public string UserName { get; set; }
 

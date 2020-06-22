@@ -126,12 +126,11 @@
     <Compile Include="Attributes\NeedAuthAttribute.cs" />
     <Compile Include="Attributes\WhiteListAttribute.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
-    <Compile Include="Controllers\BookInfoController.cs" />
+    <Compile Include="Controllers\ArticleController.cs" />
     <Compile Include="Controllers\FavoriteController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\UserController.cs" />
-    <Compile Include="Controllers\BookSectionController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -139,17 +138,14 @@
     <Compile Include="Infrastructure\UserIdentity.cs" />
     <Compile Include="Infrastructure\UserPrincipal.cs" />
     <Compile Include="Models\Common\ResponseData.cs" />
-    <Compile Include="Models\BookInfoVM\CommentInputModel.cs" />
-    <Compile Include="Models\BookInfoVM\CommentLikeInputModel.cs" />
-    <Compile Include="Models\BookInfoVM\CommentViewModel.cs" />
-    <Compile Include="Models\BookInfoVM\BookInfoViewModel.cs" />
-    <Compile Include="Models\BookInfoVM\ReadBookInfoInputModel.cs" />
-    <Compile Include="Models\BookInfoVM\ViewHistoryPushInputModel.cs" />
-    <Compile Include="Models\BookInfoVM\SimpleCommentsViewModel.cs" />
+    <Compile Include="Models\ArticleVM\CommentInputModel.cs" />
+    <Compile Include="Models\ArticleVM\CommentLikeInputModel.cs" />
+    <Compile Include="Models\ArticleVM\CommentViewModel.cs" />
+    <Compile Include="Models\ArticleVM\ArticleViewModel.cs" />
+    <Compile Include="Models\ArticleVM\SimpleCommentsViewModel.cs" />
     <Compile Include="Models\FavoriteVM\FavBookInfoInputModel.cs" />
     <Compile Include="Models\UserInfoVM\FollowViewModel.cs" />
     <Compile Include="Models\UserInfoVM\RelationViewModel.cs" />
-    <Compile Include="Models\BookSectionVM\BookSectionHistoryViewModel.cs" />
     <Compile Include="Models\FavoriteVM\CreateInputModel.cs" />
     <Compile Include="Models\FavoriteVM\FavoriteViewModel.cs" />
     <Compile Include="Models\FavoriteVM\FavStatInBookInfoViewModel.cs" />
@@ -163,7 +159,6 @@
     <Compile Include="Models\UserInfoVM\MyFollowViewModel.cs" />
     <Compile Include="Models\UserInfoVM\RegisterInputModel.cs" />
     <Compile Include="Models\UserInfoVM\UserInfoViewModel.cs" />
-    <Compile Include="Models\BookSectionVM\BookSectionViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
