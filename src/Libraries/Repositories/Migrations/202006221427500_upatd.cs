@@ -3,7 +3,7 @@ namespace Repositories.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class update : DbMigration
+    public partial class upatd : DbMigration
     {
         public override void Up()
         {
@@ -13,11 +13,19 @@ namespace Repositories.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         Title = c.String(maxLength: 30, storeType: "nvarchar"),
+                        Description = c.String(unicode: false, storeType: "text"),
+                        PicUrl = c.String(unicode: false, storeType: "text"),
                         Content = c.String(unicode: false, storeType: "text"),
                         CreateTime = c.DateTime(nullable: false, precision: 0),
                         LastUpdateTime = c.DateTime(nullable: false, precision: 0),
                         CustomUrl = c.String(unicode: false, storeType: "text"),
+                        LikeNum = c.Int(nullable: false),
+                        DislikeNum = c.Int(nullable: false),
+                        ShareNum = c.Int(nullable: false),
+                        CommentNum = c.Int(nullable: false),
                         ArticleStatus = c.Int(nullable: false),
+                        CommentStatus = c.Int(nullable: false),
+                        OpenStatus = c.Int(nullable: false),
                         AuthorId = c.Int(nullable: false),
                         DeletedAt = c.DateTime(precision: 0),
                         IsDeleted = c.Boolean(nullable: false),
@@ -125,7 +133,7 @@ namespace Repositories.Migrations
                         ID = c.Int(nullable: false, identity: true),
                         Name = c.String(nullable: false, unicode: false, storeType: "text"),
                         Description = c.String(unicode: false, storeType: "text"),
-                        Icon = c.String(maxLength: 24, storeType: "nvarchar"),
+                        Icon = c.String(unicode: false, storeType: "text"),
                         ControllerName = c.String(unicode: false, storeType: "text"),
                         ActionName = c.String(unicode: false, storeType: "text"),
                         AreaName = c.String(unicode: false, storeType: "text"),
@@ -157,47 +165,7 @@ namespace Repositories.Migrations
                 .Index(t => t.Sys_MenuId);
             
             CreateTable(
-                "dbo.BookInfo",
-                c => new
-                    {
-                        ID = c.Int(nullable: false, identity: true),
-                        Name = c.String(nullable: false, unicode: false, storeType: "text"),
-                        Description = c.String(unicode: false, storeType: "text"),
-                        PicUrl = c.String(unicode: false, storeType: "text"),
-                        CreateTime = c.DateTime(nullable: false, precision: 0),
-                        LastUpdateTime = c.DateTime(nullable: false, precision: 0),
-                        IsOpen = c.Boolean(nullable: false),
-                        LikeNum = c.Int(nullable: false),
-                        DislikeNum = c.Int(nullable: false),
-                        CommentNum = c.Int(nullable: false),
-                        ShareNum = c.Int(nullable: false),
-                        CreatorId = c.Int(nullable: false),
-                        DeletedAt = c.DateTime(precision: 0),
-                        IsDeleted = c.Boolean(nullable: false),
-                    })
-                .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.UserInfo", t => t.CreatorId, cascadeDelete: true)
-                .Index(t => t.CreatorId);
-            
-            CreateTable(
-                "dbo.BookSection",
-                c => new
-                    {
-                        ID = c.Int(nullable: false, identity: true),
-                        Title = c.String(unicode: false, storeType: "text"),
-                        Content = c.String(nullable: false, unicode: false, storeType: "text"),
-                        Duration = c.Long(nullable: false),
-                        SortCode = c.Int(nullable: false),
-                        DeletedAt = c.DateTime(precision: 0),
-                        IsDeleted = c.Boolean(nullable: false),
-                        BookInfoId = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.BookInfo", t => t.BookInfoId, cascadeDelete: true)
-                .Index(t => t.BookInfoId);
-            
-            CreateTable(
-                "dbo.Favorite_BookInfo",
+                "dbo.Favorite_Article",
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
@@ -205,13 +173,13 @@ namespace Repositories.Migrations
                         DeletedAt = c.DateTime(precision: 0),
                         IsDeleted = c.Boolean(nullable: false),
                         FavoriteId = c.Int(nullable: false),
-                        BookInfoId = c.Int(nullable: false),
+                        ArticleId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.BookInfo", t => t.BookInfoId, cascadeDelete: true)
+                .ForeignKey("dbo.Article", t => t.ArticleId, cascadeDelete: true)
                 .ForeignKey("dbo.Favorite", t => t.FavoriteId, cascadeDelete: true)
                 .Index(t => t.FavoriteId)
-                .Index(t => t.BookInfoId);
+                .Index(t => t.ArticleId);
             
             CreateTable(
                 "dbo.Favorite",
@@ -231,20 +199,38 @@ namespace Repositories.Migrations
                 .Index(t => t.CreatorId);
             
             CreateTable(
-                "dbo.BookInfo_Comment",
+                "dbo.Article_Participant",
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
-                        BookInfoId = c.Int(nullable: false),
-                        CommentId = c.Int(nullable: false),
+                        IsAgreed = c.Boolean(nullable: false),
+                        AgreeTime = c.DateTime(precision: 0),
+                        CreateTime = c.DateTime(nullable: false, precision: 0),
+                        DeletedAt = c.DateTime(precision: 0),
+                        IsDeleted = c.Boolean(nullable: false),
+                        ArticleId = c.Int(nullable: false),
+                        ParticipantId = c.Int(nullable: false),
+                        ParticipantInfoId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.ID)
+                .ForeignKey("dbo.Article", t => t.ArticleId, cascadeDelete: true)
+                .ForeignKey("dbo.UserInfo", t => t.ParticipantId, cascadeDelete: true)
+                .ForeignKey("dbo.ParticipantInfo", t => t.ParticipantInfoId, cascadeDelete: true)
+                .Index(t => t.ArticleId)
+                .Index(t => t.ParticipantId)
+                .Index(t => t.ParticipantInfoId);
+            
+            CreateTable(
+                "dbo.ParticipantInfo",
+                c => new
+                    {
+                        ID = c.Int(nullable: false, identity: true),
+                        RoleNames = c.String(unicode: false, storeType: "text"),
+                        Description = c.String(unicode: false, storeType: "text"),
                         DeletedAt = c.DateTime(precision: 0),
                         IsDeleted = c.Boolean(nullable: false),
                     })
-                .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.BookInfo", t => t.BookInfoId, cascadeDelete: true)
-                .ForeignKey("dbo.Comment", t => t.CommentId, cascadeDelete: true)
-                .Index(t => t.BookInfoId)
-                .Index(t => t.CommentId);
+                .PrimaryKey(t => t.ID);
             
             CreateTable(
                 "dbo.Comment",
@@ -266,90 +252,6 @@ namespace Repositories.Migrations
                 .ForeignKey("dbo.Comment", t => t.ParentId)
                 .Index(t => t.AuthorId)
                 .Index(t => t.ParentId);
-            
-            CreateTable(
-                "dbo.BookInfo_Dislike",
-                c => new
-                    {
-                        ID = c.Int(nullable: false, identity: true),
-                        CreateTime = c.DateTime(nullable: false, precision: 0),
-                        DeletedAt = c.DateTime(precision: 0),
-                        IsDeleted = c.Boolean(nullable: false),
-                        BookInfoId = c.Int(nullable: false),
-                        UserInfoId = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.BookInfo", t => t.BookInfoId, cascadeDelete: true)
-                .ForeignKey("dbo.UserInfo", t => t.UserInfoId, cascadeDelete: true)
-                .Index(t => t.BookInfoId)
-                .Index(t => t.UserInfoId);
-            
-            CreateTable(
-                "dbo.BookInfo_Like",
-                c => new
-                    {
-                        ID = c.Int(nullable: false, identity: true),
-                        CreateTime = c.DateTime(nullable: false, precision: 0),
-                        DeletedAt = c.DateTime(precision: 0),
-                        IsDeleted = c.Boolean(nullable: false),
-                        BookInfoId = c.Int(nullable: false),
-                        UserInfoId = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.BookInfo", t => t.BookInfoId, cascadeDelete: true)
-                .ForeignKey("dbo.UserInfo", t => t.UserInfoId, cascadeDelete: true)
-                .Index(t => t.BookInfoId)
-                .Index(t => t.UserInfoId);
-            
-            CreateTable(
-                "dbo.BookInfo_Participant",
-                c => new
-                    {
-                        ID = c.Int(nullable: false, identity: true),
-                        IsAgreed = c.Boolean(nullable: false),
-                        AgreeTime = c.DateTime(precision: 0),
-                        CreateTime = c.DateTime(nullable: false, precision: 0),
-                        DeletedAt = c.DateTime(precision: 0),
-                        IsDeleted = c.Boolean(nullable: false),
-                        BookInfoId = c.Int(nullable: false),
-                        ParticipantId = c.Int(nullable: false),
-                        ParticipantInfoId = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.BookInfo", t => t.BookInfoId, cascadeDelete: true)
-                .ForeignKey("dbo.UserInfo", t => t.ParticipantId, cascadeDelete: true)
-                .ForeignKey("dbo.ParticipantInfo", t => t.ParticipantInfoId, cascadeDelete: true)
-                .Index(t => t.BookInfoId)
-                .Index(t => t.ParticipantId)
-                .Index(t => t.ParticipantInfoId);
-            
-            CreateTable(
-                "dbo.ParticipantInfo",
-                c => new
-                    {
-                        ID = c.Int(nullable: false, identity: true),
-                        RoleNames = c.String(unicode: false, storeType: "text"),
-                        Description = c.String(unicode: false, storeType: "text"),
-                        DeletedAt = c.DateTime(precision: 0),
-                        IsDeleted = c.Boolean(nullable: false),
-                    })
-                .PrimaryKey(t => t.ID);
-            
-            CreateTable(
-                "dbo.BookSection_Comment",
-                c => new
-                    {
-                        ID = c.Int(nullable: false, identity: true),
-                        DeletedAt = c.DateTime(precision: 0),
-                        IsDeleted = c.Boolean(nullable: false),
-                        BookSectionId = c.Int(nullable: false),
-                        CommentId = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.BookSection", t => t.BookSectionId, cascadeDelete: true)
-                .ForeignKey("dbo.Comment", t => t.CommentId, cascadeDelete: true)
-                .Index(t => t.BookSectionId)
-                .Index(t => t.CommentId);
             
             CreateTable(
                 "dbo.Comment_Dislike",
@@ -475,80 +377,24 @@ namespace Repositories.Migrations
                     })
                 .PrimaryKey(t => t.ID);
             
-            CreateTable(
-                "dbo.User_BookInfo",
-                c => new
-                    {
-                        ID = c.Int(nullable: false, identity: true),
-                        CreateTime = c.DateTime(nullable: false, precision: 0),
-                        SpendTime = c.Long(nullable: false),
-                        DeletedAt = c.DateTime(precision: 0),
-                        IsDeleted = c.Boolean(nullable: false),
-                        LastViewSectionId = c.Int(),
-                        ReaderId = c.Int(nullable: false),
-                        BookInfoId = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.BookInfo", t => t.BookInfoId, cascadeDelete: true)
-                .ForeignKey("dbo.BookSection", t => t.LastViewSectionId)
-                .ForeignKey("dbo.UserInfo", t => t.ReaderId, cascadeDelete: true)
-                .Index(t => t.LastViewSectionId)
-                .Index(t => t.ReaderId)
-                .Index(t => t.BookInfoId);
-            
-            CreateTable(
-                "dbo.User_BookSection",
-                c => new
-                    {
-                        ID = c.Int(nullable: false, identity: true),
-                        LastAccessIp = c.String(maxLength: 20, storeType: "nvarchar"),
-                        LastViewAt = c.Long(nullable: false),
-                        LastViewTime = c.DateTime(nullable: false, precision: 0),
-                        ProgressAt = c.Long(nullable: false),
-                        DeletedAt = c.DateTime(precision: 0),
-                        IsDeleted = c.Boolean(nullable: false),
-                        ReaderId = c.Int(nullable: false),
-                        BookSectionId = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.BookSection", t => t.BookSectionId, cascadeDelete: true)
-                .ForeignKey("dbo.UserInfo", t => t.ReaderId, cascadeDelete: true)
-                .Index(t => t.ReaderId)
-                .Index(t => t.BookSectionId);
-            
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.User_BookSection", "ReaderId", "dbo.UserInfo");
-            DropForeignKey("dbo.User_BookSection", "BookSectionId", "dbo.BookSection");
-            DropForeignKey("dbo.User_BookInfo", "ReaderId", "dbo.UserInfo");
-            DropForeignKey("dbo.User_BookInfo", "LastViewSectionId", "dbo.BookSection");
-            DropForeignKey("dbo.User_BookInfo", "BookInfoId", "dbo.BookInfo");
             DropForeignKey("dbo.Follower_Followed", "FollowerId", "dbo.UserInfo");
             DropForeignKey("dbo.Follower_Followed", "FollowedId", "dbo.UserInfo");
             DropForeignKey("dbo.Comment_Like", "UserInfoId", "dbo.UserInfo");
             DropForeignKey("dbo.Comment_Like", "CommentId", "dbo.Comment");
             DropForeignKey("dbo.Comment_Dislike", "UserInfoId", "dbo.UserInfo");
             DropForeignKey("dbo.Comment_Dislike", "CommentId", "dbo.Comment");
-            DropForeignKey("dbo.BookSection_Comment", "CommentId", "dbo.Comment");
-            DropForeignKey("dbo.BookSection_Comment", "BookSectionId", "dbo.BookSection");
-            DropForeignKey("dbo.BookInfo_Participant", "ParticipantInfoId", "dbo.ParticipantInfo");
-            DropForeignKey("dbo.BookInfo_Participant", "ParticipantId", "dbo.UserInfo");
-            DropForeignKey("dbo.BookInfo_Participant", "BookInfoId", "dbo.BookInfo");
-            DropForeignKey("dbo.BookInfo_Like", "UserInfoId", "dbo.UserInfo");
-            DropForeignKey("dbo.BookInfo_Like", "BookInfoId", "dbo.BookInfo");
-            DropForeignKey("dbo.BookInfo_Dislike", "UserInfoId", "dbo.UserInfo");
-            DropForeignKey("dbo.BookInfo_Dislike", "BookInfoId", "dbo.BookInfo");
-            DropForeignKey("dbo.BookInfo_Comment", "CommentId", "dbo.Comment");
             DropForeignKey("dbo.Comment", "ParentId", "dbo.Comment");
             DropForeignKey("dbo.Comment", "AuthorId", "dbo.UserInfo");
-            DropForeignKey("dbo.BookInfo_Comment", "BookInfoId", "dbo.BookInfo");
-            DropForeignKey("dbo.Favorite_BookInfo", "FavoriteId", "dbo.Favorite");
+            DropForeignKey("dbo.Article_Participant", "ParticipantInfoId", "dbo.ParticipantInfo");
+            DropForeignKey("dbo.Article_Participant", "ParticipantId", "dbo.UserInfo");
+            DropForeignKey("dbo.Article_Participant", "ArticleId", "dbo.Article");
+            DropForeignKey("dbo.Favorite_Article", "FavoriteId", "dbo.Favorite");
             DropForeignKey("dbo.Favorite", "CreatorId", "dbo.UserInfo");
-            DropForeignKey("dbo.Favorite_BookInfo", "BookInfoId", "dbo.BookInfo");
-            DropForeignKey("dbo.BookInfo", "CreatorId", "dbo.UserInfo");
-            DropForeignKey("dbo.BookSection", "BookInfoId", "dbo.BookInfo");
+            DropForeignKey("dbo.Favorite_Article", "ArticleId", "dbo.Article");
             DropForeignKey("dbo.Article", "AuthorId", "dbo.UserInfo");
             DropForeignKey("dbo.Role_User", "UserInfoId", "dbo.UserInfo");
             DropForeignKey("dbo.Role_User", "RoleInfoId", "dbo.RoleInfo");
@@ -561,35 +407,20 @@ namespace Repositories.Migrations
             DropForeignKey("dbo.Sys_Menu", "ParentId", "dbo.Sys_Menu");
             DropForeignKey("dbo.Role_Function", "FunctionInfoId", "dbo.FunctionInfo");
             DropForeignKey("dbo.Role_User", "OperatorId", "dbo.UserInfo");
-            DropIndex("dbo.User_BookSection", new[] { "BookSectionId" });
-            DropIndex("dbo.User_BookSection", new[] { "ReaderId" });
-            DropIndex("dbo.User_BookInfo", new[] { "BookInfoId" });
-            DropIndex("dbo.User_BookInfo", new[] { "ReaderId" });
-            DropIndex("dbo.User_BookInfo", new[] { "LastViewSectionId" });
             DropIndex("dbo.Follower_Followed", new[] { "FollowedId" });
             DropIndex("dbo.Follower_Followed", new[] { "FollowerId" });
             DropIndex("dbo.Comment_Like", new[] { "UserInfoId" });
             DropIndex("dbo.Comment_Like", new[] { "CommentId" });
             DropIndex("dbo.Comment_Dislike", new[] { "UserInfoId" });
             DropIndex("dbo.Comment_Dislike", new[] { "CommentId" });
-            DropIndex("dbo.BookSection_Comment", new[] { "CommentId" });
-            DropIndex("dbo.BookSection_Comment", new[] { "BookSectionId" });
-            DropIndex("dbo.BookInfo_Participant", new[] { "ParticipantInfoId" });
-            DropIndex("dbo.BookInfo_Participant", new[] { "ParticipantId" });
-            DropIndex("dbo.BookInfo_Participant", new[] { "BookInfoId" });
-            DropIndex("dbo.BookInfo_Like", new[] { "UserInfoId" });
-            DropIndex("dbo.BookInfo_Like", new[] { "BookInfoId" });
-            DropIndex("dbo.BookInfo_Dislike", new[] { "UserInfoId" });
-            DropIndex("dbo.BookInfo_Dislike", new[] { "BookInfoId" });
             DropIndex("dbo.Comment", new[] { "ParentId" });
             DropIndex("dbo.Comment", new[] { "AuthorId" });
-            DropIndex("dbo.BookInfo_Comment", new[] { "CommentId" });
-            DropIndex("dbo.BookInfo_Comment", new[] { "BookInfoId" });
+            DropIndex("dbo.Article_Participant", new[] { "ParticipantInfoId" });
+            DropIndex("dbo.Article_Participant", new[] { "ParticipantId" });
+            DropIndex("dbo.Article_Participant", new[] { "ArticleId" });
             DropIndex("dbo.Favorite", new[] { "CreatorId" });
-            DropIndex("dbo.Favorite_BookInfo", new[] { "BookInfoId" });
-            DropIndex("dbo.Favorite_BookInfo", new[] { "FavoriteId" });
-            DropIndex("dbo.BookSection", new[] { "BookInfoId" });
-            DropIndex("dbo.BookInfo", new[] { "CreatorId" });
+            DropIndex("dbo.Favorite_Article", new[] { "ArticleId" });
+            DropIndex("dbo.Favorite_Article", new[] { "FavoriteId" });
             DropIndex("dbo.Role_Menu", new[] { "Sys_MenuId" });
             DropIndex("dbo.Role_Menu", new[] { "RoleInfoId" });
             DropIndex("dbo.Role_Menu", new[] { "OperatorId" });
@@ -602,8 +433,6 @@ namespace Repositories.Migrations
             DropIndex("dbo.Role_User", new[] { "UserInfoId" });
             DropIndex("dbo.Role_User", new[] { "OperatorId" });
             DropIndex("dbo.Article", new[] { "AuthorId" });
-            DropTable("dbo.User_BookSection");
-            DropTable("dbo.User_BookInfo");
             DropTable("dbo.ThemeTemplate");
             DropTable("dbo.Setting");
             DropTable("dbo.SearchTotal");
@@ -612,17 +441,11 @@ namespace Repositories.Migrations
             DropTable("dbo.Follower_Followed");
             DropTable("dbo.Comment_Like");
             DropTable("dbo.Comment_Dislike");
-            DropTable("dbo.BookSection_Comment");
-            DropTable("dbo.ParticipantInfo");
-            DropTable("dbo.BookInfo_Participant");
-            DropTable("dbo.BookInfo_Like");
-            DropTable("dbo.BookInfo_Dislike");
             DropTable("dbo.Comment");
-            DropTable("dbo.BookInfo_Comment");
+            DropTable("dbo.ParticipantInfo");
+            DropTable("dbo.Article_Participant");
             DropTable("dbo.Favorite");
-            DropTable("dbo.Favorite_BookInfo");
-            DropTable("dbo.BookSection");
-            DropTable("dbo.BookInfo");
+            DropTable("dbo.Favorite_Article");
             DropTable("dbo.Role_Menu");
             DropTable("dbo.Sys_Menu");
             DropTable("dbo.FunctionInfo");

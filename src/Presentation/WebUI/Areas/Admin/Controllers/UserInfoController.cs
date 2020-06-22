@@ -315,43 +315,43 @@ namespace WebUI.Areas.Admin.Controllers
         [HttpGet]
         public ViewResult FaceStat(int id)
         {
-            IList<User_BookInfo> user_BookInfos = ContainerManager.Resolve<IUser_BookInfoService>().Filter(1, 10, out int totalCount_CourseBox, m => m.ReaderId == id && !m.IsDeleted, m => m.CreateTime, false).ToList();
+            //IList<User_BookInfo> user_BookInfos = ContainerManager.Resolve<IUser_BookInfoService>().Filter(1, 10, out int totalCount_CourseBox, m => m.ReaderId == id && !m.IsDeleted, m => m.CreateTime, false).ToList();
 
-            IList<User_BookSection> user_BookSections = ContainerManager.Resolve<IUser_BookSectionService>().Filter(1, 10, out int totalCount_VideoInfo, m => m.ReaderId == id && !m.IsDeleted, m => m.LastViewAt, false).ToList();
+            //IList<User_BookSection> user_BookSections = ContainerManager.Resolve<IUser_BookSectionService>().Filter(1, 10, out int totalCount_VideoInfo, m => m.ReaderId == id && !m.IsDeleted, m => m.LastViewAt, false).ToList();
 
-            IList<User_BookInfoViewModel> user_BookInfoViewModels = new List<User_BookInfoViewModel>();
-            foreach (var item in user_BookInfos)
-            {
-                User_BookInfoViewModel viewModelItem = new User_BookInfoViewModel
-                {
-                    ID = item.ID,
-                    JoinTime = item.CreateTime.ToString("yyyy-MM-dd HH:mm:ss"),
-                    CourseBox = new User_BookInfoViewModel.CourseBoxModel
-                    {
-                        Name = item.BookInfo.Name
-                    },
-                    LastPlayVideoInfo = new User_BookInfoViewModel.VideoInfoModel
-                    {
-                        Page = item.LastViewSection.SortCode,
-                        Title = item.LastViewSection.Title
-                    },
-                    Score = 0
-                };
-                var relate_Learner_VideoInfos = user_BookSections.Where(m => m.BookSection.BookInfoId == item.BookInfoId);
-                long totalLen = relate_Learner_VideoInfos.Select(m => m.BookSection).Select(m => m.Duration).Sum();
-                long playLen = relate_Learner_VideoInfos.Select(m => m.ProgressAt).Sum();
+            //IList<User_BookInfoViewModel> user_BookInfoViewModels = new List<User_BookInfoViewModel>();
+            //foreach (var item in user_BookInfos)
+            //{
+            //    User_BookInfoViewModel viewModelItem = new User_BookInfoViewModel
+            //    {
+            //        ID = item.ID,
+            //        JoinTime = item.CreateTime.ToString("yyyy-MM-dd HH:mm:ss"),
+            //        CourseBox = new User_BookInfoViewModel.CourseBoxModel
+            //        {
+            //            Name = item.BookInfo.Name
+            //        },
+            //        LastPlayVideoInfo = new User_BookInfoViewModel.VideoInfoModel
+            //        {
+            //            Page = item.LastViewSection.SortCode,
+            //            Title = item.LastViewSection.Title
+            //        },
+            //        Score = 0
+            //    };
+            //    var relate_Learner_VideoInfos = user_BookSections.Where(m => m.BookSection.BookInfoId == item.BookInfoId);
+            //    long totalLen = relate_Learner_VideoInfos.Select(m => m.BookSection).Select(m => m.Duration).Sum();
+            //    long playLen = relate_Learner_VideoInfos.Select(m => m.ProgressAt).Sum();
 
-                if (totalLen > 0)
-                {
-                    viewModelItem.Score = (int)(playLen / totalLen) * 100;
-                }
+            //    if (totalLen > 0)
+            //    {
+            //        viewModelItem.Score = (int)(playLen / totalLen) * 100;
+            //    }
 
-                user_BookInfoViewModels.Add(viewModelItem);
-            }
+            //    user_BookInfoViewModels.Add(viewModelItem);
+            //}
 
 
-            ViewBag.Learner_CourseBoxes = user_BookInfoViewModels;
-            ViewBag.Learner_VideoInfos = user_BookSections;
+            //ViewBag.Learner_CourseBoxes = user_BookInfoViewModels;
+            //ViewBag.Learner_VideoInfos = user_BookSections;
 
             return View();
         }

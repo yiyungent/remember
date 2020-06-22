@@ -8164,7 +8164,6 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\ArticleController.cs" />
     <Compile Include="Areas\Admin\Controllers\ControlController.cs" />
-    <Compile Include="Areas\Admin\Controllers\BookInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\LogInfoController.cs" />
@@ -8180,8 +8179,6 @@
     <Compile Include="Areas\Admin\Models\Common\OptionModel.cs" />
     <Compile Include="Areas\Admin\Models\Common\QueryType.cs" />
     <Compile Include="Areas\Admin\Models\Common\ZNodeModel.cs" />
-    <Compile Include="Areas\Admin\Models\BookInfoVM\BookInfoCreateViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\BookInfoVM\BookInfoViewModel.cs" />
     <Compile Include="Areas\Admin\Models\DashboardVM\AccessLogViewModel.cs" />
     <Compile Include="Areas\Admin\Models\DashboardVM\CpuMemoryViewModel.cs" />
     <Compile Include="Areas\Admin\Models\DashboardVM\IndexTwoViewModel.cs" />
@@ -8258,12 +8255,6 @@
     <Content Include="Areas\Admin\Views\Article\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Article\Index.cshtml" />
     <Content Include="Views\Article\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\BookInfo\AddSection.cshtml" />
-    <Content Include="Areas\Admin\Views\BookInfo\Create.cshtml" />
-    <Content Include="Areas\Admin\Views\BookInfo\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\BookInfo\EditSection.cshtml" />
-    <Content Include="Areas\Admin\Views\BookInfo\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\BookInfo\Sections.cshtml" />
     <Content Include="Areas\Admin\Views\LogInfo\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Plugin\Configure.cshtml" />
     <Content Include="Areas\Admin\Views\Plugin\Index.cshtml" />
@@ -8914,11 +8905,9 @@
     <Content Include="Areas\Account\Views\Shared\_RightControlSidebarPartial.cshtml" />
     <Content Include="Areas\Admin\Views\UserInfo\FaceStat.cshtml" />
     <Content Include="assets\libs\toastr\build\toastr.js.map" />
-    <Content Include="App_Data\install.lock" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Install\Index.cshtml" />
-    <Content Include="Views\CourseBox\Index.cshtml" />
     <Content Include="Views\Errors\PageNotFound.cshtml" />
     <Content Include="Views\Shared\_ErrorRedirect.cshtml" />
     <Content Include="Views\Shared\_LayoutMain.cshtml" />

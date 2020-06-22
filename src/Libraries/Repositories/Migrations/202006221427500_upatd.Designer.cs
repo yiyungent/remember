@@ -7,13 +7,13 @@ namespace Repositories.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class update : IMigrationMetadata
+    public sealed partial class upatd : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(update));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(upatd));
         
         string IMigrationMetadata.Id
         {
-            get { return "201912291033154_update"; }
+            get { return "202006221427500_upatd"; }
         }
         
         string IMigrationMetadata.Source
