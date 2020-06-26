@@ -1,5 +1,5 @@
 <p align="center">
-<img src="docs/_images/logo.png" alt="remember" height="680">
+<img src="_res/_images/logo.png" alt="remember" height="680">
 </p>
 <h1 align="center">remember</h1>
 
@@ -18,8 +18,8 @@ remember 是一个强大的内容管理系统，旨在让每个人都能轻松�
 ## 截图
 
 <p align="center">
-<img src="docs/_images/ppt3.png" height="400">
-<img src="docs/_images/PC多页面展示.png">
+<img src="_res/_images/ppt3.png" height="400">
+<img src="_res/_images/PC多页面展示.png">
 </p>
 
 ## 使用的第三方库
