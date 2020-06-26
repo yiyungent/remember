@@ -154,42 +154,42 @@ namespace WebUI.Controllers
                 findPwd_MailContent += "&nbsp; &nbsp;如非本人操作，及时检查账号或";
                 findPwd_MailContent += "<a href='#' target='_blank'>联系在线客服</a>";
                 findPwd_MailContent += "<br>";
-                findPwd_MailContent += "&nbsp; &nbsp;祝在【remember】收获愉快！";
+                findPwd_MailContent += "&nbsp; &nbsp;祝在【{{Web.Name}}】收获愉快！";
                 findPwd_MailContent += "<br><br>";
                 findPwd_MailContent += "&nbsp; &nbsp;（这是一封自动发送的邮件，请不要直接回复）";
                 findPwd_MailContent += "</p>";
 
                 Dictionary<string, string> dic = new Dictionary<string, string>()
                 {
-                    { "DefaultTemplateName", "Blue" },
+                    { "Default.TemplateName", "Blue" },
 
-                    { "WebApiSite", "http://localhost:4530/" },
-                    { "WebApiTitle","remember" },
-                    { "WebApiDesc", "remember是xx推出的专业在线教育平台，聚合大量优质教育机构和名师，下设职业培训、公务员考试、托福雅思、考证考级、英语口语、中小学教育等众多在线学习精品课程，打造老师在线上课教学、学生及时互动学习的课堂。"},
-                    { "WebApiKeywords", "" },
-                    { "WebApiStat", "" },
+                    //{ "WebApi.Site", "" },
 
-                    { "WebUISite", "http://localhost:4483/" },
-                    { "WebUITitle", "remember - 在线学习" },
-                    { "WebUIDesc", "remember是xx推出的专业在线教育平台，聚合大量优质教育机构和名师，下设职业培训、公务员考试、托福雅思、考证考级、英语口语、中小学教育等众多在线学习精品课程，打造老师在线上课教学、学生及时互动学习的课堂。"},
-                    { "WebUIKeywords", "" },
-                    { "WebUIStat", "" },
+                    //{ "WebUI.Site", "" },
+                    { "Web.Name", "remember" },
+                    { "WebUI.Stat", "" },
 
-                     { "MailUserName", "" },
-                    { "MailPassword", "" },
-                     { "MailDisplayName", "" },
-                    { "MailDisplayAddress", "" },
-                    { "SmtpHost", "smtp.qq.com" },
-                    { "SmtpPort", "25" },
-                    { "SmtpEnableSsl", "1" },
+                     { "Mail.UserName", "" },
+                    { "Mail.Password", "" },
+                     { "Mail.DisplayName", "" },
+                    { "Mail.DisplayAddress", "" },
+                    { "Smtp.Host", "smtp.qq.com" },
+                    { "Smtp.Port", "25" },
+                    { "Smtp.EnableSsl", "1" },
 
-                    { "EnableRedisSession", "1" },
-                    { "EnableLog", "0" },
+                    { "Log.Enable", "0" },
 
-                    { "FindPwd_MailSubject", "【{{WebUITitle}}】账号安全中心-找回登录密码-{{ReceiveMail}}正在尝试找回密码"},
-                    { "FindPwd_MailContent", findPwd_MailContent },
+                    { "FindPwd.Mail.Subject", "【{{Web.Name}}】账号安全中心-找回登录密码-{{ReceiveMail}}正在尝试找回密码"},
+                    { "FindPwd.Mail.Content", findPwd_MailContent },
 
-                    { "CorsWhiteList", "* live.a.com m.a.com"}
+                    { "CorsWhiteList", "* blog.your-domain-name.com m.your-domain-name.com"},
+
+                    // 各页面 SEO
+                    { "Home.Index.Title", "remember - 在线学习" },
+                    { "Home.Index.Desc", "remember是xx推出的专业在线教育平台，聚合大量优质教育机构和名师，下设职业培训、公务员考试、托福雅思、考证考级、英语口语、中小学教育等众多在线学习精品课程，打造老师在线上课教学、学生及时互动学习的课堂。"},
+                    { "Home.Index.Keywords", "" },
+
+
                 };
 
                 foreach (var keyValue in dic)

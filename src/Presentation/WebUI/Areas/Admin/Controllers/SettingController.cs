@@ -38,11 +38,8 @@ namespace WebUI.Areas.Admin.Controllers
         {
             SettingViewModel viewModel = new SettingViewModel();
 
-            viewModel.WebUISite = WebSetting.Get("WebUISite");
-            viewModel.WebUITitle = WebSetting.Get("WebUITitle");
-            viewModel.WebUIDesc = WebSetting.Get("WebUIDesc");
-            viewModel.WebUIKeywords = WebSetting.Get("WebUIKeywords");
-            viewModel.WebUIStat = WebSetting.Get("WebUIStat");
+            viewModel.WebName = WebSetting.Get("Web.Name");
+            viewModel.WebUIStat = WebSetting.Get("WebUI.Stat");
 
             return View(viewModel);
         }
@@ -62,11 +59,9 @@ namespace WebUI.Areas.Admin.Controllers
 
                     try
                     {
-                        WebSetting.Set("WebUISite", inputModel.WebUISite);
-                        WebSetting.Set("WebUITitle", inputModel.WebUITitle);
-                        WebSetting.Set("WebUIDesc", inputModel.WebUIDesc);
-                        WebSetting.Set("WebUIKeywords", inputModel.WebUIKeywords);
-                        WebSetting.Set("WebUIStat", inputModel.WebUIStat);
+                        WebSetting.Set("WebUI.Site", inputModel.WebUISite);
+                        WebSetting.Set("Web.Name", inputModel.WebName);
+                        WebSetting.Set("WebUI.Stat", inputModel.WebUIStat);
                     }
                     catch (Exception ex)
                     {
@@ -94,11 +89,6 @@ namespace WebUI.Areas.Admin.Controllers
         {
             SettingViewModel viewModel = new SettingViewModel();
 
-            viewModel.WebApiSite = WebSetting.Get("WebApiSite");
-            viewModel.WebApiTitle = WebSetting.Get("WebApiTitle");
-            viewModel.WebApiDesc = WebSetting.Get("WebApiDesc");
-            viewModel.WebApiKeywords = WebSetting.Get("WebApiKeywords");
-            viewModel.WebApiStat = WebSetting.Get("WebApiStat");
             viewModel.CorsWhiteList = WebSetting.Get("CorsWhiteList");
 
             return View(viewModel);
@@ -119,11 +109,6 @@ namespace WebUI.Areas.Admin.Controllers
 
                     try
                     {
-                        WebSetting.Set("WebApiSite", inputModel.WebApiSite);
-                        WebSetting.Set("WebApiTitle", inputModel.WebApiTitle);
-                        WebSetting.Set("WebApiDesc", inputModel.WebApiDesc);
-                        WebSetting.Set("WebApiKeywords", inputModel.WebApiKeywords);
-                        WebSetting.Set("WebApiStat", inputModel.WebApiStat);
                         WebSetting.Set("CorsWhiteList", inputModel.CorsWhiteList);
                     }
                     catch (Exception ex)
@@ -152,12 +137,12 @@ namespace WebUI.Areas.Admin.Controllers
         {
             SettingViewModel viewModel = new SettingViewModel();
 
-            viewModel.MailUserName = WebSetting.Get("MailUserName");
-            viewModel.MailDisplayAddress = WebSetting.Get("MailDisplayAddress");
-            viewModel.MailDisplayName = WebSetting.Get("MailDisplayName");
-            viewModel.SmtpHost = WebSetting.Get("SmtpHost");
-            viewModel.SmtpPort = Convert.ToInt32(WebSetting.Get("SmtpPort"));
-            viewModel.SmtpEnableSsl = WebSetting.Get("SmtpEnableSsl") == "1";
+            viewModel.MailUserName = WebSetting.Get("Mail.UserName");
+            viewModel.MailDisplayAddress = WebSetting.Get("Mail.DisplayAddress");
+            viewModel.MailDisplayName = WebSetting.Get("Mail.DisplayName");
+            viewModel.SmtpHost = WebSetting.Get("Smtp.Host");
+            viewModel.SmtpPort = Convert.ToInt32(WebSetting.Get("Smtp.Port"));
+            viewModel.SmtpEnableSsl = WebSetting.Get("Smtp.EnableSsl") == "1";
 
             return View(viewModel);
         }
@@ -177,17 +162,17 @@ namespace WebUI.Areas.Admin.Controllers
 
                     try
                     {
-                        WebSetting.Set("MailUserName", inputModel.MailUserName);
-                        WebSetting.Set("MailDisplayAddress", inputModel.MailDisplayAddress);
-                        WebSetting.Set("MailDisplayName", inputModel.MailDisplayName);
-                        WebSetting.Set("SmtpHost", inputModel.SmtpHost);
-                        WebSetting.Set("SmtpPort", inputModel.SmtpPort.ToString());
+                        WebSetting.Set("Mail.UserName", inputModel.MailUserName);
+                        WebSetting.Set("Mail.DisplayAddress", inputModel.MailDisplayAddress);
+                        WebSetting.Set("Mail.DisplayName", inputModel.MailDisplayName);
+                        WebSetting.Set("Smtp.Host", inputModel.SmtpHost);
+                        WebSetting.Set("Smtp.Port", inputModel.SmtpPort.ToString());
 
-                        WebSetting.Set("SmtpEnableSsl", inputModel.SmtpEnableSsl ? "1" : "0");
+                        WebSetting.Set("Smtp.EnableSsl", inputModel.SmtpEnableSsl ? "1" : "0");
 
                         if (!string.IsNullOrEmpty(inputModel.MailPassword))
                         {
-                            WebSetting.Set("MailPassword", inputModel.MailPassword);
+                            WebSetting.Set("Mail.Password", inputModel.MailPassword);
                         }
 
                     }
@@ -217,8 +202,8 @@ namespace WebUI.Areas.Admin.Controllers
         {
             SettingViewModel viewModel = new SettingViewModel();
 
-            viewModel.FindPwd_MailSubject = WebSetting.Get("FindPwd_MailSubject");
-            viewModel.FindPwd_MailContent = WebSetting.Get("FindPwd_MailContent");
+            viewModel.FindPwd_MailSubject = WebSetting.Get("FindPwd.Mail.Subject");
+            viewModel.FindPwd_MailContent = WebSetting.Get("FindPwd.Mail.Content");
 
             return View(viewModel);
         }
@@ -238,8 +223,8 @@ namespace WebUI.Areas.Admin.Controllers
 
                     try
                     {
-                        WebSetting.Set("FindPwd_MailSubject", inputModel.FindPwd_MailSubject);
-                        WebSetting.Set("FindPwd_MailContent", inputModel.FindPwd_MailContent);
+                        WebSetting.Set("FindPwd.Mail.Subject", inputModel.FindPwd_MailSubject);
+                        WebSetting.Set("FindPwd.Mail.Content", inputModel.FindPwd_MailContent);
                     }
                     catch (Exception ex)
                     {
@@ -267,8 +252,7 @@ namespace WebUI.Areas.Admin.Controllers
         {
             SettingViewModel viewModel = new SettingViewModel();
 
-            viewModel.EnableRedisSession = Convert.ToInt32(WebSetting.Get("EnableRedisSession")) == 1;
-            viewModel.EnableLog = Convert.ToInt32(WebSetting.Get("EnableLog")) == 1;
+            viewModel.LogEnable = Convert.ToInt32(WebSetting.Get("Log.Enable")) == 1;
 
             return View(viewModel);
         }
@@ -288,8 +272,7 @@ namespace WebUI.Areas.Admin.Controllers
 
                     try
                     {
-                        WebSetting.Set("EnableRedisSession", inputModel.EnableRedisSession ? "1" : "0");
-                        WebSetting.Set("EnableLog", inputModel.EnableLog ? "1" : "0");
+                        WebSetting.Set("Log.Enable", inputModel.LogEnable ? "1" : "0");
                     }
                     catch (Exception ex)
                     {

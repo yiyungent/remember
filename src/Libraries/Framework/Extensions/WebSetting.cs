@@ -9,7 +9,7 @@ namespace Framework.Extensions
         {
             ISettingService settingService = ContainerManager.Resolve<ISettingService>();
             string value = settingService.GetSet(key);
-
+            
             return value;
         }
 

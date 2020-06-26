@@ -73,7 +73,7 @@
 				<li><a href="@Url.Action("Index", "Setting", new { area = "Admin" })">常规</a></li>
 				}
 				@if(Html.HasAuth("Admin.Setting.WebApi")){
-				<li><a href="@Url.Action("WebApi", "Setting", new { are = "Admin" })">WebAPI & Mobile</a></li>
+				<li><a href="@Url.Action("WebApi", "Setting", new { are = "Admin" })">WebAPI</a></li>
 				}
 				@if(Html.HasAuth("Admin.Setting.FindPwd")){
 				<li><a href="@Url.Action("FindPwd", "Setting", new { area = "Admin" })">找回密码</a></li>

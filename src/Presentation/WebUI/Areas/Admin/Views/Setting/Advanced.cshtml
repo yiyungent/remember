@@ -76,7 +76,7 @@
 				<li><a href="@Url.Action("Index", "Setting", new { area = "Admin" })">常规</a></li>
 				}
 				@if(Html.HasAuth("Admin.Setting.WebApi")){
-				<li><a href="@Url.Action("WebApi", "Setting", new { are = "Admin" })">WebAPI & Mobile</a></li>
+				<li><a href="@Url.Action("WebApi", "Setting", new { are = "Admin" })">WebAPI</a></li>
 				}
 				@if(Html.HasAuth("Admin.Setting.FindPwd")){
 				<li><a href="@Url.Action("FindPwd", "Setting", new { area = "Admin" })">找回密码</a></li>
@@ -99,7 +99,7 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label">错误日志记录</label>
 							<div class="col-sm-2">
-								<input type="checkbox" class="flat-blue" name="EnableLog" checked="@(Model.EnableLog?"":null)">
+								<input type="checkbox" class="flat-blue" name="EnableLog" checked="@(Model.LogEnable?"":null)">
 							</div>
 							<div class="col-sm-8">需同时开启 Web.config 配置文件中设置，且开启需重启应用程序池。日志文件位置: /App_Data/Logs/</div>
 						</div>

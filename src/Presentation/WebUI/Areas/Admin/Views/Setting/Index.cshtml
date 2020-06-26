@@ -56,7 +56,7 @@
 			<ul class="nav nav-tabs">
 				<li class="active"><a>常规</a></li>
 				@if(Html.HasAuth("Admin.Setting.WebApi")){
-				<li><a href="@Url.Action("WebApi", "Setting", new { are = "Admin" })">WebAPI & Mobile</a></li>
+				<li><a href="@Url.Action("WebApi", "Setting", new { are = "Admin" })">WebAPI</a></li>
 				}
 				@if(Html.HasAuth("Admin.Setting.FindPwd")){
 				<li><a href="@Url.Action("FindPwd", "Setting", new { area = "Admin" })">找回密码</a></li>
@@ -72,33 +72,15 @@
 				<div class="tab-pane active">
 					<form id="js-form" class="form-horizontal">
 						<div class="form-group">
-							<label for="inputAccount" class="col-sm-2 control-label">PC</label>
+							<label for="inputAccount" class="col-sm-2 control-label">网站名称</label>
 							<div class="col-sm-10">
-								@Html.TextBoxFor(m => m.WebUISite, new { @class = "form-control", placeholder = "PC eg:http://localhost:7784" })
+								@Html.TextBoxFor(m => m.WebName, new { @class = "form-control", placeholder = "PC网站名称" })
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="inputAccount" class="col-sm-2 control-label">PC网站名称</label>
+							<label for="WebUIStat" class="col-sm-2 control-label">网站统计代码</label>
 							<div class="col-sm-10">
-								@Html.TextBoxFor(m => m.WebUITitle, new { @class = "form-control", placeholder = "PC网站名称" })
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="inputDescription" class="col-sm-2 control-label">SEO - PC 描述</label>
-							<div class="col-sm-10">
-								@Html.TextAreaFor(m => m.WebUIDesc, new { @class = "form-control", placeholder = "SEO - PC 描述" })
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="WebUIKeywords" class="col-sm-2 control-label">SEO - PC 关键词</label>
-							<div class="col-sm-10">
-								@Html.TextAreaFor(m => m.WebUIKeywords, new { @class = "form-control", placeholder = "SEO - PC 关键词" })
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="WebUIStat" class="col-sm-2 control-label">WebUI 网站统计代码</label>
-							<div class="col-sm-10">
-								@Html.TextAreaFor(m => m.WebUIStat, new { @class = "form-control", placeholder = "WebUI 网站统计代码，置于网站底部" })
+								@Html.TextAreaFor(m => m.WebUIStat, new { @class = "form-control", placeholder = "网站统计代码，置于网站底部" })
 							</div>
 						</div>
 

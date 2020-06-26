@@ -8,21 +8,7 @@ namespace WebUI.Areas.Admin.Models.SettingVM
 {
     public class SettingViewModel
     {
-        public string WebUISite { get; set; }
-
-        public string WebUITitle { get; set; }
-
-        public string WebUIDesc { get; set; }
-
-        public string WebUIKeywords { get; set; }
-
-        public string WebApiSite { get; set; }
-
-        public string WebApiTitle { get; set; }
-
-        public string WebApiDesc { get; set; }
-
-        public string WebApiKeywords { get; set; }
+        public string WebName { get; set; }
 
         /// <summary>
         /// 网站底部统计代码
@@ -30,11 +16,7 @@ namespace WebUI.Areas.Admin.Models.SettingVM
         [AllowHtml]
         public string WebUIStat { get; set; }
 
-        public string WebApiStat { get; set; }
-
-        public bool EnableRedisSession { get; set; }
-
-        public bool EnableLog { get; set; }
+        public bool LogEnable { get; set; }
 
         /// <summary>
         /// 跨域白名单
