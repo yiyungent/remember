@@ -59,7 +59,6 @@ namespace WebUI.Areas.Admin.Controllers
 
                     try
                     {
-                        WebSetting.Set("WebUI.Site", inputModel.WebUISite);
                         WebSetting.Set("Web.Name", inputModel.WebName);
                         WebSetting.Set("WebUI.Stat", inputModel.WebUIStat);
                     }

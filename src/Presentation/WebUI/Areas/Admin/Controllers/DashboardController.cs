@@ -67,9 +67,9 @@ namespace WebUI.Areas.Admin.Controllers
                 // TODO: 发现这样写 linq ，EF仍然无法翻译成SQL，所以待转为手写SQL，或则推荐使用long类型存13位时间戳
                 // 计算PV：当天访问量
                 //todayPV = this._logInfoService.Filter(m => !m.IsDeleted).Where(m => m.AccessTime.ToString("yyyy-MM-dd") == today).Count();
-                todayPV = this._logInfoService.Filter(m => !m.IsDeleted).ToList().Where(m => m.AccessTime.ToString("yyyy-MM-dd") == today).Count();
+                todayPV = this._logInfoService.All().Where(m => m.AccessTime.ToString("yyyy-MM-dd") == today).Count();
                 //todayUV = this._logInfoService.Filter(m => !m.IsDeleted).Where(m => m.AccessTime.ToString("yyyy-MM-dd") == today).GroupBy(m => m.IdCode).Count();
-                todayUV = this._logInfoService.Filter(m => !m.IsDeleted).ToList().Where(m => m.AccessTime.ToString("yyyy-MM-dd") == today).GroupBy(m => m.IdCode).Count();
+                todayUV = this._logInfoService.All().Where(m => m.AccessTime.ToString("yyyy-MM-dd") == today).GroupBy(m => m.IdCode).Count();
                 //todayNewUserReg = this._userInfoService.All().Where(m => m.CreateTime.ToString("yyyy-MM-dd") == today).Count();
                 todayNewUserReg = this._userInfoService.All().ToList().Where(m => m.CreateTime.ToString("yyyy-MM-dd") == today).Count();
                 // TODO: 当天跳出率计算
@@ -135,7 +135,7 @@ namespace WebUI.Areas.Admin.Controllers
                 viewModel.yAxis[0].type = "value";
 
                 IList<Series> series = new List<Series>();
-                IList<LogInfo> logInfos = this._logInfoService.Filter(m => !m.IsDeleted).ToList();
+                IList<LogInfo> logInfos = this._logInfoService.All().ToList();
 
                 // PV, UV
                 IList<int> pvList = new List<int>();

@@ -51,33 +51,33 @@ namespace WebUI.Areas.Admin.Controllers
                 case "uid":
                     queryType.Text = "用户ID";
                     int userId = int.Parse(query);
-                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.AccessUserId == userId && !m.IsDeleted, m => m.ID, false).ToList();
+                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.AccessUserId == userId, m => m.ID, false).ToList();
                     break;
                 case "username":
                     queryType.Text = "用户名";
                     userId = this._userInfoService.Find(m => m.UserName.Contains(query) && !m.IsDeleted)?.ID ?? -1;
-                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.AccessUserId == userId && !m.IsDeleted, m => m.ID, false).ToList();
+                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.AccessUserId == userId, m => m.ID, false).ToList();
                     break;
                 case "browser":
                     queryType.Text = "浏览器";
-                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.Browser.Contains(query) && !m.IsDeleted, m => m.ID, false).ToList();
+                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.Browser.Contains(query), m => m.ID, false).ToList();
                     break;
                 case "ip":
                     queryType.Text = "IP";
-                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.AccessIp.Contains(query) && !m.IsDeleted, m => m.ID, false).ToList();
+                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.AccessIp.Contains(query), m => m.ID, false).ToList();
                     break;
                 case "city":
                     queryType.Text = "城市";
-                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.AccessCity.Contains(query) && !m.IsDeleted, m => m.ID, false).ToList();
+                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.AccessCity.Contains(query), m => m.ID, false).ToList();
                     break;
                 case "id":
                     queryType.Text = "ID";
                     int logId = int.Parse(query);
-                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.ID == logId && !m.IsDeleted, m => m.ID, false).ToList();
+                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.ID == logId, m => m.ID, false).ToList();
                     break;
                 default:
                     queryType.Text = "IP";
-                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.AccessIp.Contains(query) && !m.IsDeleted, m => m.ID, false).ToList();
+                    list = this._logInfoService.Filter<int>(pageIndex, pageSize, out totalCount, m => m.AccessIp.Contains(query), m => m.ID, false).ToList();
                     break;
             }
             ViewBag.Query = query;
@@ -88,7 +88,7 @@ namespace WebUI.Areas.Admin.Controllers
         #region 查看
         public ViewResult Details(int id)
         {
-            LogInfo viewModel = this._logInfoService.Find(m => m.ID == id && !m.IsDeleted);
+            LogInfo viewModel = this._logInfoService.Find(m => m.ID == id);
             VisitorInfoViewModel visitorInfo = JsonConvert.DeserializeObject<VisitorInfoViewModel>(viewModel.VisitorInfo);
             if (visitorInfo == null)
             {

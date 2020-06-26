@@ -130,6 +130,20 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Templates\MultipleOutputHelper.ttinclude" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Templates\T4_ImplementService.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>T4_ImplementService.cs</LastGenOutput>
+    </Content>
+    <Content Include="Templates\T4_InterfaceService.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>T4_InterfaceService.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

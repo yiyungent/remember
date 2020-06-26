@@ -40,13 +40,13 @@ namespace Services.Implement
                     UserInfo userInfo = this.Find(m => m.ID == userId && !m.IsDeleted);
                     if (userInfo.Role_Users != null && userInfo.Role_Users.Count >= 1)
                     {
-                        var roleInfos = userInfo.Role_Users.Where(m => !m.IsDeleted).Select(m => m.RoleInfo);
+                        var roleInfos = userInfo.Role_Users.Select(m => m.RoleInfo);
                         foreach (var role in roleInfos)
                         {
                             var role_funcs = role.Role_Functions;
                             if (role_funcs != null && role_funcs.Count >= 1)
                             {
-                                var funcs = role_funcs.Where(m => !m.IsDeleted).Select(m => m.FunctionInfo);
+                                var funcs = role_funcs.Select(m => m.FunctionInfo);
                                 foreach (var func in funcs)
                                 {
                                     if (!authKeys.Contains(func.AuthKey, authKeyCompare))
@@ -65,7 +65,7 @@ namespace Services.Implement
                     var role_funcs = roleInfo.Role_Functions;
                     if (role_funcs != null && role_funcs.Count >= 1)
                     {
-                        var funcs = role_funcs.Where(m => !m.IsDeleted).Select(m => m.FunctionInfo);
+                        var funcs = role_funcs.Select(m => m.FunctionInfo);
                         foreach (var func in funcs)
                         {
                             if (!authKeys.Contains(func.AuthKey, authKeyCompare))
@@ -88,11 +88,11 @@ namespace Services.Implement
             UserInfo userInfo = this.Find(m => m.ID == userId && !m.IsDeleted);
             if (userInfo != null)
             {
-                var role_Users = userInfo.Role_Users.Where(m => !m.IsDeleted).Select(m => m.RoleInfo);
+                var role_Users = userInfo.Role_Users.Select(m => m.RoleInfo);
                 IEnumerable<Sys_Menu> sys_Menus;
                 foreach (RoleInfo role in role_Users)
                 {
-                    sys_Menus = role.Role_Menus.Where(m => !m.IsDeleted).Select(m => m.Sys_Menu);
+                    sys_Menus = role.Role_Menus.Select(m => m.Sys_Menu);
                     foreach (Sys_Menu menu in sys_Menus)
                     {
                         if (!menuList.Contains(menu, new Sys_Menu_Compare()))
@@ -117,7 +117,7 @@ namespace Services.Implement
         {
             message = "";
             IFollower_FollowedService follower_FollowedService = ContainerManager.Resolve<IFollower_FollowedService>();
-            bool isFollowed = follower_FollowedService.Contains(m => m.FollowerId == followerId && m.FollowedId == followedId && !m.IsDeleted);
+            bool isFollowed = follower_FollowedService.Contains(m => m.FollowerId == followerId && m.FollowedId == followedId);
             if (act == 1)
             {
                 if (!isFollowed)
@@ -128,7 +128,6 @@ namespace Services.Implement
                         FollowerId = followerId,
                         FollowedId = followedId,
                         CreateTime = DateTime.Now,
-                        IsDeleted = false
                     });
 
                     message = "关注成功";
@@ -143,9 +142,7 @@ namespace Services.Implement
                 if (isFollowed)
                 {
                     // 已经关注-》取消关注
-                    Follower_Followed follower_Followed = follower_FollowedService.Find(m => m.FollowerId == followerId && m.FollowedId == followedId && !m.IsDeleted);
-                    follower_Followed.DeletedAt = DateTime.Now;
-                    follower_Followed.IsDeleted = true;
+                    Follower_Followed follower_Followed = follower_FollowedService.Find(m => m.FollowerId == followerId && m.FollowedId == followedId);
                     follower_FollowedService.Update(follower_Followed);
 
                     message = "取消关注成功";
@@ -175,9 +172,9 @@ namespace Services.Implement
             IFollower_FollowedService follower_FollowedService = ContainerManager.Resolve<IFollower_FollowedService>();
 
             // 我有 关注 他 吗？
-            bool isMeFollowHim = follower_FollowedService.Contains(m => m.FollowerId == meUID && m.FollowedId == himUID && !m.IsDeleted);
+            bool isMeFollowHim = follower_FollowedService.Contains(m => m.FollowerId == meUID && m.FollowedId == himUID);
             // 他 有 关注 我 吗？
-            bool isHimFollowMe = follower_FollowedService.Contains(m => m.FollowedId == meUID && m.FollowerId == himUID && !m.IsDeleted);
+            bool isHimFollowMe = follower_FollowedService.Contains(m => m.FollowedId == meUID && m.FollowerId == himUID);
 
             if (isMeFollowHim && !isHimFollowMe)
             {
@@ -209,8 +206,8 @@ namespace Services.Implement
             fans = 0;
 
             IFollower_FollowedService follower_FollowedService = ContainerManager.Resolve<IFollower_FollowedService>();
-            follow = follower_FollowedService.Count(m => m.FollowerId == uid && !m.IsDeleted);
-            fans = follower_FollowedService.Count(m => m.FollowedId == uid && !m.IsDeleted);
+            follow = follower_FollowedService.Count(m => m.FollowerId == uid);
+            fans = follower_FollowedService.Count(m => m.FollowedId == uid);
         }
         #endregion
 

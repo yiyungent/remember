@@ -8,12 +8,12 @@ namespace WebApi.Models.FavoriteVM
     /// <summary>
     /// 此课程的收藏统计
     /// </summary>
-    public class FavStatInBookInfoViewModel
+    public class FavStatInArticleViewModel
     {
         /// <summary>
-        /// 此课程的总被收藏数（全部用户）
+        /// 此文章的总被收藏数（全部用户）
         /// </summary>
-        public int BookInfoFavCount { get; set; }
+        public int ArticleFavCount { get; set; }
 
         /// <summary>
         /// 对于此课程我的收藏统计

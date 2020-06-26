@@ -60,9 +60,9 @@ namespace WebApi.Controllers
                 string avatarUrl = userInfo.Avatar.Replace(":WebUISite:", webApiSite);
 
                 //int followNum = Container.Instance.Resolve<Follower_FollowedService>().Count(Expression.Eq("Follower.ID", userInfo.ID));
-                int followNum = this._follower_FollowedService.Count(m => m.FollowerId == userInfo.ID && !m.IsDeleted);
+                int followNum = this._follower_FollowedService.Count(m => m.FollowerId == userInfo.ID);
                 //int fansNum = Container.Instance.Resolve<Follower_FollowedService>().Count(Expression.Eq("Followed.ID", userInfo.ID));
-                int fansNum = this._follower_FollowedService.Count(m => m.FollowedId == userInfo.ID && !m.IsDeleted);
+                int fansNum = this._follower_FollowedService.Count(m => m.FollowedId == userInfo.ID);
                 //int articleNum = Container.Instance.Resolve<ArticleService>().Count(Expression.Eq("Author.ID", userInfo.ID));
                 int articleNum = this._articleService.Count(m => m.AuthorId == userInfo.ID && !m.IsDeleted);
 
@@ -92,7 +92,7 @@ namespace WebApi.Controllers
         [HttpPost]
         [NeedAuth]
         [Route("UpdatePwd")]
-        public ResponseData UpdatePwd([FromBody]string oldPassword, [FromBody]string newPassword)
+        public ResponseData UpdatePwd([FromBody] string oldPassword, [FromBody] string newPassword)
         {
             ResponseData responseData = null;
 
@@ -130,7 +130,7 @@ namespace WebApi.Controllers
         #region 注册
         [HttpPost]
         [Route("Register")]
-        public ResponseData Register([FromBody]RegisterInputModel viewModel)
+        public ResponseData Register([FromBody] RegisterInputModel viewModel)
         {
             // TODO: 注册待完善，手机号注册
             if (ModelState.IsValid)
@@ -195,7 +195,7 @@ namespace WebApi.Controllers
         /// <returns>返回一个 JWToken 和一个 JWToken 的过期时间（Unix时间戳）</returns>
         [HttpPost]
         [Route("Login")]
-        public ResponseData Login([FromBody]LoginInputModel inputModel)
+        public ResponseData Login([FromBody] LoginInputModel inputModel)
         {
             string loginAccount = inputModel.LoginAccount.Trim();
             inputModel.Password = EncryptHelper.MD5Encrypt32(inputModel.Password);
@@ -372,7 +372,7 @@ namespace WebApi.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [NeedAuth]
-        public ResponseData Put([FromBody]UserInfoViewModel model)
+        public ResponseData Put([FromBody] UserInfoViewModel model)
         {
             ResponseData responseData = null;
             try
@@ -523,12 +523,12 @@ namespace WebApi.Controllers
                 // IList<Follower_Followed> iFollow = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
                 //     Expression.Eq("Follower.ID", ((UserIdentity)User.Identity).ID)
                 //}).Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
-                IList<Follower_Followed> iFollow = this._follower_FollowedService.Filter(m => m.FollowerId == currentUserId && !m.IsDeleted).ToList().Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+                IList<Follower_Followed> iFollow = this._follower_FollowedService.Filter(m => m.FollowerId == currentUserId).ToList().Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
                 // 关注我的所有人
                 // IList<Follower_Followed> iFollowed = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
                 //     Expression.Eq("Followed.ID", ((UserIdentity)User.Identity).ID)
                 //}).Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
-                IList<Follower_Followed> iFollowed = this._follower_FollowedService.Filter(m => m.FollowedId == currentUserId && !m.IsDeleted).ToList().Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+                IList<Follower_Followed> iFollowed = this._follower_FollowedService.Filter(m => m.FollowedId == currentUserId).ToList().Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
 
                 // 互粉 = 关注我的所有人  中 挑选出 我关注的人
                 // 我和这些人互粉 （UserInfo.ID）
@@ -602,12 +602,12 @@ namespace WebApi.Controllers
                 // IList<Follower_Followed> iFollow = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
                 //     Expression.Eq("Follower.ID", ((UserIdentity)User.Identity).ID)
                 //}).Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
-                IList<Follower_Followed> iFollow = this._follower_FollowedService.Filter(m => m.FollowerId == currentUserId && !m.IsDeleted).ToList().Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+                IList<Follower_Followed> iFollow = this._follower_FollowedService.Filter(m => m.FollowerId == currentUserId).ToList().Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
                 // 关注我的所有人
                 // IList<Follower_Followed> iFollowed = Container.Instance.Resolve<Follower_FollowedService>().Query(new List<ICriterion> {
                 //     Expression.Eq("Followed.ID", ((UserIdentity)User.Identity).ID)
                 //}).Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
-                IList<Follower_Followed> iFollowed = this._follower_FollowedService.Filter(m => m.FollowedId == currentUserId && !m.IsDeleted).ToList().Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
+                IList<Follower_Followed> iFollowed = this._follower_FollowedService.Filter(m => m.FollowedId == currentUserId).ToList().Distinct(compare).OrderByDescending(m => m.CreateTime.ToTimeStamp13()).ToList();
 
                 // 互粉 = 关注我的所有人  中 挑选出 我关注的人
                 // 我和这些人互粉 （UserInfo.ID）

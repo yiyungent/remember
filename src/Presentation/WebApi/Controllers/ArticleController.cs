@@ -74,7 +74,7 @@ namespace WebApi.Controllers
                 #region 未登录用户返回 基本文章数据
                 // TODO: 未处理文章不存在情况
                 Article article = this._articleService.Find(id);
-                int creatorFansNum = this._follower_FollowedService.Count(m => m.FollowedId == article.AuthorId && !m.IsDeleted);
+                int creatorFansNum = this._follower_FollowedService.Count(m => m.FollowedId == article.AuthorId);
                 //int learnViewNum = this._user_BookInfoService.Count(m => m.BookInfoId == article.ID);
 
                 viewModel = new ArticleViewModel
@@ -98,9 +98,8 @@ namespace WebApi.Controllers
                         CommentNum = article.CommentNum,
                         LikeNum = article.LikeNum,
                         DislikeNum = article.DislikeNum,
-                        FavNum = article.Favorite_Articles?.Count ?? 0,
+                        FavNum = article.FavNum,
                         ShareNum = article.ShareNum,
-                        //ViewNum = learnViewNum
                     },
                     // NOTE: 未登录用户 为 未对此文章加入学习，加入学习时间为 0，前端可通过判断这个知道是否加入学习此文章
                     //JoinTime = 0,
@@ -345,7 +344,7 @@ namespace WebApi.Controllers
                 };
 
                 // 当前文章的所有评论
-                IList<Comment> comments = this._article_CommentService.Filter(m => m.ArticleId == id && !m.IsDeleted).Select(m => m.Comment).ToList();
+                IList<Comment> comments = this._article_CommentService.Filter(m => m.ArticleId == id).Select(m => m.Comment).ToList();
 
                 // 当前文章的一级评论
                 IList<Comment> firstLevelComments = comments.Where(m => m.Parent == null || m.Parent.ID == 0).ToList();
@@ -388,13 +387,13 @@ namespace WebApi.Controllers
         #region 简单按时间倒序排序的评论列表
         [HttpGet]
         [Route("SimpleComments")]
-        public ResponseData SimpleComments(int courseBoxId)
+        public ResponseData SimpleComments(int articleId)
         {
             ResponseData responseData = null;
             try
             {
                 SimpleCommentsViewModel viewModel = new SimpleCommentsViewModel();
-                viewModel.ArticleId = courseBoxId;
+                viewModel.ArticleId = articleId;
 
                 // TODO: 未做文章是否存在等有效性效验
 
@@ -403,8 +402,7 @@ namespace WebApi.Controllers
                 //    Expression.Eq("CourseBox.ID", courseBoxId)
                 //}).Select(m => m.Comment).OrderByDescending(m => m.CreateTime).ToList();
                 IList<Comment> comments = this._article_CommentService.Filter(
-                    m => m.ArticleId == courseBoxId
-                    && !m.IsDeleted
+                    m => m.ArticleId == articleId
                 ).Select(m => m.Comment).OrderByDescending(m => m.CreateTime).ToList();
 
                 foreach (var item in comments)

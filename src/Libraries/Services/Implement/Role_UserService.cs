@@ -13,7 +13,7 @@ namespace Services.Implement
         public void UserAssignRoles(int userId, IList<int> roleIds, int operatorId)
         {
             // 计算 此用户拥有的角色 新旧差异
-            var role_Users = this._repository.Filter(m => m.UserInfoId == userId && !m.IsDeleted);
+            var role_Users = this._repository.Filter(m => m.UserInfoId == userId);
             IList<int> old_Role_Ids = new List<int>();
             if (role_Users != null && role_Users.Count() >= 1)
             {
@@ -41,9 +41,7 @@ namespace Services.Implement
             IList<Role_User> needDelete_Role_Users = role_Users.Where(m => m.UserInfoId == userId && needDelete_Role_Ids.Contains(m.RoleInfoId)).ToList();
             foreach (var item in needDelete_Role_Users)
             {
-                item.DeletedAt = DateTime.Now;
-                item.IsDeleted = true;
-                this._repository.Update(item);
+                this._repository.Delete(item);
             }
             // 新增
             foreach (var item in needAdd_Role_Ids)
@@ -53,7 +51,6 @@ namespace Services.Implement
                     UserInfoId = userId,
                     RoleInfoId = item,
                     CreateTime = DateTime.Now,
-                    OperatorId = operatorId
                 });
             }
             // 统一保存

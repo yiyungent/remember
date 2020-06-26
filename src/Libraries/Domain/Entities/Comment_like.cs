@@ -1,11 +1,9 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Domain.Entities
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
-
     /// <summary>
     /// 评论-赞的人
     /// </summary>
@@ -18,16 +16,6 @@ namespace Domain.Entities
         /// 创建时间
         /// </summary>
         public DateTime CreateTime { get; set; }
-
-        /// <summary>
-        /// 删除时间：为null，则未删除
-        /// </summary>
-        public DateTime? DeletedAt { get; set; }
-
-        /// <summary>
-        /// 是否被删除
-        /// </summary>
-        public bool IsDeleted { get; set; }
 
         #region Relationships
 

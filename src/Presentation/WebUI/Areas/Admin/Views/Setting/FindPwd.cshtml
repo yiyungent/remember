@@ -73,16 +73,16 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label">找回密码 - 邮件主题</label>
 							<div class="col-sm-6">
-								@Html.TextBoxFor(m => m.FindPwd_MailSubject, new { @class = "form-control", placeholder = "eg: 【{{WebUITitle}}】账号安全中心-找回登录密码-{{ReceiveMail}}正在尝试找回密码" })
+								@Html.TextBoxFor(m => m.FindPwd_MailSubject, new { @class = "form-control", placeholder = "eg: 【{{Web.Name}}】账号安全中心-找回登录密码-{{ReceiveMail}}正在尝试找回密码" })
 							</div>
-							<div class="col-sm-4 form-control-static">可供使用的模板标签: {{WebUITitle}} {{WebUISite}} {{WebUIDesc}} {{MailDisplayAddress}} {{MailDisplayName}} {{MailUserName}} {{ReceiveMail}} {{VCode}}</div>
+							<div class="col-sm-4 form-control-static">可供使用的模板标签: {{Web.Name}} {{Mail.DisplayAddress}} {{Mail.DisplayName}} {{Mail.UserName}} {{ReceiveMail}} {{VCode}}</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-2 control-label">邮件内容</label>
 							<div class="col-sm-6">
 								@Html.TextAreaFor(m => m.FindPwd_MailContent, new { @class = "form-control", placeholder = "", style = "height:220px;" })
 							</div>
-							<div class="col-sm-4 form-control-static">可供使用的模板标签: {{WebUITitle}} {{WebUISite}} {{WebUIDesc}} {{MailDisplayAddress}} {{MailDisplayName}} {{MailUserName}} {{ReceiveMail}} {{VCode}}</div>
+							<div class="col-sm-4 form-control-static">可供使用的模板标签: {{Web.Name}} {{Mail.DisplayAddress}} {{Mail.DisplayName}} {{Mail.UserName}} {{ReceiveMail}} {{VCode}}</div>
 						</div>
 
 						<div class="form-group">

@@ -22,7 +22,7 @@ namespace Services.Implement
                 var role_menus = roleInfo.Role_Menus;
                 if (role_menus != null && role_menus.Count >= 1)
                 {
-                    var sys_menus = role_menus.Where(m => !m.IsDeleted).Select(m => m.Sys_Menu).ToList();
+                    var sys_menus = role_menus.Select(m => m.Sys_Menu).ToList();
                     foreach (Sys_Menu menu in sys_menus)
                     {
                         if (!menuList.Contains(menu, new Sys_Menu_Compare()))
@@ -45,7 +45,7 @@ namespace Services.Implement
                 var role_funcs = roleInfo.Role_Functions;
                 if (role_funcs != null && role_funcs.Count >= 1)
                 {
-                    var functions = role_funcs.Where(m => !m.IsDeleted).Select(m => m.FunctionInfo).ToList();
+                    var functions = role_funcs.Select(m => m.FunctionInfo).ToList();
                     foreach (FunctionInfo function in functions)
                     {
                         if (!funcList.Contains(function, new FunctionInfo_Compare()))
@@ -74,8 +74,8 @@ namespace Services.Implement
             if (roleInfo != null)
             {
                 // 计算新 旧 菜单以及 权限差异
-                var old_Role_Menus = roleInfo.Role_Menus.Where(m => !m.IsDeleted).ToList();
-                var old_Role_Funcs = roleInfo.Role_Functions.Where(m => !m.IsDeleted).ToList();
+                var old_Role_Menus = roleInfo.Role_Menus.ToList();
+                var old_Role_Funcs = roleInfo.Role_Functions.ToList();
 
                 try
                 {
@@ -110,12 +110,10 @@ namespace Services.Implement
 
                     // 删除
                     IRole_MenuRepository role_MenuRepository = ContainerManager.Resolve<IRole_MenuRepository>();
-                    IList<Role_Menu> needDelete_Role_Menus = role_MenuRepository.Filter(m => m.RoleInfoId == roleId && needDelete_Menus_Ids.Contains(m.Sys_MenuId) && !m.IsDeleted).ToList();
+                    IList<Role_Menu> needDelete_Role_Menus = role_MenuRepository.Filter(m => m.RoleInfoId == roleId && needDelete_Menus_Ids.Contains(m.Sys_MenuId)).ToList();
                     foreach (var item in needDelete_Role_Menus)
                     {
-                        item.DeletedAt = DateTime.Now;
-                        item.IsDeleted = true;
-                        role_MenuRepository.Update(item);
+                        role_MenuRepository.Delete(item);
                     }
                     // 新增
                     foreach (var item in needAdd_Menus_Ids)
@@ -125,7 +123,6 @@ namespace Services.Implement
                             RoleInfoId = roleId,
                             Sys_MenuId = item,
                             CreateTime = DateTime.Now,
-                            OperatorId = operatorId
                         });
                     }
                     // 统一保存
@@ -163,12 +160,10 @@ namespace Services.Implement
 
                     // 删除
                     IRole_FunctionRepository role_FuncRepository = ContainerManager.Resolve<IRole_FunctionRepository>();
-                    IList<Role_Function> needDelete_Role_Funcs = role_FuncRepository.Filter(m => m.RoleInfoId == roleId && needDelete_Funcs_Ids.Contains(m.FunctionInfoId) && !m.IsDeleted).ToList();
+                    IList<Role_Function> needDelete_Role_Funcs = role_FuncRepository.Filter(m => m.RoleInfoId == roleId && needDelete_Funcs_Ids.Contains(m.FunctionInfoId)).ToList();
                     foreach (var item in needDelete_Role_Funcs)
                     {
-                        item.DeletedAt = DateTime.Now;
-                        item.IsDeleted = true;
-                        role_FuncRepository.Update(item);
+                        role_FuncRepository.Delete(item);
                     }
                     // 新增
                     foreach (var item in needAdd_Funcs_Ids)
@@ -178,7 +173,6 @@ namespace Services.Implement
                             RoleInfoId = roleId,
                             FunctionInfoId = item,
                             CreateTime = DateTime.Now,
-                            OperatorId = operatorId
                         });
                     }
                     // 统一保存

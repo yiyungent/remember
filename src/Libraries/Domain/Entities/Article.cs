@@ -1,12 +1,9 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Domain.Entities
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
-    using System.Linq;
-
     public partial class Article : BaseEntity
     {
         [Key]
@@ -77,6 +74,11 @@ namespace Domain.Entities
         public int CommentNum { get; set; }
 
         /// <summary>
+        /// 收藏数目
+        /// </summary>
+        public int FavNum { get; set; }
+
+        /// <summary>
         /// 文章状态
         /// </summary>
         public AStatus ArticleStatus { get; set; }
@@ -102,11 +104,6 @@ namespace Domain.Entities
         public virtual UserInfo Author { get; set; }
 
         /// <summary>
-        /// 属于哪些收藏夹
-        /// </summary>
-        public virtual ICollection<Favorite_Article> Favorite_Articles { get; set; }
-
-        /// <summary>
         /// 删除时间：为null，则未删除
         /// </summary>
         public DateTime? DeletedAt { get; set; }
@@ -115,27 +112,6 @@ namespace Domain.Entities
         /// 是否被删除
         /// </summary>
         public bool IsDeleted { get; set; }
-
-        #endregion
-
-        #region Helpers
-
-        [NotMapped]
-        public IList<Favorite> Favorites
-        {
-            get
-            {
-                IList<Favorite> favorites = new List<Favorite>();
-                if (this.Favorite_Articles != null && this.Favorite_Articles.Count >= 1)
-                {
-                    favorites = this.Favorite_Articles.Select(m => m.Favorite).ToList();
-                }
-
-                return favorites;
-            }
-        }
-
-
 
         #endregion
 
@@ -175,7 +151,11 @@ namespace Domain.Entities
             /// <summary>
             /// 仅自己可见
             /// </summary>
-            Self
+            Self,
+            /// <summary>
+            /// 自己和粉丝可见
+            /// </summary>
+            Fans
         }
     }
 }

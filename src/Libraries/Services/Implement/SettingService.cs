@@ -23,7 +23,7 @@ namespace Services.Implement
             {
                 if (value == null)
                 {
-                    value = this._repository.Find(m => m.SetKey == key && !m.IsDeleted).SetValue;
+                    value = this._repository.Find(m => m.SetKey == key).SetValue;
 
                     CacheHelper.Insert<string>("Settings." + key, value, DateTime.Now.AddDays(1));
                 }
@@ -44,7 +44,7 @@ namespace Services.Implement
             Setting dbModel = null;
             try
             {
-                dbModel = this._repository.Find(m => m.SetKey == key && !m.IsDeleted);
+                dbModel = this._repository.Find(m => m.SetKey == key);
             }
             catch (Exception ex)
             { }
@@ -54,7 +54,6 @@ namespace Services.Implement
                 dbModel = new Setting();
                 dbModel.SetKey = key;
                 dbModel.SetValue = value;
-                dbModel.IsDeleted = false;
                 this._repository.Create(dbModel);
             }
             else
@@ -81,34 +80,34 @@ namespace Services.Implement
                 // TODO: 这么筛选，可能存在问题，也可以在之后再去除被删除的。现在已改为之后再去掉被删除的
                 // 获取所有需要用到的设置项
                 IList<Setting> settings = this._repository.Filter(m =>
-                    m.SetKey == "FindPwd_MailSubject"
-                    || m.SetKey == "FindPwd_MailContent"
-                    || m.SetKey == "MailDisplayAddress"
-                    || m.SetKey == "MailDisplayName"
-                    || m.SetKey == "MailUserName"
-                    || m.SetKey == "MailPassword"
-                    || m.SetKey == "SmtpHost"
-                    || m.SetKey == "SmtpPort"
-                    || m.SetKey == "SmtpEnableSsl"
-                ).Where(m => !m.IsDeleted).ToList();
+                    m.SetKey == "FindPwd.Mail.Subject"
+                    || m.SetKey == "FindPwd.Mail.Content"
+                    || m.SetKey == "Mail.DisplayAddress"
+                    || m.SetKey == "Mail.DisplayAddress"
+                    || m.SetKey == "Mail.UserName"
+                    || m.SetKey == "Mail.Password"
+                    || m.SetKey == "Smtp.Host"
+                    || m.SetKey == "Smtp.Port"
+                    || m.SetKey == "Smtp.EnableSsl"
+                ).ToList();
 
-                string mailSubjectTemplate = settings.FirstOrDefault(m => m.SetKey == "FindPwd_MailSubject")?.SetValue ?? "";
-                string mailContentTemplate = settings.FirstOrDefault(m => m.SetKey == "FindPwd_MailContent")?.SetValue ?? "";
+                string mailSubjectTemplate = settings.FirstOrDefault(m => m.SetKey == "FindPwd.Mail.Subject")?.SetValue ?? "";
+                string mailContentTemplate = settings.FirstOrDefault(m => m.SetKey == "FindPwd.Mail.Content")?.SetValue ?? "";
 
                 string mailSubject = ReplaceMailTemplate(mailSubjectTemplate, mail, vCode);
                 string mailContent = ReplaceMailTemplate(mailContentTemplate, mail, vCode);
 
                 MailOptions mailOptions = new MailOptions();
-                mailOptions.SenderDisplayAddress = settings.FirstOrDefault(m => m.SetKey == "MailDisplayAddress")?.SetValue ?? "";
-                mailOptions.SenderDisplayName = settings.FirstOrDefault(m => m.SetKey == "MailDisplayName")?.SetValue ?? "";
-                mailOptions.UserName = settings.FirstOrDefault(m => m.SetKey == "MailUserName")?.SetValue ?? "";
-                mailOptions.Password = settings.FirstOrDefault(m => m.SetKey == "MailPassword")?.SetValue ?? "";
+                mailOptions.SenderDisplayAddress = settings.FirstOrDefault(m => m.SetKey == "Mail.DisplayAddress")?.SetValue ?? "";
+                mailOptions.SenderDisplayName = settings.FirstOrDefault(m => m.SetKey == "Mail.DisplayAddress")?.SetValue ?? "";
+                mailOptions.UserName = settings.FirstOrDefault(m => m.SetKey == "Mail.UserName")?.SetValue ?? "";
+                mailOptions.Password = settings.FirstOrDefault(m => m.SetKey == "Mail.Password")?.SetValue ?? "";
                 mailOptions.Subject = mailSubject;
                 mailOptions.Content = mailContent;
                 mailOptions.ReceiveAddress = mail;
-                mailOptions.Host = settings.FirstOrDefault(m => m.SetKey == "SmtpHost")?.SetValue ?? "";
-                mailOptions.Port = Convert.ToInt32(settings.FirstOrDefault(m => m.SetKey == "SmtpPort")?.SetValue ?? "25");
-                string enableSsl = settings.FirstOrDefault(m => m.SetKey == "SmtpEnableSsl")?.SetValue ?? "";
+                mailOptions.Host = settings.FirstOrDefault(m => m.SetKey == "Smtp.Host")?.SetValue ?? "";
+                mailOptions.Port = Convert.ToInt32(settings.FirstOrDefault(m => m.SetKey == "Smtp.Port")?.SetValue ?? "25");
+                string enableSsl = settings.FirstOrDefault(m => m.SetKey == "Smtp.EnableSsl")?.SetValue ?? "";
                 if (enableSsl == "" || enableSsl == "0")
                 {
                     mailOptions.EnableSsl = false;
@@ -150,28 +149,18 @@ namespace Services.Implement
 
             // 获取所有需要用到的设置项
             IList<Setting> settings = this._repository.Filter(m =>
-                m.SetKey == "WebUITitle"
-                || m.SetKey == "WebUIDesc"
-                || m.SetKey == "WebUISite"
-                || m.SetKey == "MailDisplayAddress"
-                || m.SetKey == "MailDisplayName"
-                || m.SetKey == "MailUserName"
-            ).Where(m => !m.IsDeleted).ToList();
+                m.SetKey == "Web.Name"
+                || m.SetKey == "Mail.DisplayAddress"
+                || m.SetKey == "Mail.DisplayAddress"
+                || m.SetKey == "Mail.UserName"
+            ).ToList();
             Dictionary<string, string> keyValues = new Dictionary<string, string>();
 
-            //keyValues.Add("WebUITitle", GetSet("WebUITitle"));
-            keyValues.Add("WebUITitle", settings.FirstOrDefault(m => m.SetKey == "WebUITitle")?.SetValue ?? "");
-            //keyValues.Add("WebUIDesc", GetSet("WebUIDesc"));
-            keyValues.Add("WebUIDesc", settings.FirstOrDefault(m => m.SetKey == "WebUIDesc")?.SetValue ?? "");
-            //keyValues.Add("WebUISite", GetSet("WebUISite"));
-            keyValues.Add("WebUISite", settings.FirstOrDefault(m => m.SetKey == "WebUISite")?.SetValue ?? "");
+            keyValues.Add("Web.Name", settings.FirstOrDefault(m => m.SetKey == "Web.Name")?.SetValue ?? "");
 
-            //keyValues.Add("MailDisplayAddress", GetSet("MailDisplayAddress"));
-            keyValues.Add("MailDisplayAddress", settings.FirstOrDefault(m => m.SetKey == "MailDisplayAddress")?.SetValue ?? "");
-            //keyValues.Add("MailDisplayName", GetSet("MailDisplayName"));
-            keyValues.Add("MailDisplayName", settings.FirstOrDefault(m => m.SetKey == "MailDisplayName")?.SetValue ?? "");
-            //keyValues.Add("MailUserName", GetSet("MailUserName"));
-            keyValues.Add("MailUserName", settings.FirstOrDefault(m => m.SetKey == "MailUserName")?.SetValue ?? "");
+            keyValues.Add("Mail.DisplayAddress", settings.FirstOrDefault(m => m.SetKey == "Mail.DisplayAddress")?.SetValue ?? "");
+            keyValues.Add("Mail.DisplayAddress", settings.FirstOrDefault(m => m.SetKey == "Mail.DisplayAddress")?.SetValue ?? "");
+            keyValues.Add("Mail.UserName", settings.FirstOrDefault(m => m.SetKey == "Mail.UserName")?.SetValue ?? "");
             keyValues.Add("ReceiveMail", receiveMail);
             keyValues.Add("VCode", vCode);
 
