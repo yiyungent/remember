@@ -5,6 +5,7 @@
 
 > :blue_book: remember - 期望能帮到你
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0a96c28a7daf41f2bfe3d769e86b18b0)](https://app.codacy.com/manual/yiyungent/remember?utm_source=github.com&utm_medium=referral&utm_content=yiyungent/remember&utm_campaign=Badge_Grade_Dashboard)
 [![repo size](https://img.shields.io/github/repo-size/yiyungent/remember.svg?style=flat)]()
 [![LICENSE](https://img.shields.io/github/license/yiyungent/remember.svg?style=flat)](https://github.com/yiyungent/remember/blob/master/LICENSE)
 
