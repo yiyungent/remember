@@ -75,8 +75,6 @@
     <Compile Include="Auto\Implement\Role_FunctionRepository.cs" />
     <Compile Include="Auto\Implement\Role_MenuRepository.cs" />
     <Compile Include="Auto\Implement\Role_UserRepository.cs" />
-    <Compile Include="Auto\Implement\SearchDetailRepository.cs" />
-    <Compile Include="Auto\Implement\SearchTotalRepository.cs" />
     <Compile Include="Auto\Implement\SettingRepository.cs" />
     <Compile Include="Auto\Implement\Sys_MenuRepository.cs" />
     <Compile Include="Auto\Implement\ThemeTemplateRepository.cs" />
@@ -102,8 +100,6 @@
     <Compile Include="Auto\Interface\IRole_FunctionRepository.cs" />
     <Compile Include="Auto\Interface\IRole_MenuRepository.cs" />
     <Compile Include="Auto\Interface\IRole_UserRepository.cs" />
-    <Compile Include="Auto\Interface\ISearchDetailRepository.cs" />
-    <Compile Include="Auto\Interface\ISearchTotalRepository.cs" />
     <Compile Include="Auto\Interface\ISettingRepository.cs" />
     <Compile Include="Auto\Interface\ISys_MenuRepository.cs" />
     <Compile Include="Auto\Interface\IThemeTemplateRepository.cs" />
@@ -114,9 +110,7 @@
     <Compile Include="Core\IRepository.cs" />
     <Compile Include="Core\RemDbContext.cs" />
     <Compile Include="Implement\ArticleRepository.cs" />
-    <Compile Include="Implement\SearchTotalRepository.cs" />
     <Compile Include="Interface\IArticleRepository.cs" />
-    <Compile Include="Interface\ISearchTotalRepository.cs" />
     <Compile Include="Migrations\202006221427500_upatd.cs" />
     <Compile Include="Migrations\202006221427500_upatd.Designer.cs">
       <DependentUpon>202006221427500_upatd.cs</DependentUpon>

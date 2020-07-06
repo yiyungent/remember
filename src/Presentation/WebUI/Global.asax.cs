@@ -15,8 +15,6 @@ using System.Reflection;
 using System.Web.Compilation;
 using System.Web.Mvc;
 using System.Web.Routing;
-using PluginHub.Infrastructure;
-using PluginHub.Web.Mvc.Routes;
 using Framework.Config;
 using Framework.Common;
 using log4net;
@@ -40,10 +38,6 @@ namespace WebUI
             AutoMapperRegister();
 
             RegisterRoutes(RouteTable.Routes);
-
-            //initialize engine context
-            // TODO: The requested service 'PluginHub.Infrastructure.ITypeFinder' has not been registered
-            //EngineContext.Initialize(false);
 
             FrameworkConfig.Register();
 
@@ -106,8 +100,6 @@ namespace WebUI
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
 
             // 注意 Framework 所需数据库访问者
-            //builder.RegisterType<DBAccessProvider>().As<IDBAccessProvider>();
-            //builder.RegisterType<AuthManager>().As<IAuthManager>();
             builder.RegisterType<WorkContext>().As<IWorkContext>();
             builder.RegisterType<TemplateContext>().As<ITemplateContext>();
             builder.RegisterType<TemplateProvider>().As<ITemplateProvider>();
@@ -133,8 +125,6 @@ namespace WebUI
             builder.RegisterType<Role_MenuRepository>().As<IRole_MenuRepository>();
             builder.RegisterType<Role_UserRepository>().As<IRole_UserRepository>();
             builder.RegisterType<RoleInfoRepository>().As<IRoleInfoRepository>();
-            builder.RegisterType<SearchDetailRepository>().As<ISearchDetailRepository>();
-            builder.RegisterType<SearchTotalRepository>().As<ISearchTotalRepository>();
             builder.RegisterType<SettingRepository>().As<ISettingRepository>();
             builder.RegisterType<Sys_MenuRepository>().As<ISys_MenuRepository>();
             builder.RegisterType<ThemeTemplateRepository>().As<IThemeTemplateRepository>();
@@ -159,8 +149,6 @@ namespace WebUI
             builder.RegisterType<Role_MenuService>().As<IRole_MenuService>();
             builder.RegisterType<Role_UserService>().As<IRole_UserService>();
             builder.RegisterType<RoleInfoService>().As<IRoleInfoService>();
-            builder.RegisterType<SearchDetailService>().As<ISearchDetailService>();
-            builder.RegisterType<SearchTotalService>().As<ISearchTotalService>();
             builder.RegisterType<SettingService>().As<ISettingService>();
             builder.RegisterType<Sys_MenuService>().As<ISys_MenuService>();
             builder.RegisterType<ThemeTemplateService>().As<IThemeTemplateService>();

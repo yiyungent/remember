@@ -43,8 +43,6 @@ namespace Repositories.Core
         public virtual DbSet<LogInfo> LogInfo { get; set; }
         public virtual DbSet<ParticipantInfo> ParticipantInfo { get; set; }
         public virtual DbSet<RoleInfo> RoleInfo { get; set; }
-        public virtual DbSet<SearchDetail> SearchDetail { get; set; }
-        public virtual DbSet<SearchTotal> SearchTotal { get; set; }
         public virtual DbSet<Setting> Setting { get; set; }
         public virtual DbSet<Sys_Menu> Sys_Menu { get; set; }
         public virtual DbSet<ThemeTemplate> ThemeTemplate { get; set; }

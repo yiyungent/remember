@@ -72,8 +72,6 @@ namespace WebApi
             builder.RegisterType<Role_MenuRepository>().As<IRole_MenuRepository>();
             builder.RegisterType<Role_UserRepository>().As<IRole_UserRepository>();
             builder.RegisterType<RoleInfoRepository>().As<IRoleInfoRepository>();
-            builder.RegisterType<SearchDetailRepository>().As<ISearchDetailRepository>();
-            builder.RegisterType<SearchTotalRepository>().As<ISearchTotalRepository>();
             builder.RegisterType<SettingRepository>().As<ISettingRepository>();
             builder.RegisterType<Sys_MenuRepository>().As<ISys_MenuRepository>();
             builder.RegisterType<ThemeTemplateRepository>().As<IThemeTemplateRepository>();
@@ -98,8 +96,6 @@ namespace WebApi
             builder.RegisterType<Role_MenuService>().As<IRole_MenuService>();
             builder.RegisterType<Role_UserService>().As<IRole_UserService>();
             builder.RegisterType<RoleInfoService>().As<IRoleInfoService>();
-            builder.RegisterType<SearchDetailService>().As<ISearchDetailService>();
-            builder.RegisterType<SearchTotalService>().As<ISearchTotalService>();
             builder.RegisterType<SettingService>().As<ISettingService>();
             builder.RegisterType<Sys_MenuService>().As<ISys_MenuService>();
             builder.RegisterType<ThemeTemplateService>().As<IThemeTemplateService>();

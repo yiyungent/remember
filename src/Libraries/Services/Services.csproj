@@ -65,8 +65,6 @@
     <Compile Include="Auto\Implement\Role_FunctionService.cs" />
     <Compile Include="Auto\Implement\Role_MenuService.cs" />
     <Compile Include="Auto\Implement\Role_UserService.cs" />
-    <Compile Include="Auto\Implement\SearchDetailService.cs" />
-    <Compile Include="Auto\Implement\SearchTotalService.cs" />
     <Compile Include="Auto\Implement\SettingService.cs" />
     <Compile Include="Auto\Implement\Sys_MenuService.cs" />
     <Compile Include="Auto\Implement\ThemeTemplateService.cs" />
@@ -92,8 +90,6 @@
     <Compile Include="Auto\Interface\IRole_FunctionService.cs" />
     <Compile Include="Auto\Interface\IRole_MenuService.cs" />
     <Compile Include="Auto\Interface\IRole_UserService.cs" />
-    <Compile Include="Auto\Interface\ISearchDetailService.cs" />
-    <Compile Include="Auto\Interface\ISearchTotalService.cs" />
     <Compile Include="Auto\Interface\ISettingService.cs" />
     <Compile Include="Auto\Interface\ISys_MenuService.cs" />
     <Compile Include="Auto\Interface\IThemeTemplateService.cs" />

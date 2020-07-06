@@ -135,7 +135,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\DemoSQL\remember演示数据.sql" />
-    <Content Include="App_Data\InstalledPlugins.txt" />
     <Content Include="assets\css\app.css" />
     <Content Include="assets\css\base.css" />
     <Content Include="assets\css\comment.min.css" />
@@ -8167,7 +8166,6 @@
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\LogInfoController.cs" />
-    <Compile Include="Areas\Admin\Controllers\PluginController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoleInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\SettingController.cs" />
     <Compile Include="Areas\Admin\Controllers\SysMenuController.cs" />
@@ -8184,9 +8182,6 @@
     <Compile Include="Areas\Admin\Models\DashboardVM\IndexTwoViewModel.cs" />
     <Compile Include="Areas\Admin\Models\DashboardVM\PvUvViewModel.cs" />
     <Compile Include="Areas\Admin\Models\LogInfoVM\VisitorInfoViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\PluginVM\ConfigureViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\PluginVM\PluginListViewModel.cs" />
-    <Compile Include="Areas\Admin\Models\PluginVM\PluginModel.cs" />
     <Compile Include="Areas\Admin\Models\RoleInfoVM\RoleInfoViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SettingVM\SettingViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ThemeTemplateVM\InstallZipItem.cs" />
@@ -8199,12 +8194,8 @@
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
-    <Compile Include="Controllers\WidgetController.cs" />
-    <Compile Include="DependencyRegistrar.cs" />
     <Compile Include="Extensions\DomainExt.cs" />
-    <Compile Include="Extensions\MappingExtensions.cs" />
     <Compile Include="Extensions\ModelStateDicExt.cs" />
-    <Compile Include="Extensions\RequestExt.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -8213,26 +8204,16 @@
     <Compile Include="HtmlHelpers\CollapseMenu.cs" />
     <Compile Include="HtmlHelpers\PageHelper.cs" />
     <Compile Include="HtmlHelpers\PageInfo.cs" />
-    <Compile Include="Imples\CustomSettingImply.cs" />
-    <Compile Include="Infrastructure\AutoMapperStartupTask.cs" />
     <Compile Include="Infrastructure\CmsUrlConstraint.cs" />
-    <Compile Include="Models\CardBoxVM\SearchResultViewModel.cs" />
-    <Compile Include="Models\Cms\RenderWidgetModel.cs" />
-    <Compile Include="Models\Cms\WidgetModel.cs" />
     <Compile Include="Models\Common\ResponseData.cs" />
-    <Compile Include="Models\CourseBoxVM\SearchResultViewModel.cs" />
     <Compile Include="Models\LogVM\AccessLogInputModel.cs" />
     <Compile Include="Models\LogVM\UserAgentModel.cs" />
-    <Compile Include="Models\SearchVM\IndexContent.cs" />
-    <Compile Include="Models\SearchVM\LuceneEnum.cs" />
-    <Compile Include="Models\SearchVM\SearchResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
     <Content Include="App_Data\LuceneDir\segments.gen" />
     <Content Include="App_Data\LuceneDir\_0.cfs" />
-    <Content Include="App_Data\PluginTables\BaiduTJSettings.json" />
     <Content Include="Areas\Account\Views\Login\FindPassword.cshtml" />
     <Content Include="Areas\Account\Views\Login\Index.cshtml" />
     <Content Include="Areas\Account\Views\Profile\Index.cshtml" />
@@ -8256,8 +8237,6 @@
     <Content Include="Areas\Admin\Views\Article\Index.cshtml" />
     <Content Include="Views\Article\Index.cshtml" />
     <Content Include="Areas\Admin\Views\LogInfo\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Plugin\Configure.cshtml" />
-    <Content Include="Areas\Admin\Views\Plugin\Index.cshtml" />
     <Content Include="Areas\Admin\Views\RoleInfo\AssignPower.cshtml" />
     <Content Include="Areas\Admin\Views\RoleInfo\Details.cshtml" />
     <Content Include="Areas\Admin\Views\RoleInfo\Edit.cshtml" />
@@ -8916,7 +8895,6 @@
     <Content Include="Views\Shared\_TopNav_NotificationsMenuPartial.cshtml" />
     <Content Include="Views\Shared\_TopNav_TasksMenuPartial.cshtml" />
     <Content Include="Views\Shared\_TopNav_UserAccountMenuPartial.cshtml" />
-    <Content Include="Views\Widget\WidgetsByZone.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_RightControlSidebarPartial.cshtml" />
     <Content Include="Views\Shared\_FooterPartial.cshtml" />
@@ -8939,28 +8917,11 @@
     <Folder Include="assets\libs\senna\node_modules\bootstrap\grunt\" />
     <Folder Include="assets\libs\senna\node_modules\bootstrap\js\" />
     <Folder Include="assets\libs\senna\node_modules\bootstrap\less\mixins\" />
-    <Folder Include="Plugins\" />
     <Folder Include="Templates\" />
     <Folder Include="Upload\images\avatars\" />
     <Folder Include="Upload\TemplateInstallZip\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\pluginHub\PluginHub.Mvc5\PluginHub.Mvc5.csproj">
-      <Project>{c7624908-0861-428d-aa0d-3468d8ca4ac8}</Project>
-      <Name>PluginHub.Mvc5</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\pluginHub\PluginHub.Services\PluginHub.Services.csproj">
-      <Project>{f16a9c9b-f001-4d1b-9623-b192effc7d0d}</Project>
-      <Name>PluginHub.Services</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\pluginHub\PluginHub.Web\PluginHub.Web.csproj">
-      <Project>{d546c37c-3e0f-421d-b685-e39df8019958}</Project>
-      <Name>PluginHub.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\pluginHub\PluginHub\PluginHub.csproj">
-      <Project>{7eee28df-e7d1-473d-ae8a-acff774ac741}</Project>
-      <Name>PluginHub</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\AutoMapperConfig\AutoMapperConfig.csproj">
       <Project>{03AC9D3C-2B2D-4246-8562-C844832F1962}</Project>
       <Name>AutoMapperConfig</Name>

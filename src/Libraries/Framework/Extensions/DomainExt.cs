@@ -25,6 +25,7 @@ namespace Framework.Extensions
             {
                 ISettingService settingService = ContainerManager.Resolve<ISettingService>();
 
+                // TODO: 改为从 HttpContext 中获取当前域名
                 string webApiSite = settingService.GetSet("WebApiSite");
                 string webUISite = settingService.GetSet("WebUISite");
 

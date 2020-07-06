@@ -80,17 +80,13 @@
   <ItemGroup>
     <Compile Include="Attributes\AuthFilterAttribute.cs" />
     <Compile Include="Attributes\AuthKeyAttribute.cs" />
-    <Compile Include="Common\CacheHelper.cs" />
     <Compile Include="Common\CommonHelper.cs" />
     <Compile Include="Common\EncryptHelper.cs" />
-    <Compile Include="Common\HttpAide.cs" />
-    <Compile Include="Common\HttpTemplate.cs" />
     <Compile Include="Common\IWebHelper.cs" />
     <Compile Include="Common\Tools.cs" />
     <Compile Include="Common\WebHelper.cs" />
     <Compile Include="Config\AppConfig.cs" />
     <Compile Include="Config\FrameworkConfig.cs" />
-    <Compile Include="Core\FrameworkException.cs" />
     <Compile Include="Extensions\DomainExt.cs" />
     <Compile Include="Extensions\WebSetting.cs" />
     <Compile Include="Infrastructure\Concrete\AccountManager.cs" />
@@ -112,7 +108,6 @@
     <Compile Include="Mvc\ViewEngines\Templates\TemplateVirtualPathProviderViewEngine.cs" />
     <Compile Include="Mvc\ViewEngines\Templates\WebViewPage.cs" />
     <Compile Include="Mvc\ViewEngines\Templates\WorkContext.cs" />
-    <Compile Include="Mvc\WebViewPages\Auth\WebViewPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestResult\LoginTimeOutResult.cs" />
     <Compile Include="RequestResult\NeedLoginResult.cs" />

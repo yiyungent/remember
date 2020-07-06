@@ -104,10 +104,8 @@
     <Compile Include="Common\Cache\Redis.cs" />
     <Compile Include="Common\DateTimeHelper.cs" />
     <Compile Include="Common\FileHelper.cs" />
-    <Compile Include="Common\GetRandom.cs" />
     <Compile Include="Common\JwtHelper.cs" />
     <Compile Include="Common\MailHelper.cs" />
-    <Compile Include="Common\NPOIHelper.cs" />
     <Compile Include="Common\SharpZip.cs" />
     <Compile Include="Common\VerifyCode.cs" />
     <Compile Include="ContainerManager.cs" />

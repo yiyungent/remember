@@ -79,8 +79,6 @@
     <Compile Include="Entities\Role_Function.cs" />
     <Compile Include="Entities\Role_Menu.cs" />
     <Compile Include="Entities\Role_User.cs" />
-    <Compile Include="Entities\SearchDetail.cs" />
-    <Compile Include="Entities\SearchTotal.cs" />
     <Compile Include="Entities\Setting.cs" />
     <Compile Include="Entities\Sys_Menu.cs" />
     <Compile Include="Entities\ThemeTemplate.cs" />

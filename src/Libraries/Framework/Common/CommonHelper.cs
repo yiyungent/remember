@@ -1,5 +1,4 @@
-﻿using Framework.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -31,7 +30,7 @@ namespace Framework.Common
 
             if (!IsValidEmail(output))
             {
-                throw new FrameworkException("Email is not valid.");
+                throw new Exception("Email is not valid.");
             }
 
             return output;
