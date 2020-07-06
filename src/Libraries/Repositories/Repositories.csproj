@@ -55,10 +55,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auto\Implement\ArticleRepository.cs" />
+    <Compile Include="Auto\Implement\Article_CatRepository.cs" />
     <Compile Include="Auto\Implement\Article_CommentRepository.cs" />
     <Compile Include="Auto\Implement\Article_DislikeRepository.cs" />
     <Compile Include="Auto\Implement\Article_LikeRepository.cs" />
     <Compile Include="Auto\Implement\Article_ParticipantRepository.cs" />
+    <Compile Include="Auto\Implement\CatInfoRepository.cs" />
     <Compile Include="Auto\Implement\CommentRepository.cs" />
     <Compile Include="Auto\Implement\Comment_DislikeRepository.cs" />
     <Compile Include="Auto\Implement\Comment_LikeRepository.cs" />
@@ -67,6 +69,7 @@
     <Compile Include="Auto\Implement\Follower_FollowedRepository.cs" />
     <Compile Include="Auto\Implement\FunctionInfoRepository.cs" />
     <Compile Include="Auto\Implement\LogInfoRepository.cs" />
+    <Compile Include="Auto\Implement\MessageRepository.cs" />
     <Compile Include="Auto\Implement\ParticipantInfoRepository.cs" />
     <Compile Include="Auto\Implement\RoleInfoRepository.cs" />
     <Compile Include="Auto\Implement\Role_FunctionRepository.cs" />
@@ -79,10 +82,12 @@
     <Compile Include="Auto\Implement\ThemeTemplateRepository.cs" />
     <Compile Include="Auto\Implement\UserInfoRepository.cs" />
     <Compile Include="Auto\Interface\IArticleRepository.cs" />
+    <Compile Include="Auto\Interface\IArticle_CatRepository.cs" />
     <Compile Include="Auto\Interface\IArticle_CommentRepository.cs" />
     <Compile Include="Auto\Interface\IArticle_DislikeRepository.cs" />
     <Compile Include="Auto\Interface\IArticle_LikeRepository.cs" />
     <Compile Include="Auto\Interface\IArticle_ParticipantRepository.cs" />
+    <Compile Include="Auto\Interface\ICatInfoRepository.cs" />
     <Compile Include="Auto\Interface\ICommentRepository.cs" />
     <Compile Include="Auto\Interface\IComment_DislikeRepository.cs" />
     <Compile Include="Auto\Interface\IComment_LikeRepository.cs" />
@@ -91,6 +96,7 @@
     <Compile Include="Auto\Interface\IFollower_FollowedRepository.cs" />
     <Compile Include="Auto\Interface\IFunctionInfoRepository.cs" />
     <Compile Include="Auto\Interface\ILogInfoRepository.cs" />
+    <Compile Include="Auto\Interface\IMessageRepository.cs" />
     <Compile Include="Auto\Interface\IParticipantInfoRepository.cs" />
     <Compile Include="Auto\Interface\IRoleInfoRepository.cs" />
     <Compile Include="Auto\Interface\IRole_FunctionRepository.cs" />

@@ -59,9 +59,11 @@
     <Compile Include="BaseEntity.cs" />
     <Compile Include="CommonEqualityComparer.cs" />
     <Compile Include="Entities\Article.cs" />
+    <Compile Include="Entities\Article_Cat.cs" />
     <Compile Include="Entities\Article_Comment.cs" />
     <Compile Include="Entities\Article_Dislike.cs" />
     <Compile Include="Entities\Article_Like.cs" />
+    <Compile Include="Entities\CatInfo.cs" />
     <Compile Include="Entities\Comment.cs" />
     <Compile Include="Entities\Comment_Dislike.cs" />
     <Compile Include="Entities\Comment_Like.cs" />
@@ -71,6 +73,7 @@
     <Compile Include="Entities\Follower_Followed.cs" />
     <Compile Include="Entities\FunctionInfo.cs" />
     <Compile Include="Entities\LogInfo.cs" />
+    <Compile Include="Entities\Message.cs" />
     <Compile Include="Entities\ParticipantInfo.cs" />
     <Compile Include="Entities\RoleInfo.cs" />
     <Compile Include="Entities\Role_Function.cs" />

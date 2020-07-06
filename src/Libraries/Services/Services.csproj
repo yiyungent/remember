@@ -45,10 +45,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auto\Implement\ArticleService.cs" />
+    <Compile Include="Auto\Implement\Article_CatService.cs" />
     <Compile Include="Auto\Implement\Article_CommentService.cs" />
     <Compile Include="Auto\Implement\Article_DislikeService.cs" />
     <Compile Include="Auto\Implement\Article_LikeService.cs" />
     <Compile Include="Auto\Implement\Article_ParticipantService.cs" />
+    <Compile Include="Auto\Implement\CatInfoService.cs" />
     <Compile Include="Auto\Implement\CommentService.cs" />
     <Compile Include="Auto\Implement\Comment_DislikeService.cs" />
     <Compile Include="Auto\Implement\Comment_LikeService.cs" />
@@ -57,6 +59,7 @@
     <Compile Include="Auto\Implement\Follower_FollowedService.cs" />
     <Compile Include="Auto\Implement\FunctionInfoService.cs" />
     <Compile Include="Auto\Implement\LogInfoService.cs" />
+    <Compile Include="Auto\Implement\MessageService.cs" />
     <Compile Include="Auto\Implement\ParticipantInfoService.cs" />
     <Compile Include="Auto\Implement\RoleInfoService.cs" />
     <Compile Include="Auto\Implement\Role_FunctionService.cs" />
@@ -69,10 +72,12 @@
     <Compile Include="Auto\Implement\ThemeTemplateService.cs" />
     <Compile Include="Auto\Implement\UserInfoService.cs" />
     <Compile Include="Auto\Interface\IArticleService.cs" />
+    <Compile Include="Auto\Interface\IArticle_CatService.cs" />
     <Compile Include="Auto\Interface\IArticle_CommentService.cs" />
     <Compile Include="Auto\Interface\IArticle_DislikeService.cs" />
     <Compile Include="Auto\Interface\IArticle_LikeService.cs" />
     <Compile Include="Auto\Interface\IArticle_ParticipantService.cs" />
+    <Compile Include="Auto\Interface\ICatInfoService.cs" />
     <Compile Include="Auto\Interface\ICommentService.cs" />
     <Compile Include="Auto\Interface\IComment_DislikeService.cs" />
     <Compile Include="Auto\Interface\IComment_LikeService.cs" />
@@ -81,6 +86,7 @@
     <Compile Include="Auto\Interface\IFollower_FollowedService.cs" />
     <Compile Include="Auto\Interface\IFunctionInfoService.cs" />
     <Compile Include="Auto\Interface\ILogInfoService.cs" />
+    <Compile Include="Auto\Interface\IMessageService.cs" />
     <Compile Include="Auto\Interface\IParticipantInfoService.cs" />
     <Compile Include="Auto\Interface\IRoleInfoService.cs" />
     <Compile Include="Auto\Interface\IRole_FunctionService.cs" />
