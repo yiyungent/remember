@@ -1,17 +1,23 @@
-﻿@using Framework.Extensions
+﻿@using Core
+@using Services.Interface
 @{
 	Layout = null;
 
-	string webUIName = WebSetting.Get("WebUITitle").Split(new string[] { "-", " " }, StringSplitOptions.RemoveEmptyEntries)[0];
-	string copyright = "<strong>Copyright &copy; 2019 <a href='#'>" + webUIName + "</a>.</strong> All rights reserved."; //WebSetting.Get("Copyright");
+	string webName = ViewBag.WebName;
+	string footer = ContainerManager.Resolve<ISettingService>().GetSet("Web.Footer"); ;
 }
 
 <footer class="main-footer">
 	<div class="container">
+		<!-- To the right -->
 		<div class="pull-right hidden-xs">
-			<b>@webUIName</b> 0.2.0
+			@webName
 		</div>
-		@Html.Raw(copyright)
+		<!-- Default to the left -->
+		<div class="pull-left hidden-xs">
+			@Html.Raw(footer)
+			<p>Powered by <strong><a href="https://github.com/yiyungent/remember" target="_blank">remember</a></strong> <em>X0.1</em></p>
+		</div>
 	</div>
 	<!-- /.container -->
 </footer>

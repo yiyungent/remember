@@ -1,15 +1,20 @@
-﻿@using WebUI.Areas.Admin.Models.Common
+﻿@using Core
+@using Services.Interface
 @{
 	Layout = null;
 
-	AdminWebBaseInfoViewModel baseInfo = ViewBag.AdminWebBaseInfo;
+	string webName = ViewBag.WebName;
+	string footer = ContainerManager.Resolve<ISettingService>().GetSet("Web.Footer"); ;
 }
 
 <footer class="main-footer">
 	<!-- To the right -->
 	<div class="pull-right hidden-xs">
-		@Html.Raw(baseInfo.Logo_mini)
+		@webName
 	</div>
 	<!-- Default to the left -->
-	@Html.Raw(baseInfo.Copyright)
+	<div class="pull-left hidden-xs">
+		@Html.Raw(footer)
+		<p>Powered by <strong><a href="https://github.com/yiyungent/remember" target="_blank">remember</a></strong> <em>X0.1</em></p>
+	</div>
 </footer>

@@ -3,17 +3,17 @@
 @{
 	Layout = null;
 
-	AdminWebBaseInfoViewModel baseInfo = ViewBag.AdminWebBaseInfo;
 	UserInfo currentUserInfo = ViewBag.CurrentUserInfo;
+	string webName = ViewBag.WebName;
 }
 
 <header class="main-header">
 	<!-- Logo -->
 	<a href="/" class="logo">
 		<!-- mini logo for sidebar mini 50x50 pixels -->
-		<span class="logo-mini">@Html.Raw(baseInfo.Logo_mini)</span>
+		<span class="logo-mini">@webName</span>
 		<!-- logo for regular state and mobile devices -->
-		<span class="logo-lg">@Html.Raw(baseInfo.Logo_lg)</span>
+		<span class="logo-lg">@webName</span>
 	</a>
 	<!-- Header Navbar -->
 	<nav class="navbar navbar-static-top" role="navigation">

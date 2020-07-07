@@ -1559,7 +1559,7 @@ namespace WebUI.Controllers
                 userInfo = new UserInfo()
                 {
                     UserName = "admin",
-                    Avatar = ":WebUISite:/assets/images/default-avatar.jpg",
+                    Avatar = "/assets/images/default-avatar.jpg",
                     Password = EncryptHelper.MD5Encrypt32("admin"),
                     Email = "yiyungent@126.com",
                     Description = "我是超级管理员",

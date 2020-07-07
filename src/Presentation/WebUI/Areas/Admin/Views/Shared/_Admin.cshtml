@@ -1,19 +1,17 @@
 ﻿@using Domain.Entities
-@using WebUI.Areas.Admin.Models.Common
-@using WebUI.Extensions
-@using WebUI.Areas.Admin.Models
-@using Framework.Extensions
+@using Core
+@using Services.Interface
 @using Framework.Infrastructure.Concrete
 @{
 	Layout = null;
 
-	ViewBag.Title = "管理中心 - " + WebSetting.Get("WebUITitle");
+	string webName = ContainerManager.Resolve<ISettingService>().GetSet("Web.Name");
+	ViewBag.WebName = webName;
+	ViewBag.Title = "管理中心 - " + webName;
 
-	AdminWebBaseInfoViewModel baseInfo = new AdminWebBaseInfoViewModel();
 	UserInfo currentUserInfo = AccountManager.GetCurrentUserInfo(true);
-	currentUserInfo.Avatar = currentUserInfo.Avatar.ToHttpAbsoluteUrl();
-	ViewBag.AdminWebBaseInfo = baseInfo;
 	ViewBag.CurrentUserInfo = currentUserInfo;
+	string title = ViewBag.Title;
 }
 
 <!DOCTYPE html>
@@ -21,7 +19,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>@ViewBag.Title</title>
+	<title>@title - Powered by remember</title>
 	<!-- Tell the browser to be responsive to screen width -->
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 	<link rel="stylesheet" href="/assets/libs/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css">

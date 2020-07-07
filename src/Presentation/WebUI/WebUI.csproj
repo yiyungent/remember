@@ -8172,7 +8172,6 @@
     <Compile Include="Areas\Admin\Controllers\CatInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ThemeTemplateController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserInfoController.cs" />
-    <Compile Include="Areas\Admin\Models\Common\AdminWebBaseInfoViewModel.cs" />
     <Compile Include="Areas\Admin\Models\Common\BreadcrumbItem.cs" />
     <Compile Include="Areas\Admin\Models\Common\ListViewModel.cs" />
     <Compile Include="Areas\Admin\Models\Common\OptionModel.cs" />

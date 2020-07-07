@@ -1,8 +1,15 @@
-﻿@using WebUI.Areas.Admin.Models.Common
+﻿@using Core
+@using Services.Interface
+@using Domain.Entities
 @{
 	Layout = null;
 
-	AdminWebBaseInfoViewModel baseInfo = ViewBag.AdminWebBaseInfo;
+	IList<ThemeTemplate> themeTemplates = ContainerManager.Resolve<IThemeTemplateService>().Filter(m => m.IsOpen == 1).ToList();
+	Dictionary<int, string> themeTemplateDic = new Dictionary<int, string>();
+	foreach (var item in themeTemplates)
+	{
+		themeTemplateDic.Add(item.ID, item.Title);
+	}
 }
 
 <!-- Control Sidebar -->
@@ -18,7 +25,7 @@
 		<div class="tab-pane active" id="control-sidebar-home-tab">
 			<h3 class="control-sidebar-heading">选择主题模板</h3>
 			<ul class="control-sidebar-menu">
-				@foreach (var item in baseInfo.ThemeTemplateDic)
+				@foreach (var item in themeTemplateDic)
 				{
 					<li>
 						<a onclick="selectTemplate(@item.Key)">
