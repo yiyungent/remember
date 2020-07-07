@@ -12,7 +12,7 @@
 	// 当前登录账号
 	CurrentAccountModel currentAccount = AccountManager.GetCurrentAccount();
 	UserInfo currentUserInfo = AccountManager.GetCurrentUserInfo(true);
-	currentUserInfo.Avatar = currentUserInfo.Avatar.ToHttpAbsoluteUrl();
+	currentUserInfo.Avatar = currentUserInfo.Avatar;
 	string roleName = currentUserInfo.RoleInfos.FirstOrDefault() == null ? "" : currentUserInfo.RoleInfos.FirstOrDefault().Name;
 
 	IDictionary<int, string> themeTemplateDic = new Dictionary<int, string>();

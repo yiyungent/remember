@@ -234,7 +234,7 @@ namespace WebUI.Areas.Admin.Controllers
                 string fullPath = basePath + saveFileName;
                 file.SaveAs(fullPath);
 
-                string imgUrl = ($"/Upload/images/{currentUserId}/{DateTime.Now.ToString("yyyy-MM-dd")}/" + saveFileName).ToHttpAbsoluteUrl();
+                string imgUrl = ($"/Upload/images/{currentUserId}/{DateTime.Now.ToString("yyyy-MM-dd")}/" + saveFileName);
                 return Json(new WangEditorUploadImgResult
                 {
                     errno = 0,
