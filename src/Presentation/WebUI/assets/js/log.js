@@ -1,6 +1,6 @@
 ﻿/// <reference path="../libs/ua-parser-js/dist/ua-parser.min.js" />
 
-var logUrl = "http://localhost:4483/home/log";
+var logUrl = "/home/log";
 
 
 // 访问时间: 13位毫秒时间戳

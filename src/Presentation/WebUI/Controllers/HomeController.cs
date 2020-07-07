@@ -24,13 +24,15 @@ namespace WebUI.Controllers
         #region Fields
         private readonly IArticleService _articleService;
         private readonly ILogInfoService _logInfoService;
+        private readonly ISettingService _settingService;
         #endregion
 
         #region Ctor
-        public HomeController(IArticleService articleService, ILogInfoService logInfoService)
+        public HomeController(IArticleService articleService, ILogInfoService logInfoService, ISettingService settingService)
         {
             this._articleService = articleService;
             this._logInfoService = logInfoService;
+            this._settingService = settingService;
         }
         #endregion
 
@@ -42,7 +44,17 @@ namespace WebUI.Controllers
             Query(pageIndex, pageSize, out IList<Article> list, out int totalCount);
 
             ListViewModel<Article> articles = new ListViewModel<Article>(list, pageIndex: pageIndex, pageSize: pageSize, totalCount: totalCount);
+            string webName = _settingService.GetSet("Web.Name");
+            // SEO
+            string homeTitle = _settingService.GetSet("SEO.Home.Index.Title");
+            string homeKeywords = _settingService.GetSet("SEO.Home.Index.Keywords");
+            string homeDesc = _settingService.GetSet("SEO.Home.Index.Desc");
+
             ViewBag.ArticleVM = articles;
+            ViewBag.WebName = webName;
+            ViewBag.Title = homeTitle.Replace("{{Web.Name}}", webName);
+            ViewBag.Keywords = homeKeywords.Replace("{{Web.Name}}", webName);
+            ViewBag.Desc = homeDesc.Replace("{{Web.Name}}", webName);
 
             return View();
         }

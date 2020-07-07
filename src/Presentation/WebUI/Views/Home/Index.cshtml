@@ -9,8 +9,6 @@
 	ListViewModel<Article> articleVM = ViewBag.ArticleVM;
 	IList<Article> articles = articleVM.List.OrderByDescending(m => m.LastUpdateTime).ToList();
 
-	ViewBag.Title = WebSetting.Get("WebUITitle");
-	ViewBag.Desc = WebSetting.Get("WebUIDesc");
 	// TODO: Article.Description 需要做html清理，只保存纯文本
 }
 @section head {
