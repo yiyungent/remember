@@ -8167,6 +8167,7 @@
     <Compile Include="Areas\Admin\Controllers\HomeController.cs" />
     <Compile Include="Areas\Admin\Controllers\LogInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoleInfoController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SEOController.cs" />
     <Compile Include="Areas\Admin\Controllers\SettingController.cs" />
     <Compile Include="Areas\Admin\Controllers\CatInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ThemeTemplateController.cs" />
@@ -8183,6 +8184,7 @@
     <Compile Include="Areas\Admin\Models\DashboardVM\PvUvViewModel.cs" />
     <Compile Include="Areas\Admin\Models\LogInfoVM\VisitorInfoViewModel.cs" />
     <Compile Include="Areas\Admin\Models\RoleInfoVM\RoleInfoViewModel.cs" />
+    <Compile Include="Areas\Admin\Models\SEOVM\SEOViewModel.cs" />
     <Compile Include="Areas\Admin\Models\SettingVM\SettingViewModel.cs" />
     <Compile Include="Areas\Admin\Models\ThemeTemplateVM\InstallZipItem.cs" />
     <Compile Include="Areas\Admin\Models\ThemeTemplateVM\OpenCloseItem.cs" />
@@ -8884,6 +8886,8 @@
     <Content Include="Areas\Account\Views\Shared\_RightControlSidebarPartial.cshtml" />
     <Content Include="Areas\Admin\Views\UserInfo\FaceStat.cshtml" />
     <Content Include="assets\libs\toastr\build\toastr.js.map" />
+    <Content Include="Areas\Admin\Views\SEO\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\SEO\Article.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Install\Index.cshtml" />

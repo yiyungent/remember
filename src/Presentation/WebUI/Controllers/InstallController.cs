@@ -189,9 +189,13 @@ namespace WebUI.Controllers
                     { "CorsWhiteList", "* blog.your-domain-name.com m.your-domain-name.com"},
 
                     // 各页面 SEO
-                    { "Home.Index.Title", "remember - 在线学习" },
-                    { "Home.Index.Desc", "remember是xx推出的专业在线教育平台，聚合大量优质教育机构和名师，下设职业培训、公务员考试、托福雅思、考证考级、英语口语、中小学教育等众多在线学习精品课程，打造老师在线上课教学、学生及时互动学习的课堂。"},
-                    { "Home.Index.Keywords", "" },
+                    { "SEO.Home.Index.Title", "{{Web.Name}} - 多人博客" },
+                    { "SEO.Home.Index.Desc", "remember是xx推出的专业在线教育平台，聚合大量优质教育机构和名师，下设职业培训、公务员考试、托福雅思、考证考级、英语口语、中小学教育等众多在线学习精品课程，打造老师在线上课教学、学生及时互动学习的课堂。"},
+                    { "SEO.Home.Index.Keywords", "" },
+
+                    { "SEO.Article.Index.Title", "{{Article.Title}} - {{Web.Name}}" },
+                    { "SEO.Article.Index.Desc", "{{Article.Content(30)}}"},
+                    { "SEO.Article.Index.Keywords", "{{Article.Title}}" },
 
 
                 };
@@ -349,6 +353,15 @@ namespace WebUI.Controllers
                     Parent = parentMenu,
                     SortCode = 10,
                 });
+                this._sys_MenuService.Create(new Sys_Menu()
+                {
+                    Name = "SEO设置",
+                    ControllerName = "SEO",
+                    ActionName = "Index",
+                    AreaName = "Admin",
+                    Parent = parentMenu,
+                    SortCode = 10,
+                });
                 //this._sys_MenuService.Create(new Sys_Menu()
                 //{
                 //    Name = "注册与访问控制",
@@ -370,15 +383,6 @@ namespace WebUI.Controllers
                 //this._sys_MenuService.Create(new Sys_Menu()
                 //{
                 //    Name = "性能优化",
-                //    ControllerName = "Home",
-                //    ActionName = "Index",
-                //    AreaName = "Admin",
-                //    Parent = parentMenu,
-                //    SortCode = 10,
-                //});
-                //this._sys_MenuService.Create(new Sys_Menu()
-                //{
-                //    Name = "SEO设置",
                 //    ControllerName = "Home",
                 //    ActionName = "Index",
                 //    AreaName = "Admin",
@@ -1399,55 +1403,19 @@ namespace WebUI.Controllers
                 });
                 #endregion
 
-                #region 文库
-                Sys_Menu bookInfo_Sys_Menu = this._sys_MenuService.Find(m => m.ControllerName == "BookInfo");
+                #region 全局-SEO设置
+                Sys_Menu setting_seo = this._sys_MenuService.Find(m => m.ControllerName == "SEO");
                 this._functionInfoService.Create(new FunctionInfo
                 {
-                    AuthKey = "Admin.BookInfo.Index",
-                    Name = "文库-列表",
-                    Sys_Menu = bookInfo_Sys_Menu
+                    AuthKey = "Admin.SEO.Index",
+                    Name = "SEO设置-首页",
+                    Sys_Menu = setting_seo
                 });
                 this._functionInfoService.Create(new FunctionInfo
                 {
-                    AuthKey = "Admin.BookInfo.Edit",
-                    Name = "文库-编辑",
-                    Sys_Menu = bookInfo_Sys_Menu
-                });
-                this._functionInfoService.Create(new FunctionInfo
-                {
-                    AuthKey = "Admin.BookInfo.ImportBook",
-                    Name = "文库-导入文库",
-                    Sys_Menu = bookInfo_Sys_Menu
-                });
-                this._functionInfoService.Create(new FunctionInfo
-                {
-                    AuthKey = "Admin.BookInfo.Delete",
-                    Name = "文库-删除",
-                    Sys_Menu = bookInfo_Sys_Menu
-                });
-                this._functionInfoService.Create(new FunctionInfo
-                {
-                    AuthKey = "Admin.BookInfo.Create",
-                    Name = "文库-创建",
-                    Sys_Menu = bookInfo_Sys_Menu
-                });
-                this._functionInfoService.Create(new FunctionInfo
-                {
-                    AuthKey = "Admin.BookInfo.AddVideo",
-                    Name = "文库章节-添加",
-                    Sys_Menu = bookInfo_Sys_Menu
-                });
-                this._functionInfoService.Create(new FunctionInfo
-                {
-                    AuthKey = "Admin.BookInfo.DeleteVideo",
-                    Name = "文库章节-删除",
-                    Sys_Menu = bookInfo_Sys_Menu
-                });
-                this._functionInfoService.Create(new FunctionInfo
-                {
-                    AuthKey = "Admin.BookInfo.EditVideo",
-                    Name = "文库章节-编辑",
-                    Sys_Menu = bookInfo_Sys_Menu
+                    AuthKey = "Admin.SEO.Article",
+                    Name = "SEO设置-文章页",
+                    Sys_Menu = setting_seo
                 });
                 #endregion
 
