@@ -171,7 +171,7 @@ namespace WebUI.Controllers
 
                     //{ "WebUI.Site", "" },
                     { "Web.Name", "remember" },
-                    { "WebUI.Stat", "" },
+                    { "Web.Footer", "<strong>Copyright &copy; 2020 <a target='_blank' href='https://github.com/yiyungent/remember'>remember</a>.</strong> All rights reserved." },
 
                      { "Mail.UserName", "" },
                     { "Mail.Password", "" },

@@ -39,7 +39,7 @@ namespace WebUI.Areas.Admin.Controllers
             SettingViewModel viewModel = new SettingViewModel();
 
             viewModel.WebName = WebSetting.Get("Web.Name");
-            viewModel.WebUIStat = WebSetting.Get("WebUI.Stat");
+            viewModel.WebFooter = WebSetting.Get("Web.Footer");
 
             return View(viewModel);
         }
@@ -60,7 +60,7 @@ namespace WebUI.Areas.Admin.Controllers
                     try
                     {
                         WebSetting.Set("Web.Name", inputModel.WebName);
-                        WebSetting.Set("WebUI.Stat", inputModel.WebUIStat);
+                        WebSetting.Set("Web.Footer", inputModel.WebFooter);
                     }
                     catch (Exception ex)
                     {

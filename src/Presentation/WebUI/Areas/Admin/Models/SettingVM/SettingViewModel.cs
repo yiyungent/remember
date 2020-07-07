@@ -11,10 +11,10 @@ namespace WebUI.Areas.Admin.Models.SettingVM
         public string WebName { get; set; }
 
         /// <summary>
-        /// 网站底部统计代码
+        /// 网站底部
         /// </summary>
         [AllowHtml]
-        public string WebUIStat { get; set; }
+        public string WebFooter { get; set; }
 
         public bool LogEnable { get; set; }
 
