@@ -1,17 +1,23 @@
-﻿
+﻿@using Core
+@using Services.Interface
 @{
 	Layout = null;
 
-	string title = ViewBag.Title;
+	string webName = ViewBag.WebName;
+	string footer = ContainerManager.Resolve<ISettingService>().GetSet("Web.Footer");
 }
 
 <footer class="main-footer">
 	<div class="container">
+		<!-- To the right -->
 		<div class="pull-right hidden-xs">
-			<b>Version</b> 2.3.7
+			@webName
 		</div>
-		<strong>Copyright &copy; 2014-2016 <a href="/">@title</a>.</strong> All rights
-		reserved.
+		<!-- Default to the left -->
+		<div class="pull-left hidden-xs">
+			@Html.Raw(footer)
+			<p>Powered by <strong><a href="https://github.com/yiyungent/remember" target="_blank">remember</a></strong> <em>X0.1</em></p>
+		</div>
 	</div>
 	<!-- /.container -->
 </footer>

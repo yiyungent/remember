@@ -4,7 +4,6 @@
 @using WebUI.Areas.Account.Models
 @using Framework.Models
 @using Framework.Infrastructure.Concrete
-@using Framework.Extensions
 @model UserInfo
 @{
 	Layout = "~/Areas/Account/Views/Shared/_LayoutMain.cshtml";
@@ -13,7 +12,7 @@
 	// 当前登录账号
 	CurrentAccountModel currentAccount = AccountManager.GetCurrentAccount();
 	UserInfo currentUserInfo = AccountManager.GetCurrentUserInfo(true);
-	currentUserInfo.Avatar = currentUserInfo.Avatar.ToHttpAbsoluteUrl();
+	currentUserInfo.Avatar = currentUserInfo.Avatar;
 	EditUserInfoViewModel editUserInfoModel = new EditUserInfoViewModel
 	{
 		InputUserName = currentUserInfo.UserName,
@@ -21,14 +20,13 @@
 		InputEmail = currentUserInfo.Email
 	};
 	// 此个人中心地址对应的用户
-	Model.Avatar = Model.Avatar.ToHttpAbsoluteUrl();
+	Model.Avatar = Model.Avatar;
 	// 当前访问的个人中心是否为当前登录账号的个人中心---仅自己可见的内容
 	bool isSelf = Model.ID == currentUserInfo.ID;
 
 
 	ViewBag.CurrentUserInfo = currentUserInfo;
 	ViewBag.CurrentAccount = currentAccount;
-	ViewBag.SubTitle = Model.UserName + "的空间";
 }
 @section head {
 }

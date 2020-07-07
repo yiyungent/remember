@@ -90,6 +90,8 @@ namespace WebUI.Areas.Account.Controllers
 
             #endregion
 
+            ViewBag.Title = "登陆 - " + _settingService.GetSet("Web.Name");
+
             return View();
         }
 
@@ -221,6 +223,8 @@ namespace WebUI.Areas.Account.Controllers
         #region 找回密码视图
         public ActionResult FindPassword()
         {
+            ViewBag.Title = "找回密码 - " + _settingService.GetSet("Web.Name");
+
             return View();
         }
         #endregion

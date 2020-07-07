@@ -8220,7 +8220,7 @@
     <Content Include="Areas\Account\Views\Profile\Index.cshtml" />
     <Content Include="Areas\Account\Views\Shared\_AboutMeBoxPartial.cshtml" />
     <Content Include="Areas\Account\Views\Shared\_ActivityPartial.cshtml" />
-    <Content Include="Areas\Account\Views\Shared\_Login.cshtml" />
+    <Content Include="Areas\Account\Views\Shared\_LayoutLogin.cshtml" />
     <Content Include="Areas\Account\Views\Shared\_MessagePartial.cshtml" />
     <Content Include="Areas\Account\Views\Shared\_ProfileBoxPartial.cshtml" />
     <Content Include="Areas\Account\Views\Shared\_Redirect.cshtml" />

@@ -10,7 +10,7 @@
 
 <div id="js-profileBox" class="box box-primary">
 	<div class="box-body box-profile">
-		<img class="profile-user-img img-responsive img-circle" src="@Model.Avatar.ToHttpAbsoluteUrl()" alt="@Model.UserName">
+		<img class="profile-user-img img-responsive img-circle" src="@Model.Avatar" alt="@Model.UserName">
 
 		<h3 class="profile-username text-center">@Model.UserName</h3>
 
@@ -24,7 +24,7 @@
 				<b>关注</b> <a class="pull-right">543</a>
 			</li>
 			<li class="list-group-item">
-				<b>积分</b> <a class="pull-right">13,287</a>
+				<b>积分</b> <a class="pull-right">@Model.Credit</a>
 			</li>
 		</ul>
 

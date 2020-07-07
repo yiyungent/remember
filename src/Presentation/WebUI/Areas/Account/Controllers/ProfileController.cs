@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using WebUI.Areas.Account.Models;
 using WebUI.Areas.Admin.Models;
 using WebUI.Areas.Admin.Models.Common;
@@ -41,7 +42,33 @@ namespace WebUI.Areas.Account.Controllers
         #endregion
 
         #region 个人中心首页
-        public ActionResult Index(string userName = null, int pageIndex = 1)
+
+        public ActionResult Index(int id = 0, int pageIndex = 1)
+        {
+            if (id == 0)
+            {
+                return RedirectToAction("Index", "Home", new { area = "" });
+            }
+            // 此主页对应的UserInfo
+            UserInfo viewModel = AccountManager.GetUserInfoById(id);
+            int authorId = viewModel.ID;
+            if (viewModel == null)
+            {
+                // 不存在此用户
+                return new View_NotExistAccountResult();
+            }
+
+            int pageSize = 6;
+            pageIndex = pageIndex >= 1 ? pageIndex : 1;
+            Query(pageIndex, pageSize, out IList<Article> list, out int totalCount, authorId);
+
+            ListViewModel<Article> articles = new ListViewModel<Article>(list, pageIndex: pageIndex, pageSize: pageSize, totalCount: totalCount);
+            ViewBag.ArticleVM = articles;
+
+            return View(viewModel);
+        }
+
+        public ActionResult Index2(string userName = null, int pageIndex = 1)
         {
             if (userName == null)
             {
@@ -63,7 +90,7 @@ namespace WebUI.Areas.Account.Controllers
             ListViewModel<Article> articles = new ListViewModel<Article>(list, pageIndex: pageIndex, pageSize: pageSize, totalCount: totalCount);
             ViewBag.ArticleVM = articles;
 
-            return View(viewModel);
+            return View("Index", viewModel);
         }
 
         private void Query(int pageIndex, int pageSize, out IList<Article> list, out int totalCount, int authorId)

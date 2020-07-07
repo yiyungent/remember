@@ -31,7 +31,7 @@ namespace WebUI.Areas.Account.Controllers
                 {
                     model = new UserInfo
                     {
-                        Avatar = ":WebUISite:/images/notexist-avatar.jpg",
+                        Avatar = "/images/notexist-avatar.jpg",
                         Role_Users = new List<Role_User>()
                     };
                 }

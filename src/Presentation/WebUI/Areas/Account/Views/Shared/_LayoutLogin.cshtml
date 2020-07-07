@@ -2,12 +2,7 @@
 @{
 	Layout = null;
 
-	string subTitle = ViewBag.SubTitle;
-	string title = WebSetting.Get("WebUITitle");
-	if (!string.IsNullOrEmpty(subTitle))
-	{
-		title = subTitle + " - " + title;
-	}
+	string title = ViewBag.Title;
 }
 
 <!DOCTYPE html>
@@ -15,7 +10,7 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width" />
-	<title>@title</title>
+	<title>@title - Powered by remember</title>
 	<link href="/assets/css/base.css" rel="stylesheet" />
 	<style>
 		.outer {

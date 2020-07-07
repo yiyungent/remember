@@ -1,9 +1,7 @@
 ﻿@using Domain.Entities
-@using PluginHub.Mvc5
 @using Core
 @using Services.Interface;
 @using Framework.Models
-@using Framework.Extensions
 @using Framework.Infrastructure.Concrete
 @{
 	Layout = null;
@@ -12,13 +10,6 @@
 	CurrentAccountModel currentAccount = AccountManager.GetCurrentAccount();
 	UserInfo currentUserInfo = AccountManager.GetCurrentUserInfo(true);
 	string roleName = currentUserInfo.RoleInfos.FirstOrDefault() == null ? "" : currentUserInfo.RoleInfos.FirstOrDefault().Name;
-	string title = WebSetting.Get("WebUITitle");
-	string subTitle = ViewBag.SubTitle;
-	string fullTitle = title;
-	if (!string.IsNullOrEmpty(subTitle))
-	{
-		fullTitle = subTitle + " - " + title;
-	}
 
 	IDictionary<int, string> themeTemplateDic = new Dictionary<int, string>();
 	IList<ThemeTemplate> themeTemplates = ContainerManager.Resolve<IThemeTemplateService>().Filter(m => m.IsOpen == 1).ToList();
@@ -28,12 +19,16 @@
 		themeTemplateDic.Add(item.ID, item.Title);
 	}
 
+	ISettingService settingService = ContainerManager.Resolve<ISettingService>();
+	string webName = settingService.GetSet("Web.Name");
+
+	ViewBag.WebName = webName;
 	ViewBag.CurrentAccount = currentAccount;
 	ViewBag.CurrentUserInfo = currentUserInfo;
 	ViewBag.RoleName = roleName;
-	ViewBag.Title = WebSetting.Get("WebUITitle");
 	ViewBag.ThemeTemplateDic = themeTemplateDic;
 
+	string title = currentUserInfo.UserName + "的个人空间 - " + webName;
 }
 
 <!DOCTYPE html>
@@ -41,7 +36,7 @@
 <html>
 <head>
 	<meta name="viewport" content="width=device-width" />
-	<title>@fullTitle</title>
+	<title>@title - Powered by remember</title>
 	<!-- Tell the browser to be responsive to screen width -->
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 	<link rel="stylesheet" href="/assets/libs/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -66,7 +61,7 @@
 			<nav class="navbar navbar-static-top">
 				<div class="container">
 					<div class="navbar-header">
-						<a href="/" class="navbar-brand">@title</a>
+						<a href="/" class="navbar-brand">@webName</a>
 						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
 							<i class="fa fa-bars"></i>
 						</button>
