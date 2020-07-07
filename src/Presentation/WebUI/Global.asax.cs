@@ -129,6 +129,7 @@ namespace WebUI
             builder.RegisterType<Sys_MenuRepository>().As<ISys_MenuRepository>();
             builder.RegisterType<ThemeTemplateRepository>().As<IThemeTemplateRepository>();
             builder.RegisterType<UserInfoRepository>().As<IUserInfoRepository>();
+            builder.RegisterType<CatInfoRepository>().As<ICatInfoRepository>();
 
             // 注册服务层服务
             builder.RegisterType<ArticleService>().As<IArticleService>();
@@ -153,6 +154,7 @@ namespace WebUI
             builder.RegisterType<Sys_MenuService>().As<ISys_MenuService>();
             builder.RegisterType<ThemeTemplateService>().As<IThemeTemplateService>();
             builder.RegisterType<UserInfoService>().As<IUserInfoService>();
+            builder.RegisterType<CatInfoService>().As<ICatInfoService>();
 
             // TODO: 注册基于接口约束的实体，不知道为什么，改为部分类后就失败了，以前还测试成功
             // 注册基于接口约束的实体

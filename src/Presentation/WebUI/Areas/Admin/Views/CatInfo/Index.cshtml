@@ -22,7 +22,7 @@
                 shade: 0.4,
                 shadeClose: false,
                 area: ['800px', '420px'],
-                content: ['/Admin/SysMenu/Edit?id=' + id, 'yes'],
+                content: ['/Admin/CatInfo/Edit?id=' + id, 'yes'],
                 end: function () {
                     window.location.href = window.location.href; // 刷新页面
                 }
@@ -31,5 +31,5 @@
 	</script>
 }
 <div>
-	@Html.GenerateCollapseMenu()
+	@Html.GenerateCollapseCat()
 </div>

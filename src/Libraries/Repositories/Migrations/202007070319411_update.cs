@@ -3,7 +3,7 @@ namespace Repositories.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class upatd : DbMigration
+    public partial class update : DbMigration
     {
         public override void Up()
         {
@@ -23,6 +23,7 @@ namespace Repositories.Migrations
                         DislikeNum = c.Int(nullable: false),
                         ShareNum = c.Int(nullable: false),
                         CommentNum = c.Int(nullable: false),
+                        FavNum = c.Int(nullable: false),
                         ArticleStatus = c.Int(nullable: false),
                         CommentStatus = c.Int(nullable: false),
                         OpenStatus = c.Int(nullable: false),
@@ -64,17 +65,12 @@ namespace Repositories.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         CreateTime = c.DateTime(precision: 0),
-                        DeletedAt = c.DateTime(precision: 0),
-                        IsDeleted = c.Boolean(nullable: false),
-                        OperatorId = c.Int(),
                         UserInfoId = c.Int(nullable: false),
                         RoleInfoId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.UserInfo", t => t.OperatorId)
                 .ForeignKey("dbo.RoleInfo", t => t.RoleInfoId, cascadeDelete: true)
                 .ForeignKey("dbo.UserInfo", t => t.UserInfoId, cascadeDelete: true)
-                .Index(t => t.OperatorId)
                 .Index(t => t.UserInfoId)
                 .Index(t => t.RoleInfoId);
             
@@ -96,17 +92,12 @@ namespace Repositories.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         CreateTime = c.DateTime(precision: 0),
-                        DeletedAt = c.DateTime(precision: 0),
-                        IsDeleted = c.Boolean(nullable: false),
-                        OperatorId = c.Int(),
                         RoleInfoId = c.Int(nullable: false),
                         FunctionInfoId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.ID)
                 .ForeignKey("dbo.FunctionInfo", t => t.FunctionInfoId, cascadeDelete: true)
-                .ForeignKey("dbo.UserInfo", t => t.OperatorId)
                 .ForeignKey("dbo.RoleInfo", t => t.RoleInfoId, cascadeDelete: true)
-                .Index(t => t.OperatorId)
                 .Index(t => t.RoleInfoId)
                 .Index(t => t.FunctionInfoId);
             
@@ -150,53 +141,46 @@ namespace Repositories.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         CreateTime = c.DateTime(precision: 0),
-                        DeletedAt = c.DateTime(precision: 0),
-                        IsDeleted = c.Boolean(nullable: false),
-                        OperatorId = c.Int(),
                         RoleInfoId = c.Int(nullable: false),
                         Sys_MenuId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.UserInfo", t => t.OperatorId)
                 .ForeignKey("dbo.Sys_Menu", t => t.Sys_MenuId, cascadeDelete: true)
                 .ForeignKey("dbo.RoleInfo", t => t.RoleInfoId, cascadeDelete: true)
-                .Index(t => t.OperatorId)
                 .Index(t => t.RoleInfoId)
                 .Index(t => t.Sys_MenuId);
             
             CreateTable(
-                "dbo.Favorite_Article",
+                "dbo.Article_Cat",
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
-                        CreateTime = c.DateTime(nullable: false, precision: 0),
-                        DeletedAt = c.DateTime(precision: 0),
-                        IsDeleted = c.Boolean(nullable: false),
-                        FavoriteId = c.Int(nullable: false),
+                        CreateTime = c.Long(nullable: false),
+                        CatInfoId = c.Int(nullable: false),
                         ArticleId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.ID)
                 .ForeignKey("dbo.Article", t => t.ArticleId, cascadeDelete: true)
-                .ForeignKey("dbo.Favorite", t => t.FavoriteId, cascadeDelete: true)
-                .Index(t => t.FavoriteId)
+                .ForeignKey("dbo.CatInfo", t => t.CatInfoId, cascadeDelete: true)
+                .Index(t => t.CatInfoId)
                 .Index(t => t.ArticleId);
             
             CreateTable(
-                "dbo.Favorite",
+                "dbo.CatInfo",
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
                         Name = c.String(maxLength: 30, storeType: "nvarchar"),
-                        Description = c.String(unicode: false, storeType: "text"),
-                        IsOpen = c.Boolean(nullable: false),
-                        CreateTime = c.DateTime(nullable: false, precision: 0),
+                        CreateTime = c.Long(nullable: false),
+                        Icon = c.String(unicode: false, storeType: "text"),
+                        SortCode = c.Int(nullable: false),
+                        ParentId = c.Int(),
                         DeletedAt = c.DateTime(precision: 0),
                         IsDeleted = c.Boolean(nullable: false),
-                        CreatorId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.ID)
-                .ForeignKey("dbo.UserInfo", t => t.CreatorId, cascadeDelete: true)
-                .Index(t => t.CreatorId);
+                .ForeignKey("dbo.CatInfo", t => t.ParentId)
+                .Index(t => t.ParentId);
             
             CreateTable(
                 "dbo.Article_Participant",
@@ -206,8 +190,6 @@ namespace Repositories.Migrations
                         IsAgreed = c.Boolean(nullable: false),
                         AgreeTime = c.DateTime(precision: 0),
                         CreateTime = c.DateTime(nullable: false, precision: 0),
-                        DeletedAt = c.DateTime(precision: 0),
-                        IsDeleted = c.Boolean(nullable: false),
                         ArticleId = c.Int(nullable: false),
                         ParticipantId = c.Int(nullable: false),
                         ParticipantInfoId = c.Int(nullable: false),
@@ -259,8 +241,6 @@ namespace Repositories.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         CreateTime = c.DateTime(nullable: false, precision: 0),
-                        DeletedAt = c.DateTime(precision: 0),
-                        IsDeleted = c.Boolean(nullable: false),
                         CommentId = c.Int(nullable: false),
                         UserInfoId = c.Int(nullable: false),
                     })
@@ -276,8 +256,6 @@ namespace Repositories.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         CreateTime = c.DateTime(nullable: false, precision: 0),
-                        DeletedAt = c.DateTime(precision: 0),
-                        IsDeleted = c.Boolean(nullable: false),
                         CommentId = c.Int(nullable: false),
                         UserInfoId = c.Int(nullable: false),
                     })
@@ -288,13 +266,43 @@ namespace Repositories.Migrations
                 .Index(t => t.UserInfoId);
             
             CreateTable(
+                "dbo.Favorite",
+                c => new
+                    {
+                        ID = c.Int(nullable: false, identity: true),
+                        Name = c.String(maxLength: 30, storeType: "nvarchar"),
+                        Description = c.String(unicode: false, storeType: "text"),
+                        IsOpen = c.Boolean(nullable: false),
+                        CreateTime = c.DateTime(nullable: false, precision: 0),
+                        DeletedAt = c.DateTime(precision: 0),
+                        IsDeleted = c.Boolean(nullable: false),
+                        CreatorId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.ID)
+                .ForeignKey("dbo.UserInfo", t => t.CreatorId, cascadeDelete: true)
+                .Index(t => t.CreatorId);
+            
+            CreateTable(
+                "dbo.Favorite_Article",
+                c => new
+                    {
+                        ID = c.Int(nullable: false, identity: true),
+                        CreateTime = c.DateTime(nullable: false, precision: 0),
+                        FavoriteId = c.Int(nullable: false),
+                        ArticleId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.ID)
+                .ForeignKey("dbo.Article", t => t.ArticleId, cascadeDelete: true)
+                .ForeignKey("dbo.Favorite", t => t.FavoriteId, cascadeDelete: true)
+                .Index(t => t.FavoriteId)
+                .Index(t => t.ArticleId);
+            
+            CreateTable(
                 "dbo.Follower_Followed",
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
                         CreateTime = c.DateTime(nullable: false, precision: 0),
-                        DeletedAt = c.DateTime(precision: 0),
-                        IsDeleted = c.Boolean(nullable: false),
                         FollowerId = c.Int(nullable: false),
                         FollowedId = c.Int(nullable: false),
                     })
@@ -327,28 +335,6 @@ namespace Repositories.Migrations
                         AccessUrl = c.String(unicode: false, storeType: "text"),
                         RefererUrl = c.String(unicode: false, storeType: "text"),
                         CreateTime = c.DateTime(nullable: false, precision: 0),
-                        DeletedAt = c.DateTime(precision: 0),
-                        IsDeleted = c.Boolean(nullable: false),
-                    })
-                .PrimaryKey(t => t.ID);
-            
-            CreateTable(
-                "dbo.SearchDetail",
-                c => new
-                    {
-                        ID = c.Guid(nullable: false),
-                        KeyWord = c.String(unicode: false, storeType: "text"),
-                        SearchTime = c.DateTime(nullable: false, precision: 0),
-                    })
-                .PrimaryKey(t => t.ID);
-            
-            CreateTable(
-                "dbo.SearchTotal",
-                c => new
-                    {
-                        ID = c.Guid(nullable: false),
-                        KeyWord = c.String(unicode: false, storeType: "text"),
-                        SearchCount = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.ID);
             
@@ -361,8 +347,6 @@ namespace Repositories.Migrations
                         SetValue = c.String(unicode: false, storeType: "text"),
                         Name = c.String(unicode: false, storeType: "text"),
                         Remark = c.String(unicode: false, storeType: "text"),
-                        DeletedAt = c.DateTime(precision: 0),
-                        IsDeleted = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.ID);
             
@@ -383,6 +367,9 @@ namespace Repositories.Migrations
         {
             DropForeignKey("dbo.Follower_Followed", "FollowerId", "dbo.UserInfo");
             DropForeignKey("dbo.Follower_Followed", "FollowedId", "dbo.UserInfo");
+            DropForeignKey("dbo.Favorite_Article", "FavoriteId", "dbo.Favorite");
+            DropForeignKey("dbo.Favorite_Article", "ArticleId", "dbo.Article");
+            DropForeignKey("dbo.Favorite", "CreatorId", "dbo.UserInfo");
             DropForeignKey("dbo.Comment_Like", "UserInfoId", "dbo.UserInfo");
             DropForeignKey("dbo.Comment_Like", "CommentId", "dbo.Comment");
             DropForeignKey("dbo.Comment_Dislike", "UserInfoId", "dbo.UserInfo");
@@ -392,23 +379,23 @@ namespace Repositories.Migrations
             DropForeignKey("dbo.Article_Participant", "ParticipantInfoId", "dbo.ParticipantInfo");
             DropForeignKey("dbo.Article_Participant", "ParticipantId", "dbo.UserInfo");
             DropForeignKey("dbo.Article_Participant", "ArticleId", "dbo.Article");
-            DropForeignKey("dbo.Favorite_Article", "FavoriteId", "dbo.Favorite");
-            DropForeignKey("dbo.Favorite", "CreatorId", "dbo.UserInfo");
-            DropForeignKey("dbo.Favorite_Article", "ArticleId", "dbo.Article");
+            DropForeignKey("dbo.Article_Cat", "CatInfoId", "dbo.CatInfo");
+            DropForeignKey("dbo.CatInfo", "ParentId", "dbo.CatInfo");
+            DropForeignKey("dbo.Article_Cat", "ArticleId", "dbo.Article");
             DropForeignKey("dbo.Article", "AuthorId", "dbo.UserInfo");
             DropForeignKey("dbo.Role_User", "UserInfoId", "dbo.UserInfo");
             DropForeignKey("dbo.Role_User", "RoleInfoId", "dbo.RoleInfo");
             DropForeignKey("dbo.Role_Menu", "RoleInfoId", "dbo.RoleInfo");
             DropForeignKey("dbo.Role_Function", "RoleInfoId", "dbo.RoleInfo");
-            DropForeignKey("dbo.Role_Function", "OperatorId", "dbo.UserInfo");
             DropForeignKey("dbo.FunctionInfo", "Sys_MenuId", "dbo.Sys_Menu");
             DropForeignKey("dbo.Role_Menu", "Sys_MenuId", "dbo.Sys_Menu");
-            DropForeignKey("dbo.Role_Menu", "OperatorId", "dbo.UserInfo");
             DropForeignKey("dbo.Sys_Menu", "ParentId", "dbo.Sys_Menu");
             DropForeignKey("dbo.Role_Function", "FunctionInfoId", "dbo.FunctionInfo");
-            DropForeignKey("dbo.Role_User", "OperatorId", "dbo.UserInfo");
             DropIndex("dbo.Follower_Followed", new[] { "FollowedId" });
             DropIndex("dbo.Follower_Followed", new[] { "FollowerId" });
+            DropIndex("dbo.Favorite_Article", new[] { "ArticleId" });
+            DropIndex("dbo.Favorite_Article", new[] { "FavoriteId" });
+            DropIndex("dbo.Favorite", new[] { "CreatorId" });
             DropIndex("dbo.Comment_Like", new[] { "UserInfoId" });
             DropIndex("dbo.Comment_Like", new[] { "CommentId" });
             DropIndex("dbo.Comment_Dislike", new[] { "UserInfoId" });
@@ -418,34 +405,31 @@ namespace Repositories.Migrations
             DropIndex("dbo.Article_Participant", new[] { "ParticipantInfoId" });
             DropIndex("dbo.Article_Participant", new[] { "ParticipantId" });
             DropIndex("dbo.Article_Participant", new[] { "ArticleId" });
-            DropIndex("dbo.Favorite", new[] { "CreatorId" });
-            DropIndex("dbo.Favorite_Article", new[] { "ArticleId" });
-            DropIndex("dbo.Favorite_Article", new[] { "FavoriteId" });
+            DropIndex("dbo.CatInfo", new[] { "ParentId" });
+            DropIndex("dbo.Article_Cat", new[] { "ArticleId" });
+            DropIndex("dbo.Article_Cat", new[] { "CatInfoId" });
             DropIndex("dbo.Role_Menu", new[] { "Sys_MenuId" });
             DropIndex("dbo.Role_Menu", new[] { "RoleInfoId" });
-            DropIndex("dbo.Role_Menu", new[] { "OperatorId" });
             DropIndex("dbo.Sys_Menu", new[] { "ParentId" });
             DropIndex("dbo.FunctionInfo", new[] { "Sys_MenuId" });
             DropIndex("dbo.Role_Function", new[] { "FunctionInfoId" });
             DropIndex("dbo.Role_Function", new[] { "RoleInfoId" });
-            DropIndex("dbo.Role_Function", new[] { "OperatorId" });
             DropIndex("dbo.Role_User", new[] { "RoleInfoId" });
             DropIndex("dbo.Role_User", new[] { "UserInfoId" });
-            DropIndex("dbo.Role_User", new[] { "OperatorId" });
             DropIndex("dbo.Article", new[] { "AuthorId" });
             DropTable("dbo.ThemeTemplate");
             DropTable("dbo.Setting");
-            DropTable("dbo.SearchTotal");
-            DropTable("dbo.SearchDetail");
             DropTable("dbo.LogInfo");
             DropTable("dbo.Follower_Followed");
+            DropTable("dbo.Favorite_Article");
+            DropTable("dbo.Favorite");
             DropTable("dbo.Comment_Like");
             DropTable("dbo.Comment_Dislike");
             DropTable("dbo.Comment");
             DropTable("dbo.ParticipantInfo");
             DropTable("dbo.Article_Participant");
-            DropTable("dbo.Favorite");
-            DropTable("dbo.Favorite_Article");
+            DropTable("dbo.CatInfo");
+            DropTable("dbo.Article_Cat");
             DropTable("dbo.Role_Menu");
             DropTable("dbo.Sys_Menu");
             DropTable("dbo.FunctionInfo");

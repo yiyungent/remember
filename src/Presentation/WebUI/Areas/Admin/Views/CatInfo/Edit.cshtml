@@ -1,5 +1,5 @@
 ﻿@using Domain.Entities
-@model Sys_Menu
+@model CatInfo
 @{
 	Layout = null;
 }
@@ -10,9 +10,9 @@
 		@Html.HiddenFor(m => m.ID)
 		<div class="layui-form">
 			<div class="layui-form-item">
-				<label class="layui-form-label">菜单名</label>
+				<label class="layui-form-label">分区名</label>
 				<div class="layui-input-block">
-					<input type="text" name="Name" required lay-verify="required" placeholder="请输入菜单名" autocomplete="off" class="layui-input" value="@Model.Name">
+					<input type="text" name="Name" required lay-verify="required" placeholder="请输入分区名" autocomplete="off" class="layui-input" value="@Model.Name">
 				</div>
 			</div>
 		</div>
@@ -25,7 +25,7 @@
 			</div>
 		</div>
 		<div class="layui-form-item">
-			<label class="layui-form-label">上级菜单</label>
+			<label class="layui-form-label">上级分区</label>
 			<div class="layui-input-block">
 				@Html.DropDownListFor(model => model.ParentId, (IList<SelectListItem>)ViewBag.DDLParent)
 			</div>
@@ -49,7 +49,7 @@
 	function saveData() {
 		$.ajax({
 			type: "post",
-			url: "/Admin/SysMenu/Edit",
+			url: "/Admin/CatInfo/Edit",
 			data: $("form").serialize(),
 			dataType: "json",
 			success: function (data) {

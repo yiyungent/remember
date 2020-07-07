@@ -8168,7 +8168,7 @@
     <Compile Include="Areas\Admin\Controllers\LogInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\RoleInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\SettingController.cs" />
-    <Compile Include="Areas\Admin\Controllers\SysMenuController.cs" />
+    <Compile Include="Areas\Admin\Controllers\CatInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\ThemeTemplateController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserInfoController.cs" />
     <Compile Include="Areas\Admin\Models\Common\AdminWebBaseInfoViewModel.cs" />
@@ -8201,7 +8201,7 @@
     </Compile>
     <Compile Include="HtmlHelpers\AuthTagHelper.cs" />
     <Compile Include="HtmlHelpers\CheckBoxListHelper.cs" />
-    <Compile Include="HtmlHelpers\CollapseMenu.cs" />
+    <Compile Include="HtmlHelpers\CollapseCat.cs" />
     <Compile Include="HtmlHelpers\PageHelper.cs" />
     <Compile Include="HtmlHelpers\PageInfo.cs" />
     <Compile Include="Infrastructure\CmsUrlConstraint.cs" />
@@ -8250,8 +8250,8 @@
     <Content Include="Areas\Admin\Views\Shared\_AdminContent.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_LeftMenuPartial.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_MessagePartial.cshtml" />
-    <Content Include="Areas\Admin\Views\SysMenu\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\SysMenu\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\CatInfo\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\CatInfo\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ThemeTemplate\Index.cshtml" />
     <Content Include="Areas\Admin\Views\ThemeTemplate\UploadTemplate.cshtml" />
     <Content Include="Areas\Admin\Views\UserInfo\Create.cshtml" />

@@ -32,6 +32,7 @@ namespace Repositories.Core
         #region Tables
 
         public virtual DbSet<Article> Article { get; set; }
+        public virtual DbSet<Article_Cat> Article_Cat { get; set; }
         public virtual DbSet<Comment> Comment { get; set; }
         public virtual DbSet<Comment_Dislike> Comment_Dislike { get; set; }
         public virtual DbSet<Comment_Like> Comment_Like { get; set; }
@@ -50,6 +51,7 @@ namespace Repositories.Core
         public virtual DbSet<Role_Function> Role_Function { get; set; }
         public virtual DbSet<Role_Menu> Role_Menu { get; set; }
         public virtual DbSet<Role_User> Role_User { get; set; }
+        public virtual DbSet<CatInfo> CatInfo { get; set; }
 
         #endregion
 

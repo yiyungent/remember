@@ -21,6 +21,7 @@ namespace WebUI.Controllers
         private readonly IFavoriteService _favoriteService;
         private readonly IRole_MenuService _role_MenuService;
         private readonly IRole_FunctionService _role_FunctionService;
+        private readonly ICatInfoService _catInfoService;
         #endregion
 
         #region Properties
@@ -55,7 +56,8 @@ namespace WebUI.Controllers
                                  IArticleService articleService,
                                  IFavoriteService favoriteService,
                                  IRole_MenuService role_MenuService,
-                                 IRole_FunctionService role_FunctionService)
+                                 IRole_FunctionService role_FunctionService,
+                                 ICatInfoService catInfoService)
         {
             this._userInfoService = userInfoService;
             this._settingService = settingService;
@@ -67,6 +69,7 @@ namespace WebUI.Controllers
             this._favoriteService = favoriteService;
             this._role_MenuService = role_MenuService;
             this._role_FunctionService = role_FunctionService;
+            this._catInfoService = catInfoService;
         }
         #endregion
 
@@ -131,6 +134,7 @@ namespace WebUI.Controllers
             InitUserInfo();
 
             InitFavorite();
+            InitCatInfo();
             InitArticle();
         }
         #endregion
@@ -251,7 +255,7 @@ namespace WebUI.Controllers
                        "门户",
                        //"防灌水",
                        "运营",
-                       "应用",
+                       //"应用",
                        //"工具",
                        //"站长",
                        //"UCenter"
@@ -521,15 +525,15 @@ namespace WebUI.Controllers
                 //    Parent = parentMenu,
                 //    SortCode = 10,
                 //});
-                this._sys_MenuService.Create(new Sys_Menu()
-                {
-                    Name = "菜单管理",
-                    ControllerName = "SysMenu",
-                    ActionName = "Index",
-                    AreaName = "Admin",
-                    Parent = parentMenu,
-                    SortCode = 10,
-                });
+                //this._sys_MenuService.Create(new Sys_Menu()
+                //{
+                //    Name = "菜单管理",
+                //    ControllerName = "SysMenu",
+                //    ActionName = "Index",
+                //    AreaName = "Admin",
+                //    Parent = parentMenu,
+                //    SortCode = 10,
+                //});
                 this._sys_MenuService.Create(new Sys_Menu()
                 {
                     Name = "模板管理",
@@ -791,7 +795,7 @@ namespace WebUI.Controllers
                 this._sys_MenuService.Create(new Sys_Menu()
                 {
                     Name = "分区管理",
-                    ControllerName = "Home",
+                    ControllerName = "CatInfo",
                     ActionName = "Index",
                     AreaName = "Admin",
                     Parent = parentMenu,
@@ -1018,17 +1022,17 @@ namespace WebUI.Controllers
                 #endregion
 
                 #region 应用
-                parentMenu = this._sys_MenuService.Find(m => m.Name == "应用");
+                //parentMenu = this._sys_MenuService.Find(m => m.Name == "应用");
 
-                this._sys_MenuService.Create(new Sys_Menu()
-                {
-                    Name = "插件管理",
-                    ControllerName = "Plugin",
-                    ActionName = "Index",
-                    AreaName = "Admin",
-                    Parent = parentMenu,
-                    SortCode = 10,
-                });
+                //this._sys_MenuService.Create(new Sys_Menu()
+                //{
+                //    Name = "插件管理",
+                //    ControllerName = "Plugin",
+                //    ActionName = "Index",
+                //    AreaName = "Admin",
+                //    Parent = parentMenu,
+                //    SortCode = 10,
+                //});
                 #endregion
 
                 #region 工具
@@ -1600,6 +1604,277 @@ namespace WebUI.Controllers
                     CreateTime = DateTime.Now
                 });
                 this._userInfoService.Create(userInfo);
+
+                ShowMessage("成功");
+            }
+            catch (Exception ex)
+            {
+                ShowMessage("失败");
+                ShowMessage(ex.Message);
+            }
+        }
+        #endregion
+
+        #region 初始化分区表
+        private void InitCatInfo()
+        {
+            try
+            {
+                ShowMessage("开始初始化分区表");
+
+                // TODO: 系统菜单图标初始化
+                #region 一级分区
+                string[] firstLevel_names = {
+                       "动画",
+                       "游戏",
+                       "影视",
+                       "生活",
+                       "兴趣",
+                       "轻小说",
+                       "科技",
+                };
+                string[] firstLevel_icons = {
+                    "glyphicon glyphicon-home",
+                    "glyphicon glyphicon-globe",
+                    "glyphicon glyphicon-blackboard",
+                    "glyphicon glyphicon-th-large",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                    "fa fa-folder",
+                };
+                for (int i = 0; i < firstLevel_names.Length; i++)
+                {
+                    this._catInfoService.Create(new CatInfo()
+                    {
+                        Name = firstLevel_names[i],
+                        Icon = firstLevel_icons[i],
+                        SortCode = i + 1,
+                    });
+
+                }
+                #endregion
+
+                #region 二级分区
+
+                // 一级项---二级的父菜单项
+                CatInfo parent = null;
+
+                #region 动画
+                parent = this._catInfoService.Find(m => m.Name == "动画");
+
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "动漫杂谈",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "动漫资讯",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "动画技术",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                #endregion
+
+                #region 游戏
+                parent = this._catInfoService.Find(m => m.Name == "游戏");
+
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "单机游戏",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "电子竞技",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "手机游戏",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "网络游戏",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "桌游棋牌",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                #endregion
+
+                #region 影视
+                parent = this._catInfoService.Find(m => m.Name == "影视");
+
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "电影",
+                    Parent = parent,
+                    SortCode = 20,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "电视剧",
+                    Parent = parent,
+                    SortCode = 20,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "纪录片",
+                    Parent = parent,
+                    SortCode = 20,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "综艺",
+                    Parent = parent,
+                    SortCode = 20,
+                });
+                #endregion
+
+                #region 生活
+                parent = this._catInfoService.Find(m => m.Name == "生活");
+
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "美食",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "萌宠",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "时尚",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "运动",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "日常",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                #endregion
+
+                #region 兴趣
+                parent = this._catInfoService.Find(m => m.Name == "兴趣");
+
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "绘画",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "手工",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "摄影",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "模型手办",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                #endregion
+
+                #region 轻小说
+                parent = this._catInfoService.Find(m => m.Name == "轻小说");
+
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "原创连载",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "同人连载",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "短篇小说",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "小说杂谈",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                #endregion
+
+                #region 科技
+                parent = this._catInfoService.Find(m => m.Name == "科技");
+
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "人文历史",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "自然",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "数码",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "汽车",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                this._catInfoService.Create(new CatInfo()
+                {
+                    Name = "学习",
+                    Parent = parent,
+                    SortCode = 10,
+                });
+                #endregion
+
+                #endregion
 
                 ShowMessage("成功");
             }
