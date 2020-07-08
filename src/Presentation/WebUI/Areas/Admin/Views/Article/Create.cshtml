@@ -4,6 +4,10 @@
 @{
 	Layout = "~/Areas/Admin/Views/Shared/_AdminContent.cshtml";
 
+	IList<CatInfo> catInfos = ViewBag.CatInfos;
+	CatInfo defaultSelectedCat = ViewBag.DefaultSelectedCat;
+	IList<CatInfo> firstLevelCats = catInfos.Where(m => m.Parent == null).ToList();
+
 	Html.EnableClientValidation(false);
 }
 @section head {
@@ -11,6 +15,20 @@
 @section body {
 	<script src="/assets/libs/wangEditor/wangEditor.min.js"></script>
 	<script>
+
+		function selectCat(id, name, parentName) {
+			event.preventDefault();
+			$("#js-catId").val(id);
+			$("#js-cat-tip").text(parentName + " → " + name);
+
+		}
+
+		function initSelectCat() {
+			var catId = $("#js-catId").val();
+			var name = $("#js-cat [data-cat-id=" + catId + "]").text();
+			var parentName = $("#js-cat [data-cat-id=" + catId + "]").data("cat-parent-name");
+			$("#js-cat-tip").text(parentName + " → " + name);
+		}
 
 		function saveDataSuccess(data) {
 			if (data.code <= 0) {
@@ -34,7 +52,7 @@
 
 
 		$(function () {
-			
+
 			var E = window.wangEditor;
 			var editor = new E('#js-editArea');
 			// editor 配置
@@ -57,7 +75,7 @@
 			// 初始化 editor 的内容
 			editor.txt.html($hiddenEditArea.val());
 
-
+			initSelectCat();
 		});
 
 	</script>
@@ -84,13 +102,35 @@
 				<div id="js-editArea"></div>
 				@Html.TextAreaFor(m => m.Content, new { style = "display: none;" })
 			</div>
+			<div id="js-cat" class="form-group">
+				<label>分区</label>
+				<div>
+					@foreach (var item in firstLevelCats)
+					{
+						<div class="btn-group">
+							<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<span data-cat-id="@item.ID">@item.Name</span> <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu">
+								@foreach (var subItem in item.Children)
+								{
+									<li><a onclick="selectCat(@subItem.ID, '@subItem.Name', '@item.Name')" data-cat-id="@subItem.ID" data-cat-parent-name="@item.Name">@subItem.Name</a></li>
+								}
+							</ul>
+						</div>
+					}
+					@Html.Hidden("CatId", defaultSelectedCat.ID, new { id = "js-catId" })
+					<div style="padding-top:12px;">当前选择的分区：<span id="js-cat-tip" style="color:#00a1d6;"></span></div>
+				</div>
+			</div>
 			<div class="form-group">
 				<label for="CustomUrl">自定义URL</label>
 			</div>
 			<div class="input-group">
-				@{ string str = $"{WebSetting.Get("WebUISite")}/u{Model.AuthorId}/"; }
+				@{ string str = $"/u{Model.AuthorId}/"; }
 				<span class="input-group-addon">@str</span>
 				@Html.TextBoxFor(m => m.CustomUrl, new { @class = "form-control" })
+				<span class="input-group-addon">.html</span>
 			</div>
 		</div>
 		<!-- /.box-body -->

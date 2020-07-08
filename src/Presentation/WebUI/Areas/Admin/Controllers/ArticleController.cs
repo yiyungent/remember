@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Common;
 using Domain;
 using Domain.Entities;
 using Framework.Extensions;
@@ -21,12 +22,16 @@ namespace WebUI.Areas.Admin.Controllers
     {
         #region Fields
         private readonly IArticleService _articleService;
+        private readonly ICatInfoService _catInfoService;
+        private readonly IArticle_CatService _article_CatService;
         #endregion
 
         #region Ctor
-        public ArticleController(IArticleService articleService)
+        public ArticleController(IArticleService articleService, ICatInfoService catInfoService, IArticle_CatService article_CatService)
         {
             this._articleService = articleService;
+            this._catInfoService = catInfoService;
+            this._article_CatService = article_CatService;
         }
         #endregion
 
@@ -74,7 +79,11 @@ namespace WebUI.Areas.Admin.Controllers
         public ViewResult Edit(int id)
         {
             Article viewModel = this._articleService.Find(m => m.ID == id && !m.IsDeleted);
-            viewModel.CustomUrl = viewModel.CustomUrl.Replace($"u{viewModel.AuthorId}/", "");
+            viewModel.CustomUrl = viewModel.CustomUrl.Replace($"u{viewModel.AuthorId}/", "").Replace(".html", "");
+            CatInfo selectedCat = _article_CatService.Find(m => m.ArticleId == viewModel.ID).CatInfo;
+            IList<CatInfo> catInfos = _catInfoService.All().ToList();
+            ViewBag.SelectedCat = selectedCat;
+            ViewBag.CatInfos = catInfos;
 
             return View(viewModel);
         }
@@ -90,30 +99,51 @@ namespace WebUI.Areas.Admin.Controllers
                 {
 
                     #region 数据有效效验
-
-
-
+                    IList<CatInfo> catInfos = _catInfoService.All().ToList();
+                    int selectCatId = 0;
+                    if (int.TryParse(Request.Form["CatId"], out selectCatId))
+                    {
+                        if (catInfos.Select(m => m.ID).Contains(selectCatId))
+                        {
+                            selectCatId = int.Parse(Request.Form["CatId"]);
+                        }
+                        else
+                        {
+                            return Json(new { code = -1, message = "添加失败,分区不存在" });
+                        }
+                    }
+                    else
+                    {
+                        return Json(new { code = -1, message = "添加失败,分区ID为整数" });
+                    }
+                    Article dbModel = this._articleService.Find(m => m.ID == inputModel.ID && !m.IsDeleted);
+                    string fullCustomUrl = $"u{dbModel.AuthorId}/{inputModel.CustomUrl}.html";
+                    bool isExist = this._articleService.Contains(m => m.CustomUrl == fullCustomUrl);
+                    if (isExist)
+                    {
+                        return Json(new { code = -1, message = "添加失败,自定义URL已存在，请更改" });
+                    }
                     #endregion
 
-                    Article dbModel = this._articleService.Find(m => m.ID == inputModel.ID && !m.IsDeleted);
-
-                    int userId = AccountManager.GetCurrentAccount().UserId;
                     // 输入模型->数据库模型
                     dbModel.Title = inputModel.Title;
                     dbModel.Content = inputModel.Content;
-                    dbModel.CustomUrl = $"u{userId}/{inputModel.CustomUrl}";
+                    dbModel.CustomUrl = fullCustomUrl;
                     dbModel.LastUpdateTime = DateTime.Now;
 
                     this._articleService.Update(dbModel);
-
-                    // 添加到队列-新建此文章索引 -- 不需要先删除，因为 SearchIndexManager 会先删除此ID的索引，再新建
-                    //SearchIndexManager.GetInstance().AddQueue(dbModel.ID.ToString(), dbModel.Title, dbModel.Content, dbModel.CreateTime, dbModel.CustomUrl);
+                    // 更新分区s
+                    Article_Cat article_Cat = this._article_CatService.Find(m => m.ArticleId == dbModel.ID);
+                    article_Cat.ArticleId = inputModel.ID;
+                    article_Cat.CatInfoId = selectCatId;
+                    article_Cat.CreateTime = DateTime.Now.ToTimeStamp10();
+                    this._article_CatService.Update(article_Cat);
 
                     return Json(new { code = 1, message = "保存成功" });
                 }
                 else
                 {
-                    string errorMessage = ModelState.GetErrorMessage();
+                    string errorMessage = "保存失败";
                     return Json(new { code = -1, message = errorMessage });
                 }
             }
@@ -135,10 +165,6 @@ namespace WebUI.Areas.Admin.Controllers
                 dbModel.DeletedAt = DateTime.Now;
                 this._articleService.Update(dbModel);
 
-
-                // 添加到队列-删除此文章索引
-                //SearchIndexManager.GetInstance().DeleteQueue(id.ToString());
-
                 return Json(new { code = 1, message = "删除成功" });
             }
             catch (Exception ex)
@@ -156,7 +182,11 @@ namespace WebUI.Areas.Admin.Controllers
             DateTime now = DateTime.Now;
             int userId = AccountManager.GetCurrentAccount().UserId;
             viewModel.AuthorId = userId;
-            viewModel.CustomUrl = $"article-{now.Year}-{now.Month}-{now.Day}-" + Guid.NewGuid().ToString().Substring(0, 8) + ".html";
+            viewModel.CustomUrl = Guid.NewGuid().ToString().Substring(0, 7);
+
+            IList<CatInfo> catInfos = _catInfoService.All().ToList();
+            ViewBag.CatInfos = catInfos;
+            ViewBag.DefaultSelectedCat = catInfos.Where(m => m.Parent != null).FirstOrDefault();
 
             return View(viewModel);
         }
@@ -171,30 +201,50 @@ namespace WebUI.Areas.Admin.Controllers
                 if (ModelState.IsValid)
                 {
                     #region 数据有效效验
-
+                    IList<CatInfo> catInfos = _catInfoService.All().ToList();
+                    int selectCatId = 0;
+                    if (int.TryParse(Request.Form["CatId"], out selectCatId))
+                    {
+                        if (catInfos.Select(m => m.ID).Contains(selectCatId))
+                        {
+                            selectCatId = int.Parse(Request.Form["CatId"]);
+                        }
+                        else
+                        {
+                            return Json(new { code = -1, message = "添加失败,分区不存在" });
+                        }
+                    }
+                    else
+                    {
+                        return Json(new { code = -1, message = "添加失败,分区ID为整数" });
+                    }
+                    int userId = AccountManager.GetCurrentAccount().UserId;
+                    string fullCustomUrl = $"u{userId}/{inputModel.CustomUrl}.html";
+                    bool isExist = this._articleService.Contains(m => m.CustomUrl == fullCustomUrl);
+                    if (isExist)
+                    {
+                        return Json(new { code = -1, message = "添加失败,自定义URL已存在，请更改" });
+                    }
                     #endregion
 
                     Article dbModel = inputModel;
-                    int userId = AccountManager.GetCurrentAccount().UserId;
                     dbModel.AuthorId = userId;
                     dbModel.CreateTime = DateTime.Now;
                     dbModel.LastUpdateTime = DateTime.Now;
-                    dbModel.CustomUrl = $"u{userId}/{inputModel.CustomUrl}";
-
+                    dbModel.CustomUrl = fullCustomUrl;
                     this._articleService.Create(dbModel);
-
-                    // TODO: 添加搜索索引
-                    //int lastId = _articleService.GetLastId();
-
-                    // 添加到队列-新建此文章索引
-                    //SearchIndexManager.GetInstance().AddQueue(lastId.ToString(), dbModel.Title, dbModel.Content, dbModel.CreateTime, dbModel.CustomUrl);
+                    this._article_CatService.Create(new Article_Cat
+                    {
+                        ArticleId = dbModel.ID,
+                        CatInfoId = selectCatId,
+                        CreateTime = DateTime.Now.ToTimeStamp10()
+                    });
 
                     return Json(new { code = 1, message = "添加成功" });
                 }
                 else
                 {
-                    string errorMessage = ModelState.GetErrorMessage();
-                    return Json(new { code = -1, message = errorMessage });
+                    return Json(new { code = -1, message = "添加失败" });
                 }
             }
             catch (Exception ex)

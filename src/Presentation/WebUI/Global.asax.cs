@@ -115,6 +115,7 @@ namespace WebUI
             builder.RegisterType<Article_DislikeRepository>().As<IArticle_DislikeRepository>();
             builder.RegisterType<Article_LikeRepository>().As<IArticle_LikeRepository>();
             builder.RegisterType<Article_ParticipantRepository>().As<IArticle_ParticipantRepository>();
+            builder.RegisterType<Article_CatRepository>().As<IArticle_CatRepository>();
             builder.RegisterType<FavoriteRepository>().As<IFavoriteRepository>();
             builder.RegisterType<Favorite_ArticleRepository>().As<IFavorite_ArticleRepository>();
             builder.RegisterType<Follower_FollowedRepository>().As<IFollower_FollowedRepository>();
@@ -140,6 +141,7 @@ namespace WebUI
             builder.RegisterType<Article_DislikeService>().As<IArticle_DislikeService>();
             builder.RegisterType<Article_LikeService>().As<IArticle_LikeService>();
             builder.RegisterType<Article_ParticipantService>().As<IArticle_ParticipantService>();
+            builder.RegisterType<Article_CatService>().As<IArticle_CatService>();
             builder.RegisterType<FavoriteService>().As<IFavoriteService>();
             builder.RegisterType<Favorite_ArticleService>().As<IFavorite_ArticleService>();
             builder.RegisterType<Follower_FollowedService>().As<IFollower_FollowedService>();
@@ -205,11 +207,6 @@ namespace WebUI
                 defaults: new { controller = "Install", action = "Index" },
                 namespaces: new string[] { "WebUI.Controllers" }
             );
-
-            // register custom routes (plugins, etc)
-            // TODO: Could not load file or assembly 'Autofac.Integration.Mvc, Version=3.3.0.0, Culture=neutral,
-            //var routePublisher = EngineContext.Current.Resolve<IRoutePublisher>();
-            //routePublisher.RegisterRoutes(routes);
 
             // 注册文章页的自定义路由
             var route = routes.MapRoute(

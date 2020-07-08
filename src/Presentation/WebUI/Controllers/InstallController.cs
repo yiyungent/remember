@@ -1,5 +1,7 @@
-﻿using Domain.Entities;
+﻿using Core.Common;
+using Domain.Entities;
 using Framework.Common;
+using Repositories.Core;
 using Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -22,6 +24,7 @@ namespace WebUI.Controllers
         private readonly IRole_MenuService _role_MenuService;
         private readonly IRole_FunctionService _role_FunctionService;
         private readonly ICatInfoService _catInfoService;
+        private readonly IArticle_CatService _article_CatService;
         #endregion
 
         #region Properties
@@ -57,7 +60,8 @@ namespace WebUI.Controllers
                                  IFavoriteService favoriteService,
                                  IRole_MenuService role_MenuService,
                                  IRole_FunctionService role_FunctionService,
-                                 ICatInfoService catInfoService)
+                                 ICatInfoService catInfoService,
+                                 IArticle_CatService article_CatService)
         {
             this._userInfoService = userInfoService;
             this._settingService = settingService;
@@ -70,6 +74,7 @@ namespace WebUI.Controllers
             this._role_MenuService = role_MenuService;
             this._role_FunctionService = role_FunctionService;
             this._catInfoService = catInfoService;
+            this._article_CatService = article_CatService;
         }
         #endregion
 
@@ -136,6 +141,7 @@ namespace WebUI.Controllers
             InitFavorite();
             InitCatInfo();
             InitArticle();
+            InitArticle_Cat();
         }
         #endregion
 
@@ -1873,7 +1879,7 @@ namespace WebUI.Controllers
                     LastUpdateTime = DateTime.Now,
                     Title = "Hello World！",
                     Content = "Hello World! 这是一篇自动生成的文章",
-                    CustomUrl = "HelloWorld.html",
+                    CustomUrl = "u1/HelloWorld.html",
                     Description = "这是一篇自动生成的文章"
                 });
 
@@ -1887,6 +1893,31 @@ namespace WebUI.Controllers
         }
         #endregion
 
+        #region 初始化文章分区表
+        private void InitArticle_Cat()
+        {
+            try
+            {
+                ShowMessage("开始初始化文章分区表");
+
+                Article article = this._articleService.All().First();
+                CatInfo catInfo = this._catInfoService.Find(m => m.Parent != null);
+                this._article_CatService.Create(new Article_Cat
+                {
+                    ArticleId = article.ID,
+                    CatInfoId = catInfo.ID,
+                    CreateTime = DateTime.Now.ToTimeStamp10()
+                });
+
+                ShowMessage("成功");
+            }
+            catch (Exception ex)
+            {
+                ShowMessage("失败");
+                ShowMessage(ex.Message);
+            }
+        }
+        #endregion
 
         #region 初始化收藏夹表
         private void InitFavorite()

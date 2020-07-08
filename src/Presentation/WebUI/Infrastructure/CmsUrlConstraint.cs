@@ -18,7 +18,6 @@ namespace WebUI.Infrastructure
                 //此为请求的 自定义url参数
                 string customUrl = values[parameterName].ToString();
 
-                //var articleService = Container.Instance.Resolve<ArticleService>();
                 // 根据自定义url 参数值 查找数据库, 将文章实体拿到
                 Article page = ContainerManager.Resolve<IArticleService>().Find(m => m.CustomUrl == customUrl && !m.IsDeleted);
                 if (page != null)
