@@ -9,9 +9,10 @@
 }
 @section body {
 	<script src="/assets/libs/xss/dist/xss.min.js"></script>
+	<script src="/assets/js/XSSOptions.js"></script>
 	<script>
 			$(".XSSFilter").each(function () {
-				var filterHtml = filterXSS(this.innerHTML);
+				var filterHtml = filterXSS(this.innerHTML, xssOptions);
 				console.log(filterHtml);
 				this.innerHTML = filterHtml;
 			});

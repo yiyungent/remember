@@ -15,13 +15,13 @@
 @section body {
 	<script src="/assets/libs/wangEditor/wangEditor.min.js"></script>
 	<script src="/assets/libs/xss/dist/xss.min.js"></script>
+	<script src="/assets/js/XSSOptions.js"></script>
 	<script>
 
 		function selectCat(id, name, parentName) {
 			event.preventDefault();
 			$("#js-catId").val(id);
 			$("#js-cat-tip").text(parentName + " → " + name);
-
 		}
 
 		function initSelectCat() {
@@ -70,12 +70,12 @@
 			var $hiddenEditArea = $("#Content");
 			editor.customConfig.onchange = function (html) {
 				// 监控变化，同步更新到 textarea
-				var filterHtml = filterXSS(html);
+				var filterHtml = filterXSS(html, xssOptions);
 				$hiddenEditArea.val(filterHtml);
 			}
 			editor.create();
 			// 初始化 editor 的内容
-			editor.txt.html(filterXSS($hiddenEditArea.val()));
+			editor.txt.html(filterXSS($hiddenEditArea.val(), xssOptions));
 
 			initSelectCat();
 		});

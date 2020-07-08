@@ -384,6 +384,7 @@
     <Content Include="assets\js\log.js" />
     <Content Include="assets\js\login.js" />
     <Content Include="assets\js\tools.js" />
+    <Content Include="assets\js\XSSOptions.js" />
     <Content Include="assets\libs\AdminLTE\bower_components\bootstrap-colorpicker\dist\css\bootstrap-colorpicker.css" />
     <Content Include="assets\libs\AdminLTE\bower_components\bootstrap-colorpicker\dist\css\bootstrap-colorpicker.min.css" />
     <Content Include="assets\libs\AdminLTE\bower_components\bootstrap-colorpicker\dist\img\bootstrap-colorpicker\alpha-horizontal.png" />
