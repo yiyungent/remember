@@ -136,6 +136,7 @@
   <ItemGroup>
     <Content Include="App_Data\DemoSQL\remember演示数据.sql" />
     <Content Include="assets\css\app.css" />
+    <Content Include="assets\css\article.css" />
     <Content Include="assets\css\base.css" />
     <Content Include="assets\css\comment.min.css" />
     <Content Include="assets\css\fpwd.css" />
@@ -7429,6 +7430,9 @@
     <Content Include="assets\libs\WebUploader\Uploader.swf" />
     <Content Include="assets\libs\WebUploader\webuploader.css" />
     <Content Include="assets\libs\WebUploader\webuploader.js" />
+    <Content Include="assets\libs\xss\dist\test.html" />
+    <Content Include="assets\libs\xss\dist\xss.js" />
+    <Content Include="assets\libs\xss\dist\xss.min.js" />
     <Content Include="assets\libs\ztree_v3\.gitattributes" />
     <Content Include="assets\libs\ztree_v3\api\apiCss\api.js" />
     <Content Include="assets\libs\ztree_v3\api\apiCss\common.css" />

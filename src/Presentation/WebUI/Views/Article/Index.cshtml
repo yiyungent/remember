@@ -4,13 +4,48 @@
 	Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
 
-<div class="row">
-	<div class="col-xs-12 text-center">
-		<h1>@Model.Title</h1>
-	</div>
-</div>
+@section head {
+	<link href="/assets/css/article.css" rel="stylesheet" />
+}
+@section body {
+	<script src="/assets/libs/xss/dist/xss.min.js"></script>
+	<script>
+			$(".XSSFilter").each(function () {
+				var filterHtml = filterXSS(this.innerHTML);
+				console.log(filterHtml);
+				this.innerHTML = filterHtml;
+			});
+	</script>
+}
+
 <div class="row">
 	<div class="col-xs-12">
-		@Html.Raw(Model.Content)
+		<article class="article">
+			<!-- 文章头部 -->
+			<header>
+				<h1 class="text-center XSSFilter">@Model.Title</h1>
+				<!-- 文章属性列表 -->
+				<dl class="dl-inline">
+					<dt>来源：</dt>
+					<dd>维基百科</dd>
+					<dt>最后修订：</dt>
+					<dd>2016年8月12日 (星期五) 12:53</dd>
+					<dt></dt>
+					<dd class="pull-right"><span class="label label-success">HTML</span> <span class="label label-warning">网页设计</span> <span class="label label-info">W3C</span> <span class="label label-danger"><i class="icon-eye-open"></i> 235</span></dd>
+				</dl>
+			</header>
+			<!-- 文章正文部分 -->
+			<section class="content XSSFilter">
+				@Html.Raw(Model.Content)
+			</section>
+			<!-- 文章底部 -->
+			<footer>
+				<ul class="pager pager-justify">
+					<li class="previous"><a href="#"><i class="icon-arrow-left"></i> 上一篇</a></li>
+					<li><a href="#"><i class="icon-list-ul"></i> 目录</a></li>
+					<li class="next disabled"><a href="#">没有下一篇 <i class="icon-arrow-right"></i></a></li>
+				</ul>
+			</footer>
+		</article>
 	</div>
 </div>

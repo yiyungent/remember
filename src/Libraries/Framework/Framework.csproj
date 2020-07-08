@@ -80,11 +80,13 @@
   <ItemGroup>
     <Compile Include="Attributes\AuthFilterAttribute.cs" />
     <Compile Include="Attributes\AuthKeyAttribute.cs" />
+    <Compile Include="Attributes\XSSFilterAttribute.cs" />
     <Compile Include="Common\CommonHelper.cs" />
     <Compile Include="Common\EncryptHelper.cs" />
     <Compile Include="Common\IWebHelper.cs" />
     <Compile Include="Common\Tools.cs" />
     <Compile Include="Common\WebHelper.cs" />
+    <Compile Include="Common\XSSHelper.cs" />
     <Compile Include="Config\AppConfig.cs" />
     <Compile Include="Config\FrameworkConfig.cs" />
     <Compile Include="Extensions\DomainExt.cs" />

@@ -2,6 +2,7 @@
 using Core.Common;
 using Domain;
 using Domain.Entities;
+using Framework.Attributes;
 using Framework.Extensions;
 using Framework.Infrastructure.Concrete;
 using Services;
@@ -18,6 +19,7 @@ using WebUI.Extensions;
 
 namespace WebUI.Areas.Admin.Controllers
 {
+    //[XSSFilter]
     public class ArticleController : Controller
     {
         #region Fields
@@ -118,7 +120,7 @@ namespace WebUI.Areas.Admin.Controllers
                     }
                     Article dbModel = this._articleService.Find(m => m.ID == inputModel.ID && !m.IsDeleted);
                     string fullCustomUrl = $"u{dbModel.AuthorId}/{inputModel.CustomUrl}.html";
-                    bool isExist = this._articleService.Contains(m => m.CustomUrl == fullCustomUrl);
+                    bool isExist = this._articleService.Contains(m => m.CustomUrl == fullCustomUrl && m.ID != inputModel.ID);
                     if (isExist)
                     {
                         return Json(new { code = -1, message = "添加失败,自定义URL已存在，请更改" });
