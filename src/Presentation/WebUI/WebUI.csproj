@@ -140,6 +140,7 @@
     <Content Include="assets\css\comment.min.css" />
     <Content Include="assets\css\fpwd.css" />
     <Content Include="assets\css\login.css" />
+    <Content Include="assets\images\default-article-pic.svg" />
     <Content Include="assets\images\default-avatar.jpg" />
     <Content Include="assets\images\default-notify.jpg" />
     <Content Include="assets\images\emoji\emoji\1.png" />

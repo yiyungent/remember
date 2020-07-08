@@ -58,59 +58,37 @@
 			break;
 	}
 }
+@helper SubString(string str, int length)
+{
+	string temp = str.Length > length ? str.Substring(0, length) : str;
+	@temp
+}
+@helper ImgSrc(string url)
+{
+	if (string.IsNullOrEmpty(url))
+	{
+		@("/assets/images/default-article-pic.svg")
+	}
+	else
+	{
+		@url
+	}
+}
 
 <!-- Main content -->
 <section class="content">
 	<div class="row">
 		@foreach (var item in articles)
 		{
-			<!-- Post -->
-			<div class="post">
-				<div class="user-block">
-					<img class="img-circle img-bordered-sm" src="@item.Author.Avatar.ToHttpAbsoluteUrl()" alt="@item.Author.UserName">
-					<span class="username">
-						<a href="#">@item.Author.UserName</a>
-						<a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
-					</span>
-					<span class="description">@OpenStatus(item.OpenStatus) - @PrettyTime(item.CreateTime)</span>
-				</div>
-				<!-- /.user-block -->
-				<p>
-					<h4 class="text-center">
-						<a href="/@item.CustomUrl" target="_blank">@item.Title</a>
-					</h4>
-					<div>
-						@item.Description
+			<div class="col-sm-6 col-md-3">
+				<a href="@item.CustomUrl" class="thumbnail" target="_blank">
+					<img src="@ImgSrc(item.PicUrl)" alt="@item.Title">
+					<div class="caption">
+						<h4>@SubString(item.Title, 7)</h4>
+						<p>@SubString(item.Content, 15)</p>
 					</div>
-					<div class="text-center">
-						<a href="/@item.CustomUrl" class="btn btn-primary btn-sm" target="_blank">阅读</a>
-					</div>
-				</p>
-				<ul class="list-inline">
-					<li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> 分享</a></li>
-					<li>
-						<a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> 赞</a>
-					</li>
-					<li class="pull-right">
-						<a href="#" class="link-black text-sm">
-							<i class="fa fa-comments-o margin-r-5"></i> 评论
-							(@item.CommentNum)
-						</a>
-					</li>
-				</ul>
-
-				<form class="form-horizontal">
-					<div class="form-group margin-bottom-none">
-						<div class="col-sm-10">
-							<input class="form-control input-sm" placeholder="留下评论吧">
-						</div>
-						<div class="col-sm-2">
-							<button type="submit" class="btn btn-danger pull-right btn-block btn-sm">评论</button>
-						</div>
-					</div>
-				</form>
+				</a>
 			</div>
-			<!-- /.post -->
 		}
 	</div>
 	<div class="row">
